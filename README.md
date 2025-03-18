@@ -35,6 +35,7 @@ Thumbtack (servicios locales, desde limpieza hasta reparación)
 Workana (enfocado en trabajos freelance)
 Airbnb Experiences (para servicios y experiencias locales)
 Sin embargo, sí tiene elementos diferenciadores que podrían darle un valor añadido y hacerlo más competitivo o atractivo:
+
 ✅ Recomendación por cercanía → No todas las plataformas priorizan la cercanía física para servicios presenciales.
 
 ✅ Sistema de calificación bilateral → Construye confianza y reputación para ambas partes.
@@ -45,7 +46,8 @@ Sin embargo, sí tiene elementos diferenciadores que podrían darle un valor añ
 
 👉 La clave para que sea innovador está en cómo se ejecute la idea y qué valor diferencial aporte respecto a la competencia (por ejemplo, mejor experiencia de usuario, calidad de recomendaciones, o un algoritmo más preciso para la búsqueda por cercanía).
 
-💡 ¿Es una buena idea en términos de utilidad?
+## 💡 ¿Es una buena idea en términos de utilidad?
+
 ✅ Sí. Hay una demanda constante de servicios rápidos y confiables, especialmente en reparaciones, mantenimiento y cuidado personal.
 
 ✅ La posibilidad de encontrar proveedores cercanos y calificados de manera rápida resuelve un problema real y frecuente.
