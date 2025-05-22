@@ -4,10 +4,13 @@
 @import url('./styles/modalRol.css');
 @import url('./styles/register.css');
 
+/* root */
 /* VARIABLES CSS PARA DETERMINAR COLORES PRIMARIOS Y SECUNDARIOS ETC Y REUTILIZAR*/
-/* :root{
+:root{
+    --bg-primary: #eceaea;
+    --bg-secondary: #1E5DA3;
+}
 
-} */
 
 /* RESETEO */
 *,::after, ::before{
@@ -17,6 +20,7 @@
 }
 
 body {
+    background-color: var(--bg-primary);
     font-family: 'Inter', sans-serif;
 }
 
@@ -34,4 +38,12 @@ h3 {
 
 p {
     font-size: 1rem;
+}
+
+li{
+    list-style-type: none;
+}
+
+a{
+  color: #FFFF;
 }

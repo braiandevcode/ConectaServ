@@ -1,3 +1,10 @@
+/* root */
+/* VARIABLES CSS PARA DETERMINAR COLORES PRIMARIOS Y SECUNDARIOS ETC Y REUTILIZAR*/
+:root{
+    --bg-primary: #eceaea;
+    --bg-secondary: #1E5DA3;
+}
+
 button.color {
     font-family: 'Inter', sans-serif;
     font-size: 1rem;
@@ -8,7 +15,7 @@ button.color {
     border-radius: 6px;
     padding: 10px 20px;
     cursor: pointer;
-    transition: background 0.25s ease;
+    transition: all 0.25s ease;
 }
 
 button.color:hover {
@@ -28,7 +35,7 @@ button.color:active {
 /* -- Header -- */
 header {
     padding: 1rem 0;
-    background-color: #fff;
+    background-color: var(--bg-primary);
     border-bottom: 1px solid #eee;
 }
 
@@ -60,7 +67,6 @@ header .nav-links {
     top: 60px;
     left: 0;
     right: 0;
-    background-color: #fff;
     padding: 1rem;
 }
 
@@ -127,7 +133,6 @@ header .nav-links a {
 
 
 /* Cards */
-
 .categorias-flex {
     display: flex;
     flex-wrap: wrap;
@@ -162,7 +167,7 @@ button.card {
 
 /*Footer*/
 .footer {
-    background-color: #1E5DA3;
+    background-color: var(--bg-secondary);
     padding: 40px 20px;
     font-size: 0.9rem;
     color: #fff;
@@ -175,23 +180,28 @@ button.card {
 }
 
 
-.footer-logo__logo,
-.footer-logo__link {
+.card-logo,
+.card-logo__logo {
     display: flex;
     align-items: center;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 1rem;
     font-size: x-large;
 }
 
-.footer-logo__icon {
+.card-logo__icon {
     background: linear-gradient(45deg, rgb(20, 78, 126),  rgb(99, 142, 176), transparent);
     padding: 1rem;
     border-radius: 10px;
 }
 
-.footer-logo__link {
+.card-logo__logo {
     font-weight: bold;
     color: rgba(239, 237, 237, 0.937);
+}
+
+.card-logo__text--head{
+    color:  rgb(20, 78, 126);
 }
 
 .footer-column h4 {
