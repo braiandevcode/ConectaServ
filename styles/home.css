@@ -1,0 +1,252 @@
+/* -- General styles -- */
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin:0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+h1 {
+    font-size: 3.75rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1.125rem;
+}
+
+p {
+    font-size: 1rem;
+}
+
+button.color {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #2E77BB, #1E5DA3);
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.25s ease;
+}
+
+button.color:hover {
+    background: linear-gradient(135deg, #1E5DA3, #2E77BB);
+}
+
+button.color:active {
+    background: #1E5DA3;
+}
+
+.container {
+    max-width: 1400px;
+    margin: auto;
+    padding: 0 1rem
+}
+
+/* -- Header -- */
+header {
+    padding: 1rem 0;
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #2E77BB;
+}
+
+.menu-toggle {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+header .nav-links {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    padding: 1rem;
+}
+
+header .nav-links a {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+}
+
+.nav-links.active {
+    display: flex;
+}
+
+/*Header desktop*/
+@media(min-width:720px) {
+    .menu-toggle {
+        display: none;
+    }
+
+    header .container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    header .nav-links {
+        display: flex;
+        position: static;
+        padding: 0;
+        flex-direction: row;
+        align-items: center
+    }
+}
+
+/* -- Hero -- */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 90vh;
+    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../media/trabajador-de-la-construccion-femenina-con-casco-y-rodillo-de-pintura.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    background-position: center center;
+}
+
+/* -- Section: como funciona --*/
+.como-funciona .container {
+    text-align: center;
+    padding: 200px 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.como-funciona .img-container {
+    background-image: url(../media/cerrar-mujer-sosteniendo-telefono.jpg);
+    width: 100%;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+}
+
+
+/* Cards */
+
+.categorias-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+}
+
+button.card {
+    all: unset;
+    background-color: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    padding: 24px 12px;
+    text-align: center;
+    cursor: pointer;
+    width: 200px;
+    height: 160px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #D9E8F5
+}
+
+.card span {
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/*Footer*/
+.footer {
+    background-color: #1E5DA3;
+    padding: 40px 20px;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+.footer-columns {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.footer-column h4 {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+    text-decoration: none;
+    color: #fff;
+    transition: opacity 0.2s ease;
+}
+
+.footer-column ul li a:hover {
+    opacity: 0.8;
+}
+
+.footer-bottom {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #e0e0e0;
+}
+
+/* Footer desktop */
+@media (min-width: 720px) {
+    .footer-columns {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .footer-column {
+        max-width: 300px;
+    }
+
+    .footer-bottom {
+        text-align: right;
+        margin-top: 40px;
+    }
+}
