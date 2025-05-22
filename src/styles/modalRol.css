@@ -1,4 +1,9 @@
 /* ========== BASE ========== */
+
+.modal-flex{
+  display: flex;
+}
+
 .modal-rol {
   position: fixed;
   top: 0;
@@ -10,11 +15,12 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  transition: opacity 0.3s ease;
+  transform: scale(1);
+  transition: opacity 0.3s ease, transform .3s ease-in-out;
 }
 
 .modal-rol--hidden {
-  display: none;
+  transform: scale(0);
 }
 
 .modal-rol__container {
