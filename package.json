@@ -1,0 +1,15 @@
+{
+  "name": "conectaserv",
+  "version": "1.0.0",
+  "description": "[Drive ConectaServ](https://drive.google.com/drive/u/1/folders/1ZAfBl2fj-0ov2GnPDK3NFrIPtFejqX0j)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
