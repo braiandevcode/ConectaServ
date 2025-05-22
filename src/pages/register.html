@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Encuentra un servicio de forma rapida y segura">
+    <meta name="keywords" content="Contratar, Pago Online, Chat">
+    <title>ConectaServ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<!-- CUERPO -->
+<body>
+    <!-- CABECERA -->
+    <header>
+        <div class="container">
+            <p class="logo">ConectaServ</p>
+            <button class="menu-toggle">
+                ☰
+            </button>
+            <nav class="nav-links">
+                <a href="#">Inicio</a>
+                <a href="#como-funciona">¿Cómo funciona?</a>
+                <a href="#categorias">Categorías</a>
+                <a href="./src/pages/login.html">Iniciar Sesión</a>
+                <button class="color btnRegister">Registrarse</button>
+            </nav>
+        </div>
+    </header>
+    <!-- REGISTRO DE USUARIOS -->
+     <!-- FALTA DEFINIR -->
+    <div id="registerModal" class="register-modal register-modal--visible">
+        <div class="register-modal__container">
+            <div class="register-modal__content">
+                <div class="register-modal__header">
+                    <h3 class="register-modal__title" id="registerTitle">Registro de Cliente</h3>
+                    <button id="closeRegisterModal" class="register-modal__close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form id="registrationForm" class="register-form">
+                    <!-- REGISTRO NORMAL CLIENTE -->
+                    <div class="register-form__section">
+                        <h4 class="register-form__subtitle">Información básica</h4>
+                        <div class="register-form__grid">
+                            <div class="register-form__field">
+                                <label for="fullName" class="register-form__label">Nombre completo*</label>
+                                <input type="text" id="fullName" class="register-form__input" required />
+                            </div>
+                            <div class="register-form__field">
+                                <label for="email" class="register-form__label">Correo electrónico*</label>
+                                <input type="email" id="email" class="register-form__input" required />
+                            </div>
+                            <div class="register-form__field">
+                                <label for="password" class="register-form__label">Contraseña*</label>
+                                <input type="password" id="password" class="register-form__input" required />
+                                <p class="register-form__hint">Mínimo 8 caracteres, incluyendo mayúsculas y números</p>
+                            </div>
+                            <div class="register-form__field">
+                                <label for="confirmPassword" class="register-form__label">Confirmar contraseña*</label>
+                                <input type="password" id="confirmPassword" class="register-form__input" required />
+                            </div>
+                            <div class="register-form__field">
+                                <label for="phone" class="register-form__label">Teléfono</label>
+                                <input type="tel" id="phone" class="register-form__input" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="register-form__section register-form__terms">
+                        <div class="register-form__checkbox">
+                            <input id="terms" type="checkbox" class="register-form__checkbox-input" required />
+                            <label for="terms" class="register-form__checkbox-label">
+                                Acepto los <a href="#" class="register-form__link">Términos y Condiciones</a> y la
+                                <a href="#" class="register-form__link">Política de Privacidad</a> de ConectaServ*
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- PROFESIONAL -->
+                    <div id="professionalFields" class="professional">
+                        <div class="professional__section">
+                            <h4 class="professional__title">Información profesional</h4>
+
+                            <!-- Servicios -->
+                            <div class="professional__group">
+                                <label class="professional__label">Servicios que ofreces*</label>
+                                <div class="professional__services">
+                                    <div class="service">
+                                        <input type="checkbox" id="service1" class="service__input" />
+                                        <label for="service1" class="service__label">Plomería</label>
+                                    </div>
+                                    <div class="service">
+                                        <input type="checkbox" id="service2" class="service__input" />
+                                        <label for="service2" class="service__label">Electricidad</label>
+                                    </div>
+                                    <div class="service">
+                                        <input type="checkbox" id="service3" class="service__input" />
+                                        <label for="service3" class="service__label">Pintura</label>
+                                    </div>
+                                    <div class="service">
+                                        <input type="checkbox" id="service4" class="service__input" />
+                                        <label for="service4" class="service__label">Carpintería</label>
+                                    </div>
+                                    <div class="service">
+                                        <input type="checkbox" id="service5" class="service__input" />
+                                        <label for="service5" class="service__label">Niñera</label>
+                                    </div>
+                                    <div class="service">
+                                        <input type="checkbox" id="service6" class="service__input" />
+                                        <label for="service6" class="service__label">Limpieza</label>
+                                    </div>
+                                    <div class="service">
+                                        <input type="checkbox" id="service7" class="service__input" />
+                                        <label for="service7" class="service__label">Jardinería</label>
+                                    </div>
+                                    <div class="service">
+                                        <input type="checkbox" id="service8" class="service__input" />
+                                        <label for="service8" class="service__label">Mudanzas</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Presupuesto -->
+                            <div class="professional__row">
+                                <div class="professional__column">
+                                    <label class="professional__label">¿Cobras presupuesto inicial?*</label>
+                                    <div class="radio-group">
+                                        <label class="radio-option">
+                                            <input type="radio" name="hasEstimateFee" value="yes"
+                                                class="radio-option__input" />
+                                            <span class="radio-option__label">Sí</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="hasEstimateFee" value="no" checked
+                                                class="radio-option__input" />
+                                            <span class="radio-option__label">No</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="estimateFeeContainer"
+                                    class="professional__column professional__column--hidden">
+                                    <label for="estimateFee" class="professional__label">Precio fijo del
+                                        presupuesto*</label>
+                                    <div class="input-icon">
+                                        <span class="input-icon__prefix">$</span>
+                                        <input type="number" id="estimateFee" class="input-icon__field" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Descripción -->
+                            <div class="professional__group">
+                                <label for="description" class="professional__label">Descripción breve de tu
+                                    perfil*</label>
+                                <textarea id="description" rows="3" class="professional__textarea"></textarea>
+                            </div>
+
+                            <!-- Foto de perfil -->
+                            <div class="professional__group">
+                                <label class="professional__label">Foto de perfil*</label>
+                                <div id="profilePhotoUpload" class="upload-area">
+                                    <i class="upload-area__icon fas fa-cloud-upload-alt"></i>
+                                    <p class="upload-area__text">Arrastra tu foto aquí o haz clic para seleccionar</p>
+                                    <p class="upload-area__note">Formatos: JPG, PNG (Máx. 5MB)</p>
+                                    <input type="file" class="upload-area__input" accept="image/jpeg,jpg,png,webpe" />
+                                </div>
+                            </div>
+
+                            <!-- Portafolio -->
+                            <div class="professional__group">
+                                <label class="professional__label">Portafolio (imágenes de trabajos realizados)</label>
+                                <div id="portfolioUpload" class="upload-area">
+                                    <i class="upload-area__icon fas fa-cloud-upload-alt"></i>
+                                    <p class="upload-area__text">Arrastra tus imágenes aquí o haz clic para seleccionar
+                                    </p>
+                                    <p class="upload-area__note">Puedes subir hasta 10 imágenes (Máx. 5MB cada una)</p>
+                                    <input type="file" class="upload-area__input" accept="image/jpeg,jpg,png,webpe"
+                                        multiple />
+                                </div>
+                            </div>
+
+                            <!-- Redes y sitio -->
+                            <div class="professional__row">
+                                <div class="professional__column">
+                                    <label for="website" class="professional__label">Sitio web</label>
+                                    <input type="url" id="website" class="professional__input" placeholder="https://" />
+                                </div>
+                                <div class="professional__column">
+                                    <label for="linkedin" class="professional__label">LinkedIn</label>
+                                    <input type="url" id="linkedin" class="professional__input"
+                                        placeholder="https://linkedin.com/in/" />
+                                </div>
+                                <div class="professional__column">
+                                    <label for="instagram" class="professional__label">Instagram</label>
+                                    <input type="url" id="instagram" class="professional__input"
+                                        placeholder="https://instagram.com/" />
+                                </div>
+                            </div>
+
+                            <!-- Ubicación -->
+                            <div class="professional__group">
+                                <label for="location" class="professional__label">Ubicación (ciudad/zona de
+                                    trabajo)*</label>
+                                <input type="text" id="location" class="professional__input" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="register-form__actions">
+                        <button type="submit" class="register-form__submit-btn">Completar registro</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIE PÁGINA -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-columns">
+                <div class="footer-logo">
+                    <div class="flex items-center space-x-2">
+                        <div class="gradient-bg text-white p-2 rounded-lg">
+                            <i class="fas fa-hands-helping text-xl"></i>
+                        </div>
+                        <a href="#" class="text-xl font-bold text-gray-800">ConectaServ</a>
+                    </div>
+                    <p>Conectando personas con trabajadores de confianza.</p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Enlaces</h4>
+                    <ul>
+                        <li><a href="#">Inicio</a></li>
+                        <li><a href="#">¿Cómo funciona?</a></li>
+                        <li><a href="#">Iniciar Sesión</a></li>
+                        <li><a href="#">Registrarse</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4>Contacto</h4>
+                    <p>Email: ejemploemail@.com</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 ConectaServ. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./dist/main.js" type="module"></script>
+</body>
+
+</html>

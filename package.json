@@ -1,15 +1,25 @@
 {
   "name": "conectaserv",
   "version": "1.0.0",
-  "description": "[Drive ConectaServ](https://drive.google.com/drive/u/1/folders/1ZAfBl2fj-0ov2GnPDK3NFrIPtFejqX0j)",
-  "main": "index.js",
+  "description": "Contáctate con profesionales de forma rapida y segura",
+  "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "dev": "tsc -w "
   },
-  "keywords": [],
+  "keywords": [
+    "Contratar",
+    "Pago Online",
+    "Chat"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "zod": "^3.25.20"
   }
 }
