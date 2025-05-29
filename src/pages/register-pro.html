@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Encuentra un servicio de forma rapida y segura" />
+    <meta name="keywords" content="Contratar, Pago Online, Chat" />
+    <title>ConectaServ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+
+  <!-- CUERPO -->
+
+  <body>
+    <!-- CABECERA -->
+    <header>
+      <div class="container">
+        <!-- LOGO REUTILIZABLE -->
+        <div class="card-logo">
+          <a href="../../index.html" class="card-logo__logo">
+            <div class="card-logo__icon">
+              <i class="fas fa-hands-helping"></i>
+            </div>
+            <span class="card-logo__text card-logo__text--head">ConectaServ</span>
+          </a>
+        </div>
+        <nav class="nav-links">
+          <a href="../../index.html#como-funciona">¿Cómo funciona?</a>
+          <a href="../../index.html#categorias">Categorías</a>
+          <a href="./src/pages/login.html">Iniciar Sesión</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main>
+      <!-- REGISTRO DE PROFESIIONALES-->
+      <div class="register-userProfessional register-userProfessional--visible">
+        <div class="register-userProfessional__container">
+          <div class="register-userProfessional__content">
+            <div class="register-userProfessional__header">
+              <h2 class="tregister-userProfessional__title">Registro de Profesional</h2>
+            </div>
+            <form class="register-formProfessional">
+              <!-- REGISTRO INFORMACION BASICA -->
+              <div class="form-basic form-step" data-step="1">
+                <div class="register-formProfessional__header">
+                  <h3 class="form-basic__subtitle">Información básica</h3>
+                  <div class="container-textInfo">
+                    <i class="fas fa-info-circle"></i>
+                    <p class="container-textInfo__message">
+                      Los campos que contienen (
+                      <span>*</span>
+                      ) son obligatorios
+                    </p>
+                  </div>
+                </div>
+                <div class="form-basic__fields">
+                  <div class="form-basic__field">
+                    <label class="form-basic__label">
+                      Nombre completo
+                      <span>*</span>
+                    </label>
+                    <input type="text" name="fullName" class="form-basic__input" placeholder="Roberto Bustos" required />
+                  </div>
+                  <div class="form-basic__field">
+                    <label class="form-basic__label">
+                      Correo electrónico
+                      <span>*</span>
+                    </label>
+                    <input type="email" name="email" class="form-basic__input" autocomplete="email" placeholder="test@example.com" required />
+                  </div>
+                  <!-- SELECT UBICACION -->
+                  <div class="group-select form-basic__field form-basic__location">
+                    <label class="form-basic__label">
+                      Ubicación
+                      <span>*</span>
+                    </label>
+                    <select class="form-basic__location-select" name="location">
+                      <option value="" disabled selected>Seleccione una ciudad</option>
+                      <option value="olavarria">Olavarría</option>
+                      <option value="azul">Azul</option>
+                      <option value="tandil">Tandil</option>
+                    </select>
+                  </div>
+                  <!-- CONTRASEÑA -->
+                  <div class="form-basic__field">
+                    <label class="form-basic__label">
+                      Contraseña
+                      <span>*</span>
+                    </label>
+                    <input type="password" name="password" class="form-basic__input" autocomplete="new-password" placeholder="***********" required />
+                  </div>
+                  <div class="form-basic__field">
+                    <label class="form-basic__label">
+                      Confirmar contraseña
+                      <span>*</span>
+                    </label>
+                    <input type="password" name="confirmPassword" class="form-basic__input" autocomplete="confirmPassword" placeholder="***********" required />
+                  </div>
+                </div>
+                <div class="container-btn">
+                  <button type="button" disabled class="btn btn--with-icon container-btn__next" data-step="1">
+                    Siguiente
+                    <i class="fas fa-arrow-circle-right"></i>
+                  </button>
+                </div>
+              </div>
+              <!-- REGISTRO INFORMACION PROFESIONAL -->
+              <div class="form-professional form-step form-step--hidden" data-step="2">
+                <div class="form-professional__section">
+                  <div class="register-formProfessional__header">
+                    <h3 class="form-basic__subtitle">Informacion Profesional</h3>
+                    <div class="container-textInfo">
+                      <i class="fas fa-info-circle"></i>
+                      <p class="container-textInfo__message">
+                        Los campos que contienen (
+                        <span>*</span>
+                        ) son obligatorios
+                      </p>
+                    </div>
+                  </div>
+                  <div class="group-select">
+                    <!-- SERVICIOS -->
+                    <label class="form-professional__title">
+                      Elegir categoría
+                      <span>*</span>
+                    </label>
+                    <!-- SELECT DE CATEGORIAS -->
+                    <select class="form-professional__select" name="category">
+                      <option disabled selected>Seleccione una categoría</option>
+                      <option value="reparacion-mantenimiento">Reparación y mantenimiento</option>
+                      <option value="mudanza-transporte">Mudanza y Transporte</option>
+                      <option value="jardineria-mantenimiento-exterior">Jardinería y mantenimiento exterior</option>
+                    </select>
+                  </div>
+                  <!-- SECCION ESPECIALIZACION -->
+                  <div class="form-professional-groupSpeciality form-step form-step--hidden" data-step="3">
+                    <div class="form-professional-groupSpeciality__header form-professional-groupSpeciality__header--visible">
+                      <h3 class="form-professional-groupSpeciality__title">Paso 1: Especialización</h3>
+                    </div>
+                    <div class="form-professional-groupSpeciality__section-wrapper form-professional-groupSpeciality__checks-wrapper--visible">
+                      <div class="form-professional-groupSpeciality__containerChecksSpecialitys form-professional-groupSpeciality__containerChecksSpecialitys--visible">
+                        <div class="form-professional-groupSpeciality__speciality-header">
+                          <i class="fas fa-screwdriver-wrench"></i>
+                          <label class="form-professional-groupSpeciality__label">
+                            Selecciona tus especialidades
+                            <span>*</span>
+                          </label>
+                        </div>
+                        <div class="form-professional-groupSpeciality__services-body"></div>
+                      </div>
+                      <div class="form-professional-groupSpeciality__checks-wrapper form-professional-groupSpeciality__checks-wrapper--visible">
+                        <div class="form-professional-groupSpeciality__containerChecksContexts form-professional-groupSpeciality__containerChecksContexts--visible">
+                          <div class="form-professional-groupSpeciality__context-header">
+                            <i class="fas fa-building"></i>
+                            <label class="form-professional-groupSpeciality__label">
+                              ¿Dónde podés brindar tus servicios?
+                              <span>*</span>
+                            </label>
+                          </div>
+
+                          <div class="form-professional-groupSpeciality__contexts-body"></div>
+                        </div>
+                        <div class="form-professional-groupSpeciality__containerChecksDates form-professional-groupSpeciality__containerChecksDates--visible">
+                          <div class="form-professional-groupSpeciality__dates-header">
+                            <i class="fas fa-calendar-plus"></i>
+                            <label class="form-professional-groupSpeciality__label">
+                              Tus días y horarios
+                              <span>*</span>
+                            </label>
+                          </div>
+                          <div class="form-professional-groupSpeciality__dates-body">
+                            <div class="form-professional-groupSpeciality__containerChecksDays">
+                              <div class="form-professional-groupSpeciality__days-header">
+                                <i class="fas fa-calendar-days"></i>
+                                <h5>Días</h5>
+                              </div>
+                              <div class="form-professional-groupSpeciality__days-body"></div>
+                            </div>
+                            <div class="form-professional-groupSpeciality__containerChecksHours">
+                              <div class="form-professional-groupSpeciality__hours-header">
+                                <i class="fas fa-clock"></i>
+                                <h5>Horarios</h5>
+                              </div>
+                              <div class="form-professional-groupSpeciality__hours-body"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="container-btn container-btn--flex-end">
+                      <button type="button" disabled class="btn btn--with-icon container-btn__next" data-step="3">
+                        Siguiente
+                        <i class="fas fa-arrow-circle-right"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <!-- SECCION PRESUPUESTO -->
+                  <div class="form-professional-groupBudget form-step form-step--hidden" data-step="4">
+                    <div class="form-professional-groupBudget__header form-professional-groupBudget__header--visible">
+                      <h3 class="form-professional-groupBudget__title">Paso 2: Presupuesto</h3>
+                    </div>
+                    <div class="form-professional-groupBudget__column">
+                      <div>
+                        <label class="form-professional-groupBudget__label">
+                          ¿Cobrás por sacar presupuesto?
+                          <span>*</span>
+                        </label>
+                        <div class="container-textInfo">
+                          <i class="fas fa-info-circle"></i>
+                          <p class="container-textInfo__message">Esta acción no puede ser modificada luego</p>
+                        </div>
+                      </div>
+                      <div class="radio-group">
+                        <label class="radio-option">
+                          <input type="radio" name="hasBudgetConfirm" value="yes" class="radio-option__input" />
+                          <span class="radio-option__label">Sí</span>
+                        </label>
+                        <label class="radio-option">
+                          <input type="radio" name="hasBudgetReject" value="no" checked class="radio-option__input" />
+                          <span class="radio-option__label">No</span>
+                        </label>
+                      </div>
+                    </div>
+                    <!-- CAMPO DE PRECIO PRESUPUESTO -->
+                    <div class="form-professional-groupBudget__column">
+                      <label class="form-professional-groupBudget__label">
+                        Precio fijo del presupuesto
+                        <span>*</span>
+                      </label>
+                      <div class="input-icon">
+                        <span class="input-icon__prefix">$</span>
+                        <input type="text" name="estimateFee" class="input-icon__field" />
+                      </div>
+                    </div>
+                    <!-- REEMBOLSO -->
+                    <div class="form-professional-groupBudget__column">
+                      <div>
+                        <label class="form-professional-groupBudget__label">
+                          ¿Si eres contratado haces reembolso de presupuesto?
+                          <span>*</span>
+                        </label>
+                        <p class="form-professionalBudget__info">
+                          <i class="fas fa-info"></i>
+                          Esta acción no puede ser modificada luego
+                        </p>
+                      </div>
+                      <div class="radio-group">
+                        <label class="radio-option">
+                          <input type="radio" name="hasRefundBudgetConfirm" value="yes" class="radio-option__input" />
+                          <span class="radio-option__label">Sí</span>
+                        </label>
+                        <label class="radio-option">
+                          <input type="radio" name="hasRefundBudgetReject" value="no" checked class="radio-option__input" />
+                          <span class="radio-option__label">No</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <!--  SECCION PERFIL PERFIL -->
+                  <div class="form-professional-groupProfile form-step form-step--hidden" data-step="5">
+                    <div class="form-professional-groupProfile__header form-professional-groupProfile__header--visible">
+                      <h3 class="form-professional-groupProfile__title">Paso 3: Tu perfil</h3>
+                    </div>
+                    <!-- DESCRIPCION -->
+                    <div class="form-professional-groupProfile__containerDescription">
+                      <label class="form-professional-groupProfile__label">Descripción breve de tu perfil(Opcional)</label>
+                      <textarea name="description" rows="3" class="form-professional-groupProfile__textarea"></textarea>
+                    </div>
+                    <!-- IMAGEN DE PERFIL -->
+                    <div class="form-professional-groupProfile__containerImageProfile">
+                      <label class="form-professional-groupProfile__label">Foto de perfil(Opcional)</label>
+                      <div class="upload-area">
+                        <i class="upload-area__icon fas fa-cloud-upload-alt"></i>
+                        <p class="upload-area__text">Arrastra tu foto aquí o haz clic para seleccionar</p>
+                        <p class="upload-area__note">Formatos: JPG, PNG (Máx. 5MB)</p>
+                        <input type="file" class="upload-area__input" accept="image/jpeg,jpg,png,webpe" />
+                      </div>
+                    </div>
+                    <!-- IMAGENES DE EXPERIENCIAS-->
+                    <div class="form-professional__groupImagesExperiences">
+                      <label class="form-professional-groupImagesExperiences__label">Imágenes de trabajos realizados</label>
+                      <div class="upload-area">
+                        <i class="upload-area__icon fas fa-cloud-upload-alt"></i>
+                        <p class="upload-area__text">Arrastra tus imágenes aquí o haz clic para seleccionar</p>
+                        <p class="upload-area__note">Puedes subir hasta 10 imágenes (Máx. 5MB cada una)</p>
+                        <input type="file" class="upload-area__input" accept="image/jpeg,jpg,png,webpe" multiple />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- TERMINOS Y CONDICIONES
+                        <div class="form-basic register-formProfessional__terms">
+                            <div class="register-formProfessional__checkbox">
+                                <input name="terms" type="checkbox" class="register-formProfessional__checkbox-input" required />
+                                <label class="register-formProfessional__checkbox-label">
+                                    Acepto los <a href="#" class="register-formProfessional__link">Términos y Condiciones</a> y la
+                                    <a href="#" class="register-formProfessional__link">Política de Privacidad</a> de ConectaServ
+                                    <span>*</span>
+                                </label>
+                            </div>
+                        </div> -->
+              <!-- BOTON REGISTRO -->
+              <div class="btn-container container-btn--flex-end register-formProfessional__actions register-formProfessional__actions--hidden">
+                <button type="submit" disabled class="btn btn--with-icon register-formProfessional__submit-btn">
+                  Registrarse
+                  <i class="fa-solid fa-user-plus"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- PIE PÁGINA -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-columns">
+          <!-- LOGO REUTILIZABLE -->
+          <div class="card-logo">
+            <a href="../../index.html" class="card-logo__logo">
+              <div class="card-logo__icon">
+                <i class="fas fa-hands-helping"></i>
+              </div>
+              <span class="card-logo__text">ConectaServ</span>
+            </a>
+          </div>
+          <p>Conectando personas con trabajadores de confianza.</p>
+        </div>
+
+        <div class="footer-links">
+          <h4>Enlaces</h4>
+          <ul>
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">¿Cómo funciona?</a></li>
+            <li><a href="#">Iniciar Sesión</a></li>
+            <li><a href="#">Registrarse</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-contact">
+          <h4>Contacto</h4>
+          <p>Email: ejemploemail@.com</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 ConectaServ. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+
+    <script src="../../dist/main.js" type="module"></script>
+  </body>
+</html>

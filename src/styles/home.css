@@ -16,6 +16,7 @@ button.color {
     padding: 10px 20px;
     cursor: pointer;
     transition: all 0.25s ease;
+    transition: all 0.25s ease;
 }
 
 button.color:hover {
@@ -35,6 +36,7 @@ button.color:active {
 /* -- Header -- */
 .header {
     padding: 1rem 0;
+    background-color: var(--bg-primary);
     background-color: var(--bg-primary);
     border-bottom: 1px solid #eee;
 }
@@ -219,6 +221,7 @@ button.color:active {
 /*Footer*/
 .footer {
     background-color: var(--bg-secondary);
+    background-color: var(--bg-secondary);
     padding: 40px 20px;
     font-size: 0.9rem;
     color: #fff;
@@ -229,7 +232,6 @@ button.color:active {
     flex-direction: column;
     gap: 30px;
 }
-
 
 .card-logo,
 .card-logo__logo {

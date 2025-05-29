@@ -1,9 +1,14 @@
 {
   "compilerOptions": {
     "target": "ES2023",
-    "module": "ES6", 
+    "module": "ES2022",
+    "baseUrl": "./src",
     "rootDir": "./src",
     "outDir": "./dist",
+    "paths": {
+      "@config/*": ["config/*"],
+      "@types/*": ["types/*"]
+    },
     "removeComments": true,
     "noEmitOnError": false,
     "esModuleInterop": true,
@@ -11,5 +16,5 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src"]
+  "include": ["src/**/*"]
 }

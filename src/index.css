@@ -1,47 +1,353 @@
 /* -- General styles -- */
 /* IMPORTO CSS HOME EN INDEX PRINCIPAL */
-@import url('./styles/home.css'); 
+@import url('./styles/home.css');
 @import url('./styles/modalRol.css');
-@import url('./styles/register.css');
+@import url('./styles/registerProfessional.css');
 
+/* ROOT */
 /* VARIABLES CSS PARA DETERMINAR COLORES PRIMARIOS Y SECUNDARIOS ETC Y REUTILIZAR*/
-/* :root{
-
-} */
-
-/* RESETEO */
-*,::after, ::before{
-    box-sizing: border-box;
-    padding: 0;
-    margin:0;
+:root {
+  --bg-primary: #eceaea;
+  --bg-secondary: #1E5DA3;
 }
 
+
+/*******************************************RESETEO UNIVERSAL***************************************************/
+*,
+::after,
+::before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+/******************************************RESETEO ESTILOS DE TODOS LOS ELEMNTOS DEL BODY*************************************/
+
+/* BODY Y MAIN DE PAGINA */
 body {
-    font-family: 'Inter', sans-serif;
+  background-color: var(--bg-primary);
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 1px;
 }
 
 h1 {
-    font-size: 3.4rem;
+  font-size: 3.4rem;
 }
 
+body,
+main {
+  min-height: 100dvh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  padding: .9rem 0;
+}
+
+
+/* TITULO NIVEL 1  */
+h1 {
+  font-size: 1.75rem;
+}
+
+/* TITULO NIVEL 2 */
 h2 {
-    font-size: 1.5rem;
-    margin-bottom: 2rem
+  font-size: 1rem;
 }
 
+/* TITULO NIVEL 3 */
 h3 {
-    font-size: 1.125rem;
+  font-size: .950rem;
 }
 
+/* TITULO NIVEL 3 */
 h4{
-    font-size: 1rem;
-    font-weight: bold;
+    font-size: .8rem;
 }
 
+/* PARA TODOS LOS PARRAFOS */
 p {
-    font-size: 1rem;
+  font-size: .6rem;
+}
+
+li {
+  list-style-type: none;
 }
 
 a {
+  color: #FFFF;
+}
+
+
+/* ELEMENTOS FLEXBOX */
+body,
+main,
+.container-textInfo,
+.radio-group,
+.radio-option,
+form input[type="checkbox"],
+.group-select,
+.container-btn,
+.btn--with-icon {
+  display: flex;
+}
+
+/* ALINEADOS AL CENTRO */
+.container-textInfo,
+.radio-group,
+.radio-option,
+form input[type="checkbox"],
+.container-btn,
+.btn--with-icon {
+  align-items: center;
+}
+
+/* JUSTIFICADO AL CENTRO */
+body,
+main,
+form input[type="checkbox"] {
+  justify-content: center;
+}
+
+/* JUSTIFICADO AL FINAL */
+.container-btn {
+  justify-content: flex-end;
+}
+
+/* DIRECCION COLUMNS */
+body,
+main,
+.group-select {
+  flex-direction: column;
+}
+
+/* FLEX BASIS 100% */
+body,
+main,
+.group-select,
+.container-btn {
+  flex-basis: 100%;
+}
+
+/* GAP .5REM */
+.container-textInfo,
+.radio-option,
+.btn--with-icon {
+  gap: .5rem;
+}
+
+/* GAP 1REM (POR SI SE AGREGA ALGUNO)*/
+
+
+/* GAP 1.5REM */
+.group-select {
+  gap: 1rem;
+}
+
+.radio-group {
+  gap: 1.5rem;
+}
+
+/* 2REM (POR SI SE AGREGA ALGUNO)*/
+
+
+/******************************************RESETEO ESTILOS EN FORMULARIOS*************************************/
+form {
+  line-height: 1.25rem;
+  color: #111827;
+  background-color: white;
+}
+
+/* RESETEO DE EN LABEL, INPUTS TEXTAREA Y PLACEHOLDERS*/
+form label,
+form label .radio-option__label,
+form input,
+form label textarea::placeholder,
+form label input::placeholder {
+  font-size: .7rem;
+}
+
+/* INPUTS, TEXTAREAS Y SELECTS */
+form input,
+form textarea,
+form select {
+  width: 100%;
+  padding: .5rem .75rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  border: 1px solid #D1D5DB;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: .375rem;
+}
+
+/*¨************************CLASES ESPECIFICAS PARA ESTILOS DE LOS TEXTOS INFORMATIVOS************************ */
+
+/* ESTILOS AL CONTENEDOR DE TEXTO INFORMATIVO */
+.container-textInfo {
+  color: var(--bg-secondary);
+}
+
+/* ESTILOS DE TAMAÑO DE FUENTE PARA EL CONTENEDOR DE TEXTO INFORMATIVO Y AL PARRAFO QUE CONTIENE*/
+.container-textInfo,
+.container-textInfo p {
+  font-size: 0.43rem;
+}
+
+/********************************************RESETEO DE INPUTS RADIO Y CHECKBOX******************************/
+form input[type="checkbox"],
+form input[type="radio"] {
+  position: relative;
+  appearance: none;
+  border: 2px solid #D1D5DB;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+form input[type="radio"] {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+}
+
+form input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 0.25rem;
+}
+
+/* ESTILOS DE CHECKED EN INPUTS TIPO RADIO Y CHECKBOX */
+form input[type="radio"]:checked,
+form input[type="checkbox"]:checked {
+  background-color: #2563EB;
+  border-color: #2563EB;
+}
+
+/* AFTER DE INPUT RADIO Y CHECKED */
+form input[type="radio"]:checked::after,
+form input[type="checkbox"]:checked::after {
+  position: absolute;
+}
+
+form input[type="checkbox"]:checked::after {
+  content: "✔";
+  color: white;
+  line-height: 1;
+  font-size: 1rem;
+}
+
+form input[type="radio"]:checked::after {
+  content: "";
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: white;
+  border-radius: 9999px;
+  top: 0.15rem;
+  left: 0.15rem;
+}
+
+/*  ESTILOS AL CONTENEDOR DE BOTONES*/
+.container-btn {
+  padding: .8rem;
+}
+
+/* ESTILOS GENERALES PARA TODOS BOTONES CON ICONOS */
+.btn--with-icon {
+  font-size: 1rem;
+  color: white;
+}
+
+/* ESTILOS GENERALES PARA TODOS BOTONES SIN ICONOS*/
+.btn {
+  width: 100%;
+  max-width: max-content;
+  font-weight: 600;
+  padding: .75rem 1.25rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  background-color: #2563EB;
+  transition: background-color 0.3s ease;
+}
+
+/* MOBILE-FIRST */
+
+/****************************RESPONSIVE RESETEADO PARA TODOS LOS HAMBITOS DE LA WEB ***********************************/
+/* 768px */
+@media (min-width: 768px) {
+
+  .container-textInfo,
+  .container-textInfo p {
+    font-size: 0.72rem;
+  }
+}
+
+/* 968px */
+@media (min-width: 968px) {
+
+  /* TITULO NIVEL 1  */
+  h1 {
+    font-size: 2.75rem;
+  }
+
+  /* TITULO NIVEL 2 */
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  /* TITULO NIVEL 3 */
+  h3 {
     font-size: 1rem;
+  }
+
+  /* TITULO NIVEL 3 */
+h4{
+    font-size: .9rem;
+}
+
+  /* PARA TODOS LOS PARRAFOS */
+  p {
+    font-size: .7rem;
+  }
+
+  /* RESETEO DE EN LABEL, INPUTS TEXTAREA Y PLACEHOLDERS*/
+  form label,
+  form input,
+  form label textarea::placeholder,
+  form label input::placeholder {
+    font-size: .7rem;
+  }
+}
+
+/* 1024px */
+@media (min-width: 1024px) {
+
+  /* TITULO NIVEL 1  */
+  h1 {
+    font-size: 3.75rem;
+  }
+
+  /* TITULO NIVEL 2 */
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 2rem
+  }
+
+  /* TITULO NIVEL 3 */
+  h3 {
+    font-size: 1.125rem;
+  }
+  
+  /* TITULO NIVEL 3 */
+h4{
+    font-size: 1rem;
+}
+  /* PARA TODOS LOS PARRAFOS */
+  p {
+    font-size: .8rem;
+  }
 }
