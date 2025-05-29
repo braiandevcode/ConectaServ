@@ -30,6 +30,10 @@ body {
   letter-spacing: 1px;
 }
 
+h1 {
+  font-size: 3.4rem;
+}
+
 body,
 main {
   min-height: 100dvh;
@@ -58,6 +62,11 @@ h2 {
 /* TITULO NIVEL 3 */
 h3 {
   font-size: .950rem;
+}
+
+/* TITULO NIVEL 3 */
+h4{
+    font-size: .8rem;
 }
 
 /* PARA TODOS LOS PARRAFOS */
@@ -161,6 +170,7 @@ form label textarea::placeholder,
 form label input::placeholder {
   font-size: .7rem;
 }
+
 /* INPUTS, TEXTAREAS Y SELECTS */
 form input,
 form textarea,
@@ -269,6 +279,7 @@ form input[type="radio"]:checked::after {
 /****************************RESPONSIVE RESETEADO PARA TODOS LOS HAMBITOS DE LA WEB ***********************************/
 /* 768px */
 @media (min-width: 768px) {
+
   .container-textInfo,
   .container-textInfo p {
     font-size: 0.72rem;
@@ -292,6 +303,11 @@ form input[type="radio"]:checked::after {
   h3 {
     font-size: 1rem;
   }
+
+  /* TITULO NIVEL 3 */
+h4{
+    font-size: .9rem;
+}
 
   /* PARA TODOS LOS PARRAFOS */
   p {
@@ -318,13 +334,18 @@ form input[type="radio"]:checked::after {
   /* TITULO NIVEL 2 */
   h2 {
     font-size: 1.5rem;
+    margin-bottom: 2rem
   }
 
   /* TITULO NIVEL 3 */
   h3 {
     font-size: 1.125rem;
   }
-
+  
+  /* TITULO NIVEL 3 */
+h4{
+    font-size: 1rem;
+}
   /* PARA TODOS LOS PARRAFOS */
   p {
     font-size: .8rem;
