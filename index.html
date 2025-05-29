@@ -16,17 +16,45 @@
 
 <body>
   <!-- CABECERA -->
-  <header>
-    <div class="container">
-      <p class="logo">ConectaServ</p>
+  <header class="header">
+    <div class="header__container">
+      <div class="card-logo">
+        <a href="#" class="card-logo__logo">
+          <div class="card-logo__icon">
+            <i class="fas fa-hands-helping"></i>
+          </div>
+          <span class="card-logo__text">ConectaServ</span>
+        </a>
+      </div>
       <button class="menu-toggle">
-        ☰
+        <i class="fas fa-list"></i>
       </button>
       <nav class="nav-links">
-        <a href="#">Inicio</a>
-        <a href="#como-funciona">¿Cómo funciona?</a>
-        <a href="#categorias">Categorías</a>
-        <a href="./src/pages/login.html">Iniciar Sesión</a>
+        <a href="#como-funciona" class="nav__link">¿Cómo funciona?</a>
+
+        <div class="dropdown">
+          <a href="#" class="nav-item dropdown-toggle nav__link">
+            Categorías <i class="fa-solid fa-angle-down"></i>
+          </a>
+          <div class="dropdown__menu">
+            <div class="dropdown__group">
+              <p class="dropdown__title">Reparaciones</p>
+              <a href="#" class="dropdown__item">blabla</a>
+            </div>
+
+            <div class="dropdown__group">
+              <p class="dropdown__title">Jardinería</p>
+              <a href="#" class="dropdown__item">blabla</a>
+            </div>
+
+            <div class="dropdown__group">
+              <p class="dropdown__title">Mudanzas y transporte</p>
+              <a href="#" class="dropdown__item">blabla</a>
+            </div>
+          </div>
+        </div>
+
+        <a href="./src/pages/login.html" class="nav__link">Iniciar Sesión</a>
         <button class="color btnRegister">Registrarse</button>
       </nav>
     </div>
@@ -37,37 +65,45 @@
     <h1>Encuentra prestadores de servicios confiables</h1>
   </section>
 
-  <!-- CATEGORIAS -->
-  <section id="categorias" class="categorias">
-    <div class="container">
-      <h2>Categorías</h2>
-      <div class="categorias-flex">
-        <button class="card">
-          <span>Reparaciones y mantenimiento</span>
-        </button>
-        <button class="card">
-          <span>Jardinería y mantenimiento</span>
-        </button>
-        <button class="card">
-          <span>Mudanzas y transporte</span>
-        </button>
-      </div>
-    </div>
-  </section>
-
   <!-- COMO FUNCIONA -->
-  <section id="como-funciona" class="como-funciona">
+  <!-- <section id="como-funciona" class="como-funciona">
     <div class="container">
       <div class="img-container"></div>
       <h2>¿Cómo funciona?</h2>
-      <p>Conectá con trabajadores calificados, chateá y contratá con confianza.<br>Mirá cómo usar la plataforma
-      </p>
+      <ol>
+        <li>Busca a prestadores por categoría</li>
+        <li>Elige un trabajador de tu preferencia</li>
+        <li>Chateá y paga</li>
+      </ol>
+    </div>
+  </section> -->
+  <section class="como-funciona">
+    <div class="container">
+      <h2>Cómo funciona</h2>
+      <div class="img-pasos__container">
+        <div class="img-container">
+        </div>
+        <div class="pasos">
+          <div class="paso">
+            <i class="fas fa-clipboard-list paso__icono"></i>
+            <p>Busca a prestadores por categoría</p>
+          </div>
+          <div class="paso">
+            <i class="fas fa-user-check paso__icono"></i>
+            <p>Elige un trabajador de tu preferencia</p>
+          </div>
+          <div class="paso">
+            <i class="fas fa-comments-dollar paso__icono"></i>
+            <p>Chateá y paga</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
 
   <!-- MODAL ROL -->
-  <div class="modal-rol modal-rol--hidden">
+  <div class="modal-rol modal-rol--hidden modal-flex">
     <div class="modal-rol__container">
       <div class="modal-rol__content">
         <div class="modal-rol__header">
@@ -112,21 +148,22 @@
 
   <!-- PIE PÁGINA -->
   <footer class="footer">
-    <div class="container">
-      <div class="footer-columns">
-        <div class="footer-logo">
-          <div class="footer-logo__logo">
-            <a href="#" class="footer-logo__link">   
-              <div class="footer-logo__icon">
+    <div class="footer__container container">
+      <div class="footer__columns">
+        <div class="footer__logo">
+          <!-- LOGO REUTILIZABLE -->
+          <div class="card-logo">
+            <a href="#" class="card-logo__logo card-logo__logo--footer">
+              <div class="card-logo__icon--footer">
                 <i class="fas fa-hands-helping"></i>
               </div>
-               <span class="footer-logo__text">ConectaServ</span>
+              <span class="card-logo__text--footer">ConectaServ</span>
             </a>
           </div>
           <p>Conectando personas con trabajadores de confianza.</p>
         </div>
 
-        <div class="footer-links">
+        <div class="footer__links">
           <h4>Enlaces</h4>
           <ul>
             <li><a href="#">Inicio</a></li>
