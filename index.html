@@ -1,162 +1,167 @@
 <!DOCTYPE html>
 <html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Encuentra un servicio de forma rapida y segura" />
+    <meta name="keywords" content="Contratar, Pago Online, Chat" />
+    <title>ConectaServ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Encuentra un servicio de forma rapida y segura">
-  <meta name="keywords" content="Contratar, Pago Online, Chat">
-  <title>ConectaServ</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./src/index.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
+  <!-- CUERPO -->
 
-<!-- CUERPO -->
+  <!-- ACA ESTUBE YO BRAIAN TOCANDO COSAS -->
 
-<body>
-  <!-- CABECERA -->
-  <header>
-    <div class="container">
-      <div class="card-logo">
-        <a href="#" class="card-logo__logo">
-          <div class="card-logo__icon">
-            <i class="fas fa-hands-helping"></i>
-          </div>
-          <span class="card-logo__text card-logo__text--head">ConectaServ</span>
-        </a>
+  <body>
+    <!-- CABECERA -->
+    <header>
+      <div class="container">
+        <div class="card-logo">
+          <a href="./index.html" class="card-logo__logo">
+            <div class="card-logo__icon">
+              <i class="fas fa-hands-helping"></i>
+            </div>
+            <span class="card-logo__text card-logo__text--head">ConectaServ</span>
+          </a>
+        </div>
+        <button class="menu-toggle">
+          <i class="fas fa-list"></i>
+        </button>
+        <nav class="nav-links">
+          <a href="./index.html">Inicio</a>
+          <a href="#como-funciona">¿Cómo funciona?</a>
+          <a href="#categorias">Categorías</a>
+          <a href="./src/pages/login.html">Iniciar Sesión</a>
+          <button class="color btnRegister">Registrarse</button>
+        </nav>
       </div>
-      <button class="menu-toggle">
-        <i class="fas fa-list"></i>
-      </button>
-      <nav class="nav-links">
-        <a href="#">Inicio</a>
-        <a href="#como-funciona">¿Cómo funciona?</a>
-        <a href="#categorias">Categorías</a>
-        <a href="./src/pages/login.html">Iniciar Sesión</a>
-        <button class="color btnRegister">Registrarse</button>
-      </nav>
-    </div>
-  </header>
+    </header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <h1>Encuentra prestadores de servicios confiables</h1>
-  </section>
+    <!-- HERO -->
+    <section class="hero">
+      <h1>Encuentra prestadores de servicios confiables</h1>
+    </section>
 
-  <!-- CATEGORIAS -->
-  <section id="categorias" class="categorias">
-    <div class="container">
-      <h2>Categorías</h2>
-      <div class="categorias-flex">
-        <button class="card">
-          <span>Reparaciones y mantenimiento</span>
-        </button>
-        <button class="card">
-          <span>Jardinería y mantenimiento</span>
-        </button>
-        <button class="card">
-          <span>Mudanzas y transporte</span>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- COMO FUNCIONA -->
-  <section id="como-funciona" class="como-funciona">
-    <div class="container">
-      <div class="img-container"></div>
-      <h2>¿Cómo funciona?</h2>
-      <p>Conectá con trabajadores calificados, chateá y contratá con confianza.<br>Mirá cómo usar la plataforma
-      </p>
-    </div>
-  </section>
-
-
-  <!-- MODAL ROL -->
-  <div class="modal-rol modal-rol--hidden modal-flex">
-    <div class="modal-rol__container">
-      <div class="modal-rol__content">
-        <div class="modal-rol__header">
-          <h3 class="modal-rol__title">Regístrate en ConectaServ</h3>
-          <button class="modal-rol__close-btn">
-            <i class="fas fa-times modal-rol__close-icon"></i>
+    <!-- CATEGORIAS -->
+    <section id="categorias" class="categorias">
+      <div class="container">
+        <h2>Categorías</h2>
+        <div class="categorias-flex">
+          <button class="card">
+            <span>Reparaciones y mantenimiento</span>
+          </button>
+          <button class="card">
+            <span>Jardinería y mantenimiento</span>
+          </button>
+          <button class="card">
+            <span>Mudanzas y transporte</span>
           </button>
         </div>
-
-        <p class="modal-rol__description">Selecciona el tipo de cuenta que deseas crear:</p>
-
-        <div class="modal-rol__cards">
-          <!-- TARJETA CLIENTE -->
-          <div data-role="cliente" class="modal-rol__card modal-rol__card--cliente">
-            <div class="modal-rol__card-inner">
-              <div class="modal-rol__icon-container">
-                <i class="fas fa-user modal-rol__icon"></i>
-              </div>
-              <div class="modal-rol__text">
-                <h4 class="modal-rol__card-title">Cliente</h4>
-                <p class="modal-rol__card-description">Busca y contrata profesionales para tus necesidades</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- TARJETA PROFESIONAL -->
-          <div data-role="profesional" class="modal-rol__card modal-rol__card--profesional">
-            <div class="modal-rol__card-inner">
-              <div class="modal-rol__icon-container">
-                <i class="fas fa-briefcase modal-rol__icon"></i>
-              </div>
-              <div class="modal-rol__text">
-                <h4 class="modal-rol__card-title">Profesional</h4>
-                <p class="modal-rol__card-description">Ofrece tus servicios y encuentra nuevos clientes</p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- PIE PÁGINA -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-columns">
-        <div class="footer-logo">
-          <!-- LOGO REUTILIZABLE -->
-          <div class="card-logo">
-            <a href="#" class="card-logo__logo">
-              <div class="card-logo__icon">
-                <i class="fas fa-hands-helping"></i>
+    <!-- COMO FUNCIONA -->
+    <section id="como-funciona" class="como-funciona">
+      <div class="container">
+        <div class="img-container"></div>
+        <h2>¿Cómo funciona?</h2>
+        <p>
+          Conectá con trabajadores calificados, chateá y contratá con confianza.
+          <br />
+          Mirá cómo usar la plataforma
+        </p>
+      </div>
+    </section>
+
+    <!-- MODAL ROL -->
+    <div class="modal-rol modal-rol--hidden">
+      <div class="modal-rol__container">
+        <div class="modal-rol__content">
+          <div class="modal-rol__header modal-rol__header--column">
+            <div class="modal-rol__header">
+              <h3 class="modal-rol__title">Regístrate en ConectaServ</h3>
+              <button class="modal-rol__close-btn">
+                <i class="fas fa-times modal-rol__close-icon"></i>
+              </button>
+            </div>
+            <div>
+              <p class="modal-rol__description">Selecciona el tipo de cuenta que deseas crear:</p>
+            </div>
+          </div>
+
+          <div class="modal-rol__cards">
+            <!-- TARJETA CLIENTE -->
+            <a href="./src/pages/register-client.html" class="modal-rol__card modal-rol__card--cliente">
+              <div class="modal-rol__card-inner">
+                <div class="modal-rol__icon-container">
+                  <i class="fas fa-user modal-rol__icon"></i>
+                </div>
+                <div class="modal-rol__text">
+                  <h4 class="modal-rol__card-title">Cliente</h4>
+                  <p class="modal-rol__card-description">Busca y contrata profesionales para tus necesidades</p>
+                </div>
               </div>
-              <span class="card-logo__text">ConectaServ</span>
+            </a>
+
+            <!-- TARJETA PROFESIONAL -->
+            <a href="./src/pages/register-pro.html" class="modal-rol__card modal-rol__card--profesional">
+              <div class="modal-rol__card-inner">
+                <div class="modal-rol__icon-container">
+                  <i class="fas fa-briefcase modal-rol__icon"></i>
+                </div>
+                <div class="modal-rol__text">
+                  <h4 class="modal-rol__card-title">Profesional</h4>
+                  <p class="modal-rol__card-description">Ofrece tus servicios y encuentra nuevos clientes</p>
+                </div>
+              </div>
             </a>
           </div>
-          <p>Conectando personas con trabajadores de confianza.</p>
         </div>
-
-        <div class="footer-links">
-          <h4>Enlaces</h4>
-          <ul>
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#">¿Cómo funciona?</a></li>
-            <li><a href="#">Iniciar Sesión</a></li>
-            <li><a href="#">Registrarse</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-contact">
-          <h4>Contacto</h4>
-          <p>Email: ejemploemail@.com</p>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <p>&copy; 2025 ConectaServ. Todos los derechos reservados.</p>
       </div>
     </div>
-  </footer>
 
-  <script src="./dist/main.js" type="module"></script>
-</body>
+    <!-- PIE PÁGINA -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-columns">
+          <div class="footer-logo">
+            <!-- LOGO REUTILIZABLE -->
+            <div class="card-logo">
+              <a href="#" class="card-logo__logo">
+                <div class="card-logo__icon">
+                  <i class="fas fa-hands-helping"></i>
+                </div>
+                <span class="card-logo__text">ConectaServ</span>
+              </a>
+            </div>
+            <p>Conectando personas con trabajadores de confianza.</p>
+          </div>
 
+          <div class="footer-links">
+            <h4>Enlaces</h4>
+            <ul>
+              <li><a href="#">Inicio</a></li>
+              <li><a href="#">¿Cómo funciona?</a></li>
+              <li><a href="#">Iniciar Sesión</a></li>
+              <li><a href="#">Registrarse</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-contact">
+            <h4>Contacto</h4>
+            <p>Email: ejemploemail@.com</p>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>&copy; 2025 ConectaServ. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="./dist/main.js" type="module"></script>
+  </body>
 </html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Encuentra un servicio de forma rapida y segura" />
+    <meta name="keywords" content="Contratar, Pago Online, Chat" />
+    <title>ConectaServ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+
+  <!-- CUERPO -->
+  <body>
+    <!-- CABECERA -->
+    <header>
+      <div class="container">
+        <!-- LOGO REUTILIZABLE -->
+        <div class="card-logo">
+          <a href="../../index.html" class="card-logo__logo">
+            <div class="card-logo__icon">
+              <i class="fas fa-hands-helping"></i>
+            </div>
+            <span class="card-logo__text card-logo__text--head">ConectaServ</span>
+          </a>
+        </div>
+        <nav class="nav-links">
+          <a href="../../index.html#como-funciona">¿Cómo funciona?</a>
+          <a href="../../index.html#categorias">Categorías</a>
+          <a href="./src/pages/login.html">Iniciar Sesión</a>
+        </nav>
+      </div>
+    </header>
+    <!-- MAIN -->
+    <main>
+      <!-- REGISTRO DE PROFESIIONALES-->
+      <div class="register-userProfessional register-userProfessional--visible">
+        <div class="register-userProfessional__container">
+          <div class="register-userProfessional__content">
+            <div class="register-userProfessional__header">
+              <h2 class="tregister-userProfessional__title">Registro de Profesional</h2>
+            </div>
+            <form class="register-formProfessional">
+              <!-- REGISTRO INFORMACION BASICA -->
+              <div class="form-basic form-step" data-step="1">
+                <div class="register-formProfessional__header">
+                  <h3 class="form-basic__subtitle">Información básica</h3>
+                  <div class="container-textInfo">
+                    <i class="fas fa-info-circle"></i>
+                    <p class="container-textInfo__message">
+                      Los campos que contienen (
+                      <span>*</span>
+                      ) son obligatorios
+                    </p>
+                  </div>
+                </div>
+                <div class="form-basic__fields">
+                  <div class="form-basic__field">
+                    <label class="form-basic__label">
+                      Nombre completo
+                      <span>*</span>
+                    </label>
+                    <input type="text" name="fullName" class="form-basic__input" placeholder="Roberto Bustos" required />
+                  </div>
+                  <div class="form-basic__field">
+                    <label class="form-basic__label">
+                      Correo electrónico
+                      <span>*</span>
+                    </label>
+                    <input type="email" name="email" class="form-basic__input" autocomplete="email" placeholder="test@example.com" required />
+                  </div>
+                  <!-- SELECT UBICACION -->
+                  <div class="group-select form-basic__field form-basic__location">
+                    <label class="form-basic__label">
+                      Ubicación
+                      <span>*</span>
+                    </label>
+                    <select class="form-basic__location-select" name="location">
+                      <option value="" disabled selected>Seleccione una ciudad</option>
+                      <option value="olavarria">Olavarría</option>
+                      <option value="azul">Azul</option>
+                      <option value="tandil">Tandil</option>
+                    </select>
+                  </div>
+                  <!-- CONTRASEÑA -->
+                  <div class="form-basic__field">
+                    <label class="form-basic__label">
+                      Contraseña
+                      <span>*</span>
+                    </label>
+                    <input type="password" name="password" class="form-basic__input" autocomplete="new-password" placeholder="***********" required />
+                  </div>
+                  <div class="form-basic__field">
+                    <label class="form-basic__label">
+                      Confirmar contraseña
+                      <span>*</span>
+                    </label>
+                    <input type="password" name="confirmPassword" class="form-basic__input" autocomplete="confirmPassword" placeholder="***********" required />
+                  </div>
+                </div>
+              </div>
+              <!-- TERMINOS Y CONDICIONES -->
+              <div class="form-basic register-formProfessional__terms">
+                <div class="register-formProfessional__checkbox">
+                  <input name="terms" type="checkbox" class="register-formProfessional__checkbox-input" required />
+                  <label class="register-formProfessional__checkbox-label">
+                    Acepto los
+                    <a href="#" class="register-formProfessional__link">Términos y Condiciones</a>
+                    y la
+                    <a href="#" class="register-formProfessional__link">Política de Privacidad</a>
+                    de ConectaServ
+                    <span>*</span>
+                  </label>
+                </div>
+              </div>
+              <!-- BOTON REGISTRO -->
+              <div class="btn-container container-btn--flex-end register-formProfessional__actions">
+                <button type="submit" disabled class="btn btn--with-icon register-formProfessional__submit-btn">
+                  Registrarse
+                  <i class="fa-solid fa-user-plus"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- PIE PÁGINA -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-columns">
+          <!-- LOGO REUTILIZABLE -->
+          <div class="card-logo">
+            <a href="#" class="card-logo__logo">
+              <div class="card-logo__icon">
+                <i class="fas fa-hands-helping"></i>
+              </div>
+              <span class="card-logo__text">ConectaServ</span>
+            </a>
+          </div>
+          <p>Conectando personas con trabajadores de confianza.</p>
+        </div>
+
+        <div class="footer-links">
+          <h4>Enlaces</h4>
+          <ul>
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">¿Cómo funciona?</a></li>
+            <li><a href="#">Iniciar Sesión</a></li>
+            <li><a href="#">Registrarse</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-contact">
+          <h4>Contacto</h4>
+          <p>Email: ejemploemail@.com</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 ConectaServ. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+
+    <script src="../../dist/main.js" type="module"></script>
+  </body>
+</html>
