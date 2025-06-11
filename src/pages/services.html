@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Encuentra un servicio de forma rapida y segura">
+        <meta name="keywords" content="Contratar, Pago Online, Chat">
+        <title>ConectaServ</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="../styles/services.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+</head>
+
+<body>
+    <!-- CUERPO -->
+
+    <body>
+        <!-- CABECERA -->
+        <header class="header">
+            <div class="header__container">
+                <div class="card-logo">
+                    <a href="../../index.html" class="card-logo__logo">
+                        <div class="card-logo__icon">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <span class="card-logo__text">ConectaServ</span>
+                    </a>
+                </div>
+                <button class="menu-toggle">
+                    <i class="fas fa-list"></i>
+                </button>
+                <nav class="nav-links">
+                    <a href="#how-works" class="nav__link">¿Cómo funciona?</a>
+
+                    <div class="dropdown">
+                        <a href="#" class="nav-item dropdown-toggle nav__link">
+                            Categorías <i class="fa-solid fa-angle-down"></i>
+                        </a>
+                        <div class="dropdown__menu">
+                            <div class="dropdown__group">
+                                <p class="dropdown__title">Reparaciones</p>
+                                <a href="./services.html" class="dropdown__item">Plomería</a>
+                                <a href="./services.html" class="dropdown__item">Electricidad</a>
+                                <a href="./services.html" class="dropdown__item">Pintura</a>
+                                <a href="./services.html" class="dropdown__item">Carpintería</a>
+                                <a href="./services.html" class="dropdown__item">Electrodomésticos</a>
+                                <a href="./services.html" class="dropdown__item">Aire acondicionado</a>
+                                <a href="./services.html" class="dropdown__item">Herrería</a>
+                                <a href="./services.html" class="dropdown__item">Construcción en seco</a>
+                            </div>
+
+                            <div class="dropdown__group">
+                                <p class="dropdown__title">Jardinería</p>
+                                <a href="./services.html" class="dropdown__item">Corte de pasto</a>
+                                <a href="./services.html" class="dropdown__item">Poda de árboles</a>
+                                <a href="./services.html" class="dropdown__item">Poda de arbustos</a>
+                                <a href="./services.html" class="dropdown__item">Desmalezado</a>
+                                <a href="./services.html" class="dropdown__item">Limpieza de jardín</a>
+                                <a href="./services.html" class="dropdown__item">Fertilización/mantenimiento césped</a>
+                                <a href="./services.html" class="dropdown__item">Plantación</a>
+                            </div>
+
+                            <div class="dropdown__group">
+                                <p class="dropdown__title">Mudanzas y transporte</p>
+                                <a href="./services.html" class="dropdown__item">Mudanzas particulares</a>
+                                <a href="./services.html" class="dropdown__item">Mudanzas comerciales</a>
+                                <a href="./services.html" class="dropdown__item">Mudanzas locales</a>
+                                <a href="./services.html" class="dropdown__item">Muzandas larga distancia</a>
+                                <a href="./services.html" class="dropdown__item">Fletes por hora/viaje</a>
+                                <a href="./services.html" class="dropdown__item">Transporte de muebles</a>
+                                <a href="./services.html" class="dropdown__item">Transporte de electrodomésticos</a>
+                                <a href="./services.html" class="dropdown__item">Traslado de objetos frágiles</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="./src/pages/login.html" class="nav__link">Iniciar Sesión</a>
+                    <button class="color btnRegister">Registrarse</button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- CONTENIDO -->
+        <main class="main-content">
+            <!-- FILTROS -->
+            <button class="filters__btn">Filtros</button>
+
+            <aside class="filters__panel hidden">
+
+                <button class="filters__back">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+
+                <h3>Filtros</h3>
+                <div class="filter__group">
+                    <h4>Ordenar por</h4>
+                    <label><input type="radio"> Mejor calificación</label>
+                </div>
+
+                <div class="filter__group">
+                    <h4>Días</h4>
+                    <label><input type="checkbox"> Lunes</label>
+                    <label><input type="checkbox"> Martes</label>
+                    <label><input type="checkbox"> Miércoles</label>
+                    <label><input type="checkbox"> Jueves</label>
+                    <label><input type="checkbox"> Viernes</label>
+                </div>
+
+                <div class="filter__group">
+                    <h4>Horarios</h4>
+                    <label><input type="checkbox"> Mañana</label>
+                    <label><input type="checkbox"> Tarde</label>
+                    <label><input type="checkbox"> Noche</label>
+                    <label><input type="checkbox"> 24hs</label>
+                </div>
+
+                <div class="aplicate__container">
+                    <button id="aplicate__btn" class="btn">Aplicar</button>
+                </div>
+            </aside>
+
+            <!-- TARJETAS DE SERVICIO -->
+            <section class="cards">
+                <h2>Resultados para categoría elegida</h2>
+
+                <div class="card">
+                    <div class="card__content">
+
+                        <div class="card__info-container">
+                            <img src="../images/profile-pic.jpg" alt="Foto" class="card__img">
+                            
+                            <div class="card__info">
+                            <h3>José Fernandez</h3>
+                            <p><span class="green">5 estrellas</span> </p>
+                            </div>
+                        </div>
+                        <div class="card__description">
+                            <p>"Si estás buscando arreglar tu sillón lo puedo solucionar..."</p>
+                        </div>
+                        <div class="card__button--container">
+                            <button class="btn">Ver perfil</button>
+                        </div>
+                    </div>
+                </div>
+
+                                <div class="card">
+                    <div class="card__content">
+
+                        <div class="card__info-container">
+                            <img src="../images/profile-pic.jpg" alt="Foto" class="card__img">
+                            
+                            <div class="card__info">
+                            <h3>José Fernandez</h3>
+                            <p><span class="green">5 estrellas</span> </p>
+                            </div>
+                        </div>
+                        <div class="card__description">
+                            <p>"Si estás buscando arreglar tu sillón lo puedo solucionar..."</p>
+                        </div>
+                        <div class="card__button--container">
+                            <button class="btn">Ver perfil</button>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+
+        <!-- PIE PÁGINA -->
+        <footer class="footer">
+            <div class="footer__container container">
+                <div class="footer__columns">
+                    <div class="footer__logo">
+                        <!-- LOGO REUTILIZABLE -->
+                        <div class="card-logo">
+                            <a href="#" class="card-logo__logo card-logo__logo--footer">
+                                <div class="card-logo__icon--footer">
+                                    <i class="fas fa-hands-helping"></i>
+                                </div>
+                                <span class="card-logo__text--footer">ConectaServ</span>
+                            </a>
+                        </div>
+                        <p>Conectando personas con trabajadores de confianza.</p>
+                    </div>
+
+                    <div class="footer__links">
+                        <h4>Enlaces</h4>
+                        <ul>
+                            <li><a href="#">Inicio</a></li>
+                            <li><a href="#">¿Cómo funciona?</a></li>
+                            <li><a href="#">Iniciar Sesión</a></li>
+                            <li><a href="#">Registrarse</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-contact">
+                        <h4>Contacto</h4>
+                        <p>Email: ejemploemail@.com</p>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <p>&copy; 2025 ConectaServ. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="../../dist/main.js" type="module"></script>
+
+    </body>
+
+</html>
