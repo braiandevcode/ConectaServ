@@ -38,18 +38,38 @@
           </a>
           <div class="dropdown__menu">
             <div class="dropdown__group">
-              <h4 class="dropdown__title">Reparaciones</h4>
-              <a href="./services.html" class="dropdown__item">Carpintería</a>
+              <p class="dropdown__title">Reparaciones</p>
+              <a href="./src/pages/services.html" class="dropdown__item">Plomería</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Electricidad</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Pintura</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Carpintería</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Electrodomésticos</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Aire acondicionado</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Herrería</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Construcción en seco</a>
             </div>
 
             <div class="dropdown__group">
               <p class="dropdown__title">Jardinería</p>
-              <a href="#" class="dropdown__item">blabla</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Corte de pasto</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Poda de árboles</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Poda de arbustos</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Desmalezado</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Limpieza de jardín</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Fertilización/mantenimiento césped</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Plantación</a>
             </div>
 
             <div class="dropdown__group">
               <p class="dropdown__title">Mudanzas y transporte</p>
-              <a href="#" class="dropdown__item">blabla</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Mudanzas particulares</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Mudanzas comerciales</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Mudanzas locales</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Muzandas larga distancia</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Fletes por hora/viaje</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Transporte de muebles</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Transporte de electrodomésticos</a>
+              <a href="./src/pages/services.html" class="dropdown__item">Traslado de objetos frágiles</a>
             </div>
           </div>
         </div>
@@ -66,17 +86,6 @@
   </section>
 
   <!-- COMO FUNCIONA -->
-  <!-- <section id="how-works" class="how-works">
-    <div class="container">
-      <div class="img-container"></div>
-      <h2>¿Cómo funciona?</h2>
-      <ol>
-        <li>Busca a prestadores por categoría</li>
-        <li>Elige un trabajador de tu preferencia</li>
-        <li>Chateá y paga</li>
-      </ol>
-    </div>
-  </section> -->
   <section class="how-works">
     <div class="container">
       <h2>Cómo funciona</h2>
@@ -103,44 +112,51 @@
 
 
   <!-- MODAL ROL -->
-  <div class="modal-rol modal-rol--hidden modal-flex">
+  <div class="modal-rol modal-rol--hidden">
     <div class="modal-rol__container">
       <div class="modal-rol__content">
-        <div class="modal-rol__header">
-          <h3 class="modal-rol__title">Regístrate en ConectaServ</h3>
-          <button class="modal-rol__close-btn">
-            <i class="fas fa-times modal-rol__close-icon"></i>
-          </button>
+        <div class="modal-rol__header modal-rol__header--column">
+          <div class="modal-rol__header">
+            <h3 class="modal-rol__title">Regístrate en ConectaServ</h3>
+            <button class="modal-rol__close-btn">
+              <i class="fas fa-times modal-rol__close-icon"></i>
+            </button>
+          </div>
+          <div>
+            <p class="modal-rol__description">
+              Selecciona el tipo de cuenta que deseas crear:
+            </p>
+          </div>
         </div>
-
-        <p class="modal-rol__description">Selecciona el tipo de cuenta que deseas crear:</p>
-
         <div class="modal-rol__cards">
           <!-- TARJETA CLIENTE -->
-          <div data-role="cliente" class="modal-rol__card modal-rol__card--cliente">
+          <a href="./src/pages/register-client.html" class="modal-rol__card modal-rol__card--cliente">
             <div class="modal-rol__card-inner">
               <div class="modal-rol__icon-container">
                 <i class="fas fa-user modal-rol__icon"></i>
               </div>
               <div class="modal-rol__text">
                 <h4 class="modal-rol__card-title">Cliente</h4>
-                <p class="modal-rol__card-description">Busca y contrata profesionales para tus necesidades</p>
+                <p class="modal-rol__card-description">
+                  Busca y contrata profesionales para tus necesidades
+                </p>
               </div>
             </div>
-          </div>
-
+          </a>
           <!-- TARJETA PROFESIONAL -->
-          <div data-role="profesional" class="modal-rol__card modal-rol__card--profesional">
+          <a href="./src/pages/register-pro.html" class="modal-rol__card modal-rol__card--profesional">
             <div class="modal-rol__card-inner">
               <div class="modal-rol__icon-container">
                 <i class="fas fa-briefcase modal-rol__icon"></i>
               </div>
               <div class="modal-rol__text">
                 <h4 class="modal-rol__card-title">Profesional</h4>
-                <p class="modal-rol__card-description">Ofrece tus servicios y encuentra nuevos clientes</p>
+                <p class="modal-rol__card-description">
+                  Ofrece tus servicios y encuentra nuevos clientes
+                </p>
               </div>
             </div>
-          </div>
+          </a>
         </div>
       </div>
     </div>
