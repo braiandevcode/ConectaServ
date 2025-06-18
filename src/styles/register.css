@@ -1,0 +1,378 @@
+/*--------------------------------ESTILOS PARA EL FORMULARIO----------------------------------------------- */
+.register-userClient,
+.register-userProfessional {
+  max-width: 800px;
+}
+
+/* SUBCONTENEDOR DEL FORMULARIO*/
+.register-userClient__container,
+.register-userProfessional__container {
+  background-color: var(--bg-form);
+  border-radius: 0.5rem;
+  padding: 1.2rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* TITULO PRINCIPAL DE FORMULARIO */
+.register-userClient__title,
+.register-userProfessional__title {
+  font-size: 1.108rem;
+}
+
+/* ICONOS EN EL TITULO PRINCIPAL Y EL SUBTITULO */
+.register-userClient__title .fas,
+.register-userProfessional__title .fas,
+.form-basic__subtitle .fas,
+.form-basic__subtitle .fas {
+  color: var(--bg-secondary);
+}
+
+/* ICONOS DE LO TITULOS EN SECCIONES DENTRO DEL FORMULARIO */
+.form-professional-groupSpeciality__context-header .fas,
+.form-professional-groupSpeciality__dates-header .fas,
+.form-professional-groupSpeciality__speciality-header .fas,
+.form-professional-groupBudget__label .fas {
+  --text-color-secondary: green;
+  color: var(--text-color-secondary);
+}
+
+.form-professional-groupProfile .fas:not(.fas.fa-id-card) {
+  font-size: 1.5rem;
+  color: var(--btn-hover);
+}
+
+/*****************SECCION DEL FORMULARIO******************************** */
+
+/* FORMULARIO GENERAL DEL PROFESIONAL*/
+.register-formClient,
+.register-formProfessional {
+  width: 100%;
+}
+
+/* BOTON PARA VOLVER ATRAS */
+.register-userProfessional__arrow-left {
+  padding: .2rem;
+  user-select: none;
+  color: var(--bg-secondary);
+  border-radius: 50%;
+  font-size: 2rem;
+  order: -1;
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.form-basic__location-select option:nth-of-type(1) {
+  font-weight: bolder;
+}
+
+/* EVENTO FOCUS DE BOTON DE FORMULARIO */
+.register-formProfessional__submit-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.5);
+}
+
+/* ESTILOS DE BOTONES DE SIGUIENTE Y DE SUMBIT CUANDO ESTEN DESHABILITADOS */
+.container-btn__next:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+/*  ETIQUETAS LABEL DE INFORMACION BASICA */
+.form-basic__label {
+  color: var(--text-color-primary);
+}
+
+/* TODOS LOS ASTERISCOS EN ROJO */
+.span-required {
+  color: #e91111;
+}
+
+.form-professional-groupSpeciality__checks-wrapper {
+  flex-wrap: wrap;
+}
+
+/*---------------------------SECCION DE TERMINOS Y CONDICIONES-----------------------------------------------------------------*/
+.register-formClient__link,
+.register-formProfessional__link {
+  color: var(--link-color-secondary);
+  text-decoration: underline;
+}
+
+/*------------------------------------SECCION DE INFORMACION DE PROFESIONAL-----------------------------------------------------------*/
+
+/* ESTILOS GENERALES A TODOS LOS ITEMS DE CHECKBOX DEL FORMULARIO DE CADA SECCION*/
+.context,
+.day,
+.hour,
+.service {
+  font-size: small;
+}
+
+/*----------------------------------------------------SECCION PERFIL----------------------------------------------------------------------/
+
+/* TEXTO DE AYUDA */
+.upload-area__note {
+  font-size: 0.75rem;
+}
+
+.upload-area__input {
+  display: none;
+}
+
+/* AREAS DE SUBIDA DE IMAGEN */
+.upload-area {
+  border-style: dashed;
+  padding: .5rem;
+  text-align: center;
+  color: var(--text-color-primary);
+  transition: border-color .5s linear;
+}
+
+/* ICONO DE SUBIDA DE IMAGEN */
+.upload-area__icon {
+  font-size: 2rem;
+}
+
+.form-professional-groupSpeciality__containerChecksDates {
+  flex-grow: 1;
+}
+
+.form-professional-groupProfile__label {
+  font-weight: 500;
+  text-align: center;
+  font-size: .725rem;
+}
+
+/*--------------------FALTA ESCONDER Y ESTILIZAR UN BOTON PARA AGREGAR FOTO ---------------*/
+
+.form-professional__section {
+  flex-grow: 1;
+}
+
+.register-formClient__checkbox-label,
+.register-formProfessional__checkbox-label {
+  font-size: .6rem;
+}
+
+.form-basic__title-category {
+  color: var(--text-color-secondary);
+  background: linear-gradient(90deg, #144a76, #1e6aad);
+  padding: 1rem;
+  border-radius: 5px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+.containerMsgError {
+  width: 100%;
+}
+
+/* MENSAJE DE ERROR EN CAMPOS */
+.has-error {
+  font-size: small;
+  font-weight: 800;
+  color: #e51c1c;
+}
+
+/* BORDES PERSONALIZADOS DESDE JS */
+
+textarea.is-valid,
+select.is-valid,
+input.is-valid {
+  border-width: 2px;
+  border-color: #44d55ff0;
+}
+
+textarea {
+  font-family: sans-serif;
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+
+textarea.is-invalid,
+input.is-invalid {
+  border-width: 2px;
+  border-color: #e44444e6;
+}
+
+/* FOCUS ADICIONAL */
+textarea.is-valid:focus,
+select.is-valid:focus,
+input:not([type='radio']):not([type='checkbox']).is-valid:focus {
+  border-color: transparent;
+  box-shadow: 0 0 0 4px #44d55ff0;
+}
+
+textarea.is-invalid:focus,
+input:not([type='radio']):not([type='checkbox']).is-invalid:focus {
+  border-color: transparent;
+  box-shadow: 0 0 0 4px #e44444e6;
+}
+
+
+
+/*---------------------------------ELEMENTOS CON NONE------------------------------------*/
+/*BOTON DE REGISTRO ESCONDIDO*/
+.register-formProfessional__actions--hidden,
+/*BOTON DE ATRAS OCULTO*/
+.register-userProfessional__arrow-left--hidden,
+/* BOTON DE REGISTRARSE ESCONDIDO */
+.register-formProfessional__actions--hidden,
+/*ESCONDER LAS SECCIONES DE PASOS DEL FORMULARIO*/
+.form-step--hidden {
+  display: none;
+}
+
+/* IMAGENES PREVIAS */
+/* ESTILOS PARA LOS CONTENEDORES DE IMÁGENES (ÚNICAS Y MÚLTIPLES) */
+.form-professional-groupProfile__previewImage,
+.form-professional-groupProfile__previewMultipleImages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  border-radius: 8px; /* Bordes ligeramente redondeados */
+  padding: 15px;
+  background-color: #fafafa; /* Fondo suave */
+  min-height: 120px;
+}
+
+/* ESTILOS PARA LAS IMÁGENES DE VISTA PREVIA (ÚNICAS Y MÚLTIPLES) */
+.experience-image-preview,
+.profile-image-preview {
+  width: 150px; /* Tamaño de las imágenes */
+  height: 150px;
+  border-radius: 8px; /* Bordes redondeados */
+  object-fit: cover; /* Ajuste de imagen */
+  display: block;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efectos suaves */
+  margin: 5px; /* Espaciado entre las imágenes */
+}
+
+/* Efecto hover sobre las imágenes */
+.experience-image-preview:hover,
+.profile-image-preview:hover {
+  transform: scale(1.05); /* Aumento en el tamaño */
+  box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.2); /* Sombra más intensa */
+}
+
+/* ESTILOS PARA LOS ELEMENTOS VACÍOS (CUANDO NO HAY IMÁGENES) */
+.form-professional-groupProfile__previewMultipleImages:empty,
+.form-professional-groupProfile__previewImage:empty {
+  min-width: 0;
+  padding: 0;
+  background-color: transparent; /* Fondo más claro */
+  border-color: transparent; /* Borde gris cuando está vacío */
+}
+
+/* ESTILOS PARA LAS IMÁGENES DEL PERFIL (SI SE MUESTRAN) */
+.form-professional-groupProfile__previewImage img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 5px;
+}
+
+
+/* ASEGURAR QUE LOS EVENTOS DE HOVER SEAN PRECISOS SOLO PARA TABLET Y ESCRITORIO (INVESTIGADO) */
+@media (hover: hover) and (pointer: fine) {
+
+  /* HOVER EN EL AREA */
+  /*-------------------------------ANALIZAR Y CORREGIR ESTA PARTE-----------------------------------------*/
+  .register-formClient__link:hover,
+  .register-formProfessional__link:hover,
+  .upload-area:hover {
+    color: var(--btn-hover);
+  }
+
+  .upload-area:hover {
+    border-color: currentColor;
+  }
+
+  /* HOVER BOTON SUBMIT DE FORMULARIO */
+  .register-formProfessional__submit-btn:hover {
+    background-color: var(--btn-hover);
+  }
+
+  .register-userProfessional__arrow-left:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+
+/*-------------------------------------RESPONSIVE-------------------------------------------------------------/
+
+/* TABLET 768PX */
+@media (min-width:768px) {
+
+  .register-formClient__checkbox-label,
+  .register-formProfessional__checkbox-label {
+    font-size: .7rem;
+  }
+
+  .form-professional-groupProfile__containerImageProfile .form-professional__groupImagesExperiences,
+  .form-professional-groupProfile__containerDescription {
+    gap: 1.5rem;
+  }
+
+  .form-client,
+  .form-professional {
+    justify-content: start;
+  }
+
+  .form-professional__select {
+    width: 80%;
+  }
+
+  .register-userClient__title,
+  .register-userProfessional__title {
+    font-size: 1.45rem;
+  }
+
+  .form-professional-groupSpeciality__containerChecksDates {
+    flex-grow: 0;
+  }
+
+  .form-professional-groupSpeciality__checks-wrapper {
+    row-gap: 2rem;
+    column-gap: 8rem;
+  }
+
+  .form-professional-groupProfile__label {
+    font-size: .875rem;
+    text-align: start;
+  }
+}
+
+/* ESCRITORIO 1024PX */
+@media (min-width:1024px) {
+
+  .register-userClient__title,
+  .register-userProfessional__title {
+    font-size: 1.75rem;
+  }
+
+  .form-professional__select {
+    max-width: 50%;
+  }
+
+  .upload-area {
+    padding: 1rem;
+  }
+
+  .register-userProfessional__arrow-left {
+    opacity: .8;
+    transform: scale(.9);
+    transition: opacity .3s ease-in-out, transform .3s linear;
+  }
+
+  .form-basic__title-category {
+    justify-content: start;
+  }
+}

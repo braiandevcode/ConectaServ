@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="c-flex">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,350 +7,350 @@
     <meta name="keywords" content="Contratar, Pago Online, Chat" />
     <title>ConectaServ</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../index.css" />
+    <link rel="stylesheet" href="../index.copy.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
 
   <!-- CUERPO -->
-
-  <body>
+  <body class="c-flex c-flex-column flex:1">
     <!-- CABECERA -->
-    <header>
-      <div class="container">
-        <!-- LOGO REUTILIZABLE -->
+    <header class="header mb-2">
+      <div class="header__container">
         <div class="card-logo">
           <a href="../../index.html" class="card-logo__logo">
             <div class="card-logo__icon">
               <i class="fas fa-hands-helping"></i>
             </div>
-            <span class="card-logo__text card-logo__text--head">ConectaServ</span>
+            <span class="card-logo__text">ConectaServ</span>
           </a>
         </div>
-        <nav class="nav-links">
-          <a href="../../index.html#como-funciona">¿Cómo funciona?</a>
-          <a href="../../index.html#categorias">Categorías</a>
-          <a href="./src/pages/login.html">Iniciar Sesión</a>
-        </nav>
       </div>
     </header>
 
     <!-- MAIN -->
-    <main>
+    <!-- -------------------MODIFICAR EL "group-select" EN EL INDEX.CSS Y MODIFICAR ELEMENTOS FLEXBOX CON SUS PROPIEDADES ------------------->
+    <main class="mb-2">
       <!-- REGISTRO DE PROFESIIONALES-->
-      <div class="register-userProfessional register-userProfessional--visible">
-        <div class="register-userProfessional__container">
-          <div class="register-userProfessional__content">
-            <div class="register-userProfessional__header">
-              <h2 class="tregister-userProfessional__title">Registro de Profesional</h2>
+      <div class="w-full c-flex c-flex-justify-center centered register-userProfessional">
+        <div class="w-full register-userProfessional__container">
+          <div class="c-flex c-flex-column gap-1/2 register-userProfessional__content">
+            <div type="button" class="c-flex c-flex-self-start c-flex-items-center gap-1/2 cursor-pointer register-userProfessional__arrow-left register-userProfessional__arrow-left--hidden" data-step_prev>
+              <i class="to-left fas fa-arrow-circle-left"></i>
             </div>
-            <form class="register-formProfessional">
-              <!-- REGISTRO INFORMACION BASICA -->
-              <div class="form-basic form-step" data-step="1">
-                <div class="register-formProfessional__header">
-                  <h3 class="form-basic__subtitle">Información básica</h3>
-                  <div class="container-textInfo">
-                    <i class="fas fa-info-circle"></i>
-                    <p class="container-textInfo__message">
-                      Los campos que contienen (
-                      <span>*</span>
-                      ) son obligatorios
-                    </p>
+            <div class="w-full c-flex c-flex-items-center register-userProfessional__header">
+              <h1 class="w-full c-flex c-flex-items-center register-userProfessional__title">
+                <span>Registro</span>
+              </h1>
+            </div>
+            <form class="register-professional" enctype="multipart/form-data">
+              <div class="c-flex c-flex-column c-flex-justify-center register-formProfessional__header">
+                <h2 class="c-flex c-flex-wrap c-flex-items-center gap-1/2 form-basic__subtitle">
+                  <div class="c-flex w-full c-flex-items-center gap-1/2">
+                    <i class="fas fa-solid fa-toolbox"></i>
+                    <span>Informacion Profesional</span>
+                  </div>
+                </h2>
+                <div class="mb-1 c-flex c-flex-items-center gap-1/2 container-textInfo">
+                  <i class="fas fa-info-circle"></i>
+                  <small>
+                    Campos con (
+                    <span class="span-required">*</span>
+                    ) son obligatorios
+                  </small>
+                </div>
+              </div>
+              <!-- REGISTRO INFORMACION BASICA PASO 1-->
+              <div class="c-flex c-flex-column gap-3/2 form-basic form-step" data-step="1">
+                <!-- ENCABEZADO -->
+                <div class="c-flex c-flex-column c-flex-justify-center gap-1/2 register-formProfessional__header">
+                  <div class="c-flex c-flex-items-center gap-1 form-professional-groupSpeciality__header">
+                    <h3 class="form-professional-groupSpeciality__title">
+                      <i class="fas fa-id-card"></i>
+                      <span>Informacion basica</span>
+                    </h3>
                   </div>
                 </div>
-                <div class="form-basic__fields">
-                  <div class="form-basic__field">
-                    <label class="form-basic__label">
-                      Nombre completo
-                      <span>*</span>
+
+                <!-- CAMPOS DEL FORMULARIO -->
+                <div class="c-flex c-flex-column gap-1 form-basic__fields">
+                  <!-- CAMPO: NOMBRE COMPLETO -->
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                    <label for="fullName" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                      <span class="c-flex c-flex-items-center gap-1/2">
+                        <i class="fas fa-user"></i>
+                        <span>Nombre completo</span>
+                      </span>
+                      <span class="span-required">*</span>
                     </label>
-                    <input type="text" name="fullName" class="form-basic__input" placeholder="Roberto Bustos" required />
+                    <input type="text" name="fullName" id="fullName" class="form-basic__input" aria-label="Nombre completo" placeholder="Roberto Bustos" spellcheck="true" lang="es" autofocus required />
+                    <div data-message="fullName"><span class="has-error"></span></div>
                   </div>
-                  <div class="form-basic__field">
-                    <label class="form-basic__label">
-                      Correo electrónico
-                      <span>*</span>
+
+                  <!-- CAMPO: NOMBRE DE USUARIO -->
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                    <label for="userName" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                      <span class="c-flex c-flex-items-center gap-1/2">
+                        <i class="fas fa-user-tag"></i>
+                        <span>Nombre de usuario</span>
+                      </span>
+                      <span class="span-required">*</span>
                     </label>
-                    <input type="email" name="email" class="form-basic__input" autocomplete="email" placeholder="test@example.com" required />
+                    <input type="text" name="userName" id="userName" class="form-basic__input" aria-label="Nombre de usuario" placeholder="Roberto_Bustos.45" required />
+                    <div data-message="userName"><span class="has-error"></span></div>
                   </div>
-                  <!-- SELECT UBICACION -->
-                  <div class="group-select form-basic__field form-basic__location">
-                    <label class="form-basic__label">
-                      Ubicación
-                      <span>*</span>
+
+                  <!-- CAMPO: CORREO ELECTRONICO -->
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                    <label for="email" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                      <span class="c-flex c-flex-items-center gap-1/2">
+                        <i class="fas fa-envelope"></i>
+                        <span>Correo electronico</span>
+                      </span>
+                      <span class="span-required">*</span>
                     </label>
-                    <select class="form-basic__location-select" name="location">
+                    <input type="text" name="email" id="email" class="form-basic__input" aria-label="Correo electronico" autocomplete="email" placeholder="test@example.com" required />
+                    <div data-message="email"><span class="has-error"></span></div>
+                  </div>
+
+                  <!-- CAMPO: UBICACION (SELECT) -->
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field form-basic__location">
+                    <div data-message="location"><span class="has-error"></span></div>
+                    <label for="location" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                      <span class="c-flex c-flex-items-center gap-1/2">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Ubicacion</span>
+                      </span>
+                      <span class="span-required">*</span>
+                    </label>
+                    <select id="location" class="to-left form-basic__location-select" name="location">
                       <option value="" disabled selected>Seleccione una ciudad</option>
-                      <option value="olavarria">Olavarría</option>
+                      <option value="olavarria">Olavarria</option>
                       <option value="azul">Azul</option>
                       <option value="tandil">Tandil</option>
                     </select>
                   </div>
-                  <!-- CONTRASEÑA -->
-                  <div class="form-basic__field">
-                    <label class="form-basic__label">
-                      Contraseña
-                      <span>*</span>
+
+                  <!-- CAMPO: CONTRASENA -->
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                    <label for="password" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                      <span class="c-flex c-flex-items-center gap-1/2">
+                        <i class="fas fa-lock"></i>
+                        <span>Contrasena</span>
+                      </span>
+                      <span class="span-required">*</span>
                     </label>
-                    <input type="password" name="password" class="form-basic__input" autocomplete="new-password" placeholder="***********" required />
+                    <input type="password" name="password" id="password" class="form-basic__input" aria-label="Contrasena" autocomplete="new-password" placeholder="***********" required />
+                    <div data-message="password"><span class="has-error"></span></div>
                   </div>
-                  <div class="form-basic__field">
-                    <label class="form-basic__label">
-                      Confirmar contraseña
-                      <span>*</span>
+
+                  <!-- CAMPO: CONFIRMAR CONTRASENA -->
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                    <label for="confirmPassword" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                      <span class="c-flex c-flex-items-center gap-1/2">
+                        <i class="fas fa-user-lock"></i>
+                        <span>Confirmar contrasena</span>
+                      </span>
+                      <span class="span-required">*</span>
                     </label>
-                    <input type="password" name="confirmPassword" class="form-basic__input" autocomplete="confirmPassword" placeholder="***********" required />
+                    <input type="password" name="confirmPassword" id="confirmPassword" class="form-basic__input" aria-label="Confirmar contrasena" autocomplete="confirmPassword" placeholder="***********" required />
+                    <div data-message="confirmPassword"><span class="has-error"></span></div>
                   </div>
                 </div>
-                <div class="container-btn">
-                  <button type="button" disabled class="btn btn--with-icon container-btn__next" data-step="1">
-                    Siguiente
+
+                <!-- BOTON SIGUIENTE -->
+                <div class="c-flex c-flex-justify-end mb-2">
+                  <button type="button" disabled class="c-flex c-flex-justify-center c-flex-items-center gap-1/2 cursor-pointer btn container-btn__next" data-step="1">
+                    <span>Siguiente</span>
                     <i class="fas fa-arrow-circle-right"></i>
                   </button>
                 </div>
               </div>
-              <!-- REGISTRO INFORMACION PROFESIONAL -->
-              <div class="form-professional form-step form-step--hidden" data-step="2">
-                <div class="form-professional__section">
-                  <div class="register-formProfessional__header">
-                    <h3 class="form-basic__subtitle">Informacion Profesional</h3>
-                    <div class="container-textInfo">
-                      <i class="fas fa-info-circle"></i>
-                      <p class="container-textInfo__message">
-                        Los campos que contienen (
-                        <span>*</span>
-                        ) son obligatorios
-                      </p>
+              <!-- REGISTRO INFORMACION PROFESIONAL PASO 2 -->
+              <div class="c-flex c-flex-column c-flex-justify-center form-professional form-step form-step--hidden" data-step="2">
+                <!-- REGISTRO PROFESIONAL SECCIONES DE PASO 2 Y 3 -->
+                <div class="c-flex c-flex-column gap-1 form-professional__sections">
+                  <div data-select="category" class="c-flex c-flex-column gap-1 form-professional-groupSelectCategory">
+                    <div class="c-flex c-flex-items-center gap-1 form-professional-groupSelectCategory__header">
+                      <h3 class="form-professional-groupSelectCategory__title">
+                        <i class="fas fa-id-card"></i>
+                        <span>Seleccionar Categoría</span>
+                      </h3>
                     </div>
-                  </div>
-                  <div class="group-select">
                     <!-- SERVICIOS -->
-                    <label class="form-professional__title">
-                      Elegir categoría
-                      <span>*</span>
+                    <label for="category" class="c-flex c-flex-items-center gap-1/2 form-professional-groupSelectCategory__label">
+                      <span class="c-flex c-flex-items-center gap-1/2">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Elegir categoría</span>
+                      </span>
+                      <span class="span-required">*</span>
                     </label>
                     <!-- SELECT DE CATEGORIAS -->
-                    <select class="form-professional__select" name="category">
+                    <select id="category" class="w-full form-professional-groupSelectCategory__select" name="category">
                       <option disabled selected>Seleccione una categoría</option>
                       <option value="reparacion-mantenimiento">Reparación y mantenimiento</option>
                       <option value="mudanza-transporte">Mudanza y Transporte</option>
-                      <option value="jardineria-mantenimiento-exterior">Jardinería y mantenimiento exterior</option>
+                      <option value="jardineria">Jardinería</option>
                     </select>
                   </div>
-                  <!-- SECCION ESPECIALIZACION -->
-                  <div class="form-professional-groupSpeciality form-step form-step--hidden" data-step="3">
-                    <div class="form-professional-groupSpeciality__header form-professional-groupSpeciality__header--visible">
-                      <h3 class="form-professional-groupSpeciality__title">Paso 1: Especialización</h3>
+                  <!-- SECCION ESPECIALIZACION PASO 3-->
+                  <div class="c-flex c-flex-column gap-1 form-professional-groupSpeciality form-step form-step--hidden" data-step="3">
+                    <div class="c-flex c-flex-items-center gap-1 form-professional-groupSpeciality__header">
+                      <h3 class="form-professional-groupSpeciality__title">
+                        <i class="fas fa-id-card"></i>
+                        <span>Detalles de tu actividad</span>
+                      </h3>
                     </div>
-                    <div class="form-professional-groupSpeciality__section-wrapper form-professional-groupSpeciality__checks-wrapper--visible">
-                      <div class="form-professional-groupSpeciality__containerChecksSpecialitys form-professional-groupSpeciality__containerChecksSpecialitys--visible">
-                        <div class="form-professional-groupSpeciality__speciality-header">
-                          <i class="fas fa-screwdriver-wrench"></i>
-                          <label class="form-professional-groupSpeciality__label">
-                            Selecciona tus especialidades
-                            <span>*</span>
-                          </label>
-                        </div>
-                        <div class="form-professional-groupSpeciality__services-body"></div>
+                    <div class="mb-2 c-flex gap-2 form-professional-groupSpeciality__checks-wrapper">
+                      <div class="c-flex c-flex-column gap-1 form-professional-groupSpeciality__containerChecksSpecialitys">
+                        <div class="c-flex c-flex-column gap-1/2 form-professional-groupSpeciality__services-body"></div>
                       </div>
-                      <div class="form-professional-groupSpeciality__checks-wrapper form-professional-groupSpeciality__checks-wrapper--visible">
-                        <div class="form-professional-groupSpeciality__containerChecksContexts form-professional-groupSpeciality__containerChecksContexts--visible">
-                          <div class="form-professional-groupSpeciality__context-header">
-                            <i class="fas fa-building"></i>
-                            <label class="form-professional-groupSpeciality__label">
-                              ¿Dónde podés brindar tus servicios?
-                              <span>*</span>
-                            </label>
-                          </div>
-
-                          <div class="form-professional-groupSpeciality__contexts-body"></div>
-                        </div>
-                        <div class="form-professional-groupSpeciality__containerChecksDates form-professional-groupSpeciality__containerChecksDates--visible">
-                          <div class="form-professional-groupSpeciality__dates-header">
-                            <i class="fas fa-calendar-plus"></i>
-                            <label class="form-professional-groupSpeciality__label">
-                              Tus días y horarios
-                              <span>*</span>
-                            </label>
-                          </div>
-                          <div class="form-professional-groupSpeciality__dates-body">
-                            <div class="form-professional-groupSpeciality__containerChecksDays">
-                              <div class="form-professional-groupSpeciality__days-header">
-                                <i class="fas fa-calendar-days"></i>
-                                <h5>Días</h5>
-                              </div>
-                              <div class="form-professional-groupSpeciality__days-body"></div>
-                            </div>
-                            <div class="form-professional-groupSpeciality__containerChecksHours">
-                              <div class="form-professional-groupSpeciality__hours-header">
-                                <i class="fas fa-clock"></i>
-                                <h5>Horarios</h5>
-                              </div>
-                              <div class="form-professional-groupSpeciality__hours-body"></div>
-                            </div>
-                          </div>
-                        </div>
+                      <!-- AREAS DE SERVICIO -->
+                      <div class="c-flex gap-3 form-professional-groupSpeciality__checks-wrapper">
+                        <div class="c-flex c-flex-column c-flex-basis-full gap-1/2 form-professional-groupSpeciality__contexts-body"></div>
                       </div>
                     </div>
-                    <div class="container-btn container-btn--flex-end">
-                      <button type="button" disabled class="btn btn--with-icon container-btn__next" data-step="3">
-                        Siguiente
+                    <!-- HORARIOS -->
+                    <div class="c-flex c-flex-column gap-1 form-professional-groupSpeciality__containerChecksDates">
+                      <div class="c-flex gap-3 form-professional-groupSpeciality__dates-body">
+                        <div class="c-flex c-flex-column gap-1/2 form-professional-groupSpeciality__days-body"></div>
+                        <div class="c-flex c-flex-column gap-1/2 form-professional-groupSpeciality__hours-body"></div>
+                      </div>
+                    </div>
+                    <div class="mb-2 c-flex c-flex-justify-end">
+                      <button type="button" disabled class="c-flex c-flex-justify-center c-flex-items-center gap-1/2 cursor-pointer btn container-btn__next" data-step="3">
+                        <span>Siguiente</span>
                         <i class="fas fa-arrow-circle-right"></i>
                       </button>
                     </div>
                   </div>
-                  <!-- SECCION PRESUPUESTO -->
-                  <div class="form-professional-groupBudget form-step form-step--hidden" data-step="4">
-                    <div class="form-professional-groupBudget__header form-professional-groupBudget__header--visible">
-                      <h3 class="form-professional-groupBudget__title">Paso 2: Presupuesto</h3>
-                    </div>
-                    <div class="form-professional-groupBudget__column">
-                      <div>
-                        <label class="form-professional-groupBudget__label">
-                          ¿Cobrás por sacar presupuesto?
-                          <span>*</span>
-                        </label>
-                        <div class="container-textInfo">
-                          <i class="fas fa-info-circle"></i>
-                          <p class="container-textInfo__message">Esta acción no puede ser modificada luego</p>
-                        </div>
-                      </div>
-                      <div class="radio-group">
-                        <label class="radio-option">
-                          <input type="radio" name="hasBudgetConfirm" value="yes" class="radio-option__input" />
-                          <span class="radio-option__label">Sí</span>
-                        </label>
-                        <label class="radio-option">
-                          <input type="radio" name="hasBudgetReject" value="no" checked class="radio-option__input" />
-                          <span class="radio-option__label">No</span>
-                        </label>
-                      </div>
-                    </div>
-                    <!-- CAMPO DE PRECIO PRESUPUESTO -->
-                    <div class="form-professional-groupBudget__column">
-                      <label class="form-professional-groupBudget__label">
-                        Precio fijo del presupuesto
-                        <span>*</span>
-                      </label>
-                      <div class="input-icon">
-                        <span class="input-icon__prefix">$</span>
-                        <input type="text" name="estimateFee" class="input-icon__field" />
-                      </div>
-                    </div>
-                    <!-- REEMBOLSO -->
-                    <div class="form-professional-groupBudget__column">
-                      <div>
-                        <label class="form-professional-groupBudget__label">
-                          ¿Si eres contratado haces reembolso de presupuesto?
-                          <span>*</span>
-                        </label>
-                        <p class="form-professionalBudget__info">
-                          <i class="fas fa-info"></i>
-                          Esta acción no puede ser modificada luego
-                        </p>
-                      </div>
-                      <div class="radio-group">
-                        <label class="radio-option">
-                          <input type="radio" name="hasRefundBudgetConfirm" value="yes" class="radio-option__input" />
-                          <span class="radio-option__label">Sí</span>
-                        </label>
-                        <label class="radio-option">
-                          <input type="radio" name="hasRefundBudgetReject" value="no" checked class="radio-option__input" />
-                          <span class="radio-option__label">No</span>
-                        </label>
-                      </div>
-                    </div>
+                </div>
+                <!--  SECCION PERFIL PERFIL PASO 5-->
+                <div class="mb-2 c-flex c-flex-column gap-1 form-professional-groupProfile form-step form-step--hidden" data-step="4">
+                  <div class="c-flex c-flex-items-center gap-1 form-professional-groupProfile__header">
+                    <h3 class="form-professional-groupSelectCategory__title">
+                      <i class="fas fa-id-card"></i>
+                      <span>Tu Perfil</span>
+                    </h3>
                   </div>
-                  <!--  SECCION PERFIL PERFIL -->
-                  <div class="form-professional-groupProfile form-step form-step--hidden" data-step="5">
-                    <div class="form-professional-groupProfile__header form-professional-groupProfile__header--visible">
-                      <h3 class="form-professional-groupProfile__title">Paso 3: Tu perfil</h3>
-                    </div>
+                  <div class="mb-2 c-flex c-flex-column c-flex-items-center gap-3 form-professional-groupProfile__body">
                     <!-- DESCRIPCION -->
-                    <div class="form-professional-groupProfile__containerDescription">
-                      <label class="form-professional-groupProfile__label">Descripción breve de tu perfil(Opcional)</label>
-                      <textarea name="description" rows="3" class="form-professional-groupProfile__textarea"></textarea>
+                    <div class="w-full c-flex c-flex-items-center c-flex-column gap-1/2 w-full form-professional-groupProfile__containerDescription" data-message="description">
+                      <label for="description" class="to-left c-flex c-flex-items-center gap-1/2 form-professional-groupProfile__label">
+                        <i class="fas fa-file-lines"></i>
+                        <span>Descripción de perfil (Opcional)</span>
+                      </label>
+                      <textarea id="description" name="description" class="w-full form-professional-groupProfile__textarea" placeholder="Cuentales a la gente sobre ti..." spellcheck="true" lang="es"></textarea>
+                      <div data-message="description"><span class="has-error"></span></div>
                     </div>
                     <!-- IMAGEN DE PERFIL -->
-                    <div class="form-professional-groupProfile__containerImageProfile">
-                      <label class="form-professional-groupProfile__label">Foto de perfil(Opcional)</label>
-                      <div class="upload-area">
-                        <i class="upload-area__icon fas fa-cloud-upload-alt"></i>
-                        <p class="upload-area__text">Arrastra tu foto aquí o haz clic para seleccionar</p>
-                        <p class="upload-area__note">Formatos: JPG, PNG (Máx. 5MB)</p>
-                        <input type="file" class="upload-area__input" accept="image/jpeg,jpg,png,webpe" />
+                    <div class="c-flex c-flex-items-center c-flex-column gap-1/2 w-full form-professional-groupProfile__containerImageProfile">
+                      <h6 class="to-left c-flex c-flex-items-center gap-1/2 form-professional-groupProfile__label">
+                        <i class="fas fa-id-badge"></i>
+                        <span>Foto de perfil (Opcional)</span>
+                      </h6>
+                      <div class="c-flex c-flex-items-center c-flex-column gap-3/2 w-full cursor-pointer position-relative upload-area" data-message="imageProfile">
+                        <label class="cursor-pointer">
+                          <input type="file" name="imageProfile" class="upload-area__input" accept="image/jpg,image/jpeg,image/png,image/webp" />
+                          <div class="c-flex c-flex-items-center c-flex-column gap-3/2 form-professional-groupProfile__drag">
+                            <i class="upload-area__icon mb-1/2 fas fa-cloud-upload-alt"></i>
+                            <small class="upload-area__text">Toca o haz clic para seleccionar tu foto</small>
+                            <small class="upload-area__note">Formatos: JPG, PNG, JPEG O WEBP (Máx. 5MB)</small>
+                          </div>
+                        </label>
+                        <!-- CONTENEDOR VACÍO PARA MINIATURAS -->
+                        <div class="form-professional-groupProfile__previewImage c-flex c-flex-wrap gap-2"></div>
+                        <div data-message="imageProfile"><span class="has-error"></span></div>
                       </div>
                     </div>
+
                     <!-- IMAGENES DE EXPERIENCIAS-->
-                    <div class="form-professional__groupImagesExperiences">
-                      <label class="form-professional-groupImagesExperiences__label">Imágenes de trabajos realizados</label>
-                      <div class="upload-area">
-                        <i class="upload-area__icon fas fa-cloud-upload-alt"></i>
-                        <p class="upload-area__text">Arrastra tus imágenes aquí o haz clic para seleccionar</p>
-                        <p class="upload-area__note">Puedes subir hasta 10 imágenes (Máx. 5MB cada una)</p>
-                        <input type="file" class="upload-area__input" accept="image/jpeg,jpg,png,webpe" multiple />
+                    <div class="c-flex c-flex-items-center c-flex-column gap-1/2 w-full form-professional__groupImagesExperiences">
+                      <h6 class="to-left c-flex c-flex-items-center gap-1/2 form-professional-groupProfile__label">
+                        <i class="fas fa-images"></i>
+                        <span>Imágenes de experiencias (Opcional)</span>
+                      </h6>
+                      <div class="c-flex c-flex-items-center c-flex-column gap-3/2 w-full cursor-pointer upload-area" data-message="imageExperiences">
+                        <label class="cursor-pointer">
+                          <input type="file" name="imageExperiences" class="upload-area__input" accept="image/jpg,image/jpeg,image/png,image/webp" multiple />
+                          <div class="c-flex c-flex-items-center c-flex-column gap-3/2 form-professional-groupProfile__drag">
+                            <i class="upload-area__icon mb-1/2 fas fa-cloud-upload-alt"></i>
+                            <small class="upload-area__text">Toca o haz clic para seleccionar imágenes</small>
+                            <small class="upload-area__note">Puedes subir hasta 10 imágenes (Máx. 5MB cada una)</small>
+                            <small>Formatos: JPG, PNG, JPEG O WEBP</small>
+                          </div>
+                        </label>
+
+                        <!-- CONTENEDOR VACÍO PARA MINIATURAS -->
+                        <div class="form-professional-groupProfile__previewMultipleImages c-flex c-flex-wrap gap-2"></div>
+
+                        <div data-message="imageExperiences"><span class="has-error"></span></div>
+                      </div>
+                    </div>
+
+                    <!-- TERMINOS Y CONDICIONES -->
+                    <div class="c-flex c-flex-justify-center c-flex-basis-full gap-3/2 form-basic register-formProfessional__terms">
+                      <div class="c-flex c-flex-justify-center c-flex-items-center gap-1 register-formProfessional__checkbox">
+                        <input id="terms" name="terms" type="checkbox" class="c-flex c-flex-items-center c-flex-justify-center register-formProfessional__checkbox-input" required />
+                        <label for="terms" class="register-formProfessional__checkbox-label">
+                          Acepto los
+                          <a href="../pages/termsAndConditions.html" class="register-formProfessional__link">Términos y Condiciones</a>
+                          y la
+                          <a href="../pages/privacyPolicy.html" class="register-formProfessional__link">Política de Privacidad</a>
+                          de ConectaServ
+                        </label>
                       </div>
                     </div>
                   </div>
+                  <!-- BOTON REGISTRO -->
+                  <div class="c-flex c-flex-justify-end">
+                    <button type="submit" disabled class="c-flex-justify-center gap-1/2 cursor-pointer btn container-btn__next" data-step="4">
+                      <span>Registrarse</span>
+                      <i class="fa-solid fa-user-plus"></i>
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <!-- TERMINOS Y CONDICIONES
-                        <div class="form-basic register-formProfessional__terms">
-                            <div class="register-formProfessional__checkbox">
-                                <input name="terms" type="checkbox" class="register-formProfessional__checkbox-input" required />
-                                <label class="register-formProfessional__checkbox-label">
-                                    Acepto los <a href="#" class="register-formProfessional__link">Términos y Condiciones</a> y la
-                                    <a href="#" class="register-formProfessional__link">Política de Privacidad</a> de ConectaServ
-                                    <span>*</span>
-                                </label>
-                            </div>
-                        </div> -->
-              <!-- BOTON REGISTRO -->
-              <div class="btn-container container-btn--flex-end register-formProfessional__actions register-formProfessional__actions--hidden">
-                <button type="submit" disabled class="btn btn--with-icon register-formProfessional__submit-btn">
-                  Registrarse
-                  <i class="fa-solid fa-user-plus"></i>
-                </button>
               </div>
             </form>
           </div>
         </div>
       </div>
     </main>
-
     <!-- PIE PÁGINA -->
     <footer class="footer">
-      <div class="container">
-        <div class="footer-columns">
-          <!-- LOGO REUTILIZABLE -->
-          <div class="card-logo">
-            <a href="../../index.html" class="card-logo__logo">
-              <div class="card-logo__icon">
-                <i class="fas fa-hands-helping"></i>
-              </div>
-              <span class="card-logo__text">ConectaServ</span>
-            </a>
+      <div class="footer__container container">
+        <div class="footer__columns">
+          <div class="footer__logo">
+            <!-- LOGO REUTILIZABLE -->
+            <div class="card-logo">
+              <a href="../../index.html" class="card-logo__logo card-logo__logo--footer">
+                <div class="card-logo__icon--footer">
+                  <i class="fas fa-hands-helping"></i>
+                </div>
+                <span class="card-logo__text--footer">ConectaServ</span>
+              </a>
+            </div>
+            <p>Conectando personas con trabajadores de confianza.</p>
           </div>
-          <p>Conectando personas con trabajadores de confianza.</p>
+
+          <div class="footer__links">
+            <h4>Enlaces</h4>
+            <ul>
+              <li><a href="#">Inicio</a></li>
+              <li><a href="#">¿Cómo funciona?</a></li>
+              <li><a href="#">Iniciar Sesión</a></li>
+              <li><a href="#">Registrarse</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-contact">
+            <h4>Contacto</h4>
+            <p>Email: ejemploemail@.com</p>
+          </div>
         </div>
 
-        <div class="footer-links">
-          <h4>Enlaces</h4>
-          <ul>
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#">¿Cómo funciona?</a></li>
-            <li><a href="#">Iniciar Sesión</a></li>
-            <li><a href="#">Registrarse</a></li>
-          </ul>
+        <div class="footer-bottom">
+          <p>&copy; 2025 ConectaServ. Todos los derechos reservados.</p>
         </div>
-
-        <div class="footer-contact">
-          <h4>Contacto</h4>
-          <p>Email: ejemploemail@.com</p>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <p>&copy; 2025 ConectaServ. Todos los derechos reservados.</p>
       </div>
     </footer>
 

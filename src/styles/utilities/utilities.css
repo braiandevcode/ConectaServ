@@ -1,0 +1,272 @@
+/*-------------------------------------------------UTILITIES---------------------------------------------------*/
+
+/* ANCHOS */
+
+/* 25% */
+.w-1\/4 {
+  --w-container: 25%;
+  width: var(--w-container);
+}
+
+/* 50% */
+.w-1\/2 {
+  --w-container: 50%;
+  width: var(--w-container);
+}
+
+/* 75% */
+.w-3\/4 {
+  --w-container: 75%;
+  width: var(--w-container);
+}
+
+/* 100% */
+.w-full {
+  width: var(--w-container);
+}
+
+/****ELEMENTOS FLEXBOX ***/
+.c-flex {
+  display: flex;
+}
+
+/* ALINEADOS AL CENTRO */
+.c-flex-items-center {
+  align-items: center;
+}
+
+/* ALINEADO AL INICIO */
+.c-flex-items-start {
+  align-items: flex-start;
+}
+
+/* ALINEADO AL FINAL */
+.c-flex-items-end {
+  align-items: flex-end;
+}
+
+/* ALINEADO EN EL CROSS AXIS AL CENTRO */
+.c-flex-self-center {
+  align-self: center;
+}
+
+.c-flex-items-baseline {
+  align-items: baseline;
+}
+
+/* ALINEADO EN EL CROSS AXIS AL INICIO*/
+.c-flex-self-start {
+  align-self: start;
+}
+
+/* ALINEADO EN EL CROSS AXIS AL FINAL*/
+.c-flex-self-end {
+  align-self: end;
+}
+
+/* ALINEADO EN EL CROSS AXIS EN LA LINEA BASE*/
+.c-flex-self-baseline {
+  align-self: baseline;
+}
+
+/* JUSTIFICADO AL CENTRO */
+.c-flex-justify-center {
+  justify-content: center;
+}
+
+/* JUSTIFICADO AL FINAL */
+.c-flex-justify-end {
+  justify-content: flex-end;
+}
+
+/* JUSTIFICADO CON MARGENES A LOS EXTREMOS */
+.c-flex-justify-around {
+  justify-content: space-around;
+}
+
+/* JUSTIFICADO SIN MARGEN A LOS EXTREMOS */
+.c-flex-justify-between {
+  justify-content: space-between;
+}
+
+/* DIRECCION EN FILA */
+.c-flex-row {
+  flex-direction: row;
+}
+
+/* DIRECCION EN FILA REVERSA */
+.c-flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+/* DIRECCION COLUMNA*/
+.c-flex-column {
+  flex-direction: column;
+}
+
+/* DIRECCION COLUMNA REVERSA*/
+.c-flex-column-reverse {
+  flex-direction: column-reverse;
+}
+
+.c-flex-wrap{
+  flex-wrap: wrap;
+}
+
+.c-flex-no-wrap{
+  flex-wrap: nowrap;
+}
+
+.c-flex-wrap-reverse{
+  flex-wrap: wrap-reverse;
+}
+
+/* FLEX BASIS 0 */
+.c-flex-basis-0 {
+  flex-basis: 0;
+}
+
+/* FLEX BASIS 25% */
+.c-flex-basis-1\/4 {
+  flex-basis: 25%;
+}
+
+/* FLEX BASIS 50% */
+.c-flex-basis-1\/2 {
+  flex-basis: 50%;
+}
+
+/* FLEX BASIS 75% */
+.c-flex-basis-3\/4 {
+  flex-basis: 75%;
+}
+
+/* FLEX BASIS 100% */
+.c-flex-basis-full {
+  flex-basis: 100%;
+}
+
+/* GAP .5REM */
+.gap-1\/2 {
+  gap: .5rem;
+}
+
+/* GAP 1REM*/
+.gap-1 {
+  gap: 1rem;
+}
+
+/* GAP 1.5REM*/
+.gap-3\/2 {
+  gap: 1.5rem;
+}
+
+/* GAP 2REM*/
+.gap-2 {
+  gap: 2rem;
+}
+
+/* GAP 3REM*/
+.gap-3 {
+  gap: 3rem;
+}
+
+/* ELEMENTOS CON CURSOR POINTER */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* 
+  MARGENES AUTOMATICOS PARA ITEMS DE CONTENEDORES FLEXBOX EJEMPLO UN MENU:
+  - AYUDA A NO TENER QUE CREAR MULTILES DIV EN EL HTML PARA SEPARAR CONTENIDOS
+*/
+
+/* ITEM INCLINADO A LA IZQUIERDA CON MARGEN A LA DERECHA */
+.to-left {
+  margin-right: auto;
+}
+
+/* ITEM INCLINADO A LA DERECHA CON MARGEN A LA IZQUIERDA */
+.to-right {
+  margin-left: auto;
+}
+
+/* ITEM AL CENTRO CON MARGEN A LA DERECHA E IZQUIERDA */
+.centered {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.flex\:1{
+  flex: 1;
+}
+
+/* MARGENES ABAJO UNIDADES REM*/
+.mb-1\/2 {
+  margin-bottom: .5rem;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.mb-3\/2 {
+  margin-bottom: 1.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
+.mb-3 {
+  margin-bottom: 3rem;
+}
+
+/* MARGENES ARRIBA UNIDADES REM*/
+
+.mt-1\/2 {
+  margin-top: .5rem;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mt-3\/2 {
+  margin-top: 1.5rem;
+}
+
+.mt-2 {
+  margin-top: 2rem;
+}
+
+.mt-3 {
+  margin-top: 3rem;
+}
+
+/*------------------------------------------POSITIONS---------------------------------------------*/
+
+/* ABSOLUTE */
+.position-absolute{
+  position: absolute;
+}
+
+/* RELATIVE*/
+.position-relative{
+  position: relative;
+}
+
+/* FIXED*/
+.position-fixed{
+  position: fixed;
+}
+
+/* STATIC*/
+.position-static{
+  position: static;
+}
+
+/* RELATIVE*/
+.position-sticky{
+  position: sticky;
+}

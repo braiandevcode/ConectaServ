@@ -1,0 +1,12 @@
+ REGISTRO DE USUARIOS PROFESIONAL Y CLIENTE:   NOTA: NO OLVIDARME DEL REGISTRO DEL CLIENTE Y QUE EL PASO 4 SOLO DEBE SER VISIBLE EN "reparacion y mantenimiento" 
+    1- Resolver el problema de que el contenedor select se valla luego de pasar al step 4.(corregido)
+    2- Que si se cambia el valor en el select el boton se reinicie a deshabilitado. (corregido)
+    3- Que solo en categoria Mudanza y transporte evite validar el context[]. (corregido)
+    4- hacer que el boton de atras se vea a partir del paso 2 (corregido)
+    5- aplicar la logica para que al hacer click en el boton atras renderise la seccion previa(corregido)
+    6- validar y agregar la logica faltante en la seccion de inputs radios.(corregido)
+    7- DOM crear el span que muestra la categoria seleccionada en el subtitulo principa "informacion profesional" (corregido)
+    8- validar y agregar la logica faltante en la seccion de perfil. (corregido) (FALTA PREVEER VALIDACIONES EN CASO QUE PONGA DESCRIPCION Y/O IMAGENES)
+    9- Verificar que el check de terminos y condiciones este en true para habilitar el registro.(corregido)
+    11- hacer y agregar validaciones a los campos con libreria zod para mas agilidad (MAS ADELANTE)
+    10- solo resetear datos luego de submit(corregido)

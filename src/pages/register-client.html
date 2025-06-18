@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="c-flex">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,160 +7,212 @@
     <meta name="keywords" content="Contratar, Pago Online, Chat" />
     <title>ConectaServ</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../index.css" />
+    <link rel="stylesheet" href="../index.copy.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
 
   <!-- CUERPO -->
-  <body>
+  <body class="c-flex c-flex-column flex:1">
     <!-- CABECERA -->
-    <header>
-      <div class="container">
-        <!-- LOGO REUTILIZABLE -->
+    <header class="header mb-2">
+      <div class="header__container">
         <div class="card-logo">
           <a href="../../index.html" class="card-logo__logo">
             <div class="card-logo__icon">
               <i class="fas fa-hands-helping"></i>
             </div>
-            <span class="card-logo__text card-logo__text--head">ConectaServ</span>
+            <span class="card-logo__text">ConectaServ</span>
           </a>
         </div>
-        <nav class="nav-links">
-          <a href="../../index.html#como-funciona">¿Cómo funciona?</a>
-          <a href="../../index.html#categorias">Categorías</a>
-          <a href="./src/pages/login.html">Iniciar Sesión</a>
-        </nav>
       </div>
     </header>
+
     <!-- MAIN -->
-    <main>
+    <!-- -------------------MODIFICAR EL "group-select" EN EL INDEX.CSS Y MODIFICAR ELEMENTOS FLEXBOX CON SUS PROPIEDADES ------------------->
+    <main class="mb-2">
       <!-- REGISTRO DE PROFESIIONALES-->
-      <div class="register-userProfessional register-userProfessional--visible">
-        <div class="register-userProfessional__container">
-          <div class="register-userProfessional__content">
-            <div class="register-userProfessional__header">
-              <h2 class="tregister-userProfessional__title">Registro de Profesional</h2>
+      <div class="w-full c-flex c-flex-justify-center centered register-userClient">
+        <div class="w-full register-userClient__container">
+          <div class="c-flex c-flex-column gap-1/2 register-userClient__content">
+            <div class="w-full c-flex c-flex-items-center register-userClient__header">
+              <h1 class="w-full c-flex c-flex-items-center register-userClient__title">
+                <span>Registro Cliente</span>
+              </h1>
             </div>
-            <form class="register-formProfessional">
-              <!-- REGISTRO INFORMACION BASICA -->
-              <div class="form-basic form-step" data-step="1">
-                <div class="register-formProfessional__header">
-                  <h3 class="form-basic__subtitle">Información básica</h3>
-                  <div class="container-textInfo">
-                    <i class="fas fa-info-circle"></i>
-                    <p class="container-textInfo__message">
-                      Los campos que contienen (
-                      <span>*</span>
-                      ) son obligatorios
-                    </p>
+            <form class="register-client">
+              <div class="c-flex c-flex-column c-flex-justify-center register-formClient__header">
+                <h2 class="c-flex c-flex-wrap c-flex-items-center gap-1/2 form-basic__subtitle">
+                  <div class="c-flex w-full c-flex-items-center gap-1/2">
+                    <i class="fas fa-solid fa-user-circle"></i>
+                    <span>Crear Cuenta</span>
+                  </div>
+                </h2>
+                <div class="mb-1 c-flex c-flex-items-center gap-1/2 container-textInfo">
+                  <i class="fas fa-info-circle"></i>
+                  <small>
+                    Campos con (
+                    <span class="span-required">*</span>
+                    ) son obligatorios
+                  </small>
+                </div>
+              </div>
+              <!-- REGISTRO INFORMACION BASICA-->
+              <div class="c-flex c-flex-column gap-3/2 form-basic form-step">
+                <div class="c-flex c-flex-column c-flex-justify-center gap-1/2 register-formClient__header">
+                  <div class="c-flex c-flex-items-center gap-1 form-client-groupSpeciality__header">
+                    <h3 class="form-client-groupSpeciality__title">
+                      <i class="fas fa-id-card"></i>
+                      <span>Información básica</span>
+                    </h3>
                   </div>
                 </div>
-                <div class="form-basic__fields">
-                  <div class="form-basic__field">
-                    <label class="form-basic__label">
-                      Nombre completo
-                      <span>*</span>
+                <!-- CAMPOS DEL FORMULARIO -->
+                <div class="c-flex c-flex-column gap-1 form-basic__fields">
+                  <!-- CAMPO: NOMBRE COMPLETO -->
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                    <label for="fullName" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                      <span class="c-flex c-flex-items-center gap-1/2">
+                        <i class="fas fa-user"></i>
+                        <span>Nombre completo</span>
+                      </span>
+                      <span class="span-required">*</span>
                     </label>
-                    <input type="text" name="fullName" class="form-basic__input" placeholder="Roberto Bustos" required />
+                    <input type="text" name="fullName" id="fullName" class="form-basic__input" aria-label="Nombre completo" placeholder="Roberto Bustos" spellcheck="true" lang="es" autofocus required />
+                    <div data-message="fullName"><span class="has-error"></span></div>
                   </div>
-                  <div class="form-basic__field">
-                    <label class="form-basic__label">
-                      Correo electrónico
-                      <span>*</span>
+
+                  <!-- CAMPO: NOMBRE DE USUARIO -->
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                    <label for="userName" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                      <span class="c-flex c-flex-items-center gap-1/2">
+                        <i class="fas fa-user-tag"></i>
+                        <span>Nombre de usuario</span>
+                      </span>
+                      <span class="span-required">*</span>
                     </label>
-                    <input type="email" name="email" class="form-basic__input" autocomplete="email" placeholder="test@example.com" required />
+                    <input type="text" name="userName" id="userName" class="form-basic__input" aria-label="Nombre de usuario" placeholder="Roberto_Bustos.45" required />
+                    <div data-message="userName"><span class="has-error"></span></div>
                   </div>
-                  <!-- SELECT UBICACION -->
-                  <div class="group-select form-basic__field form-basic__location">
-                    <label class="form-basic__label">
-                      Ubicación
-                      <span>*</span>
+
+                  <!-- CAMPO: CORREO ELECTRONICO -->
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                    <label for="email" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                      <span class="c-flex c-flex-items-center gap-1/2">
+                        <i class="fas fa-envelope"></i>
+                        <span>Correo electronico</span>
+                      </span>
+                      <span class="span-required">*</span>
                     </label>
-                    <select class="form-basic__location-select" name="location">
+                    <input type="text" name="email" id="email" class="form-basic__input" aria-label="Correo electronico" autocomplete="email" placeholder="test@example.com" required />
+                    <div data-message="email"><span class="has-error"></span></div>
+                  </div>
+
+                  <!-- CAMPO: UBICACION (SELECT) -->
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field form-basic__location">
+                    <div data-message="location"><span class="has-error"></span></div>
+                    <label for="location" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                      <span class="c-flex c-flex-items-center gap-1/2">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Ubicacion</span>
+                      </span>
+                      <span class="span-required">*</span>
+                    </label>
+                    <select id="location" class="to-left form-basic__location-select" name="location">
                       <option value="" disabled selected>Seleccione una ciudad</option>
-                      <option value="olavarria">Olavarría</option>
+                      <option value="olavarria">Olavarria</option>
                       <option value="azul">Azul</option>
                       <option value="tandil">Tandil</option>
                     </select>
                   </div>
-                  <!-- CONTRASEÑA -->
-                  <div class="form-basic__field">
-                    <label class="form-basic__label">
-                      Contraseña
-                      <span>*</span>
+
+                  <!-- CAMPO: CONTRASENA -->
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                    <label for="password" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                      <span class="c-flex c-flex-items-center gap-1/2">
+                        <i class="fas fa-lock"></i>
+                        <span>Contrasena</span>
+                      </span>
+                      <span class="span-required">*</span>
                     </label>
-                    <input type="password" name="password" class="form-basic__input" autocomplete="new-password" placeholder="***********" required />
+                    <input type="password" name="password" id="password" class="form-basic__input" aria-label="Contrasena" autocomplete="new-password" placeholder="***********" required />
+                    <div data-message="password"><span class="has-error"></span></div>
                   </div>
-                  <div class="form-basic__field">
-                    <label class="form-basic__label">
-                      Confirmar contraseña
-                      <span>*</span>
+
+                  <!-- CAMPO: CONFIRMAR CONTRASENA -->
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                    <label for="confirmPassword" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                      <span class="c-flex c-flex-items-center gap-1/2">
+                        <i class="fas fa-user-lock"></i>
+                        <span>Confirmar contrasena</span>
+                      </span>
+                      <span class="span-required">*</span>
                     </label>
-                    <input type="password" name="confirmPassword" class="form-basic__input" autocomplete="confirmPassword" placeholder="***********" required />
+                    <input type="password" name="confirmPassword" id="confirmPassword" class="form-basic__input" aria-label="Confirmar contrasena" autocomplete="confirmPassword" placeholder="***********" required />
+                    <div data-message="confirmPassword"><span class="has-error"></span></div>
                   </div>
                 </div>
-              </div>
-              <!-- TERMINOS Y CONDICIONES -->
-              <div class="form-basic register-formProfessional__terms">
-                <div class="register-formProfessional__checkbox">
-                  <input name="terms" type="checkbox" class="register-formProfessional__checkbox-input" required />
-                  <label class="register-formProfessional__checkbox-label">
-                    Acepto los
-                    <a href="#" class="register-formProfessional__link">Términos y Condiciones</a>
-                    y la
-                    <a href="#" class="register-formProfessional__link">Política de Privacidad</a>
-                    de ConectaServ
-                    <span>*</span>
-                  </label>
+                <!-- TERMINOS Y CONDICIONES -->
+                <div class="c-flex c-flex-justify-center c-flex-basis-full gap-3/2 form-basic register-formClient__terms">
+                  <div class="c-flex c-flex-justify-center c-flex-items-center gap-1 register-formClient__checkbox">
+                    <input name="terms" type="checkbox" class="c-flex c-flex-items-center c-flex-justify-center register-formClient__checkbox-input" required />
+                    <label for="terms" class="register-formClient__checkbox-label">
+                      Acepto los
+                      <a href="../pages/termsAndConditions.html" class="register-formClient__link">Términos y Condiciones</a>
+                      y la
+                      <a href="../pages/privacyPolicy.html" class="register-formClient__link">Política de Privacidad</a>
+                      de ConectaServ
+                    </label>
+                  </div>
                 </div>
-              </div>
-              <!-- BOTON REGISTRO -->
-              <div class="btn-container container-btn--flex-end register-formProfessional__actions">
-                <button type="submit" disabled class="btn btn--with-icon register-formProfessional__submit-btn">
-                  Registrarse
-                  <i class="fa-solid fa-user-plus"></i>
-                </button>
+                <!-- BOTON REGISTRO -->
+                <div class="c-flex c-flex-justify-end">
+                  <button type="submit" disabled class="c-flex-justify-center gap-1/2 cursor-pointer btn container-btn__next">
+                    <span>Registrarse</span>
+                    <i class="fa-solid fa-user-plus"></i>
+                  </button>
+                </div>
               </div>
             </form>
           </div>
         </div>
       </div>
     </main>
-
     <!-- PIE PÁGINA -->
     <footer class="footer">
-      <div class="container">
-        <div class="footer-columns">
-          <!-- LOGO REUTILIZABLE -->
-          <div class="card-logo">
-            <a href="#" class="card-logo__logo">
-              <div class="card-logo__icon">
-                <i class="fas fa-hands-helping"></i>
-              </div>
-              <span class="card-logo__text">ConectaServ</span>
-            </a>
+      <div class="footer__container container">
+        <div class="footer__columns">
+          <div class="footer__logo">
+            <!-- LOGO REUTILIZABLE -->
+            <div class="card-logo">
+              <a href="../../index.html" class="card-logo__logo card-logo__logo--footer">
+                <div class="card-logo__icon--footer">
+                  <i class="fas fa-hands-helping"></i>
+                </div>
+                <span class="card-logo__text--footer">ConectaServ</span>
+              </a>
+            </div>
+            <p>Conectando personas con trabajadores de confianza.</p>
           </div>
-          <p>Conectando personas con trabajadores de confianza.</p>
+
+          <div class="footer__links">
+            <h4>Enlaces</h4>
+            <ul>
+              <li><a href="#">Inicio</a></li>
+              <li><a href="#">¿Cómo funciona?</a></li>
+              <li><a href="#">Iniciar Sesión</a></li>
+              <li><a href="#">Registrarse</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-contact">
+            <h4>Contacto</h4>
+            <p>Email: ejemploemail@.com</p>
+          </div>
         </div>
 
-        <div class="footer-links">
-          <h4>Enlaces</h4>
-          <ul>
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#">¿Cómo funciona?</a></li>
-            <li><a href="#">Iniciar Sesión</a></li>
-            <li><a href="#">Registrarse</a></li>
-          </ul>
+        <div class="footer-bottom">
+          <p>&copy; 2025 ConectaServ. Todos los derechos reservados.</p>
         </div>
-
-        <div class="footer-contact">
-          <h4>Contacto</h4>
-          <p>Email: ejemploemail@.com</p>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <p>&copy; 2025 ConectaServ. Todos los derechos reservados.</p>
       </div>
     </footer>
 
