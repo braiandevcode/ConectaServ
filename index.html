@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,6 +47,25 @@
               <a href="./src/pages/services.html" class="dropdown__item">Herrería</a>
               <a href="./src/pages/services.html" class="dropdown__item">Construcción en seco</a>
             </div>
+            <span class="card-logo__text">ConectaServ</span>
+          </a>
+        </div>
+        <button class="menu-toggle">
+          <i class="fas fa-list"></i>
+        </button>
+        <nav class="nav-links">
+          <a href="#how-works" class="nav__link">¿Cómo funciona?</a>
+
+          <div class="dropdown">
+            <a href="#" class="nav-item dropdown-toggle nav__link">
+              Categorías
+              <i class="fa-solid fa-angle-down"></i>
+            </a>
+            <div class="dropdown__menu">
+              <div class="dropdown__group">
+                <h4 class="dropdown__title">Reparaciones</h4>
+                <a href="./services.html" class="dropdown__item">Carpintería</a>
+              </div>
 
             <div class="dropdown__group">
               <p class="dropdown__title">Jardinería</p>
@@ -72,18 +90,17 @@
               <a href="./src/pages/services.html" class="dropdown__item">Traslado de objetos frágiles</a>
             </div>
           </div>
-        </div>
 
-        <a href="./src/pages/login.html" class="nav__link">Iniciar Sesión</a>
-        <button class="color btnRegister">Registrarse</button>
-      </nav>
-    </div>
-  </header>
+          <a href="./src/pages/login.html" class="nav__link">Iniciar Sesión</a>
+          <button class="color btnRegister">Registrarse</button>
+        </nav>
+      </div>
+    </header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <h1>Encuentra prestadores de servicios confiables</h1>
-  </section>
+    <!-- HERO -->
+    <section class="hero">
+      <h1>Encuentra prestadores de servicios confiables</h1>
+    </section>
 
   <!-- COMO FUNCIONA -->
   <section class="how-works">
@@ -122,6 +139,7 @@
               <i class="fas fa-times modal-rol__close-icon"></i>
             </button>
           </div>
+
           <div>
             <p class="modal-rol__description">
               Selecciona el tipo de cuenta que deseas crear:
@@ -160,48 +178,46 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- PIE PÁGINA -->
-  <footer class="footer">
-    <div class="footer__container container">
-      <div class="footer__columns">
-        <div class="footer__logo">
-          <!-- LOGO REUTILIZABLE -->
-          <div class="card-logo">
-            <a href="#" class="card-logo__logo card-logo__logo--footer">
-              <div class="card-logo__icon--footer">
-                <i class="fas fa-hands-helping"></i>
-              </div>
-              <span class="card-logo__text--footer">ConectaServ</span>
-            </a>
+    <!-- PIE PÁGINA -->
+    <footer class="footer">
+      <div class="footer__container container">
+        <div class="footer__columns">
+          <div class="footer__logo">
+            <!-- LOGO REUTILIZABLE -->
+            <div class="card-logo">
+              <a href="#" class="card-logo__logo card-logo__logo--footer">
+                <div class="card-logo__icon--footer">
+                  <i class="fas fa-hands-helping"></i>
+                </div>
+                <span class="card-logo__text--footer">ConectaServ</span>
+              </a>
+            </div>
+            <p>Conectando personas con trabajadores de confianza.</p>
           </div>
-          <p>Conectando personas con trabajadores de confianza.</p>
+
+          <div class="footer__links">
+            <h4>Enlaces</h4>
+            <ul>
+              <li><a href="#">Inicio</a></li>
+              <li><a href="#">¿Cómo funciona?</a></li>
+              <li><a href="#">Iniciar Sesión</a></li>
+              <li><a href="#">Registrarse</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-contact">
+            <h4>Contacto</h4>
+            <p>Email: ejemploemail@.com</p>
+          </div>
         </div>
 
-        <div class="footer__links">
-          <h4>Enlaces</h4>
-          <ul>
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#">¿Cómo funciona?</a></li>
-            <li><a href="#">Iniciar Sesión</a></li>
-            <li><a href="#">Registrarse</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-contact">
-          <h4>Contacto</h4>
-          <p>Email: ejemploemail@.com</p>
+        <div class="footer-bottom">
+          <p>&copy; 2025 ConectaServ. Todos los derechos reservados.</p>
         </div>
       </div>
+    </footer>
 
-      <div class="footer-bottom">
-        <p>&copy; 2025 ConectaServ. Todos los derechos reservados.</p>
-      </div>
-    </div>
-  </footer>
-
-  <script src="./dist/main.js" type="module"></script>
-</body>
-
+    <script src="./dist/main.js" type="module"></script>
+  </body>
 </html>

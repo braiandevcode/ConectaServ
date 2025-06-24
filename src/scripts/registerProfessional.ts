@@ -1,117 +1,88 @@
-import { CONTEXTS, DATE_DAYS, DATE_HOUR, GARDENNING_AND_OUTDOOR_MAINTENANCE, REPAIR_AND_MAINTENANCE, MOVING_AND_TRANSPORT } from "../config/constant.js";
-import clickEventStepFormRegister from "../helpers/clickEventStepFormRegister.js";
-import renderModalOptions from "../helpers/renderModalOptions.js";
-import stepInputs from "../helpers/stepFormRegister.js";
+import stepInputs from "../ui/stepFormRegister.js";
+import clearElementChild from "../dom/clearElementChild.js";
+import evaluateCategory from "../dom/evaluateCategory.js";
+import observeDOMChanges from "../utils/observerDOMOnChanges.js";
+import addInputListener from "../events/addInputListener.js";
+import { hide } from "../ui/auxiliars.js";
+import { createTitleCategorySelected } from "../dom/createElementsDom.ts.js";
+import { TFormElement } from "../types/types.js";
 
-
-// CONTENEDOR PRINCIPAL DEL FORMULARIO
-// const $REGISTER_USER_PROFESSIONAL_CONTAINER: HTMLDListElement | null = document.querySelector('.register-userProfessional__container');
-
+// DOCUMENT
+const D: Document = document; //ABREVIAR NOMBRE DE DOCUMENT
 
 // SELECT
-const $CATEGORY_SPECIALITY_FORM: HTMLSelectElement | null = document.querySelector('.group-select select[name="category"]');  //SELECT DE CATEGORIAS
+const $FORM_CATEGORY_SELECTED: HTMLSelectElement | null = D.querySelector('.form-professional-groupSelectCategory__select');  //SELECT DE CATEGORIAS
 
 // CONTENEDOR PRINCIPAL DE SECCIONES
-const $CONTAINER_SPECIALITY: HTMLElement | null = document.querySelector('.form-professional-groupSpeciality');
-
-const $SECTION_GROUP_SPECIALITYS_WREAPPER_CHECKS: HTMLDivElement | null = document.querySelector('.form-professional-groupSpeciality__checks-wrapper');
-
-// CONTENEDORES DE SECCIONES DE PASOS
-const $PROFESSIONAL_CONTEXT: HTMLDivElement | null = document.querySelector('.form-professional-groupSpeciality__containerChecksContexts');
-const $PROFESSIONAL_DATE: HTMLDivElement | null = document.querySelector('.form-professional-groupSpeciality__containerChecksDates');
-const $PROFESSIONAL_SPECIALITY: HTMLDivElement | null = document.querySelector('.form-professional-groupSpeciality__containerChecksSpecialitys');
-const $PROFESSIONAL_WRAPPER: HTMLDivElement | null = document.querySelector('.form-professional-groupSpeciality__checks-wrapper');
-
-// SUBTITULOS
-const $PROFESSIONAL_SPECIALITY_TITLE: HTMLHeadingElement | null = document.querySelector('.form-professional-groupSpeciality__header'); //TITULO ESPECIALIDADES
-const $PROFESSIONAL_BUDGET_TITLE: HTMLHeadingElement | null = document.querySelector('.form-professional-groupBudget__header'); // TITULO PRESUPUESTO
-const $PROFESSIONAL_PROFILE_TITLE: HTMLHeadingElement | null = document.querySelector('.form-professional-groupProfile__header'); // TITULO PERFIL
+const $FORM_CONTAINER_GROUPS: HTMLDivElement | null = D.querySelector('.form-professional-groupSpeciality');
 
 // CONTENEDORES CHECKS
-const $PROFESSIONAL_CONTEXT_CHECKS: HTMLDivElement | null = document.querySelector('.form-professional-groupSpeciality__contexts-body');
-const $PROFESSIONAL_SPECIALITY_CHECKS: HTMLDivElement | null = document.querySelector('.form-professional-groupSpeciality__services-body'); // CONTENEDOR DE CHECKS DE SERVICIOS
-const $PROFESSIONAL_DAYS_CHECKS: HTMLDivElement | null = document.querySelector('.form-professional-groupSpeciality__days-body'); // CONTENEDOR DE CHECKS DE DIAS
-const $PROFESSIONAL_HOUR_CHECKS: HTMLDivElement | null = document.querySelector('.form-professional-groupSpeciality__hours-body'); // CONTENEDOR DE CHECKS DE HORARIOS
+const $GROUP_CONTEXT_CHECKS: HTMLDivElement | null = D.querySelector('.form-professional-groupSpeciality__contexts-body');
+const $GROUP_SPECIALITY_CHECKS: HTMLDivElement | null = D.querySelector('.form-professional-groupSpeciality__services-body'); // CONTENEDOR DE CHECKS DE SERVICIOS
+const $GROUP_DAYS_CHECKS: HTMLDivElement | null = D.querySelector('.form-professional-groupSpeciality__days-body'); // CONTENEDOR DE CHECKS DE DIAS
+const $GROUP_HOUR_CHECKS: HTMLDivElement | null = D.querySelector('.form-professional-groupSpeciality__hours-body'); // CONTENEDOR DE CHECKS DE HORARIOS
 
+// FILTRAR Y ASEGURAR QUE NO HAYA NULOS
+const resetAllCheckboxContainers: HTMLDivElement[] = [
+    $GROUP_CONTEXT_CHECKS,
+    $GROUP_HOUR_CHECKS,
+    $GROUP_DAYS_CHECKS,
+    $GROUP_SPECIALITY_CHECKS
+].filter((el): el is HTMLDivElement => el !== null);
 
-
-// FUNCION PARA LIMPIAR CONTENEDORES
-const resetAllCheckboxContainers = () => {
-    $PROFESSIONAL_CONTEXT_CHECKS!.innerHTML = '';
-    $PROFESSIONAL_HOUR_CHECKS!.innerHTML = '';
-    $PROFESSIONAL_DAYS_CHECKS!.innerHTML = '';
-    $PROFESSIONAL_SPECIALITY_CHECKS!.innerHTML = '';
-}
-
-
-const addElementsMovingAndTransport = (): void => {
-    $PROFESSIONAL_CONTEXT?.classList.add('form-professional-groupSpeciality__containerChecksContexts--visible')
-    $PROFESSIONAL_SPECIALITY?.classList.add('form-professional-groupSpeciality__containerChecksSpecialitys--visible');
-    $PROFESSIONAL_CONTEXT?.classList.remove('form-professional-groupSpeciality__containerChecksContexts--visible');
-    $PROFESSIONAL_DATE?.classList.add('form-professional-groupSpeciality__containerChecksDates--visible');
-    $PROFESSIONAL_SPECIALITY_TITLE?.classList.add('form-professional-groupSpeciality__header--visible');
-    $PROFESSIONAL_BUDGET_TITLE?.classList.add('form-professional-groupBudget__header--visible');
-    $PROFESSIONAL_PROFILE_TITLE?.classList.add('form-professional-groupProfile__header--visible');
-    $SECTION_GROUP_SPECIALITYS_WREAPPER_CHECKS?.classList.add('form-professional-groupSpeciality__checks-wrapper--visible');
-    $PROFESSIONAL_WRAPPER?.classList.add('form-professional-groupSpeciality__checks-wrapper--visible');
-    $CONTAINER_SPECIALITY?.classList.remove('form-step--hidden');
-    renderModalOptions({ vectorOptions: MOVING_AND_TRANSPORT, type: 'service', $PROFESSIONAL_CONTAINER: $PROFESSIONAL_SPECIALITY_CHECKS });
-    renderModalOptions({ vectorOptions: CONTEXTS, type: 'context', $PROFESSIONAL_CONTAINER: $PROFESSIONAL_CONTEXT_CHECKS });
-    renderModalOptions({ vectorOptions: DATE_DAYS, type: 'day', $PROFESSIONAL_CONTAINER: $PROFESSIONAL_DAYS_CHECKS });
-    renderModalOptions({ vectorOptions: DATE_HOUR, type: 'hour', $PROFESSIONAL_CONTAINER: $PROFESSIONAL_HOUR_CHECKS });
-}
-
-const addElementRepairandGarden = (): void => {
-    $PROFESSIONAL_CONTEXT?.classList.add('form-professional-groupSpeciality__containerChecksContexts--visible');
-    $PROFESSIONAL_SPECIALITY?.classList.add('form-professional-groupSpeciality__containerChecksSpecialitys--visible');
-    $PROFESSIONAL_DATE?.classList.add('form-professional-groupSpeciality__containerChecksDates--visible');
-    $PROFESSIONAL_SPECIALITY_TITLE?.classList.add('form-professional-groupSpeciality__header--visible');
-    $PROFESSIONAL_BUDGET_TITLE?.classList.add('form-professional-groupBudget__header--visible');
-    $PROFESSIONAL_PROFILE_TITLE?.classList.add('form-professional-groupProfile__header--visible');
-    $PROFESSIONAL_WRAPPER?.classList.add('form-professional-groupSpeciality__checks-wrapper--visible');
-    $SECTION_GROUP_SPECIALITYS_WREAPPER_CHECKS?.classList.add('form-professional-groupSpeciality__checks-wrapper--visible');
-    $CONTAINER_SPECIALITY?.classList.remove('form-step--hidden');
-    renderModalOptions({ vectorOptions: REPAIR_AND_MAINTENANCE, type: 'service', $PROFESSIONAL_CONTAINER: $PROFESSIONAL_SPECIALITY_CHECKS });
-    renderModalOptions({ vectorOptions: CONTEXTS, type: 'context', $PROFESSIONAL_CONTAINER: $PROFESSIONAL_CONTEXT_CHECKS });
-    renderModalOptions({ vectorOptions: DATE_DAYS, type: 'day', $PROFESSIONAL_CONTAINER: $PROFESSIONAL_DAYS_CHECKS });
-    renderModalOptions({ vectorOptions: DATE_HOUR, type: 'hour', $PROFESSIONAL_CONTAINER: $PROFESSIONAL_HOUR_CHECKS });
-}
-
-const removeElements = (): void => {
-    $PROFESSIONAL_CONTEXT?.classList.remove('form-professional-groupSpeciality__containerChecksContexts--visible');
-    $PROFESSIONAL_DATE?.classList.remove('form-professional-groupSpeciality__containerChecksDates--visible');
-    $PROFESSIONAL_SPECIALITY?.classList.remove('form-professional-groupSpeciality__containerChecksSpecialitys--visible');
-    $PROFESSIONAL_SPECIALITY_TITLE?.classList.remove('form-professional-groupSpeciality__header--visible');
-    $PROFESSIONAL_BUDGET_TITLE?.classList.remove('form-professional-groupBudget__header--visible');
-    $PROFESSIONAL_PROFILE_TITLE?.classList.remove('form-professional-groupProfile__header--visible');
-    $PROFESSIONAL_WRAPPER?.classList.remove('form-professional-groupSpeciality__checks-wrapper--visible');
-    $SECTION_GROUP_SPECIALITYS_WREAPPER_CHECKS?.classList.remove('form-professional-groupSpeciality__checks-wrapper--visible');
-    $CONTAINER_SPECIALITY?.classList.add('form-step--hidden');
-}
 
 //  FUNCION DE REGISTRO DE PROFESIONALES
 const registerProfessional = (): void => {
-    // EVENTO CHANGE PARA SELECCIONAR CATEGORIA
-    $CONTAINER_SPECIALITY?.classList.add('form-step--hidden');
-    $CATEGORY_SPECIALITY_FORM?.addEventListener('change', () => {
-        if ($PROFESSIONAL_SPECIALITY_CHECKS && $PROFESSIONAL_CONTEXT_CHECKS && $PROFESSIONAL_DAYS_CHECKS && $PROFESSIONAL_HOUR_CHECKS) {
-            resetAllCheckboxContainers();
-            if ($CATEGORY_SPECIALITY_FORM.value === 'mudanza-transporte') {
-                addElementsMovingAndTransport();
-            } else if ($CATEGORY_SPECIALITY_FORM.value === 'reparacion-mantenimiento' || $CATEGORY_SPECIALITY_FORM.value === 'jardineria-mantenimiento-exterior') {
-                addElementRepairandGarden();
-            } else {
-                removeElements();
-            }
+    if (!$FORM_CONTAINER_GROUPS) return; // SI ES NULL SOLO RETORNAR
+
+    // OCULTAR ELEMENTO
+    hide({ $el: $FORM_CONTAINER_GROUPS, cls: ['form-step--hidden'] });
+
+    // FUNCION QUE TIENE UN EVENTO DE CAMBIO EN UN SELECT Y ESPERA UNA CALLBACK
+    addInputListener({
+        element: $FORM_CATEGORY_SELECTED as TFormElement,
+        callback: () => {
+            // FUNCION PARA LIMPIAR LOS CHECKBOX PREVIOS
+            clearElementChild({ elements: resetAllCheckboxContainers }); // LLAMAR FUNCION PARA LIMPIAR TODO ANTES
+
+            // RENDERIZAR NUEVOS CHECKS DINAMICOS
+            evaluateCategory({
+                formContainerGroups: $FORM_CONTAINER_GROUPS,
+                formCategorySelected: $FORM_CATEGORY_SELECTED,
+                groupContextCheckbox: $GROUP_CONTEXT_CHECKS,
+                groupDaysCheckbox: $GROUP_DAYS_CHECKS,
+                groupHoursCheckbox: $GROUP_HOUR_CHECKS,
+                groupServiceCheckbox: $GROUP_SPECIALITY_CHECKS
+            });
+
+            // ENGANCHAR VALIDACION DINAMICA PARA EL PASO 3
+            stepInputs({ step: 3, formSelector: 'professional', btnSelector: 'container-btn__next' });
+
+            stepInputs({ step: 5, formSelector: 'professional', btnSelector: 'container-btn__next' });
         }
     });
 
+    //----------------------------SECCION DE EJECUCION DE FUNCIONES PARA LOS PASOS-----------------------------------//
+    // PASO 1: TEXT + SELECT
+    stepInputs({ step: 1, formSelector: 'professional', btnSelector: 'container-btn__next' });
 
-    // REFERENCIA  A TODOS LOS INPUTS DEL FORMULARIO PASO 1
-    clickEventStepFormRegister({ selectorSection: 'form-step' });
-    stepInputs({ step: 1, formSelector: 'formProfessional', btnSelector: 'container-btn__next', selectorSection: 'form-basic' });
-    stepInputs({ step: 2, formSelector: 'formProfessional', btnSelector: 'container-btn__next', selectorSection: 'form-professional' });
 
-}
+    // PASO  2: PRIMERO MOSTRAR EL SELECT, LUEGOS LOS CHECKBOX SON GESTIONADOS POR EL EVENTO CHANGE
+    stepInputs({ step: 2, formSelector: 'professional', btnSelector: 'container-btn__next' });
+
+
+    observeDOMChanges({
+        containerSelector: '[data-step="3"]',
+        onChangeDOM: createTitleCategorySelected,
+    });
+
+    observeDOMChanges({
+        containerSelector: '[data-step="4"]',
+        onChangeDOM: () => {
+            // PASO  4: PRESUPUESTOS
+            stepInputs({ step: 4, formSelector: 'professional', btnSelector: 'container-btn__next' });
+        }
+    });
+};
 
 export default registerProfessional;

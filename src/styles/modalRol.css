@@ -1,41 +1,11 @@
-/* root */
-/* VARIABLES CSS PARA DETERMINAR COLORES PRIMARIOS Y SECUNDARIOS ETC Y REUTILIZAR*/
-:root {
-  --bg-primary: #eceaea;
-  --bg-secondary: #1E5DA3;
-}
-
 /* ELEMENTOS FLEXBOX */
-.modal-rol,
-.modal-rol__header,
-.modal-rol__card-inner,
-.modal-rol__cards,
 .modal-rol__header>div:last-child {
   display: flex;
 }
 
 /* ALINEADOS AL CENTRO */
-.modal-rol,
-.modal-rol__header,
-.modal-rol__card-inner,
 .modal-rol__header>div:last-child {
   align-items: center;
-}
-
-/* DIRECCION COLUMN*/
-.modal-rol__cards,
-.modal-rol__header--column {
-  flex-direction: column;
-}
-
-/* JUSTIFICADOS AL CENTRO */
-.modal-rol {
-  justify-content: center;
-}
-
-/* JUSTIFICADOS A LOS EXTREMOS(BETWEEN) */
-.modal-rol__header {
-  justify-content: space-between;
 }
 
 /* JUSTIFICADOS AL INICIO  */
@@ -43,17 +13,9 @@
   justify-content: flex-start;
 }
 
-/* GAP  1REM */
-.modal-rol__cards,
-.modal-rol__card-inner {
-  gap: 1rem;
-}
-
 .modal-rol {
-  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 1000;
@@ -68,14 +30,13 @@
 .modal-rol__container {
   width: 90%;
   max-width: 600px;
-  background-color: #fff;
+  background-color: var(--bg-primary);
   border-radius: 12px;
   padding: 1.1rem;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* ========== HEADER ========== */
-.modal-rol__header,
 .modal-rol__header>div:last-child {
   width: 100%;
   gap: 1rem;
@@ -85,8 +46,7 @@
   background: none;
   border: none;
   font-size: .9rem;
-  cursor: pointer;
-  color: #555;
+  color: var(--text-color-primary);
 }
 
 .modal-rol__close-icon {
@@ -103,19 +63,18 @@
   border: 2px solid #ddd;
   border-radius: 8px;
   padding: .6rem;
-  cursor: pointer;
   transition: all 0.3s ease;
-  background-color: #fafafa;
+  background-color: var(--bg-primary);
 }
 
 .modal-rol__card:hover {
-  border-color: #007bff;
-  background-color: #f0f8ff;
+  border-color: var(--link-hover-primary);
+  background-color: var(--link-hover-secondary);
 }
 
 .modal-rol__icon-container {
   font-size: 1.3rem;
-  color: #007bff;
+  color: var(--bg-secondary);
 }
 
 .modal-rol__text {
@@ -128,7 +87,7 @@
 }
 
 .modal-rol__card-description {
-  color: #555;
+  color: var(--text-color-primary);
 }
 
 /* ========== MODIFICADORES ========== */
@@ -148,9 +107,6 @@
     font-size: 1.6rem;
   }
 }
-
-/* 968px */
-@media (min-width: 968px) {}
 
 /* 1024px */
 @media (min-width: 1024px) {

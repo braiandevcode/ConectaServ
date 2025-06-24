@@ -1,65 +1,184 @@
+import { iDataByStep, iFormStateValidation } from "../interfaces/interfaces";
+import { TCategoryConfig, TCategoryKey, TOptionItem, TStatusByRegister } from "../types/types"; //IMPORTO  LOS MODULOS NECESARIOS DE TIPOS
 
-// REPARACION Y MANTENIMIENTO
-export const REPAIR_AND_MAINTENANCE: string[] = [
-    'Plomería',
-    'Electricidad',
-    'Pintura',
-    'Carpintería',
-    'Reparación de Electrodomesticos',
-    'Instalación y reparación de aire acondicionado',
-    'Herrería',
-    'Construcción en seco (Durlock, Steel Framing)',
+// REPARACIÓN Y MANTENIMIENTO
+export const REPAIR_AND_MAINTENANCE: TOptionItem[] = [
+  { label: 'Plomería', value: 'plomeria' },
+  { label: 'Electricidad', value: 'electricidad' },
+  { label: 'Pintura', value: 'pintura' },
+  { label: 'Carpintería', value: 'carpinteria' },
+  { label: 'Electrodomésticos', value: 'electrodomesticos' },
+  { label: 'Aire acondicionado', value: 'aire acondicionado' },
+  { label: 'Herrería', value: 'herreria' },
+  { label: 'Construcción en seco', value: 'construccion en seco' }
 ];
-
 
 // MUDANZA Y TRANSPORTE
-export const MOVING_AND_TRANSPORT: string[] = [
-  "Mudanzas particulares (hogares, departamentos)",
-  "Mudanzas comerciales (oficinas, negocios)",
-  "Mudanzas locales (dentro de la ciudad)",
-  "Mudanzas de larga distancia (entre provincias o regiones)",
-  "Fletes por hora o viaje",
-  "Transporte de muebles grandes",
-  "Transporte de electrodomésticos",
-  "Traslado de objetos frágiles o delicados"
+export const MOVING_AND_TRANSPORT: TOptionItem[] = [
+  { label: 'Mudanzas particulares', value: 'mudanzas particulares' },
+  { label: 'Mudanzas comerciales', value: 'mudanzas comerciales' },
+  { label: 'Mudanzas locales', value: 'mudanzas locales' },
+  { label: 'Mudanzas larga distancia', value: 'mudanzas larga distancia' },
+  { label: 'Fletes por hora/viaje', value: 'fletes por hora/viaje' },
+  { label: 'Transporte de muebles', value: 'transporte de muebles' },
+  { label: 'Transporte de electrodomésticos', value: 'transporte de electrodomésticos' },
+  { label: 'Traslado de objetos frágiles', value: 'traslado de objetos frágiles' }
 ];
 
-
-// JARDINERIA Y MANTENIMIENTO EXTERIOR
-export const GARDENNING_AND_OUTDOOR_MAINTENANCE: string[] = [
-    'Corte de pasto',
-    'Poda de árboles',
-    'Poda de arbustos y cercos vivos',
-    'Desmalezado',
-    'Recolección de hojas / limpieza de jardín',
-    'Aplicación de fertilizantes o mantenimiento de césped existente',
-    'Plantación o reparación de césped',
-];
-
-// HABITOS/CONTEXTOS DE TRABAJOS
-export const CONTEXTS = [
-    'Hogar',
-    'Comercios',
-    'Oficina',
-    'Industria'
-];
-
-
-// HABITOS/CONTEXTOS DE TRABAJOS
-export const DATE_DAYS = [
-    'Lunes',
-    'Martes',
-    'Miércoles',
-    'Jueves',
-    'Viernes',
-    'Sabado',
-    'Domingo'
+// JARDINERÍA Y MANTENIMIENTO EXTERIOR
+export const GARDENNING_AND_OUTDOOR_MAINTENANCE: TOptionItem[] = [
+  { label: 'Corte de pasto', value: 'corte de pasto' },
+  { label: 'Poda de árboles', value: 'poda de árboles' },
+  { label: 'Poda de arbustos', value: 'poda de arbustos' },
+  { label: 'Desmalezado', value: 'desmalezado' },
+  { label: 'Limpieza de jardín', value: 'limpieza de jardín' },
+  { label: 'Fertilización/mantenimiento césped', value: 'fertilización/mantenimiento césped' },
+  { label: 'Plantación/reparación césped', value: 'plantación/reparación césped' },
 ];
 
 // HABITOS/CONTEXTOS DE TRABAJOS
-export const DATE_HOUR = [
-    'Mañana',
-    'Tarde',
-    'Noche',
-    'Las 24hs'
+export const CONTEXTS: TOptionItem[] = [
+  { label: 'Hogar', value: 'hogar' },
+  { label: 'Comercios', value: 'comercios' },
+  { label: 'Oficina', value: 'oficina' },
+  { label: 'Industria', value: 'industria' }
 ];
+
+// HABITOS/CONTEXTOS DE TRABAJOS
+export const DATE_DAYS: TOptionItem[] = [
+  { label: 'Lunes', value: 'lunes' },
+  { label: 'Martes', value: 'martes' },
+  { label: 'Miércoles', value: 'miércoles' },
+  { label: 'Jueves', value: 'jueves' },
+  { label: 'Viernes', value: 'viernes' },
+  { label: 'Sabado', value: 'sabado' },
+  { label: 'Domingo', value: 'domingo' },
+];
+
+// HABITOS/CONTEXTOS DE TRABAJOS
+export const DATE_HOUR: TOptionItem[] = [
+  { label: 'Mañana', value: 'mañana' },
+  { label: 'Tarde', value: 'tarde' },
+  { label: 'Noche', value: 'noche' },
+  { label: 'Las 24hs', value: 'las 24hs' },
+];
+
+//VALORES REALES DE CADA TYPE
+export const TITLES_GROUP_CHECKS_MAP: Record<string, string> = {
+  service: 'Tus servicios',
+  context: 'Área de servicio',
+  day: 'Días',
+  hour: 'Horarios',
+};
+
+// CONFIGURACION PARA REGISTRO DE USUARIOS
+export const formState: TStatusByRegister = {
+  hasContext: false, //ESTADO GLOBAL SI TIENE EL GRUPO CONTEXTO O NO
+  stepStatus: {}, //ESTADO GLOBAL DE PASOS,OBJETO QUE PUEDE MUTAR
+  // ESTADO DE MAPEO DE VALIDACION DE PASOS OBJETO QUE PUEDEN MUTAR
+  validationTypesByStep: {
+    1: 'text',
+    2: 'selectedCategoryAndCheckBoxes',
+    3: 'checkbox',
+    4: 'radioBudgetFull',
+    5: 'filesTextareaTerms',
+  },
+  dataByStep: {} as Partial<iDataByStep>
+};
+
+// CONFIGURACION DE SELECTS DE CATEGORIAS
+export const categoryConfigs: Record<TCategoryKey, TCategoryConfig> = {
+  'reparacion-mantenimiento': {
+    hasContext: true,
+    budget: true,
+    options: [
+      { vectorGroupItemCheck: REPAIR_AND_MAINTENANCE, type: 'service' },
+      { vectorGroupItemCheck: CONTEXTS, type: 'context' },
+      { vectorGroupItemCheck: DATE_DAYS, type: 'day' },
+      { vectorGroupItemCheck: DATE_HOUR, type: 'hour' },
+    ]
+  },
+
+  'jardineria': {
+    hasContext: true,
+    budget: false,
+    options: [
+      { vectorGroupItemCheck: GARDENNING_AND_OUTDOOR_MAINTENANCE, type: 'service' },
+      { vectorGroupItemCheck: CONTEXTS, type: 'context' },
+      { vectorGroupItemCheck: DATE_DAYS, type: 'day' },
+      { vectorGroupItemCheck: DATE_HOUR, type: 'hour' },
+    ]
+  },
+
+  'mudanza-transporte': {
+    hasContext: false,
+    budget: false,
+    options: [
+      { vectorGroupItemCheck: MOVING_AND_TRANSPORT, type: 'service' },
+      { vectorGroupItemCheck: DATE_DAYS, type: 'day' },
+      { vectorGroupItemCheck: DATE_HOUR, type: 'hour' },
+    ]
+  }
+};
+
+
+// CONFIGURACION PARA MENSAJES DE ERROR EN CAMPOS
+export const formStateValidField: iFormStateValidation = {
+  fullName: {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  userName: {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  email: {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  location: {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  password: {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  confirmPassword: {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  category: {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  amountBudge: {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  description: {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  imageProfile: {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  imageExperiences: {
+    value: "",
+    error: "",
+    isValid: false,
+  }
+}
+
+
