@@ -1,5 +1,6 @@
 import registerClient from "./scripts/registerClient.js";
 import { clickEvents } from "./events/clickEvents.js";
+import services from "./scripts/services.js";
 import home from "./scripts/home.js";
 import registerProfessional from "./scripts/registerProfessional.js";
 
@@ -15,4 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
         registerProfessional(); //REGISTRO PROFESIONAL
         registerClient(); // REGISTRO CLIENTE
     };
+
+if (window.location.pathname === '/src/pages/services.html') {
+    home();    
+    services();
+    }
+
 });

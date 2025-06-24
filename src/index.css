@@ -4,14 +4,6 @@
 @import url('./styles/modalRol.css');
 @import url('./styles/registerProfessional.css');
 
-/* ROOT */
-/* VARIABLES CSS PARA DETERMINAR COLORES PRIMARIOS Y SECUNDARIOS ETC Y REUTILIZAR*/
-:root {
-  --bg-primary: #eceaea;
-  --bg-secondary: #1E5DA3;
-}
-
-
 /*******************************************RESETEO UNIVERSAL***************************************************/
 *,
 ::after,
@@ -30,130 +22,52 @@ body {
   letter-spacing: 1px;
 }
 
-h1 {
-  font-size: 3.4rem;
-}
-
 body,
 main {
   min-height: 100dvh;
 }
 
+button{
+  user-select: none;
+  border: none;
+}
+
 h1,
 h2,
-h3,
-h4,
-h5,
-h6 {
+h3{
   padding: .9rem 0;
 }
 
-
 /* TITULO NIVEL 1  */
 h1 {
-  font-size: 1.75rem;
+  font-size: 2rem;
 }
 
 /* TITULO NIVEL 2 */
 h2 {
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 
 /* TITULO NIVEL 3 */
 h3 {
-  font-size: .950rem;
+  font-size: 1.25rem;
 }
 
 /* TITULO NIVEL 3 */
 h4{
-    font-size: .8rem;
+    font-size: 1rem;
 }
 
-/* PARA TODOS LOS PARRAFOS */
-p {
-  font-size: .6rem;
-}
-
-li {
-  list-style-type: none;
+ul {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
 }
 
 a {
   color: #FFFF;
 }
-
-
-/* ELEMENTOS FLEXBOX */
-body,
-main,
-.container-textInfo,
-.radio-group,
-.radio-option,
-form input[type="checkbox"],
-.group-select,
-.container-btn,
-.btn--with-icon {
-  display: flex;
-}
-
-/* ALINEADOS AL CENTRO */
-.container-textInfo,
-.radio-group,
-.radio-option,
-form input[type="checkbox"],
-.container-btn,
-.btn--with-icon {
-  align-items: center;
-}
-
-/* JUSTIFICADO AL CENTRO */
-body,
-main,
-form input[type="checkbox"] {
-  justify-content: center;
-}
-
-/* JUSTIFICADO AL FINAL */
-.container-btn {
-  justify-content: flex-end;
-}
-
-/* DIRECCION COLUMNS */
-body,
-main,
-.group-select {
-  flex-direction: column;
-}
-
-/* FLEX BASIS 100% */
-body,
-main,
-.group-select,
-.container-btn {
-  flex-basis: 100%;
-}
-
-/* GAP .5REM */
-.container-textInfo,
-.radio-option,
-.btn--with-icon {
-  gap: .5rem;
-}
-
-/* GAP 1REM (POR SI SE AGREGA ALGUNO)*/
-
-
-/* GAP 1.5REM */
-.group-select {
-  gap: 1rem;
-}
-
-.radio-group {
-  gap: 1.5rem;
-}
-
-/* 2REM (POR SI SE AGREGA ALGUNO)*/
-
 
 /******************************************RESETEO ESTILOS EN FORMULARIOS*************************************/
 form {
@@ -272,11 +186,12 @@ form input[type="radio"]:checked::after {
   user-select: none;
   background-color: #2563EB;
   transition: background-color 0.3s ease;
+  color: white;
 }
 
 /* MOBILE-FIRST */
 
-/****************************RESPONSIVE RESETEADO PARA TODOS LOS HAMBITOS DE LA WEB ***********************************/
+/****************************RESPONSIVE RESETEADO PARA TODOS LOS AMBITOS DE LA WEB ***********************************/
 /* 768px */
 @media (min-width: 768px) {
 
@@ -291,27 +206,17 @@ form input[type="radio"]:checked::after {
 
   /* TITULO NIVEL 1  */
   h1 {
-    font-size: 2.75rem;
+    font-size: 3rem;
   }
 
   /* TITULO NIVEL 2 */
   h2 {
-    font-size: 1.3rem;
+    font-size: 2rem;
   }
 
   /* TITULO NIVEL 3 */
   h3 {
-    font-size: 1rem;
-  }
-
-  /* TITULO NIVEL 3 */
-h4{
-    font-size: .9rem;
-}
-
-  /* PARA TODOS LOS PARRAFOS */
-  p {
-    font-size: .7rem;
+    font-size: 1.4rem;
   }
 
   /* RESETEO DE EN LABEL, INPUTS TEXTAREA Y PLACEHOLDERS*/
@@ -325,29 +230,20 @@ h4{
 
 /* 1024px */
 @media (min-width: 1024px) {
-
   /* TITULO NIVEL 1  */
   h1 {
-    font-size: 3.75rem;
+    font-size: 3.4rem;
   }
 
   /* TITULO NIVEL 2 */
   h2 {
-    font-size: 1.5rem;
+    font-size: 2.2rem;
     margin-bottom: 2rem
   }
 
   /* TITULO NIVEL 3 */
   h3 {
-    font-size: 1.125rem;
+    font-size: 1.5rem;
   }
-  
-  /* TITULO NIVEL 3 */
-h4{
-    font-size: 1rem;
-}
-  /* PARA TODOS LOS PARRAFOS */
-  p {
-    font-size: .8rem;
-  }
+
 }

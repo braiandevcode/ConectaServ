@@ -1,3 +1,5 @@
+@import url('../index.css');
+
 /* root */
 /* VARIABLES CSS PARA DETERMINAR COLORES PRIMARIOS Y SECUNDARIOS ETC Y REUTILIZAR*/
 :root {
@@ -144,79 +146,6 @@ button.color:active {
     }
 }
 
-
-/* -- Hero -- */
-.hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    height: 90vh;
-    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../images/trabajador-de-la-construccion-femenina-con-casco-y-rodillo-de-pintura.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    color: white;
-    background-position: center center;
-    margin-bottom: 3rem;
-}
-
-.como-funciona {
-    padding: 3rem 1.5rem 6rem 1.5rem;
-    background-color: var(--bg-primary);
-}
-
-.pasos {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.paso {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.paso__icono {
-    font-size: 2rem;
-    color: #4c94d7;
-}
-
-/* Como funciona escritorio */
-@media (min-width: 720px) {
-    .how-works .img-container {
-        background-image: url(../images/cerrar-mujer-sosteniendo-telefono.jpg);
-        width: 700px;
-        height: 400px;
-        background-size: cover;
-        background-position: center;
-        border-radius: 10px;
-    }
-
-    .img-pasos__container {
-        display: flex;
-        gap: 4rem;
-    }
-
-    .pasos {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 2rem
-    }
-
-    .paso {
-        flex-direction: row;
-        text-align: center;
-        max-width: 200px;
-    }
-
-    .paso__icono {
-        margin-bottom: 1rem;
-    }
-}
-
 /*Footer*/
 .footer {
     background-color: var(--bg-secondary);
@@ -337,4 +266,133 @@ button.color:active {
         text-align: center;
         margin-top: 40px;
     }
+}
+
+
+
+/* Filtros */
+.main-content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.filters__btn{
+ background-color: transparent;
+  color: #2563EB;
+  border: 2px solid #2563EB;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  max-width: max-content;
+}
+
+.filters__btn:active{
+  background-color: #2563EB;
+  color: white;
+}
+
+.filters__back {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    display: flex;
+    cursor: pointer;
+    width: fit-content;
+    
+}
+
+.filters__panel{
+    position: absolute;
+    top:0;
+    left:0;
+    background: white;
+    width:100%;
+    padding:2rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.filter__group{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+#aplicate__btn{
+   max-width: none;
+}
+
+/* Tarjetas */
+.cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card{
+    background-color: white;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.card__content{
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card__info-container{
+    flex-direction: row;
+    display: flex;
+    gap: 1rem;
+}
+
+.card__button--container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.card__img{
+    height: 90px;
+    width: 90px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Escritorio*/
+@media (min-width: 768px){
+.main-content{
+    display: flex;
+    flex-direction: row;
+    gap: 10rem;
+}
+
+.filters__panel{
+    display: flex;
+    flex-direction: column;
+    padding: 3rem;
+    border-right: 1px solid #ccc;
+    position: relative;
+    background: none;
+    width: auto;
+}
+
+.filters__btn{
+    display: none;
+}
+
+.filters__back{
+    display: none;
+}
+
+#aplicate__btn{
+    display: none;
+}
+
+
+
 }
