@@ -274,7 +274,7 @@ export const updateStepBudget = ({ container }: { container: HTMLElement }): voi
   const internalSteps = container.querySelectorAll('.form-step') as NodeListOf<HTMLElement>;
 
   internalSteps.forEach((step, index) => {
-    const stepNum = index + 3;
+    const stepNum = index + 2;
     step.setAttribute("data-step", `${stepNum}`);
 
     const btn = step.querySelector<HTMLButtonElement>('.container-btn__next[data-step]');
@@ -283,52 +283,40 @@ export const updateStepBudget = ({ container }: { container: HTMLElement }): voi
 };
 
 
-// FUNCION QUE SE ENCARGA DE CREAR LA VISTA PREVIA DE LAS IMAGENES DEL PERFIL
-export const createImagesPreviews = ({ containerPrevProfile, containerPrevExperiences, fileProfile, filesExperiences }:
-  {
-    containerPrevProfile: HTMLElement,
-    containerPrevExperiences: HTMLElement,
-    fileProfile: HTMLInputElement,
-    filesExperiences: HTMLInputElement
-  }) => {
 
-  // --- VISTA PREVIA DE IMAGEN PERFIL ---
-  // SI ES VALIDO EL CAMPO Y SI EXISTE ARCHIVO Y SI LA LONGITUD ES MAYOR A CERO
-  if (formStateValidField.imageProfile.isValid && fileProfile.files && fileProfile.files.length > 0) {
-    clearElementChild({ elements: [containerPrevProfile] })  // LIMPIAR PREVIO
-    const file: File = fileProfile.files[0];
+// Función para crear vista previa de una sola imagen (perfil)
+export const createProfileImagePreview = (container: HTMLElement, inputFile: HTMLInputElement) => {
+  if (inputFile?.files && inputFile?.files.length as number > 0) {
+    clearElementChild({ elements: [container] });
+    const file = inputFile.files[0];
     const reader = new FileReader();
     reader.onload = (ev: ProgressEvent<FileReader>) => {
       const previewSrc = ev.target?.result as string;
-
-      const imgPreview = D.createElement('img') as HTMLImageElement;
-      imgPreview.setAttribute('src', previewSrc);
-      imgPreview.setAttribute('alt', 'Vista previa del perfil');
-      imgPreview.classList.add('profile-image-preview');
-
-      containerPrevProfile?.append(imgPreview);
+      const img = document.createElement('img');
+      img.src = previewSrc;
+      img.alt = 'Vista previa del perfil';
+      img.classList.add('profile-image-preview');
+      container.append(img);
     };
     reader.readAsDataURL(file);
   }
+};
 
-  // --- VISTA PREVIA DE IMÁGENES DE EXPERIENCIA ---
-  // SI ES VALIDO EL CAMPO Y SI EXISTE ARCHIVO Y SI LA LONGITUD ES MAYOR A CERO
-  if (formStateValidField.imageExperiences.isValid && filesExperiences.files && filesExperiences.files.length > 0) {
-    clearElementChild({ elements: [containerPrevExperiences] })  // LIMPIAR PREVIO
-    Array.from(filesExperiences.files).forEach(file => {
+// Función para crear vista previa de varias imágenes (experiencias)
+export const createExperienceImagesPreviews = (container: HTMLElement, inputFiles: HTMLInputElement) => {
+  if (inputFiles?.files && inputFiles.files.length as number > 0) {
+    clearElementChild({ elements: [container] });
+    Array.from(inputFiles.files).forEach(file => {
       const reader = new FileReader();
-
       reader.onload = (ev: ProgressEvent<FileReader>) => {
         const previewSrc = ev.target?.result as string;
         if (!previewSrc) return;
-
-        const img = D.createElement('img');
+        const img = document.createElement('img');
         img.src = previewSrc;
         img.classList.add('experience-image-preview');
-        containerPrevExperiences.append(img);
+        container.append(img);
       };
-
       reader.readAsDataURL(file);
     });
   }
-}
+};

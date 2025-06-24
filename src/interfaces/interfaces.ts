@@ -8,8 +8,8 @@ export interface iOnchangeObserver {
 
 // TIPO PARA FUNCION DE ESCUCHA DE EVENTO DE CAMBIO O EVENTO INPUT
 export interface iListenerChangeOrInput {
-    element: TFormElement;
-    callback: () => void;
+    element: HTMLFormElement | TFormElement;
+    callback: (event: Event) => void;
 }
 
 // INTERFACE CATEGORIA
@@ -74,7 +74,6 @@ export interface iDataByStep {
 }
 
 // INTERFACE PARA VALIDAR CAMPOS
-
 export interface iFieldState {
     value: string;
     error: string;
@@ -98,6 +97,51 @@ export interface iFormStateValidation {
 
     // PASO 5 PERFIL
     description: iFieldState;
-    imageProfile: iFieldState;
+    imageProfile:  iFieldState;
     imageExperiences: iFieldState;
+}
+
+export interface iNames {
+    service: string;
+    context: string;
+    day: string;
+    hour: string;
+}
+
+// INTERFACE NECESARIA PARA EL EVENTO CHANGE
+export interface iEventChange {
+    cbStep: ({ step, e, btn, budgeSelect, isValidFinal, errorFinal, listSectionProfile }: {
+        step: number,
+        e?: Event,
+        btn?: HTMLButtonElement | null,
+        budgeSelect?: HTMLInputElement,
+        isValidFinal?: boolean,
+        errorFinal?: string,
+        listSectionProfile?: string[]
+        inputsBasic?: HTMLInputElement[]
+        form?: HTMLFormElement | null;
+
+    }) => void;
+    form: HTMLFormElement | null;
+    step: number;
+    btn?: HTMLButtonElement | null,
+}
+
+
+// INTERFACE NECESARIA PARA EL EVENTO INPUT
+export interface iEventInput {
+    cbStep: ({ step, e, btn, budgeSelect, isValidFinal, errorFinal, listSectionProfile }: {
+        step: number,
+        e?: Event,
+        btn?: HTMLButtonElement | null,
+        budgeSelect?: HTMLInputElement,
+        isValidFinal?: boolean,
+        errorFinal?: string,
+        listSectionProfile?: string[]
+        inputsBasic?: HTMLInputElement[]
+        form?: HTMLFormElement | undefined;
+    }) => void;
+    form: HTMLFormElement | null;
+    btn?: HTMLButtonElement | null;
+    step: number;
 }

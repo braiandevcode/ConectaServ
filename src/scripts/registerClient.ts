@@ -1,39 +1,44 @@
 import { TFieldName, TFormElement } from "../types/types";
-import addInputListener from "../events/addInputListener.js";
 import saveDataStep from "../utils/saveDataStep.js";
-import { formState } from "../config/constant.js";
-import { validateStepBasic } from "../ui/stepValidationsFields.js";
+import { formState, formStateValidField } from "../config/constant.js";
+import { validateFieldsWithErrorsUI } from "../ui/fieldsValidateUI.js";
 import { iFieldState } from "../interfaces/interfaces";
+
+// RECORDAR: MAS ADELANTE SE PODRIA => MIGRARLO AL DE LOS EVENTOS DELEGADOS
 
 // REGISTRO DE CLIENTE
 const registerClient = () => {
-    const D: Document = document;
-    const $FORM_CLIENT: TFormElement | null = D.querySelector('.register-client');
+    const D: Document = document; // DOCUMENT
+    const $FORM_CLIENT: TFormElement | null = D.querySelector('.register-client'); // REFERENCIAR FORMULARIO CLIENTE
 
-    if (!$FORM_CLIENT) return;
+    if (!$FORM_CLIENT) return; // SI EL FORMULARIO NO EXISTE RETORNAR
 
-    const inputs: NodeListOf<HTMLInputElement> = $FORM_CLIENT.querySelectorAll('input:not(.terms)');
-    const select: HTMLSelectElement | null = $FORM_CLIENT.querySelector('select');
-    const checkboxTerms: HTMLInputElement | null = $FORM_CLIENT.querySelector('input[name="terms"]');
+    const inputs: NodeListOf<HTMLInputElement> = $FORM_CLIENT.querySelectorAll('input:not(.terms)'); // TODOS LOS INPUTS MENOS EL CHECK DE TERMINOS
+    const select: HTMLSelectElement | null = $FORM_CLIENT.querySelector('select'); // SELECCION DE LUGAR
+
+    const checkboxTerms: HTMLInputElement | null = $FORM_CLIENT.querySelector('input[name="terms"]'); // REFERENCIA ELEMENTO TERMINOS
     const allFieldsClient = select ? [...inputs, select] : [...inputs];
 
-    const $BUTTON_SUBMIT: HTMLButtonElement | null = $FORM_CLIENT.querySelector('button[type="submit"]');
+    const $BUTTON_SUBMIT: HTMLButtonElement | null = $FORM_CLIENT.querySelector('button[type="submit"]'); // BOTON SUBMIT
 
     // VALIDACION GENERAL DE CAMPOS
     const validateStepBasicAll = (): boolean => {
         return allFieldsClient.every(el => {
-            const result = validateStepBasic({
+            const result = validateFieldsWithErrorsUI({
                 fieldName: el.name as TFieldName,
                 value: el.value,
+                file: null,
+                files: null
             });
-            return result.isValid;
+
+            return result?.isValid === true; // ASEGURARSE DE QUE RESULT NO SEA NULL
         });
     };
 
     // ACTUALIZAR EL ESTADO DEL BOTÓN
     const updateButtonState = () => {
-        const isValidFieldsAll = validateStepBasicAll();
-        const isCheckboxTermsValid = checkboxTerms?.checked; // Verifica si el checkbox está marcado
+        const isValidFieldsAll = validateStepBasicAll(); // REUTILIZAR FUNCION DE VALIDACION DE CAMPOS
+        const isCheckboxTermsValid = checkboxTerms?.checked; // VERIFICA SI EL CHECKBOX ESTA MARCADO
 
         // ACTUALIZA EL ESTADO DEL BOTÓN SEGÚN LA VALIDEZ DE LOS CAMPOS Y EL CHECKBOX
         if (isValidFieldsAll && isCheckboxTermsValid) {
@@ -43,55 +48,52 @@ const registerClient = () => {
         }
     };
 
-    // EVENTO CHANGE E INPUT EN REGISTRO DE CLIENTE
-    addInputListener({
-        element: $FORM_CLIENT as TFormElement,
-        callback: () => {
-            saveDataStep({ step: "0", elements: allFieldsClient }); //CARGAR DATOS DEL CLIENTE
-            console.log(formState.dataByStep); // DEPURACION DE LOS DATOS QUE SE GUARDAN EN TIPEO
-            updateButtonState(); // ACTUALIZA EL ESTADO DEL BOTÓN
-        }
+    // EVENTO
+    $FORM_CLIENT.addEventListener('input', () => {
+        saveDataStep({ step: "0", elements: allFieldsClient }); // CARGAR DATOS DEL CLIENTE
+        console.log(formState.dataByStep); // DEPURACION DE LOS DATOS QUE SE GUARDAN EN TIPEO
+        updateButtonState(); // ACTUALIZA EL ESTADO DEL BOTÓN
     });
 
-    // ESCUCHAR CAMBIOS EN EL CHECKBOX DE TERMINOS UTILIZANDO addInputListener
+    // ESCUCHAR CAMBIOS EN EL CHECKBOX DE TERMINOS
     if (checkboxTerms) {
-        addInputListener({
-            element: checkboxTerms,
-            callback: updateButtonState
-        });
+        checkboxTerms.addEventListener('change', updateButtonState);
     }
 
     // RECORRER Y VALIDAR CADA CAMPO
     allFieldsClient.forEach(el => {
-        addInputListener({
-            element: el,
-            callback: () => {
-                const fieldName = el.name as TFieldName; // NAME
-                const value: string = el.value; // VALUE
+        el.addEventListener('input', () => {
+            const fieldName = el.name as TFieldName; // NAME
+            const value: string = el.value; // VALUE
 
-                const messageError = document.querySelector(`[data-message=${fieldName}] .has-error`) as HTMLSpanElement | null;
-                if (!messageError) return;
+            const isValidFieldName = (name: string): name is TFieldName => {
+                return name in formStateValidField;
+            };
 
-                // VALIDACION BASE PARA LOS INPUTS
-                const result: iFieldState = validateStepBasic({ fieldName, value });
+            if (!isValidFieldName(fieldName)) return null;
 
-                // APLICAR CLASES
-                el.classList.toggle('is-valid', result.isValid);
-                el.classList.toggle('is-invalid', !result.isValid);
+            const messageError = document.querySelector(`[data-message=${fieldName}] .has-error`) as HTMLSpanElement | null;
+            if (!messageError) return;
 
-                // ACTUALIZAR EL MENSAJE DE ERROR SOLO SI CAMBIA
-                if (!result.isValid) {
-                    // SOLO ACTUALIZAR EL MENSAJE SI EL ERROR CAMBIA
-                    if (messageError.textContent !== result.error) {
-                        messageError.textContent = result.error;
-                    }
-                } else {
-                    // SI LA VALIDACION ES CORRECTA, LIMPIAR EL MENSAJE
-                    messageError.textContent = '';
+            // VALIDACION BASE PARA LOS INPUTS
+            const result = validateFieldsWithErrorsUI({ fieldName, value, file: null, files: null });
+
+            if (!result) return; // ASEGURARSE DE QUE RESULT NO SEA NULL
+
+            // APLICAR CLASES
+            el.classList.toggle('is-valid', result.isValid);
+            el.classList.toggle('is-invalid', !result.isValid);
+
+            // ACTUALIZAR EL MENSAJE DE ERROR SOLO SI CAMBIA
+            if (!result.isValid) {
+                if (messageError.textContent !== result.error) {
+                    messageError.textContent = result.error;
                 }
-
-                updateButtonState(); // ACTUALIZA EL ESTADO DEL BOTÓN
+            } else {
+                messageError.textContent = '';
             }
+
+            updateButtonState(); // ACTUALIZA EL ESTADO DEL BOTÓN
         });
     });
 };

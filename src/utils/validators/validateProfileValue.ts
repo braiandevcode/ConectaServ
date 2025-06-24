@@ -4,7 +4,7 @@ import { convertBytes, formatDescription, isLengthValid, isValueField } from "..
 // FUNCION QUE VALIDA CAMPO DE DESCRIPCION
 export const validateDescription = (value: string): iFieldState => {
     // SI ESTA VACIO PERMITIR SIN VALOR PORQUE ES OPCIONAL
-    if (!isValueField({ text: value })) {
+    if (!isValueField({ text: value.trim() })) {
         return { error: '', value: '', isValid: true }
     }
 
@@ -47,7 +47,7 @@ export const validateImageProfile = (file: File | null): iFieldState => {
             isValid: false
         };
     }
-
+    
     return { error: '', value: file.name, isValid: true };
 };
 

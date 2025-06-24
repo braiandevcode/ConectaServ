@@ -1,6 +1,6 @@
 import { TInputs } from "../types/types";
 
-const getStepValidationMap = ({hasBudget }: { hasBudget:boolean }): Record<number, TInputs> => {
+const getStepValidationMap = ({ hasBudget }: { hasBudget:boolean }): Record<number, TInputs> => {
   return hasBudget
     ? {
         1: 'text',
