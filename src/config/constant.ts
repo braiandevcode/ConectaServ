@@ -1,4 +1,4 @@
-import { iDataByStep, iFormStateValidation } from "../interfaces/interfaces";
+import { iDataByStep, iFormStateValidation, iNames } from "../interfaces/interfaces";
 import { TCategoryConfig, TCategoryKey, TOptionItem, TStatusByRegister } from "../types/types"; //IMPORTO  LOS MODULOS NECESARIOS DE TIPOS
 
 // REPARACIÓN Y MANTENIMIENTO
@@ -181,4 +181,12 @@ export const formStateValidField: iFormStateValidation = {
   }
 }
 
+
+//CONFIG GROUP CHECKBOX PROFESSIONAL
+export const namesCheckBoxes: iNames = {
+  service: 'service[]',
+  context: 'context[]',
+  day: 'day[]',
+  hour: 'hour[]'
+};
 

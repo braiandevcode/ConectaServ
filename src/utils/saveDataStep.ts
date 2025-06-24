@@ -12,7 +12,7 @@ const saveDataStep = ({ step, elements }: { step: string; elements: TFormElement
     // EVALUAR EL VALOR DE LA CLAVE DEL OBJETO DE DATOS 
     switch (stepKey) {
         case EKeyDataByStep.ZERO: {
-            // FILTRAR DE LOS CAMPOS EL PRIMERO QUE COINCIDA CON EL NAME DEL INPUT PASO 1
+            // FILTRAR CAMPOS: EL PRIMERO QUE COINCIDA CON EL NAME DEL INPUT PASO 1
             const fullNameInput = elements.find((el) => el.name === 'fullName');
             const usernameInput = elements.find((el) => el.name === 'userName');
             const emailInput = elements.find((el) => el.name === 'email');
@@ -124,7 +124,6 @@ const saveDataStep = ({ step, elements }: { step: string; elements: TFormElement
             break;
         }
         default:
-            console.log('Paso no reconocido');
             return;
     }
 

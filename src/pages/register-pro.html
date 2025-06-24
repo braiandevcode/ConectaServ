@@ -30,7 +30,7 @@
     <!-- MAIN -->
     <!-- -------------------MODIFICAR EL "group-select" EN EL INDEX.CSS Y MODIFICAR ELEMENTOS FLEXBOX CON SUS PROPIEDADES ------------------->
     <main class="mb-2">
-      <!-- REGISTRO DE PROFESIIONALES-->
+      <!-- REGISTRO DE PROFESSIONALES-->
       <div class="w-full c-flex c-flex-justify-center centered register-userProfessional">
         <div class="w-full register-userProfessional__container">
           <div class="c-flex c-flex-column gap-1/2 register-userProfessional__content">
@@ -39,7 +39,7 @@
             </div>
             <div class="w-full c-flex c-flex-items-center register-userProfessional__header">
               <h1 class="w-full c-flex c-flex-items-center register-userProfessional__title">
-                <span>Registro</span>
+                <span>Crear Cuenta</span>
               </h1>
             </div>
             <form class="register-professional" enctype="multipart/form-data">
@@ -165,11 +165,11 @@
                   </button>
                 </div>
               </div>
-              <!-- REGISTRO INFORMACION PROFESIONAL PASO 2 -->
-              <div class="c-flex c-flex-column c-flex-justify-center form-professional form-step form-step--hidden" data-step="2">
+              <div class="c-flex c-flex-column c-flex-justify-center form-professional" data-section="professional">
                 <!-- REGISTRO PROFESIONAL SECCIONES DE PASO 2 Y 3 -->
                 <div class="c-flex c-flex-column gap-1 form-professional__sections">
-                  <div data-select="category" class="c-flex c-flex-column gap-1 form-professional-groupSelectCategory">
+                  <!-- REGISTRO INFORMACION PROFESIONAL PASO 2 -->
+                  <div data-select="category" class="c-flex c-flex-column gap-1 form-professional-groupSelectCategory form-step form-step--hidden" data-step="2">
                     <div class="c-flex c-flex-items-center gap-1 form-professional-groupSelectCategory__header">
                       <h3 class="form-professional-groupSelectCategory__title">
                         <i class="fas fa-id-card"></i>

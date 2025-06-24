@@ -19,7 +19,7 @@ export type TToggleBudgetFieldsProps = {
   isBudgeYes: boolean;
   elementRadioReinsert: NodeListOf<HTMLInputElement> | null;
   elementInputAmount: HTMLInputElement | null;
-  elementBtn: HTMLButtonElement | null;
+  elementBtn: HTMLButtonElement | null | undefined;
   fieldName: TFieldName;
 };
 
@@ -67,6 +67,8 @@ export type TOptionsCheckForm = {
 export type TFieldName = keyof iFormStateValidation;
 
 export type TValidateFieldParams = {
-  fieldName: TFieldName;
+  fieldName: TFieldName | string;
   value: string;
+  file: File | null
+  files: FileList | null
 };

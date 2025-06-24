@@ -2,14 +2,19 @@ import { TFieldName, TToggleBudgetFieldsProps, TValidateFieldParams } from "../t
 import { formState, formStateValidField } from "../config/constant.js";
 import { iFieldState } from "../interfaces/interfaces";
 import validateBudgetValue from "../utils/validators/validateBudgeValue.js";
-import { validateConfirmPassword, validateEmail, validateFullName, validateLocation, validatePassword, validateUserName } from "../utils/validators/validateBasicValue.js";
+import { validateConfirmPassword, validateEmail, validateFullName, validatePassword, validateUserName } from "../utils/validators/validateBasicValue.js";
 import { validateDescription, validateImageExperiences, validateImageProfile } from "../utils/validators/validateProfileValue.js";
 import { capitalizeWords } from "./auxiliars.js";
 
-//--------------------------------------------VALIDACIONES  DE CAMPOS PASO BASICOS----------------------------------------//
-export const validateStepBasic = ({ fieldName, value }: TValidateFieldParams): iFieldState => {
+//--------------------------------------------VALIDACIONES  DE CAMPOS CON MEN ----------------------------------------//
+export const validateFieldsWithErrorsUI = ({ fieldName, value, file, files }: TValidateFieldParams): iFieldState | null => {
     let result: iFieldState; //VARIABLE AUXILIAR
 
+    const isValidFieldName = (name: string): name is TFieldName => {
+        return name in formStateValidField;
+    };
+
+    if(!isValidFieldName(fieldName)) return null;
     // VERIFICAR EL NAME DEL CAMPO
     switch (fieldName) {
         case 'fullName':
@@ -27,8 +32,19 @@ export const validateStepBasic = ({ fieldName, value }: TValidateFieldParams): i
         case 'confirmPassword':
             result = validateConfirmPassword(value);
             break;
-        case 'location':
-            result = validateLocation(value);
+
+        case 'description':
+            result = validateDescription(value);
+            break;
+
+        case 'amountBudge':
+            result = validateBudgetValue(value);
+            break;
+        case 'imageProfile':
+            result = validateImageProfile(file);
+            break;
+        case 'imageExperiences':
+            result = validateImageExperiences(files);
             break;
         default:
             result = { error: '', value, isValid: true };
@@ -39,8 +55,8 @@ export const validateStepBasic = ({ fieldName, value }: TValidateFieldParams): i
     return result;
 };
 
-//--------------------------------------- VAIDACIONES DE CAMPOS PASO PRESUPUESTO------------------------------------------------------//
-export const validateStepBudge = (
+//--------------------------------------- VAIDACIONES DE RADIO BUTTONS EN PASO PRESUPUESTO------------------------------------------------------//
+export const UIStepBudgeRadioButtons = (
     {
         isBudgeYes,
         elementRadioReinsert,
@@ -98,35 +114,36 @@ export const validateStepBudge = (
 };
 
 
-//--------------------------------------- VAIDACIONES DE CAMPOS PASO PERFIL------------------------------------------------------//
-export const validateFullProfileStep = ({
-    description,
-    file,
-    files
-}: {
-    description: string,
-    file: File | null,
-    files: FileList | null
-}): iFieldState[] => {
+// //--------------------------------------- VAlIDACIONES DE CAMPOS PASO PERFIL------------------------------------------------------//
+// export const UIFullStepProfile = ({
+//     description,
+//     file,
+//     files
+// }: {
+//     description: string,
+//     file: File | null,
+//     files: FileList | null
+// }): iFieldState[] => {
 
-    const resultDescription: iFieldState = validateDescription(description);
-    const resultProfile: iFieldState = validateImageProfile(file);
-    const resultExperiences: iFieldState = validateImageExperiences(files);
+//     const resultDescription: iFieldState = validateDescription(description);
+//     const resultProfile: iFieldState = validateImageProfile(file);
+//     const resultExperiences: iFieldState = validateImageExperiences(files);
 
-    const usedNone: boolean = !description.trim() && !file && (!files || files.length === 0);
+//     // SI NO HAY DESCRIPCION Y SI NO HAY ARCHIVO Y SINO HAY ARCHIVOS O LA LONGITUD ES  IGUAL A CERO
+//     const usedNone: boolean = !description.trim() && !file && (!files || files.length === 0);
 
-    // SI NO SE USÓ NINGÚN CAMPO OPCIONAL, CONSIDERAR TODO COMO VÁLIDO
-    if (usedNone) {
-        return [
-            { error: '', value: '', isValid: true },
-            { error: '', value: '', isValid: true },
-            { error: '', value: '', isValid: true }
-        ];
-    }
+//     // SI NO SE USÓ NINGÚN CAMPO OPCIONAL, CONSIDERAR TODO COMO VÁLIDO
+//     if (usedNone) {
+//         return [
+//             { error: '', value: '', isValid: true },
+//             { error: '', value: '', isValid: true },
+//             { error: '', value: '', isValid: true }
+//         ];
+//     }
 
-    // SI ALGUNO FUE USADO, DEVOLVER LOS RESULTADOS PARA ANALIZAR SU VALIDACIÓN
-    return [resultDescription, resultProfile, resultExperiences];
-};
+//     // SI ALGUNO FUE USADO, DEVOLVER LOS RESULTADOS PARA ANALIZAR SU VALIDACIÓN
+//     return [resultDescription, resultProfile, resultExperiences];
+// };
 
 
 

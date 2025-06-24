@@ -107,19 +107,6 @@ export const validateUserName = (value: string): iFieldState => {
     return { error: '', value: valueNoSpaces, isValid: true };
 }
 
-// FUNCION PARA VALIDAR SELECT DE UBICACION (POR SI ACASO)
-export const validateLocation = (value: string): iFieldState => {
-    if (!isValueField({ text: value })) {
-        return {
-            error: 'Debe seleccionar ubicación',
-            value: value,
-            isValid: false,
-        };
-    }
-
-    return { error: '', value, isValid: true };
-}
-
 // FUNCION PARA VALIDAR CAMPO EMAIL
 export const validateEmail = (value: string): iFieldState => {
     const valueNoSpaces: string = value.trim(); //QUITAR ESPACIOS EN BLANCO AL INICIO Y FINAL
@@ -151,7 +138,7 @@ export const validateEmail = (value: string): iFieldState => {
         };
     }
     // VALIDAR EMAILS PERMITIDOS
-    if (!validateWithRegex({ pattern: safeEmailRegex, text: valueNoSpaces })) {
+    if (!validateWithRegex({ pattern: safeEmailRegex, text: valueNoSpaces.toLowerCase() })) {
         return {
             error: 'Solo se permiten correos de gmail, outlook o hotmail',
             value: valueNoSpaces,

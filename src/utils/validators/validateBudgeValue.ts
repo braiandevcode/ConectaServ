@@ -1,4 +1,4 @@
-import { formatMontoOnlyNumber, isValueField, parseMontoToNumber, validateWithRegex,  } from "../../ui/auxiliars.js";
+import { formatMontoOnlyNumber, isValueField, parseMontoToNumber } from "../../ui/auxiliars.js";
 import { iFieldState } from "../../interfaces/interfaces";
 
 // LOGICA DE VLAIDACION PASO 4

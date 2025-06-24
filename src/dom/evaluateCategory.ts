@@ -6,7 +6,7 @@ import { TCategoryConfig, TCategoryKey, TFormElement, TInputs, TOptionTypeGroup 
 import getStepValidationMap from "../config/getStepValidationStrategies.js";
 import setValidationStrategiesMap from "../config/setValidationStrategiesMap.js";
 import { createStepBudget, deleteStepBudget } from "./createElementsDom.ts.js";
-import saveDataStep from "../utils/saveDataStep.js";
+// import saveDataStep from "../utils/saveDataStep.js";
 
 // FUNCION QUE EVALUA EL VALOR EN SELECT DE CATEGORIA
 const evaluateCategorySelected = ({
@@ -20,14 +20,13 @@ const evaluateCategorySelected = ({
     const $BUTTON: HTMLButtonElement | null = document.querySelector('button[data-step="3"]'); //REFERENCIAR BOTON CON data-step=3
     const $CONTAINER_FORM_PROFESSIONAL: HTMLElement | null = document.querySelector('.form-professional');
 
-    // ULTIMO PROBLEMA RESUELTO A LAS 3 Y 43 DE LA MAÑANA POR UNA CONDICION PELOTUDA
     if (!formContainerGroups || !$CONTAINER_FORM_PROFESSIONAL) return null; //SI SON NULOS
 
     const selectedKeyCategory = formCategorySelected?.value.toLowerCase() as TCategoryKey; //VALOR DE SELECT
 
     const config: TCategoryConfig = categoryConfigs[selectedKeyCategory]; //CONFIGURACION SEGUN EL VALOR SELECCIONADO ejemplo categoryConfig["reparacion-mantenimiento"]
 
-    saveDataStep({ step:"2", elements:[formCategorySelected as TFormElement] }); //GUARDAR CATEGORIA ELEGIDA
+    // saveDataStep({ step:"2", elements:[formCategorySelected as TFormElement] }); //GUARDAR CATEGORIA ELEGIDA
 
     // SI NO EXISTE
     if (!config) {

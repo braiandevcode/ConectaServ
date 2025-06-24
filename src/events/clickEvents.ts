@@ -11,17 +11,20 @@ const isCategoryStep = (step: number, select: HTMLSelectElement | null): boolean
 // FUNCION PARA EVENTOS DE CLICKS
 export const clickEvents = (): void => {
   const $SELECT_CATEGORY: HTMLSelectElement | null = D.querySelector('[data-select="category"]');
+
   const $BTN_PREV: HTMLDivElement | null = D.querySelector('.register-userProfessional__arrow-left');
 
+  const sectionProfession: HTMLDivElement | null = D.querySelector('[data-section="professional"]');
   if (!$BTN_PREV) return;
 
   D.addEventListener('click', (event: TouchEvent | MouseEvent): void => {
-     const target: EventTarget | null = event.target;
+    const target: EventTarget | null = event.target;
     if (!(target instanceof HTMLElement)) return;
 
     // -----------------------EVENTO DE CLICK PARA SIGUIENTE PASO FORMULARIO REGISTRO PROFESIONAL--------------------------- //
     const $NEXT_BUTTON: HTMLButtonElement | null = target.closest('.container-btn__next[data-step]');
     if ($NEXT_BUTTON) {
+
       const step: number = parseInt($NEXT_BUTTON.dataset.step || '0', 10);
       const $SECTION_STEP_CURRENT = getStepSection(step);
       const $SECTION_STEP_NEXT = getStepSection(step + 1);
@@ -38,17 +41,18 @@ export const clickEvents = (): void => {
 
       // OCULTAR SELECT DE ESPECIALIDAD EN PASO 3
       if (isCategoryStep(step, $SELECT_CATEGORY)) {
-        hide({ $el: $SELECT_CATEGORY, cls:['form-step--hidden']});
+        hide({ $el: $SELECT_CATEGORY, cls: ['form-step--hidden'] });
       }
 
       // SI EL CLICK ES EN BOTON CON SU DATASET EN 1 SE MUESTRA EL BOTON ATRAS
       if (step === 1) {
-        show({ $el:$BTN_PREV, cls: ['register-userProfessional__arrow-left--hidden'] });
+        show({ $el: $BTN_PREV, cls: ['register-userProfessional__arrow-left--hidden'] });
+        show({ $el: sectionProfession, cls: ['form-step--hidden'] });
       }
 
       $BTN_PREV.dataset.step_prev = `${dataPrev}`; // ACTUALIZAR EL STEP_PREV PARA BOTON ATRAS
-      hide({ $el: $SECTION_STEP_CURRENT, cls:['form-step--hidden']});
-      show({ $el:$SECTION_STEP_NEXT, cls:['form-step--hidden'] });
+      hide({ $el: $SECTION_STEP_CURRENT, cls: ['form-step--hidden'] });
+      show({ $el: $SECTION_STEP_NEXT, cls: ['form-step--hidden'] });
       return;
     }
 
@@ -61,18 +65,19 @@ export const clickEvents = (): void => {
       const $SECTION_STEP_PREV = getStepSection(stepPrev);
 
       if ($SECTION_STEP_CURRENT && $SECTION_STEP_PREV) {
-        hide({ $el:$SECTION_STEP_CURRENT, cls:['form-step--hidden']});
-        show({ $el:$SECTION_STEP_PREV, cls:['form-step--hidden']});
+        hide({ $el: $SECTION_STEP_CURRENT, cls: ['form-step--hidden'] });
+        show({ $el: $SECTION_STEP_PREV, cls: ['form-step--hidden'] });
 
         // MOSTRAR EL SELECT DE CATEGORIA SI VUELVE AL PASO 3
         if (isCategoryStep(stepPrev, $SELECT_CATEGORY)) {
-          show({ $el:$SELECT_CATEGORY, cls:['form-step--hidden']});
+          show({ $el: $SELECT_CATEGORY, cls: ['form-step--hidden'] });
           $BTN_PREV.dataset.step_prev = `${stepPrev - 2}`;
         }
 
         // SI EL STEP ANTERIOR ES 1 U 0, OCULTAR BOTON ATRAS
         if (stepPrev === 1 || stepPrev === 0) {
-          hide({ $el:$BTN_PREV, cls:['register-userProfessional__arrow-left--hidden'] });
+          hide({ $el: $BTN_PREV, cls: ['register-userProfessional__arrow-left--hidden'] });
+          hide({ $el: sectionProfession, cls: ['form-step--hidden'] });
         }
       }
       // AJUSTE FINAL SI data-step_prev ES 4
