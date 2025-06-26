@@ -2,9 +2,7 @@ import { TFieldName, TFormElement } from "../types/types";
 import { formatMontoOnlyNumber } from "./auxiliars.js";
 import validateStep from "../utils/validators/validateStep.js"
 import { UIStepBudgeRadioButtons } from "./fieldsValidateUI.js";
-
-export let isValidBudgeAmount: boolean = false;
-export let errorAmount: string = '';
+import { globalStateValidationStep } from "../config/constant.js";
 
 const stepFourAmountBudge = ({ step, e, budgeSelect, form, btn }: { step: number, e: Event, budgeSelect: HTMLInputElement | null | undefined, form: HTMLFormElement, btn?: HTMLButtonElement | null | undefined }):void => {
     const $MONT_BUDGET = document.querySelector<HTMLInputElement>(`.form-professional-groupBudget__field`);
@@ -13,7 +11,7 @@ const stepFourAmountBudge = ({ step, e, budgeSelect, form, btn }: { step: number
     
     if (!target.name) return;
 
-    const fieldName = target.name as TFieldName;
+    // const fieldName = target.name as TFieldName;
     const currentIsBudgeYes = budgeSelect?.checked as boolean;
 
     const resultBudge = UIStepBudgeRadioButtons({
@@ -21,11 +19,11 @@ const stepFourAmountBudge = ({ step, e, budgeSelect, form, btn }: { step: number
         elementRadioReinsert: $RADIO_REINSERT,
         elementInputAmount: $MONT_BUDGET,
         elementBtn: btn,
-        fieldName
+        fieldName: $MONT_BUDGET?.name as TFieldName
     });
 
-    isValidBudgeAmount = resultBudge.isValid;
-    errorAmount= resultBudge.error
+    globalStateValidationStep.isValidBudgeAmount = resultBudge.isValid;
+    globalStateValidationStep.errorAmount= resultBudge.error
 
     // BLUR PARA FORMATO DE MONTO PRESUPUESTO
     $MONT_BUDGET?.addEventListener("blur", () => {

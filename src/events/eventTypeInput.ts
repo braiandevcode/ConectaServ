@@ -1,15 +1,19 @@
-import { errorAmount, isValidBudgeAmount } from "../ui/stepFourAmountBudge.js";
 import { TFieldName, TFormElement } from "../types/types";
 import { validateFieldsWithErrorsUI } from "../ui/fieldsValidateUI.js";
-import { iEventInput, iFieldState } from "../interfaces/interfaces";
+import { iCbEventBaseProps, iFieldState, iFormEventHandler } from "../interfaces/interfaces";
 import saveDataStep from "../utils/saveDataStep.js";
+import { formState, globalStateValidationStep } from "../config/constant.js";
 
-// DELEGACION DE EVENTOS TIPO CHANGE
-const eventTypeInput = ({ cbStep, form, step }: iEventInput): void | null => {
+// FUNCION DE DELEGACION PARA EL EVENTO 'INPUT' EN FORMULARIOS
+// ESTA FUNCION AGREGA UN ESCUCHADOR DE EVENTO AL FORMULARIO Y EJECUTA UNA CALLBACK PERSONALIZADA SEGUN EL CONTEXTO (REGISTRO, CONTACTO, ETC).
+// LA CALLBACK 'cbEvent' DEBE DEFINIRSE EN CADA CASO CON SU PROPIA INTERFAZ PARA RECIBIR LOS DATOS NECESARIOS. 
+// SE USA UNA INTERFAZ GENERICA PARA PERMITIR TIPADO FLEXIBLE SEGUN EL FORMULARIO DONDE SE INVOQUE.
+
+const eventTypeInput = <T extends iCbEventBaseProps>({ cbEvent, form, btn, step }: iFormEventHandler<T>): void | null => {
     if (!form) return null;
-    const allFormElements = Array.from(form?.elements as Iterable<TFormElement>) as TFormElement[];
-    const stepKey: string = String(step);
     form.addEventListener('input', (e: Event) => {
+        const allFormElements = Array.from(form?.elements as Iterable<TFormElement>) as TFormElement[];
+        const stepKey: string = String(step);
         const target = e.target as TFormElement;
 
         if (!target.name) return;
@@ -36,38 +40,58 @@ const eventTypeInput = ({ cbStep, form, step }: iEventInput): void | null => {
             // VALIDACION EXTRA PARA PRESUPUESTO
             if (fieldName === 'amountBudge' && step === 4) {
                 const budgeSelectedYes = form.querySelector('[name="budgeSelected"][value="yes"]') as HTMLInputElement;
-                cbStep({ step, e, form, budgeSelect: budgeSelectedYes });
 
-                isValidFinal = result.isValid && isValidBudgeAmount;
-                errorFinal = !result.isValid ? result.error : (!isValidBudgeAmount ? errorAmount : '');
+                cbEvent({
+                    step,
+                    e,
+                    form,
+                    context: {
+                        btn,
+                        budgeSelect: budgeSelectedYes,
+                    }
+                } as unknown as T); //CONFIA EN MI, YO ME ENCARGO DEL TIPO
+
+                isValidFinal = result.isValid && globalStateValidationStep.isValidBudgeAmount;
+                errorFinal = !result.isValid ? result.error : (!globalStateValidationStep.isValidBudgeAmount ? globalStateValidationStep.errorAmount : '');
 
                 target.classList.toggle('is-valid', isValidFinal);
                 target.classList.toggle('is-invalid', !isValidFinal);
                 messageError.textContent = isValidFinal ? '' : errorFinal;
 
                 saveDataStep({ step: stepKey, elements: allFormElements });
+                console.log(formState.dataByStep);
             }
 
             // SECCION BASICA
-            if (listSectionBasic.includes(fieldName) && step === 1) {
-                cbStep({ step, e, form });
+            if (listSectionBasic.includes(fieldName) && (step === 1 || step === 0)) {        
+                cbEvent({
+                    step,
+                    e,
+                    form,
+                } as unknown as T); //CONFIA EN MI, YO ME ENCARGO DEL TIPO
 
                 target.classList.toggle('is-valid', isValidFinal);
                 target.classList.toggle('is-invalid', !isValidFinal);
                 messageError.textContent = isValidFinal ? '' : errorFinal;
 
                 saveDataStep({ step: stepKey, elements: allFormElements });
+                console.log(formState.dataByStep);
             }
 
             // SECCION PERFIL
             if (fieldName === 'description' && (step === 4 || step === 5)) {
-                cbStep({ step, e, form });
+                cbEvent({
+                    step,
+                    e,
+                    form
+                } as unknown as T); //CONFIA EN MI, YO ME ENCARGO DEL TIPO
 
                 target.classList.toggle('is-valid', isValidFinal);
                 target.classList.toggle('is-invalid', !isValidFinal);
                 messageError.textContent = isValidFinal ? '' : errorFinal;
 
                 saveDataStep({ step: stepKey, elements: allFormElements });
+                console.log(formState.dataByStep);
             }
         }
     });

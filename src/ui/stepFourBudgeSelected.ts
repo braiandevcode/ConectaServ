@@ -1,14 +1,11 @@
 import validateStep from "../utils/validators/validateStep.js";
-import { TFieldName, TFormElement } from "../types/types";
-import {  UIStepBudgeRadioButtons } from "./fieldsValidateUI.js";
-
-export let isBudgeYes = false; //VARIABLE AUXILIAR DE BANDERA PARA EL VALUE "yes" DEL RADIO DEL PRESUPUESTO
-export let isBudgeNo = false; //VARIABLE AUXILIAR DE BANDERA PARA EL VALUE "no" DEL RADIO DEL PRESUPUESTO
-
+import { TFieldName } from "../types/types";
+import { UIStepBudgeRadioButtons } from "./fieldsValidateUI.js";
+import { globalStateValidationStep } from "../config/constant.js";
 const D: Document = document;
 
 //  RADIOS DE PRSUPUESTO Y REINSERT
-const stepFourBudgeSelected = ({step, form, btn }: { step:number; form:HTMLFormElement | null, btn: HTMLButtonElement | null | undefined }) => {
+const stepFourBudgeSelected = ({ step, form, btn }: { step: number; form: HTMLFormElement | null, btn: HTMLButtonElement | null | undefined }) => {
 
     const $RADIO_REINSERT = D.querySelectorAll<HTMLInputElement>('.form-professional-groupBudget__radioOption input[name="reinsert"]');
     const $MONT_BUDGET = D.querySelector<HTMLInputElement>(`.form-professional-groupBudget__field`);
@@ -16,7 +13,6 @@ const stepFourBudgeSelected = ({step, form, btn }: { step:number; form:HTMLFormE
     const budgeSelectedYes = form?.querySelector<HTMLInputElement>('[name="budgeSelected"][value="yes"]');
     const budgeSelectedNo = form?.querySelector<HTMLInputElement>('[name="budgeSelected"][value="no"]');
 
-    console.log(budgeSelectedNo, budgeSelectedYes);
     if (!budgeSelectedNo || !budgeSelectedNo) return;
 
     const currentIsBudgeNo = budgeSelectedNo?.checked as boolean;
@@ -30,8 +26,8 @@ const stepFourBudgeSelected = ({step, form, btn }: { step:number; form:HTMLFormE
         fieldName: $MONT_BUDGET?.name as TFieldName
     });
 
-    isBudgeYes = currentIsBudgeYes;
-    isBudgeNo = currentIsBudgeNo;
+    globalStateValidationStep.isBudgeYes = currentIsBudgeYes;
+    globalStateValidationStep.isBudgeNo = currentIsBudgeNo;
 
     validateStep({ step, form });
 }
