@@ -63,7 +63,7 @@ const saveDataStep = ({ step, elements }: { step: string; elements: TFormElement
             const dayValues = elements.filter((el) => el.name === 'day[]' && (el as HTMLInputElement).checked).map((el) => el.value);
 
             const hourValues = elements.filter((el) => el.name === 'hour[]' && (el as HTMLInputElement).checked).map((el) => el.value);
-
+            
             stepData = {
                 service: serviceValues,
                 ...(formState.hasContext ? { context: contextValues } : {}), //SI 'hasContext' ES FALSE OBJETO VACIO

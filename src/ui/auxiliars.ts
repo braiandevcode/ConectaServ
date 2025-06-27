@@ -69,7 +69,7 @@ export const formatDescription = (text: string): string => {
   if (!text || text.trim().length === 0) return "";
 
 
-   let formatted:string = text
+  let formatted: string = text
     .toLowerCase()
     .replace(/\t+/g, ' ')                 // REEMPLAZA TABS POR UN ESPACIO
     .replace(/\s{2,}/g, ' ')              //REEMPLAZA MULTIPLES ESPACIOS POR UNO SOLO
@@ -109,3 +109,19 @@ export const formatMontoWithCurrency = (value: string | number): string => {
 
 // -----------------------AUXILIAR PARA CONVERTIR MEGABYTES  A BYTES----------------------------------------//
 export const convertBytes = (value: number): number => value * 1024 * 1024;
+
+//------------------ AUXILIAR PARA BOTON NEXT Y SIGUIENTE FORMULARIO REGISTRO----------------------------
+
+// FUNCION PARA OBTENER UNA SECCION DEL FORMULARIO SEGUN EL PASO
+export const getStepSection = (step: number): HTMLDivElement | null => document.querySelector(`.form-step[data-step="${step}"]`);
+
+// FUNCION PARA VERIFICAR SI ESTA EN EL PASO DE CATEGORIA 3
+export const isCategoryStep = (step: number, select: HTMLSelectElement | null): boolean => step === 3 && select !== null;
+
+// VALIDAR QUE TODOS LOS CHECKBOXES DE LOS GRUPOS REQUERIDOS ESTAN SELECCIONADOS SEGUN CONTEXTO
+export const groupEveryGroupHasChecked = ({ groupNames }: { groupNames: string[] }): boolean => {
+  return groupNames.every(name => {
+    const inputs = Array.from(document.querySelectorAll<HTMLInputElement>(`input[type="checkbox"][name="${name}"]`));
+    return inputs.some(input => input.checked);
+  });
+};

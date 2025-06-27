@@ -1,8 +1,9 @@
 import validateStep from "../utils/validators/validateStep.js";
 import clearElementChild from "../dom/clearElementChild.js";
 import evaluateCategorySelected from "../dom/evaluateCategory.js";
+import { globalStateValidationStep } from "../config/constant.js";
 
-export let isSelected = false // VARIABLE AUXILIAR GLOBAL PARA SABER SI SE SELECCIONO CATEGORIA
+
 const D: Document = document;
 const stepTwoSelectCategory = ({ step, form }: { step: number, form:HTMLFormElement}) => {
     const $FORM_CATEGORY_SELECTED = D.querySelector<HTMLSelectElement>('.form-professional-groupSelectCategory__select');
@@ -30,7 +31,7 @@ const stepTwoSelectCategory = ({ step, form }: { step: number, form:HTMLFormElem
         groupServiceCheckbox: $GROUP_SPECIALITY_CHECKS
     });
     
-    isSelected = true;
+    globalStateValidationStep.isSelected = true;
     validateStep({ step, form });
 }
 

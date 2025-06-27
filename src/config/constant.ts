@@ -1,4 +1,4 @@
-import { iDataByStep, iFormStateValidation, iNames } from "../interfaces/interfaces";
+import { iDataByStep, iFormStateValidation, iNames, IStateGlobalValidationStep } from "../interfaces/interfaces";
 import { TCategoryConfig, TCategoryKey, TOptionItem, TStatusByRegister } from "../types/types"; //IMPORTO  LOS MODULOS NECESARIOS DE TIPOS
 
 // REPARACIÓN Y MANTENIMIENTO
@@ -77,6 +77,7 @@ export const formState: TStatusByRegister = {
   stepStatus: {}, //ESTADO GLOBAL DE PASOS,OBJETO QUE PUEDE MUTAR
   // ESTADO DE MAPEO DE VALIDACION DE PASOS OBJETO QUE PUEDEN MUTAR
   validationTypesByStep: {
+    0: 'client',
     1: 'text',
     2: 'selectedCategoryAndCheckBoxes',
     3: 'checkbox',
@@ -188,5 +189,20 @@ export const namesCheckBoxes: iNames = {
   context: 'context[]',
   day: 'day[]',
   hour: 'hour[]'
+};
+
+// OBJETO QUE PERMITE ACTULIZAR LOS ESTADOS DE CAMPOS EN CADA PASO A LA ESTRATEGIA
+export const globalStateValidationStep: IStateGlobalValidationStep = {
+  isValidExperiences: false,
+  isValidProfile: false,
+  isValidDescription: false,
+  isBudgeYes: false,
+  isBudgeNo: false,
+  isSelected: false,
+  isValidBasic: false,
+  isTerms: false,
+  isValidCheckBoxesDetailsProfession: false,
+  isValidBudgeAmount: false,
+  errorAmount: '',
 };
 

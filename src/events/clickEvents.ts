@@ -1,90 +1,57 @@
 import { hide, show } from "../ui/auxiliars.js";
-import { formState } from "../config/constant.js";
+import { handleClickNextButton, handleClickPrevButton } from "../ui/handleClickButtonsRegister.js";
 const D: Document = document;
 
-// FUNCION PARA OBTENER UNA SECCION DEL FORMULARIO SEGUN EL PASO
-const getStepSection = (step: number): HTMLDivElement | null => D.querySelector(`.form-step[data-step="${step}"]`);
+// FUNCION DELEGADA PARA MANEJAR TODOS LOS EVENTOS DE CLICK DE LA PAGINA
+// ESTA FUNCION CENTRALIZA LOS CLICK EVENTS DE CUALQUIER SECCION O COMPONENTE EN LA PAGINA (MODALES, BOTONES, NAVEGACION, FORMULARIOS, ETC.)
+// DEBE USARSE PARA CONTROLAR DE FORMA GLOBAL TODAS LAS INTERACCIONES QUE INVOLUCREN EVENTOS DE CLICK, EVITANDO ASIGNACIONES AISLADAS
+// AQUI SE DEFINEN LAS CONDICIONALES NECESARIAS SEGUN EL TARGET DEL EVENTO, PARA CADA CONTEXTO PARTICULAR
 
-// FUNCION PARA VERIFICAR SI ESTA EN EL PASO DE CATEGORIA 3
-const isCategoryStep = (step: number, select: HTMLSelectElement | null): boolean => step === 3 && select !== null;
-
-// FUNCION PARA EVENTOS DE CLICKS
 export const clickEvents = (): void => {
+  // CONSTANTES PARA REFERENCIAR PAGINAS REGISTRO CLIENTE-PROFESIONAL
+  const DOMAIN: string = 'http://localhost:5500/';
+  const ROUTE_CLIENT: string = 'src/pages/register-client.html';
+  const ROUTE_PROFESSIONAL: string = 'src/pages/register-pro.html';
+
+  //CONSTANTES QUE APUNTAN A REFERENCIAS DEL DOM
   const $SELECT_CATEGORY: HTMLSelectElement | null = D.querySelector('[data-select="category"]');
-
   const $BTN_PREV: HTMLDivElement | null = D.querySelector('.register-userProfessional__arrow-left');
-
-  const sectionProfession: HTMLDivElement | null = D.querySelector('[data-section="professional"]');
-  if (!$BTN_PREV) return;
+  const $MODAL_ROL: HTMLButtonElement | null = D.querySelector('.modal-role');
+  const $SECTION_PROFESSION: HTMLDivElement | null = D.querySelector('[data-section="professional"]');
 
   D.addEventListener('click', (event: TouchEvent | MouseEvent): void => {
     const target: EventTarget | null = event.target;
+
     if (!(target instanceof HTMLElement)) return;
 
     // -----------------------EVENTO DE CLICK PARA SIGUIENTE PASO FORMULARIO REGISTRO PROFESIONAL--------------------------- //
-    const $NEXT_BUTTON: HTMLButtonElement | null = target.closest('.container-btn__next[data-step]');
-    if ($NEXT_BUTTON) {
+    handleClickNextButton({ target, btnPrev: $BTN_PREV, section: $SECTION_PROFESSION, selectCategory: $SELECT_CATEGORY })
 
-      const step: number = parseInt($NEXT_BUTTON.dataset.step || '0', 10);
-      const $SECTION_STEP_CURRENT = getStepSection(step);
-      const $SECTION_STEP_NEXT = getStepSection(step + 1);
+    // ---------------------------EVENTO PASO ANTERIOR FORMULARIO REGISTRO PROFESIONAL------------------------------- //
+    handleClickPrevButton({ target, btnPrev: $BTN_PREV, section: $SECTION_PROFESSION, selectCategory: $SELECT_CATEGORY });
 
-      if (!$SECTION_STEP_CURRENT || !$SECTION_STEP_NEXT) return;
-
-      const dataPrev: number = parseInt($SECTION_STEP_CURRENT.dataset.step || '0', 10);
-
-      // SI EL ESTADO DEL OBJETO GLOBAL ES FALSO DESHABILITAR BOTON SIGUIENTE
-      if (!formState.stepStatus[step]) {
-        $NEXT_BUTTON.setAttribute('disabled', 'true');
-        return;
-      }
-
-      // OCULTAR SELECT DE ESPECIALIDAD EN PASO 3
-      if (isCategoryStep(step, $SELECT_CATEGORY)) {
-        hide({ $el: $SELECT_CATEGORY, cls: ['form-step--hidden'] });
-      }
-
-      // SI EL CLICK ES EN BOTON CON SU DATASET EN 1 SE MUESTRA EL BOTON ATRAS
-      if (step === 1) {
-        show({ $el: $BTN_PREV, cls: ['register-userProfessional__arrow-left--hidden'] });
-        show({ $el: sectionProfession, cls: ['form-step--hidden'] });
-      }
-
-      $BTN_PREV.dataset.step_prev = `${dataPrev}`; // ACTUALIZAR EL STEP_PREV PARA BOTON ATRAS
-      hide({ $el: $SECTION_STEP_CURRENT, cls: ['form-step--hidden'] });
-      show({ $el: $SECTION_STEP_NEXT, cls: ['form-step--hidden'] });
+    // SI EL EVENTO LO ORIGINA EL ELEMENTO CON CLASE ".btnRegister"
+    if (target.matches('.btnRegister')) {
+      show({ $el: $MODAL_ROL, cls: ['modal-role--hidden'] })
       return;
     }
 
-    // ---------------------------EVENTO PASO ANTERIOR FORMULARIO REGISTRO PROFESIONAL------------------------------- //
-    const $PREV_BUTTON = target.closest<HTMLDivElement>('.register-userProfessional__arrow-left[data-step_prev]');
-    if ($PREV_BUTTON) {
-      const stepPrev: number = parseInt($PREV_BUTTON.dataset.step_prev || '0', 10);
-
-      const $SECTION_STEP_CURRENT = getStepSection(stepPrev + 1);
-      const $SECTION_STEP_PREV = getStepSection(stepPrev);
-
-      if ($SECTION_STEP_CURRENT && $SECTION_STEP_PREV) {
-        hide({ $el: $SECTION_STEP_CURRENT, cls: ['form-step--hidden'] });
-        show({ $el: $SECTION_STEP_PREV, cls: ['form-step--hidden'] });
-
-        // MOSTRAR EL SELECT DE CATEGORIA SI VUELVE AL PASO 3
-        if (isCategoryStep(stepPrev, $SELECT_CATEGORY)) {
-          show({ $el: $SELECT_CATEGORY, cls: ['form-step--hidden'] });
-          $BTN_PREV.dataset.step_prev = `${stepPrev - 2}`;
-        }
-
-        // SI EL STEP ANTERIOR ES 1 U 0, OCULTAR BOTON ATRAS
-        if (stepPrev === 1 || stepPrev === 0) {
-          hide({ $el: $BTN_PREV, cls: ['register-userProfessional__arrow-left--hidden'] });
-          hide({ $el: sectionProfession, cls: ['form-step--hidden'] });
-        }
-      }
-      // AJUSTE FINAL SI data-step_prev ES 4
-      if ($BTN_PREV.dataset.step_prev === '4') {
-        $BTN_PREV.dataset.step_prev = `${stepPrev - 1}`;
-      }
+    // SI EL0 EVENTO LO ORIGINA EL ELEMENTO CON CLASE "modal-rol__close-btn"
+    if (target.matches('.modal-role__close-btn')) {
+      hide({ $el: $MODAL_ROL, cls: ['modal-role--hidden'] })
       return;
+    }
+
+    // SI EL EVENTO LO ORIGINA EL ELEMENTO CON data-role
+    const dataRole: HTMLDivElement | null = target.closest('[data-role]');
+
+    if (!dataRole) return; //SI NO HAY "data-role" SALIR
+
+    // SI EL VALOR DEL DATA ES "client"
+    if (dataRole.getAttribute('data-role') === 'client') {
+      location.href = `${DOMAIN}${ROUTE_CLIENT}`;  //REFERENCIAR RUTA DE CLIENTE
+    } else {
+      location.href = `${DOMAIN}${ROUTE_PROFESSIONAL}`; // REFERENCIAR RUTA PROFESIONAL
     }
 
   });

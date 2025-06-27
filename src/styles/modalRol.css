@@ -1,35 +1,22 @@
-/* ELEMENTOS FLEXBOX */
-.modal-rol__header>div:last-child {
-  display: flex;
-}
-
-/* ALINEADOS AL CENTRO */
-.modal-rol__header>div:last-child {
-  align-items: center;
-}
-
-/* JUSTIFICADOS AL INICIO  */
-.modal-rol__header>div:last-child {
-  justify-content: flex-start;
-}
-
-.modal-rol {
+.modal-role {
   top: 0;
   left: 0;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.6);
+  inset: 0;
   z-index: 1000;
   transform: scale(1);
   transition: opacity 0.3s ease, transform .3s ease-in-out;
 }
 
-.modal-rol--hidden {
+.modal-role--hidden {
   transform: scale(0);
 }
 
-.modal-rol__container {
+.modal-role__container {
   width: 90%;
   max-width: 600px;
+  max-height: 400px;
   background-color: var(--bg-primary);
   border-radius: 12px;
   padding: 1.1rem;
@@ -37,28 +24,30 @@
 }
 
 /* ========== HEADER ========== */
-.modal-rol__header>div:last-child {
+.modal-role__header>div:last-child {
   width: 100%;
   gap: 1rem;
 }
 
-.modal-rol__close-btn {
+.modal-role__close-btn {
   background: none;
   border: none;
-  font-size: .9rem;
+  font-size: 1.1rem;
+  right: .5rem;
+  top: 0;
   color: var(--text-color-primary);
 }
 
-.modal-rol__close-icon {
+.modal-role__close-icon {
   pointer-events: none;
 }
 
 /* DESCRIPTION */
-.modal-rol__description {
+.modal-role__description {
   margin-bottom: 1.5rem;
 }
 
-.modal-rol__card {
+.modal-role__card {
   flex: 1;
   border: 2px solid #ddd;
   border-radius: 8px;
@@ -67,35 +56,35 @@
   background-color: var(--bg-primary);
 }
 
-.modal-rol__card:hover {
+.modal-role__card:hover {
   border-color: var(--link-hover-primary);
   background-color: var(--link-hover-secondary);
 }
 
-.modal-rol__icon-container {
+.modal-role__icon-container {
   font-size: 1.3rem;
   color: var(--bg-secondary);
 }
 
-.modal-rol__text {
+.modal-role__text {
   flex: 1;
 }
 
-.modal-rol__card-title {
+.modal-role__card-title {
   font-weight: 600;
   color: var(--bg-secondary);
 }
 
-.modal-rol__card-description {
+.modal-role__card-description {
   color: var(--text-color-primary);
 }
 
 /* ========== MODIFICADORES ========== */
-.modal-rol__card--cliente .modal-rol__icon-container {
+.modal-role__card--cliente .modal-role__icon-container {
   color: #28a745;
 }
 
-.modal-rol__card--profesional .modal-rol__icon-container {
+.modal-role__card--profesional .modal-role__icon-container {
   color: #17a2b8;
 }
 
@@ -103,22 +92,22 @@
 /************************MEDIAQUERYES ***************************************/
 /* 768px */
 @media (min-width: 768px) {
-  .modal-rol__icon-container {
+  .modal-role__icon-container {
     font-size: 1.6rem;
   }
 }
 
 /* 1024px */
 @media (min-width: 1024px) {
-  .modal-rol__cards {
+  .modal-role__cards {
     flex-direction: row;
   }
 
-  .modal-rol__close-btn {
+  .modal-role__close-btn {
     font-size: 1.2rem;
   }
 
-  .modal-rol__icon-container {
+  .modal-role__icon-container {
     font-size: 2rem;
   }
 }

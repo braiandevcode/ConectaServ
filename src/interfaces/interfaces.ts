@@ -108,40 +108,55 @@ export interface iNames {
     hour: string;
 }
 
-// INTERFACE NECESARIA PARA EL EVENTO CHANGE
-export interface iEventChange {
-    cbStep: ({ step, e, btn, budgeSelect, isValidFinal, errorFinal, listSectionProfile }: {
-        step: number,
-        e?: Event,
-        btn?: HTMLButtonElement | null,
-        budgeSelect?: HTMLInputElement,
-        isValidFinal?: boolean,
-        errorFinal?: string,
-        listSectionProfile?: string[]
-        inputsBasic?: HTMLInputElement[]
-        form?: HTMLFormElement | null;
+// INTERFACE PARA DEFINIR PARAMETROS EN FUNCION DE BOTON SIGUIENTE/ATRAS DEL REGISTRO
+export interface iButtonsRegister { 
+    target: HTMLElement, 
+    section: HTMLDivElement | null, 
+    btnPrev: HTMLDivElement | null, 
+    selectCategory: HTMLSelectElement | null 
+}
 
-    }) => void;
-    form: HTMLFormElement | null;
-    step: number;
-    btn?: HTMLButtonElement | null,
+// INTERFACE PARA DEFINIR PARAMETROS EN FUNCION DE BOTON SIGUIENTE/ATRAS DEL REGISTRO
+export interface iButtonsRegister {
+    target: HTMLElement,
+    section: HTMLDivElement | null,
+    btnPrev: HTMLDivElement | null,
+    selectCategory: HTMLSelectElement | null
 }
 
 
-// INTERFACE NECESARIA PARA EL EVENTO INPUT
-export interface iEventInput {
-    cbStep: ({ step, e, btn, budgeSelect, isValidFinal, errorFinal, listSectionProfile }: {
-        step: number,
-        e?: Event,
-        btn?: HTMLButtonElement | null,
-        budgeSelect?: HTMLInputElement,
-        isValidFinal?: boolean,
-        errorFinal?: string,
-        listSectionProfile?: string[]
-        inputsBasic?: HTMLInputElement[]
-        form?: HTMLFormElement | undefined;
-    }) => void;
-    form: HTMLFormElement | null;
-    btn?: HTMLButtonElement | null;
-    step: number;
+// BASE COMÚN PARA TODAS LAS CALLBACKS DE EVENTOS DE FORMULARIOS
+export interface iCbEventBaseProps {
+  step?: number;
+  e?: Event;
+  form?: HTMLFormElement;
+  context?: Record<string, any>; // CAMPOS ADICIONALES POR FORMULARIO
 }
+
+
+// INTERFAZ GENÉRICA PARA FUNCIONES DE EVENTOS (REUTILIZABLE SEGUN FORMULARIO)
+export interface iFormEventHandler<T extends iCbEventBaseProps> {
+  cbEvent: (props: T) => void;
+  form: HTMLFormElement | null;
+  btn?: HTMLButtonElement | null;
+  step?: number;
+}
+
+// INTERFACE DE VALIDACION DE PERFIL
+export interface IStateGlobalValidationStep {
+  isValidExperiences: boolean,
+  isValidProfile: boolean,
+  isValidDescription: boolean,
+    isBudgeYes: boolean,
+  isBudgeNo: boolean,
+  isSelected:boolean,
+  isValidBasic:boolean,
+  isTerms:boolean,
+  isValidCheckBoxesDetailsProfession:boolean,
+  isValidBudgeAmount:boolean,
+  errorAmount:string,
+};
+
+
+
+

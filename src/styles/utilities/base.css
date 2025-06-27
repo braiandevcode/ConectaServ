@@ -45,6 +45,10 @@ a {
     color: var(--link-color-primary);
 }
 
+a:focus{
+    outline: none;
+}
+
 /* TITULOS */
 h1 {
     font-size: 1.75rem;
