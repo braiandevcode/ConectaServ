@@ -1,8 +1,8 @@
-import registerClient from "./scripts/registerClient.js";
+// import registerClient from "./scripts/registerClient.js";
 import { clickEvents } from "./events/clickEvents.js";
 import services from "./scripts/services.js";
 import home from "./scripts/home.js";
-import registerProfessional from "./scripts/registerProfessional.js";
+import register from "./scripts/register.js";
 
 // --------------------ULTIMA VERSION BRAIAN-------------------//
 
@@ -13,8 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (window.location.pathname === '/src/pages/register-client.html' || window.location.pathname === '/src/pages/register-pro.html') {
-        registerProfessional(); //REGISTRO PROFESIONAL
-        registerClient(); // REGISTRO CLIENTE
+        register(); //REGISTRO 
     };
 
 if (window.location.pathname === '/src/pages/services.html') {

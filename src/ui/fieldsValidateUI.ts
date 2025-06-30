@@ -1,5 +1,5 @@
 import { TFieldName, TToggleBudgetFieldsProps, TValidateFieldParams } from "../types/types";
-import { formState, formStateValidField } from "../config/constant.js";
+import { formState, formStateValidField, globalStateValidationStep } from "../config/constant.js";
 import { iFieldState } from "../interfaces/interfaces";
 import validateBudgetValue from "../utils/validators/validateBudgeValue.js";
 import { validateConfirmPassword, validateEmail, validateFullName, validatePassword, validateUserName } from "../utils/validators/validateBasicValue.js";
@@ -68,7 +68,6 @@ export const UIStepBudgeRadioButtons = (
     // SI COBRA PRESUPUESTO "SÍ"
     if (isBudgeYes) {
         formState.stepStatus[4] = false; //NO PERMITIR AVANZAR
-
         const rawValue: string = elementInputAmount?.value || ''; // VALOR DEL MONTO O VACIO
         const result: iFieldState = validateBudgetValue(rawValue); //LLAMAR FUNCION QUE MANEJA LA LOGICA DE VALIDACION
 
@@ -112,41 +111,5 @@ export const UIStepBudgeRadioButtons = (
         isValid: true
     };
 };
-
-
-// //--------------------------------------- VAlIDACIONES DE CAMPOS PASO PERFIL------------------------------------------------------//
-// export const UIFullStepProfile = ({
-//     description,
-//     file,
-//     files
-// }: {
-//     description: string,
-//     file: File | null,
-//     files: FileList | null
-// }): iFieldState[] => {
-
-//     const resultDescription: iFieldState = validateDescription(description);
-//     const resultProfile: iFieldState = validateImageProfile(file);
-//     const resultExperiences: iFieldState = validateImageExperiences(files);
-
-//     // SI NO HAY DESCRIPCION Y SI NO HAY ARCHIVO Y SINO HAY ARCHIVOS O LA LONGITUD ES  IGUAL A CERO
-//     const usedNone: boolean = !description.trim() && !file && (!files || files.length === 0);
-
-//     // SI NO SE USÓ NINGÚN CAMPO OPCIONAL, CONSIDERAR TODO COMO VÁLIDO
-//     if (usedNone) {
-//         return [
-//             { error: '', value: '', isValid: true },
-//             { error: '', value: '', isValid: true },
-//             { error: '', value: '', isValid: true }
-//         ];
-//     }
-
-//     // SI ALGUNO FUE USADO, DEVOLVER LOS RESULTADOS PARA ANALIZAR SU VALIDACIÓN
-//     return [resultDescription, resultProfile, resultExperiences];
-// };
-
-
-
-
 
 

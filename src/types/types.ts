@@ -9,7 +9,7 @@ export type TFormStep = {
 }
 
 // TIPADO QUE ESPECIFICAN COMBINACIONES O NO EN  CADA PASO, SEGUN LAS VARIANTES DE DE TIPOS DE ENTRADA QUE SE ENCUENTRAN
-export type TInputs = 'text' | 'selectedCategoryAndCheckBoxes' | 'checkbox' | 'radioBudgetFull' | 'filesTextareaTerms';
+export type TInputs = 'client' | 'text' | 'selectedCategoryAndCheckBoxes' | 'checkbox' | 'radioBudgetFull' | 'filesTextareaTerms';
 
 // TIPADO PARA FUNCION QUE SOLO ESPERA CAMPOS DE ENTRADA DE INPUTS O SELECTS
 export type TFormElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
@@ -71,4 +71,29 @@ export type TValidateFieldParams = {
   value: string;
   file: File | null
   files: FileList | null
+};
+
+//---------------------CONFIGUARACION DE TIPADO PARA PARAMETROS DE CALLBACK EN FORMULARIO DE REGISTRO------------------------//
+// TIPADO PARA PROFESIONAL
+export type TCbEventPropsRegistro = {
+  step?: number;
+  e?: Event;
+  form?: HTMLFormElement;
+  context?: {
+    budgeSelect?: HTMLInputElement;
+    isValidFinal?: boolean;
+    errorFinal?: string;
+    listSectionProfile?: string[];
+  };
+};
+
+// TIPADO CLIENTE
+export type TCbEventPropsRegistroCliente = {
+  e?: Event;
+  form?: HTMLFormElement;
+  step?:number;
+  context?: {
+    isValidAll: boolean;
+    checkboxChecked: boolean;
+  };
 };
