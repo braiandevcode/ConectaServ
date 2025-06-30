@@ -8,6 +8,8 @@ export const handleClickNextButton = ({ target, section, btnPrev, selectCategory
         if (!btnPrev) return;
 
         const step: number = parseInt($NEXT_BUTTON.dataset.step || '0', 10);
+        // GUARDAR EL SIGUIENTE PASO EN LOCALSTORAGE
+        localStorage.setItem("currentStep", (step + 1).toString());
         const $SECTION_STEP_CURRENT = getStepSection(step);
         const $SECTION_STEP_NEXT = getStepSection(step + 1);
 
@@ -45,6 +47,8 @@ export const handleClickPrevButton = ({ target, section, btnPrev, selectCategory
     if ($PREV_BUTTON) {
         if (!btnPrev) return;
         const stepPrev: number = parseInt($PREV_BUTTON.dataset.step_prev || '0', 10);
+        // GUARDAR EL PASO ANTERIOR EN LOCALSTORAGE
+        localStorage.setItem("currentStep", stepPrev.toString());
 
         const $SECTION_STEP_CURRENT = getStepSection(stepPrev + 1);
         const $SECTION_STEP_PREV = getStepSection(stepPrev);

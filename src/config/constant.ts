@@ -160,6 +160,36 @@ export const formStateValidField: iFormStateValidation = {
     error: "",
     isValid: false,
   },
+  "service[]": {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  "context[]": {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  "day[]": {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  "hour[]": {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  budgeSelected: {
+    value: "",
+    error: "",
+    isValid: false,
+  },
+  reinsert: {
+    value: "",
+    error: "",
+    isValid: false,
+  },
   amountBudge: {
     value: "",
     error: "",
@@ -181,7 +211,6 @@ export const formStateValidField: iFormStateValidation = {
     isValid: false,
   }
 }
-
 
 //CONFIG GROUP CHECKBOX PROFESSIONAL
 export const namesCheckBoxes: iNames = {

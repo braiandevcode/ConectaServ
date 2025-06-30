@@ -10,7 +10,8 @@ const stepFourOrFiveDescription = ({ step, form, e }: { step: number, form: HTML
 
     const validationResult = validateFieldsWithErrorsUI({
         fieldName: target.name,
-        value: '',
+        value: target.value,
+        values:[],
         file: null,
         files: null,
     });

@@ -165,7 +165,6 @@
   letter-spacing: 1px;
 }
 
-
 .containerMsgError {
   width: 100%;
 }
@@ -192,6 +191,7 @@ textarea {
   font-weight: 400;
 }
 
+select.is-invalid,
 textarea.is-invalid,
 input.is-invalid {
   border-width: 2px;

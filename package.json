@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/main.js",
-    "dev": "tsc -W"
+    "dev": "tsc -W",
+    "db":"json-server --watch src/db/db.json"
   },
   "keywords": [
     "Contratar",
@@ -16,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "json-server": "^1.0.0-beta.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
