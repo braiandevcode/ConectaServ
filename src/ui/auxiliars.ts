@@ -25,7 +25,7 @@ export const validateWithRegex = ({ pattern, text }: { pattern: RegExp, text: st
 };
 
 // SI UN CAMPO TIENE CONTENIDO
-export const isValueField = ({ text }: { text: string }): boolean => text !== "";
+export const isValueField = ({ text }: { text: string }): boolean => text.trim() !== "";
 
 
 export const normalizeSpaces = (str: string): string => str.replace(/\s+/g, ' ');  //QUITAR TODOS LOS ESPACIOS DEL TABULADOR Y RESETEAR UN SOLO TAB DE ESPACIO
@@ -118,10 +118,3 @@ export const getStepSection = (step: number): HTMLDivElement | null => document.
 // FUNCION PARA VERIFICAR SI ESTA EN EL PASO DE CATEGORIA 3
 export const isCategoryStep = (step: number, select: HTMLSelectElement | null): boolean => step === 3 && select !== null;
 
-// VALIDAR QUE TODOS LOS CHECKBOXES DE LOS GRUPOS REQUERIDOS ESTAN SELECCIONADOS SEGUN CONTEXTO
-export const groupEveryGroupHasChecked = ({ groupNames }: { groupNames: string[] }): boolean => {
-  return groupNames.every(name => {
-    const inputs = Array.from(document.querySelectorAll<HTMLInputElement>(`input[type="checkbox"][name="${name}"]`));
-    return inputs.some(input => input.checked);
-  });
-};

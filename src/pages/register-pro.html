@@ -74,7 +74,7 @@
                 <!-- CAMPOS DEL FORMULARIO -->
                 <div class="c-flex c-flex-column gap-1 form-basic__fields">
                   <!-- CAMPO: NOMBRE COMPLETO -->
-                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="fullName">
                     <label for="fullName" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
                       <span class="c-flex c-flex-items-center gap-1/2">
                         <i class="fas fa-user"></i>
@@ -83,11 +83,11 @@
                       <span class="span-required">*</span>
                     </label>
                     <input type="text" name="fullName" id="fullName" class="form-basic__input" aria-label="Nombre completo" placeholder="Roberto Bustos" spellcheck="true" lang="es" autofocus required />
-                    <div data-message="fullName"><span class="has-error"></span></div>
+                    <div><span class="has-error"></span></div>
                   </div>
 
                   <!-- CAMPO: NOMBRE DE USUARIO -->
-                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="userName">
                     <label for="userName" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
                       <span class="c-flex c-flex-items-center gap-1/2">
                         <i class="fas fa-user-tag"></i>
@@ -96,11 +96,11 @@
                       <span class="span-required">*</span>
                     </label>
                     <input type="text" name="userName" id="userName" class="form-basic__input" aria-label="Nombre de usuario" placeholder="Roberto_Bustos.45" required />
-                    <div data-message="userName"><span class="has-error"></span></div>
+                    <div><span class="has-error"></span></div>
                   </div>
 
                   <!-- CAMPO: CORREO ELECTRONICO -->
-                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="email">
                     <label for="email" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
                       <span class="c-flex c-flex-items-center gap-1/2">
                         <i class="fas fa-envelope"></i>
@@ -109,12 +109,11 @@
                       <span class="span-required">*</span>
                     </label>
                     <input type="text" name="email" id="email" class="form-basic__input" aria-label="Correo electronico" autocomplete="email" placeholder="test@example.com" required />
-                    <div data-message="email"><span class="has-error"></span></div>
+                    <div><span class="has-error"></span></div>
                   </div>
 
                   <!-- CAMPO: UBICACION (SELECT) -->
-                  <div class="c-flex c-flex-column gap-1/2 form-basic__field form-basic__location">
-                    <div data-message="location"><span class="has-error"></span></div>
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field form-basic__location" data-message="location">
                     <label for="location" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
                       <span class="c-flex c-flex-items-center gap-1/2">
                         <i class="fas fa-map-marker-alt"></i>
@@ -128,10 +127,11 @@
                       <option value="azul">Azul</option>
                       <option value="tandil">Tandil</option>
                     </select>
+                    <div><span class="has-error"></span></div>
                   </div>
 
                   <!-- CAMPO: CONTRASENA -->
-                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="password">
                     <label for="password" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
                       <span class="c-flex c-flex-items-center gap-1/2">
                         <i class="fas fa-lock"></i>
@@ -140,11 +140,11 @@
                       <span class="span-required">*</span>
                     </label>
                     <input type="password" name="password" id="password" class="form-basic__input" aria-label="Contrasena" autocomplete="new-password" placeholder="***********" required />
-                    <div data-message="password"><span class="has-error"></span></div>
+                    <div><span class="has-error"></span></div>
                   </div>
 
                   <!-- CAMPO: CONFIRMAR CONTRASENA -->
-                  <div class="c-flex c-flex-column gap-1/2 form-basic__field">
+                  <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="confirmPassword">
                     <label for="confirmPassword" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
                       <span class="c-flex c-flex-items-center gap-1/2">
                         <i class="fas fa-user-lock"></i>
@@ -153,7 +153,7 @@
                       <span class="span-required">*</span>
                     </label>
                     <input type="password" name="confirmPassword" id="confirmPassword" class="form-basic__input" aria-label="Confirmar contrasena" autocomplete="confirmPassword" placeholder="***********" required />
-                    <div data-message="confirmPassword"><span class="has-error"></span></div>
+                    <div><span class="has-error"></span></div>
                   </div>
                 </div>
 
@@ -169,7 +169,7 @@
                 <!-- REGISTRO PROFESIONAL SECCIONES DE PASO 2 Y 3 -->
                 <div class="c-flex c-flex-column gap-1 form-professional__sections">
                   <!-- REGISTRO INFORMACION PROFESIONAL PASO 2 -->
-                  <div data-select="category" class="c-flex c-flex-column gap-1 form-professional-groupSelectCategory form-step form-step--hidden" data-step="2">
+                  <div data-select="category" class="c-flex c-flex-column gap-1 form-professional-groupSelectCategory form-step form-step--hidden" data-step="2" data-message="category">
                     <div class="c-flex c-flex-items-center gap-1 form-professional-groupSelectCategory__header">
                       <h3 class="form-professional-groupSelectCategory__title">
                         <i class="fas fa-id-card"></i>
@@ -191,6 +191,7 @@
                       <option value="mudanza-transporte">Mudanza y Transporte</option>
                       <option value="jardineria">Jardinería</option>
                     </select>
+                    <div><span class="has-error"></span></div>
                   </div>
                   <!-- SECCION ESPECIALIZACION PASO 3-->
                   <div class="c-flex c-flex-column gap-1 form-professional-groupSpeciality form-step form-step--hidden" data-step="3">
@@ -240,7 +241,7 @@
                         <span>Descripción de perfil (Opcional)</span>
                       </label>
                       <textarea id="description" name="description" class="w-full form-professional-groupProfile__textarea" placeholder="Cuentales a la gente sobre ti..." spellcheck="true" lang="es"></textarea>
-                      <div data-message="description"><span class="has-error"></span></div>
+                      <div><span class="has-error"></span></div>
                     </div>
                     <!-- IMAGEN DE PERFIL -->
                     <div class="c-flex c-flex-items-center c-flex-column gap-1/2 w-full form-professional-groupProfile__containerImageProfile">
@@ -259,7 +260,7 @@
                         </label>
                         <!-- CONTENEDOR VACÍO PARA MINIATURAS -->
                         <div class="form-professional-groupProfile__previewImage c-flex c-flex-wrap gap-2"></div>
-                        <div data-message="imageProfile"><span class="has-error"></span></div>
+                        <div><span class="has-error"></span></div>
                       </div>
                     </div>
 
@@ -283,7 +284,7 @@
                         <!-- CONTENEDOR VACÍO PARA MINIATURAS -->
                         <div class="form-professional-groupProfile__previewMultipleImages c-flex c-flex-wrap gap-2"></div>
 
-                        <div data-message="imageExperiences"><span class="has-error"></span></div>
+                        <div><span class="has-error"></span></div>
                       </div>
                     </div>
 

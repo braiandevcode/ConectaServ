@@ -149,6 +149,21 @@ export const validateEmail = (value: string): iFieldState => {
     return { error: '', value: valueNoSpaces.toLocaleLowerCase(), isValid: true };
 }
 
+// FUNCION PARA VALIDAR CAMPO EMAIL
+export const validateSelected = (value: string): iFieldState => {
+    const valueNoSpaces: string = value.trim(); //QUITAR ESPACIOS EN BLANCO AL INICIO Y FINAL
+   
+    // VALIDAR LONGITUD MINIMA 6 CARACTERES
+    if (!isValueField({ text: valueNoSpaces})) {
+        return {
+            error: 'Debe seleccionar una ubicación',
+            value: valueNoSpaces,
+            isValid: false,
+        };
+    }
+    return { error: '', value: valueNoSpaces.toLowerCase(), isValid: true };
+}
+
 // FUNCION PARA VALIDAR CAMPO DE CONTRASEÑA
 export const validatePassword = (value: string): iFieldState => {
     const valueNoSpaces: string = value.trim(); //QUITAR ESPACIOS EN BLANCO AL INICIO Y FINAL

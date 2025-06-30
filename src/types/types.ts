@@ -16,8 +16,8 @@ export type TFormElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaEl
 
 // TIPO DE OBJETO PARA CAMPOS DEL PASO 4
 export type TToggleBudgetFieldsProps = {
-  isBudgeYes: boolean;
-  elementRadioReinsert: NodeListOf<HTMLInputElement> | null;
+  isBudgeYes:boolean;
+  elementRadioReinsert?: NodeListOf<HTMLInputElement> | null;
   elementInputAmount: HTMLInputElement | null;
   elementBtn: HTMLButtonElement | null | undefined;
   fieldName: TFieldName;
@@ -69,17 +69,19 @@ export type TFieldName = keyof iFormStateValidation;
 export type TValidateFieldParams = {
   fieldName: TFieldName | string;
   value: string;
-  file: File | null
+  values:string[];
+  file: File | null;
   files: FileList | null
 };
 
 //---------------------CONFIGUARACION DE TIPADO PARA PARAMETROS DE CALLBACK EN FORMULARIO DE REGISTRO------------------------//
 // TIPADO PARA PROFESIONAL
 export type TCbEventPropsRegistro = {
-  step?: number;
+  step: number;
   e?: Event;
   form?: HTMLFormElement;
   context?: {
+    btn?:HTMLButtonElement | null;
     budgeSelect?: HTMLInputElement;
     isValidFinal?: boolean;
     errorFinal?: string;
@@ -89,10 +91,12 @@ export type TCbEventPropsRegistro = {
 
 // TIPADO CLIENTE
 export type TCbEventPropsRegistroCliente = {
+  target?: TFormElement;
   e?: Event;
   form?: HTMLFormElement;
-  step?:number;
+  step?: number;
   context?: {
+    btn?: HTMLButtonElement | null | undefined;
     isValidAll: boolean;
     checkboxChecked: boolean;
   };

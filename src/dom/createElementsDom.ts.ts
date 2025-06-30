@@ -1,7 +1,5 @@
 // CADA CONSTANTE QUE EMPIEZA CON "$" EN MI CODIGO ESPECIFICA QUE ES UNA REFERENCIA A ELEMENTOS DEL DOM.
 // SI NO LO TIENE SIMPLEMENTE NO ES UNA REFERENCIA DEL DOM SON VARIABLES COMUNES DEL PROGRAMA.
-
-import { formStateValidField } from "../config/constant.js";
 import clearElementChild from "./clearElementChild.js";
 
 // DOCUMENT

@@ -15,11 +15,9 @@ export interface iListenerChangeOrInput {
 // INTERFACE CATEGORIA
 export interface iFormSelectCategory {
     formContainerGroups: HTMLDivElement | null;
-    formCategorySelected: HTMLSelectElement | null;
-    groupServiceCheckbox: HTMLDivElement | null;
-    groupDaysCheckbox: HTMLDivElement | null
-    groupHoursCheckbox: HTMLDivElement | null;
-    groupContextCheckbox: HTMLDivElement | null
+    step?: number;
+    e: Event;
+    form?: HTMLFormElement | null;
 }
 
 // TIPO DE INTERFACE PARA FUNCION DE TOGGLE DE AÑADIR/REMOVER CLASE EN ELEMENTO
@@ -43,7 +41,7 @@ export interface iDataByStep {
         username: string;
         email: string;
         location: string;
-        acceptedTerms: boolean;
+        terms: boolean;
     }
     "1": {
         fullName: string;
@@ -69,7 +67,7 @@ export interface iDataByStep {
         profileImage?: string;
         experienceImages?: string[];
         description?: string;
-        acceptedTerms: boolean;
+        terms: boolean;
     }
 }
 
@@ -89,17 +87,36 @@ export interface iFormStateValidation {
     password: iFieldState;
     confirmPassword: iFieldState;
 
-    // PASO 2
+    // PASO 2 CATEGORIA
     category: iFieldState;
+
+    // PASO 3 DETALLES DE TRABAJOS
+    "service[]": iFieldState;
+    "context[]": iFieldState;
+    "day[]": iFieldState;
+    "hour[]": iFieldState;
 
     // PASO 4 (PRESUPUESTO SI INCLUYE SOLO VALIDAR EL CAMPO DEL MONTO)
     amountBudge: iFieldState;
+    budgeSelected: iFieldState;
+    reinsert: iFieldState;
 
     // PASO 5 PERFIL
     description: iFieldState;
-    imageProfile:  iFieldState;
+    imageProfile: iFieldState;
     imageExperiences: iFieldState;
 }
+
+
+// INTERFAZ CLIENTE
+export interface iClient {
+    fullName: string,
+    userName: string,
+    email: string,
+    location: string,
+    password: string
+}
+
 
 export interface iNames {
     service: string;
@@ -109,11 +126,11 @@ export interface iNames {
 }
 
 // INTERFACE PARA DEFINIR PARAMETROS EN FUNCION DE BOTON SIGUIENTE/ATRAS DEL REGISTRO
-export interface iButtonsRegister { 
-    target: HTMLElement, 
-    section: HTMLDivElement | null, 
-    btnPrev: HTMLDivElement | null, 
-    selectCategory: HTMLSelectElement | null 
+export interface iButtonsRegister {
+    target: HTMLElement,
+    section: HTMLDivElement | null,
+    btnPrev: HTMLDivElement | null,
+    selectCategory: HTMLSelectElement | null
 }
 
 // INTERFACE PARA DEFINIR PARAMETROS EN FUNCION DE BOTON SIGUIENTE/ATRAS DEL REGISTRO
@@ -127,35 +144,42 @@ export interface iButtonsRegister {
 
 // BASE COMÚN PARA TODAS LAS CALLBACKS DE EVENTOS DE FORMULARIOS
 export interface iCbEventBaseProps {
-  step?: number;
-  e?: Event;
-  form?: HTMLFormElement;
-  context?: Record<string, any>; // CAMPOS ADICIONALES POR FORMULARIO
+    step?: number;
+    e?: Event;
+    form?: HTMLFormElement;
+    context?: Record<string, any>; // CAMPOS ADICIONALES POR FORMULARIO
 }
-
 
 // INTERFAZ GENÉRICA PARA FUNCIONES DE EVENTOS (REUTILIZABLE SEGUN FORMULARIO)
 export interface iFormEventHandler<T extends iCbEventBaseProps> {
-  cbEvent: (props: T) => void;
-  form: HTMLFormElement | null;
-  btn?: HTMLButtonElement | null;
-  step?: number;
+    cbEvent: (props: T) => void;
+    form: HTMLFormElement | null;
+    btn?: HTMLButtonElement | null;
+    step?: number;
 }
 
 // INTERFACE DE VALIDACION DE PERFIL
 export interface IStateGlobalValidationStep {
-  isValidExperiences: boolean,
-  isValidProfile: boolean,
-  isValidDescription: boolean,
+    isValidExperiences: boolean,
+    isValidProfile: boolean,
+    isValidDescription: boolean,
     isBudgeYes: boolean,
-  isBudgeNo: boolean,
-  isSelected:boolean,
-  isValidBasic:boolean,
-  isTerms:boolean,
-  isValidCheckBoxesDetailsProfession:boolean,
-  isValidBudgeAmount:boolean,
-  errorAmount:string,
+    isBudgeNo: boolean,
+    isSelected: boolean,
+    isValidBasic: boolean,
+    isTerms: boolean,
+    isValidCheckBoxesDetailsProfession: boolean,
+    isValidBudgeAmount: boolean,
+    errorAmount: string,
 };
+
+// INTERFAZ PARA  fieldsForms
+export interface iFieldsForms { 
+    vNames:string[], 
+    formElement:HTMLFormElement, 
+    formatters: Record<string, (v: string) => string>,  
+    dataToSend: Record<string, string> 
+}
 
 
 

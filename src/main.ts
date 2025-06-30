@@ -7,18 +7,24 @@ import register from "./scripts/register.js";
 // --------------------ULTIMA VERSION BRAIAN-------------------//
 
 document.addEventListener('DOMContentLoaded', () => {
+    const path: string = window.location.pathname;
+    const pathClient: string = '/src/pages/register-client.html';
+    const pathProfessional: string = '/src/pages/register-pro.html';
+    const pathTerms: string = '/src/pages/termsAndConditions.html';
+    const pathPrivacyPolicy: string = '/src/pages/privacyPolicy.html';
     clickEvents();
-    if (window.location.pathname === '/index.html' || window.location.pathname === '/') {
+    if (path === '/index.html' || path === '/') {
         home();
     };
 
-    if (window.location.pathname === '/src/pages/register-client.html' || window.location.pathname === '/src/pages/register-pro.html') {
+    if ((path === pathClient || path === pathProfessional || path === pathTerms || path === pathPrivacyPolicy)) {
         register(); //REGISTRO 
+    } else {
+        localStorage.removeItem('stepData'); //REMOVER SI SE NAVEGA A CUALQUIER OTRA PARTE QUE NO SEA LA DE LA CONDICION
     };
 
-if (window.location.pathname === '/src/pages/services.html') {
-    home();    
-    services();
+    if (path === '/src/pages/services.html') {
+        home();
+        services();
     }
-
 });

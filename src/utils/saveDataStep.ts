@@ -6,8 +6,11 @@ import { capitalizeWords, formatDescription, normalizeSpaces, parseMontoToNumber
 
 // FUNCION PARA GUARDAR DATOS Y HACER LA PERSISTENCIA
 const saveDataStep = ({ step, elements }: { step: string; elements: TFormElement[] }): void => {
+    // VARIABLE PARA NO SOBREESCRIBIR DATOS E IR ACUMULANDO
+    const existingData = JSON.parse(localStorage.getItem("stepData") || "{}");
     const stepKey: string = String(step);
     let stepData: Record<string, any> = {};
+
 
     // EVALUAR EL VALOR DE LA CLAVE DEL OBJETO DE DATOS 
     switch (stepKey) {
@@ -22,7 +25,7 @@ const saveDataStep = ({ step, elements }: { step: string; elements: TFormElement
             // AÑADIR DATOS AL OBJETO
             stepData = {
                 fullName: capitalizeWords(normalizeSpaces(fullNameInput?.value || '')),
-                username: usernameInput?.value || '',
+                userName: usernameInput?.value || '',
                 email: emailInput?.value.toLowerCase() || '',
                 location: capitalizeWords(locationInput?.value || ''),
                 terms: acceptedTermsInput?.checked || false,
@@ -39,7 +42,7 @@ const saveDataStep = ({ step, elements }: { step: string; elements: TFormElement
             // AÑADIR DATOS AL OBJETO
             stepData = {
                 fullName: capitalizeWords(normalizeSpaces(fullNameInput?.value || '')),
-                username: usernameInput?.value || '',
+                userName: usernameInput?.value || '',
                 email: emailInput?.value.toLowerCase() || '',
                 location: capitalizeWords(locationInput?.value || ''),
             };
@@ -63,7 +66,7 @@ const saveDataStep = ({ step, elements }: { step: string; elements: TFormElement
             const dayValues = elements.filter((el) => el.name === 'day[]' && (el as HTMLInputElement).checked).map((el) => el.value);
 
             const hourValues = elements.filter((el) => el.name === 'hour[]' && (el as HTMLInputElement).checked).map((el) => el.value);
-            
+
             stepData = {
                 service: serviceValues,
                 ...(formState.hasContext ? { context: contextValues } : {}), //SI 'hasContext' ES FALSE OBJETO VACIO
@@ -84,10 +87,11 @@ const saveDataStep = ({ step, elements }: { step: string; elements: TFormElement
                     amountBudge: budgetAmountInput ? parseMontoToNumber(budgetAmountInput.value) : 0,
                     reinsert: reinsertInput?.value || '',
                 };
+
             } else {
                 // SI NO ES DIFERENTE DE 'reparacion-mantenimiento'
                 const profileImageInput: TFormElement | undefined = elements.find((el) => el.name === 'imageProfile');
-                const experienceImagesInputs: TFormElement[]= elements.filter((el) => el.name === 'imageExperiences');
+                const experienceImagesInputs: TFormElement[] = elements.filter((el) => el.name === 'imageExperiences');
                 const descriptionInput = elements.find((el) => el.name === 'description') as HTMLTextAreaElement | null;
                 const acceptedTermsInput = elements.find((el) => el.name === 'terms') as HTMLInputElement | null;
 
@@ -97,7 +101,7 @@ const saveDataStep = ({ step, elements }: { step: string; elements: TFormElement
                 stepData = {
                     imageProfile: profileImageInputEl?.files?.[0] || null,
                     imageExperiences: experienceImagesInputsEl.length > 0 ? Array.from(experienceImagesInputsEl[0]?.files || []) : null,// SUPONIENDO UN SOLO INPUT PARA MULTIPLES FILES,
-                    description: formatDescription(descriptionInput?.value || '') ,
+                    description: formatDescription(descriptionInput?.value || ''),
                     terms: acceptedTermsInput?.checked || false,
                 };
             }
@@ -127,8 +131,12 @@ const saveDataStep = ({ step, elements }: { step: string; elements: TFormElement
             return;
     }
 
+    // SOBRESCRIBIMOS AL FINAL POR CUALQUIER CASO
+    existingData[stepKey] = stepData;
+    localStorage.setItem("stepData", JSON.stringify(existingData));
+
     // ACTUALIZAR ESTADO GLOBAL SIN PERDER LOS DATOS PREVIOS
-    // EL SPREAD OPERATOR O COPIA NOS AYUDA A QUE SIEMPRE TENGAMOS LA ULTIMA INFORMACION DEL OBJETO
+    // EL SPREAD OPERATOR NOS AYUDA A QUE SIEMPRE TENGAMOS LA ULTIMA INFORMACION DEL OBJETO
     formState.dataByStep = { ...formState.dataByStep, [stepKey]: stepData };
 };
 

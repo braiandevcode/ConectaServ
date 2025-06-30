@@ -9,7 +9,7 @@ import { formState, globalStateValidationStep } from "../config/constant.js";
 // LA CALLBACK 'cbEvent' DEBE DEFINIRSE EN CADA CASO CON SU PROPIA INTERFAZ PARA RECIBIR LOS DATOS NECESARIOS. 
 // SE USA UNA INTERFAZ GENERICA PARA PERMITIR TIPADO FLEXIBLE SEGUN EL FORMULARIO DONDE SE INVOQUE.
 
-const eventTypeInput = <T extends iCbEventBaseProps>({ cbEvent, form, btn, step }: iFormEventHandler<T>): void | null => {
+const eventTypeInput = <T extends iCbEventBaseProps>({ cbEvent, form, step }: iFormEventHandler<T>): void | null => {
     if (!form) return null;
     form.addEventListener('input', (e: Event) => {
         const allFormElements = Array.from(form?.elements as Iterable<TFormElement>) as TFormElement[];
@@ -22,7 +22,7 @@ const eventTypeInput = <T extends iCbEventBaseProps>({ cbEvent, form, btn, step 
         const value = target.value; // VALOR DEL CAMPO
 
         const vectorType: string[] = ['checkbox', 'radio'];
-        const listSectionBasic: string[] = ['fullName', 'userName', 'email', 'location', 'password', 'confirmPassword'];
+        const listSectionBasic: string[] = ['fullName', 'userName', 'email', 'password', 'confirmPassword'];
 
         // SI ES UN CAMPO DE TEXTO / TEXTAREA
         if (!vectorType.includes(target.type)) {
@@ -30,7 +30,7 @@ const eventTypeInput = <T extends iCbEventBaseProps>({ cbEvent, form, btn, step 
             const messageError = containerMessage?.querySelector('.has-error') as HTMLSpanElement | null;
             if (!messageError) return; // SI NO HAY ELEMENTO REFERENCIADO RETORNAR
 
-            const result: iFieldState | null = validateFieldsWithErrorsUI({ fieldName, value, file: null, files: null });
+            const result: iFieldState | null | undefined = validateFieldsWithErrorsUI({ fieldName, value, values: [], file: null, files: null });
 
             if (!result) return; // ASEGURARSE DE QUE RESULT NO SEA NULL
 
@@ -39,16 +39,10 @@ const eventTypeInput = <T extends iCbEventBaseProps>({ cbEvent, form, btn, step 
 
             // VALIDACION EXTRA PARA PRESUPUESTO
             if (fieldName === 'amountBudge' && step === 4) {
-                const budgeSelectedYes = form.querySelector('[name="budgeSelected"][value="yes"]') as HTMLInputElement;
-
                 cbEvent({
                     step,
                     e,
                     form,
-                    context: {
-                        btn,
-                        budgeSelect: budgeSelectedYes,
-                    }
                 } as unknown as T); //CONFIA EN MI, YO ME ENCARGO DEL TIPO
 
                 isValidFinal = result.isValid && globalStateValidationStep.isValidBudgeAmount;
@@ -59,23 +53,17 @@ const eventTypeInput = <T extends iCbEventBaseProps>({ cbEvent, form, btn, step 
                 messageError.textContent = isValidFinal ? '' : errorFinal;
 
                 saveDataStep({ step: stepKey, elements: allFormElements });
-                console.log(formState.dataByStep);
             }
 
             // SECCION BASICA
-            if (listSectionBasic.includes(fieldName) && (step === 1 || step === 0)) {        
-                cbEvent({
-                    step,
-                    e,
-                    form,
-                } as unknown as T); //CONFIA EN MI, YO ME ENCARGO DEL TIPO
+            if (listSectionBasic.includes(fieldName) && (step === 1 || step === 0)) {
+                cbEvent({ step, e, form } as unknown as T); //CONFIA EN MI, YO ME ENCARGO DEL TIPO
 
                 target.classList.toggle('is-valid', isValidFinal);
                 target.classList.toggle('is-invalid', !isValidFinal);
                 messageError.textContent = isValidFinal ? '' : errorFinal;
 
                 saveDataStep({ step: stepKey, elements: allFormElements });
-                console.log(formState.dataByStep);
             }
 
             // SECCION PERFIL
@@ -91,7 +79,6 @@ const eventTypeInput = <T extends iCbEventBaseProps>({ cbEvent, form, btn, step 
                 messageError.textContent = isValidFinal ? '' : errorFinal;
 
                 saveDataStep({ step: stepKey, elements: allFormElements });
-                console.log(formState.dataByStep);
             }
         }
     });

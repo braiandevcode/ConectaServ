@@ -21,6 +21,7 @@ const stepFourOrFiveFiles = ({ step, form, e, }: { step: number, form: HTMLFormE
         const validationResult = validateFieldsWithErrorsUI({
             fieldName,
             value: '',
+            values:[],
             file: target.multiple ? null : target.files[0],
             files: target.multiple ? target.files : null,
         });

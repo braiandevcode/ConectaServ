@@ -1,34 +1,36 @@
 import validateStep from "../utils/validators/validateStep.js";
-import { TFieldName } from "../types/types";
+import { TCbEventPropsRegistro, TFieldName } from "../types/types";
 import { UIStepBudgeRadioButtons } from "./fieldsValidateUI.js";
 import { globalStateValidationStep } from "../config/constant.js";
 const D: Document = document;
 
-//  RADIOS DE PRSUPUESTO Y REINSERT
-const stepFourBudgeSelected = ({ step, form, btn }: { step: number; form: HTMLFormElement | null, btn: HTMLButtonElement | null | undefined }) => {
+//  RADIOS DE PRSUPUESTO
+const stepFourBudgeSelected = ({ step, e, form }: TCbEventPropsRegistro) => {
+    const $BTN: HTMLButtonElement | null = document.querySelector(`.container-btn__next[data-step="${step}"]`);
 
-    const $RADIO_REINSERT = D.querySelectorAll<HTMLInputElement>('.form-professional-groupBudget__radioOption input[name="reinsert"]');
-    const $MONT_BUDGET = D.querySelector<HTMLInputElement>(`.form-professional-groupBudget__field`);
+    const target = e?.target as HTMLInputElement;
 
-    const budgeSelectedYes = form?.querySelector<HTMLInputElement>('[name="budgeSelected"][value="yes"]');
-    const budgeSelectedNo = form?.querySelector<HTMLInputElement>('[name="budgeSelected"][value="no"]');
+    if (!target.name) return null;
 
-    if (!budgeSelectedNo || !budgeSelectedNo) return;
+    const isChecked = target.name === 'budgeSelected' && target.checked;
 
-    const currentIsBudgeNo = budgeSelectedNo?.checked as boolean;
-    const currentIsBudgeYes = budgeSelectedYes?.checked as boolean;
+    const isYes = target.value === 'yes';
+    const isNo = target.value === 'no';
+
+
+    globalStateValidationStep.isBudgeYes = isYes && isChecked;
+    globalStateValidationStep.isBudgeNo = isNo && isChecked;
+
 
     UIStepBudgeRadioButtons({
-        isBudgeYes: currentIsBudgeYes,
-        elementRadioReinsert: $RADIO_REINSERT,
-        elementInputAmount: $MONT_BUDGET,
-        elementBtn: btn,
-        fieldName: $MONT_BUDGET?.name as TFieldName
+        isBudgeYes: isYes && isChecked,
+        elementRadioReinsert: D.querySelectorAll<HTMLInputElement>(`.form-professional-groupBudget__radioOption input[name="reinsert"]`),
+        elementInputAmount: D.querySelector<HTMLInputElement>(`.form-professional-groupBudget__field`),
+        elementBtn: $BTN,
+        fieldName: target.name as TFieldName
     });
 
-    globalStateValidationStep.isBudgeYes = currentIsBudgeYes;
-    globalStateValidationStep.isBudgeNo = currentIsBudgeNo;
-
     validateStep({ step, form });
+
 }
 export default stepFourBudgeSelected;

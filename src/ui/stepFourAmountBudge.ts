@@ -1,29 +1,33 @@
-import { TFieldName, TFormElement } from "../types/types";
+import { TCbEventPropsRegistro, TFieldName, TFormElement } from "../types/types";
 import { formatMontoOnlyNumber } from "./auxiliars.js";
 import validateStep from "../utils/validators/validateStep.js"
 import { UIStepBudgeRadioButtons } from "./fieldsValidateUI.js";
 import { globalStateValidationStep } from "../config/constant.js";
 
-const stepFourAmountBudge = ({ step, e, budgeSelect, form, btn }: { step: number, e: Event, budgeSelect: HTMLInputElement | null | undefined, form: HTMLFormElement, btn?: HTMLButtonElement | null | undefined }):void => {
+const stepFourAmountBudge = ({ step, e, form }: TCbEventPropsRegistro): void => {
     const $MONT_BUDGET = document.querySelector<HTMLInputElement>(`.form-professional-groupBudget__field`);
     const $RADIO_REINSERT = document.querySelectorAll<HTMLInputElement>('.form-professional-groupBudget__radioOption input[name="reinsert"]');
-    const target = e.target as TFormElement;
-    
+     const $BTN: HTMLButtonElement | null = document.querySelector(`.container-btn__next[data-step="${step}"]`);
+    const $RADIO_BUTTON_SELECTED = form?.querySelector('[name="budgeSelected"]') as HTMLInputElement;
+
+    const target = e?.target as TFormElement;
+
     if (!target.name) return;
 
-    // const fieldName = target.name as TFieldName;
-    const currentIsBudgeYes = budgeSelect?.checked as boolean;
+    const currentIsBudgeYes = $RADIO_BUTTON_SELECTED.checked as boolean;
 
     const resultBudge = UIStepBudgeRadioButtons({
         isBudgeYes: currentIsBudgeYes,
         elementRadioReinsert: $RADIO_REINSERT,
         elementInputAmount: $MONT_BUDGET,
-        elementBtn: btn,
+        elementBtn: $BTN,
         fieldName: $MONT_BUDGET?.name as TFieldName
     });
 
+    console.log('¿COBRA PRESUPUESTO? isBudgeYes:', currentIsBudgeYes);
+
     globalStateValidationStep.isValidBudgeAmount = resultBudge.isValid;
-    globalStateValidationStep.errorAmount= resultBudge.error
+    globalStateValidationStep.errorAmount = resultBudge.error;
 
     // BLUR PARA FORMATO DE MONTO PRESUPUESTO
     $MONT_BUDGET?.addEventListener("blur", () => {
