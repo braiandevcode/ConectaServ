@@ -1,4 +1,29 @@
 {
   "client": [],
-  "professional": []
+  "professional": [
+    {
+    "fullName": "José Fernandez",
+    "userName": "Jose44",
+    "email": "jose@mail.com",
+    "stars": 5,
+    "category": "Reparaciones",
+    "description": "Arreglo sillones y muebles.",
+    "imageProfile": "../images/profile-pic.jpg",
+    "location": "Olavarría",
+    "day": ["Lunes", "Martes"],
+    "hour": ["Mañana", "Tarde"]
+  },
+  {
+    "fullName": "María López",
+    "userName": "María70",
+    "email": "mar0@mail.com",
+    "stars": 2,
+    "category": "Reparaciones",
+    "description": "Reparaciones eléctricas a domicilio.",
+    "imageProfile": "../images/profile-pic.jpg",
+    "location": "Olavarría",
+    "day": ["Miércoles", "Jueves"],
+    "hour": ["Tarde", "Noche"]
+  }
+  ]
 }
