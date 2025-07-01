@@ -1,4 +1,4 @@
-import { iDataByStep, iFormStateValidation, iNames, IStateGlobalValidationStep } from "../interfaces/interfaces";
+import { iDataByStep, iFormStateValidation, iNames, iPhatPages, IStateGlobalValidationStep } from "../interfaces/interfaces";
 import { TCategoryConfig, TCategoryKey, TOptionItem, TStatusByRegister } from "../types/types"; //IMPORTO  LOS MODULOS NECESARIOS DE TIPOS
 
 // REPARACIÓN Y MANTENIMIENTO
@@ -234,4 +234,11 @@ export const globalStateValidationStep: IStateGlobalValidationStep = {
   isValidBudgeAmount: false,
   errorAmount: '',
 };
+
+export const pathPages: iPhatPages = {
+  PATH_FORM_CLIENT: '/src/pages/register-client.html',
+  PATH_FORM_PROFESSIONAL: '/src/pages/register-pro.html',
+  PATH_TERMS: '/src/pages/termsAndConditions.html',
+  PATH_PRIVACY: '/src/pages/privacyPolicy.html',
+}
 

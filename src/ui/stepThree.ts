@@ -18,9 +18,6 @@ const stepThree = ({ step, form, e }: { step: number, form: HTMLFormElement, e: 
         files: null
     });
 
-    console.log(result);
-    
-
     if (result) {
         globalStateValidationStep.isValidCheckBoxesDetailsProfession = result?.isValid;
     }
