@@ -10,7 +10,7 @@
         <meta name="keywords" content="Contratar, Pago Online, Chat">
         <title>ConectaServ</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="../styles/services.css">
+        <link rel="stylesheet" href="../index.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </head>
 </head>
@@ -34,7 +34,6 @@
                     <i class="fas fa-list"></i>
                 </button>
                 <nav class="nav-links">
-                    <a href="#how-works" class="nav__link">¿Cómo funciona?</a>
 
                     <div class="dropdown">
                         <a href="#" class="nav-item dropdown-toggle nav__link">
@@ -78,56 +77,52 @@
                         </div>
                     </div>
 
-                    <a href="./src/pages/login.html" class="nav__link">Iniciar Sesión</a>
+                    <div class="nav__link cursor-pointer" role="button">Iniciar Sesión</div>
                     <button class="color btnRegister">Registrarse</button>
                 </nav>
             </div>
         </header>
 
         <!-- CONTENIDO -->
-        <main class="main-content">
+        <main class="main-content c-flex c-flex-column">
             <!-- FILTROS -->
-            <button class="filters__btn">Filtros</button>
-
-            <aside class="filters__panel hidden">
-
-                <button class="filters__back">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-
-                <h3>Filtros</h3>
-                <div class="filter__group">
-                    <h4>Ordenar por</h4>
-                    <label><input type="radio"> Mejor calificación</label>
-                </div>
-
-                <div class="filter__group">
-                    <h4>Días</h4>
-                    <label><input type="checkbox"> Lunes</label>
-                    <label><input type="checkbox"> Martes</label>
-                    <label><input type="checkbox"> Miércoles</label>
-                    <label><input type="checkbox"> Jueves</label>
-                    <label><input type="checkbox"> Viernes</label>
-                </div>
-
-                <div class="filter__group">
-                    <h4>Horarios</h4>
-                    <label><input type="checkbox"> Mañana</label>
-                    <label><input type="checkbox"> Tarde</label>
-                    <label><input type="checkbox"> Noche</label>
-                    <label><input type="checkbox"> 24hs</label>
-                </div>
-
-                <div class="aplicate__container">
-                    <button id="aplicate__btn" class="btn">Aplicar</button>
-                </div>
-            </aside>
+            <div>
+                <button class="filters__btn">Filtros</button>
+                <aside class="filters__panel hidden">
+                    <button class="filters__back">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h3>Filtros</h3>
+                    <div class="filter__group">
+                        <h4>Ordenar por</h4>
+                        <label><input type="checkbox"> Mejor calificación</label>
+                    </div>
+                    <div class="filter__group">
+                        <h4>Días</h4>
+                        <label><input type="checkbox"> Lunes</label>
+                        <label><input type="checkbox"> Martes</label>
+                        <label><input type="checkbox"> Miércoles</label>
+                        <label><input type="checkbox"> Jueves</label>
+                        <label><input type="checkbox"> Viernes</label>
+                    </div>
+                    <div class="filter__group">
+                        <h4>Horarios</h4>
+                        <label><input type="checkbox"> Mañana</label>
+                        <label><input type="checkbox"> Tarde</label>
+                        <label><input type="checkbox"> Noche</label>
+                        <label><input type="checkbox"> 24hs</label>
+                    </div>
+                    <div class="aplicate__container">
+                        <button id="aplicate__btn" class="btn">Aplicar</button>
+                    </div>
+                </aside>
+            </div>
 
             <!-- TARJETAS DE SERVICIO -->
-            <section class="cards">
+            <section class="cards w-full">
                 <h2>Resultados para categoría elegida</h2>
 
-                <div class="card">
+                <!-- <div class="card">
                     <div class="card__content">
 
                         <div class="card__info-container">
@@ -165,7 +160,7 @@
                             <button class="btn">Ver perfil</button>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
             </section>
         </main>

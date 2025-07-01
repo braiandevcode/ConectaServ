@@ -1,12 +1,3 @@
-@import url('../index.css');
-
-/* root */
-/* VARIABLES CSS PARA DETERMINAR COLORES PRIMARIOS Y SECUNDARIOS ETC Y REUTILIZAR*/
-:root {
-    --bg-primary: #eceaea;
-    --bg-secondary: #1E5DA3;
-}
-
 button.color {
     font-family: 'Inter', sans-serif;
     font-size: 1rem;
@@ -27,6 +18,11 @@ button.color:hover {
 
 button.color:active {
     background: #1E5DA3;
+}
+
+.btn {
+  min-width: unset;
+  width: unset;
 }
 
 .container {
@@ -79,6 +75,7 @@ button.color:active {
 
 .nav-links.active {
     display: flex;
+    z-index:999;
 }
 
 
@@ -143,6 +140,7 @@ button.color:active {
         left: 0;
         right: 0;
         width: auto;
+        z-index:999;
     }
 }
 
@@ -273,9 +271,9 @@ button.color:active {
 /* Filtros */
 .main-content {
     padding: 1rem;
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: flex-start; */
 }
 
 .filters__btn{
@@ -337,6 +335,7 @@ button.color:active {
     background-color: white;
     padding: 1rem;
     border-radius: 10px;
+    max-width: 900px;
 }
 
 .card__content{
@@ -366,9 +365,14 @@ button.color:active {
 /* Escritorio*/
 @media (min-width: 768px){
 .main-content{
-    display: flex;
+    /* display: flex; */
     flex-direction: row;
-    gap: 10rem;
+    gap: 3rem;
+}
+
+.cards{
+    align-items: center;
+    max-width: 900px;
 }
 
 .filters__panel{
