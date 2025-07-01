@@ -81,9 +81,9 @@ const eventTypeChange = <T extends iCbEventBaseProps>({ cbEvent, step, form }: i
                 e,
             } as unknown as T);
 
-            if (!isCategoryRepair && step === 4) {
-                stepFourOrFiveFiles({ step, form, e });
-            }
+            // if (!isCategoryRepair && step === 4) {
+            //     stepFourOrFiveFiles({ step, form, e });
+            // }
 
             saveDataStep({ step: stepKey, elements: allFormElements });
         }

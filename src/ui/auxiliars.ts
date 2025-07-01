@@ -37,7 +37,7 @@ export const capitalizeWords = (str: string): string => str.split(' ').map(word 
 
 //----------------------------------------------FUNCIONES DE PARSEOS Y FORMATO DE NUMEROS---------------------------------------//
 // FUNCION PARA PARSEAR MONTO
-// CONVERTIR A NUMERO FLOTANTE CON DECIMALES Y REEMPLAZA DE FORMA GLOBAL(ES DECIR RECORRE TODO EL TEXTO LA EXPREXION REGULAR) UN NUMERO COMO  1000 A 1000.00
+// CONVERTIR A NUMERO FLOTANTE CON DECIMALES Y REEMPLAZA DE FORMA GLOBAL(ES DECIR, LA EXPREXION REGULAR INDICA RECORRER TODO EL TEXTO) UN NUMERO COMO  1000 A 1000.00
 export const parseMontoToNumber = (value: string): number => {
   return parseFloat(value.replace(/\./g, '').replace(',', '.')) || 0;
 };
@@ -73,7 +73,7 @@ export const formatDescription = (text: string): string => {
     .toLowerCase()
     .replace(/\t+/g, ' ')                 // REEMPLAZA TABS POR UN ESPACIO
     .replace(/\s{2,}/g, ' ')              //REEMPLAZA MULTIPLES ESPACIOS POR UNO SOLO
-    .replace(/\s*([.!?])\s*/g, '$1 ')     // Elimina espacios antes de signos y deja solo uno después  ELIMINA ESPACIOS ANTES DE UN SIGNO Y DEJA SOLO UNO DESPUES
+    .replace(/\s*([.!?])\s*/g, '$1 ')     //ELIMINA ESPACIOS ANTES DE UN SIGNO Y DEJA SOLO UNO DESPUES
     .trim();
 
   // CAPITALIZAR LA PRIMERA LETRA DEL TEXTO

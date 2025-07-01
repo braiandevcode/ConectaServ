@@ -174,13 +174,18 @@ export interface IStateGlobalValidationStep {
 };
 
 // INTERFAZ PARA  fieldsForms
-export interface iFieldsForms { 
-    vNames:string[], 
-    formElement:HTMLFormElement, 
-    formatters: Record<string, (v: string) => string>,  
-    dataToSend: Record<string, string> 
+export interface iFieldsForms {
+    vNames: string[],
+    formElement: HTMLFormElement,
+    formatters: Record<string, (v: unknown) => string | number | string[]>,
+    dataToSend: Record<string, string | number | string[]>
 }
 
-
-
+// INTERFACES PARA RUTAS DE LAS PAGINAS
+export interface iPhatPages {
+    PATH_FORM_CLIENT: string;
+    PATH_FORM_PROFESSIONAL: string;
+    PATH_TERMS: string;
+    PATH_PRIVACY: string;
+}
 

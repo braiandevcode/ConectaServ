@@ -2,10 +2,12 @@ import apiRequest from "../utils/apiRequest.js";
 import { iClient, iFieldsForms } from "interfaces/interfaces.js";
 import everyFieldsFormsByFormatter from "../utils/everyFieldsFormsByFormater.js";
 import formatedValuesClient from "../ui/formattedValuesClient.js";
+import formatedValuesProfessional from "../ui/formattedValuesProfessional.js";
+import { formStateValidField } from "../config/constant.js";
 
-const eventSubmit = async ({ form }: { form: HTMLFormElement | null }): Promise<void | null> => {
-    if (!form) return null;
-    form.addEventListener('submit', async (e: Event) => {
+const eventSubmit = async (): Promise<void | null> => {
+    // if (!form) return null;
+    document.addEventListener('submit', async (e: Event) => {
         e.preventDefault();
         const formElement = e.target as HTMLFormElement;
         if (!formElement) return null;
@@ -25,7 +27,26 @@ const eventSubmit = async ({ form }: { form: HTMLFormElement | null }): Promise<
                 },
                 body: JSON.stringify(dataToSend)
             });
-            form.reset();
+            formElement.reset();
+            localStorage.removeItem('stepData');
+        }
+
+
+        if (formElement.matches('.register-professional')) {
+            const fieldsFormProfessional = Object.keys(formStateValidField);            
+
+            const dataToSend: Record<string, string> = {};
+
+            everyFieldsFormsByFormatter({ vNames: fieldsFormProfessional, dataToSend, formElement, formatters: formatedValuesProfessional() })
+
+            const parsed = apiRequest<iClient>('http://localhost:3000/professional', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dataToSend)
+            });
+            formElement.reset();
             localStorage.removeItem('stepData');
         }
 

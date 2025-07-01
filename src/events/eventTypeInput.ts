@@ -2,7 +2,7 @@ import { TFieldName, TFormElement } from "../types/types";
 import { validateFieldsWithErrorsUI } from "../ui/fieldsValidateUI.js";
 import { iCbEventBaseProps, iFieldState, iFormEventHandler } from "../interfaces/interfaces";
 import saveDataStep from "../utils/saveDataStep.js";
-import { formState, globalStateValidationStep } from "../config/constant.js";
+import { globalStateValidationStep } from "../config/constant.js";
 
 // FUNCION DE DELEGACION PARA EL EVENTO 'INPUT' EN FORMULARIOS
 // ESTA FUNCION AGREGA UN ESCUCHADOR DE EVENTO AL FORMULARIO Y EJECUTA UNA CALLBACK PERSONALIZADA SEGUN EL CONTEXTO (REGISTRO, CONTACTO, ETC).

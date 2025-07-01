@@ -2,7 +2,6 @@ import { validateFieldsWithErrorsUI } from "../ui/fieldsValidateUI.js";
 import setupEventsByStep from "../ui/stepFormRegister.js";
 import { TFieldName } from "../types/types.js";
 import { globalStateValidationStep } from "../config/constant.js";
-import eventSubmit from "../events/eventSubmit.js";
 
 // DOCUMENT
 const D: Document = document; //ABREVIAR NOMBRE DE DOCUMENT
@@ -58,7 +57,6 @@ const register = (): void => {
                     }
 
                     const inputFile = input as HTMLInputElement; //TIPOS FILE
-                    // const inputFiles = input as HTMLInputElement; //TIPOS FILES
 
                     // VALIDAR DE FORMA MANUAL
                     const validation = validateFieldsWithErrorsUI({
@@ -94,7 +92,6 @@ const register = (): void => {
     // SI ES CLIENTE
     if ($FORM_CLIENT) {
         setupEventsByStep({ step: 0, form });
-        eventSubmit({ form: $FORM_CLIENT });
     }
 
     // SI ES EL PROFESIONAL
