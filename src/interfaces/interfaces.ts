@@ -16,7 +16,8 @@ export interface iListenerChangeOrInput {
 export interface iFormSelectCategory {
     formContainerGroups: HTMLDivElement | null;
     step?: number;
-    e: Event;
+    target?: HTMLElement;
+    e?: Event;
     form?: HTMLFormElement | null;
 }
 
@@ -44,31 +45,31 @@ export interface iDataByStep {
         terms: boolean;
     }
     "1": {
-        fullName: string;
-        username: string;
-        email: string;
-        location: string;
-    };
-    "2": {
         category: TCategoryKey; //SOLO CATEGORIA SELECCIONADA
-    };
-    "3": {
         service: string[];
         context?: string[]; // SOLO PARA CATEGORIAS "jardinaria" y "reparacion y mantenimiento"
         day: string[];
         hour: string[];
     };
-    "4": {
+
+    "2": {
+        profileImage?: string;
+        experienceImages?: string[];
+        description?: string;
+    };
+
+    "3": {
         budgetSelected: string;
         budgetAmount: number;
         reinsert: string;
     };
-    "5": {
-        profileImage?: string;
-        experienceImages?: string[];
-        description?: string;
+    "4": {
+        fullName: string;
+        username: string;
+        email: string;
+        location: string;
         terms: boolean;
-    }
+    };
 }
 
 // INTERFACE PARA VALIDAR CAMPOS
@@ -79,7 +80,7 @@ export interface iFieldState {
 }
 
 export interface iFormStateValidation {
-    // PASO 1 BASICO
+    // PASO 0, 3 o 4 BASICO
     fullName: iFieldState;
     userName: iFieldState;
     email: iFieldState;
@@ -87,24 +88,22 @@ export interface iFormStateValidation {
     password: iFieldState;
     confirmPassword: iFieldState;
 
-    // PASO 2 CATEGORIA
+    // PASO 1 CATEGORIA
     category: iFieldState;
-
-    // PASO 3 DETALLES DE TRABAJOS
     "service[]": iFieldState;
     "context[]": iFieldState;
     "day[]": iFieldState;
     "hour[]": iFieldState;
+    
+    // PASO 2 PERFIL
+    descriptionUser: iFieldState;
+    imageProfile: iFieldState;
+    imageExperiences: iFieldState;
 
-    // PASO 4 (PRESUPUESTO SI INCLUYE SOLO VALIDAR EL CAMPO DEL MONTO)
+    // PASO 3 (PRESUPUESTO SI INCLUYE SOLO VALIDAR EL CAMPO DEL MONTO)
     amountBudge: iFieldState;
     budgeSelected: iFieldState;
     reinsert: iFieldState;
-
-    // PASO 5 PERFIL
-    description: iFieldState;
-    imageProfile: iFieldState;
-    imageExperiences: iFieldState;
 }
 
 
@@ -177,7 +176,7 @@ export interface IStateGlobalValidationStep {
 export interface iFieldsForms {
     vNames: string[],
     formElement: HTMLFormElement,
-    formatters: Record<string, (v: unknown) => string | number | string[]>,
+    formatters: Record<string, (value: string | string[] | File[]) => string | number | string[]>;
     dataToSend: Record<string, string | number | string[]>
 }
 

@@ -27,18 +27,18 @@ export const createTitleCategorySelected = (): void => {
 };
 
 // FUNCION PARA CREAR SECCION PASO PRESUPUESTO
-export const createStepBudget = (): void => {
+export const createStepBudget = (): void | null => {
   const $CONTAINER: HTMLElement | null = D.querySelector('.form-professional');
-  if (!$CONTAINER) return;
+  if (!$CONTAINER) return null;
 
   deleteStepBudget({ container: $CONTAINER }); //ELIMINAR TODO ANTES
 
-  const $STEP_PROFILE: HTMLElement | null = $CONTAINER.querySelector('.form-professional-groupProfile');
-  if (!$STEP_PROFILE) return;
+  const $STEP_BASIC: HTMLElement | null = $CONTAINER.querySelector('.form-basic');
+  if (!$STEP_BASIC) return null;
 
   const newStep = D.createElement('div');
   newStep.classList.add('mb-2', 'c-flex', 'c-flex-column', 'gap-1', 'form-professional-groupBudget', 'form-step', 'form-step--hidden');
-  newStep.setAttribute('data-step', '4');
+  newStep.setAttribute('data-step', '3');
   newStep.textContent = "";
 
   const headerDiv = D.createElement("div");
@@ -248,18 +248,18 @@ export const createStepBudget = (): void => {
   cont5.appendChild(buttonNext);
   newStep.appendChild(cont5);
 
-  if ($STEP_PROFILE && $STEP_PROFILE.parentElement) {
-    $STEP_PROFILE.parentElement.insertBefore(newStep, $STEP_PROFILE);
+  if ($STEP_BASIC && $STEP_BASIC.parentElement) {
+    $STEP_BASIC.parentElement.insertBefore(newStep, $STEP_BASIC);
   }
 
   updateStepBudget({ container: $CONTAINER }); //ACTUALIZAR 
 };
 
 // FUNCION PARA ELIMINAR ELEMENTO CONTENEDOR DE PRESUPUESTO
-export const deleteStepBudget = ({ container }: { container: HTMLElement | null }): void => {
-  if (!container) return;
+export const deleteStepBudget = ({ container }: { container: HTMLElement | null }): void | null => {
+  if (!container) return null;
   const $STEP_BUDGET = container.querySelector<HTMLElement>('.form-professional-groupBudget.form-step');
-  if ($STEP_BUDGET && $STEP_BUDGET.dataset.step === "4") {
+  if ($STEP_BUDGET && $STEP_BUDGET.dataset.step === "3") {
     $STEP_BUDGET.remove();
     updateStepBudget({ container }); //ACTUALIZAR
   }
@@ -269,20 +269,34 @@ export const deleteStepBudget = ({ container }: { container: HTMLElement | null 
 export const updateStepBudget = ({ container }: { container: HTMLElement }): void => {
   if (!container) return;
 
-  const internalSteps = container.querySelectorAll('.form-step') as NodeListOf<HTMLElement>;
+  const $stepBudget = container.querySelector<HTMLElement>('.form-professional-groupBudget');
+  const $stepBasic = container.querySelector<HTMLElement>('.form-basic');
 
-  internalSteps.forEach((step, index) => {
-    const stepNum = index + 2;
-    step.setAttribute("data-step", `${stepNum}`);
+  // PRESUPUESTO DINAMICO
+  // SI LA SECCION DE PRESUPUESTO EXISTE
+  if ($stepBudget) {
+    $stepBudget.setAttribute('data-step', '3');
+    const btn = $stepBudget.querySelector<HTMLButtonElement>('.container-btn__next[data-step]');
+    if (btn) btn.setAttribute('data-step', '3');
 
-    const btn = step.querySelector<HTMLButtonElement>('.container-btn__next[data-step]');
-    if (btn) btn.setAttribute("data-step", `${stepNum}`);
-  });
+    // SI BASICO SE VUELVE PASO 4
+    if ($stepBasic) {
+      $stepBasic.setAttribute('data-step', '4');
+      const btnProfile = $stepBasic.querySelector<HTMLButtonElement>('.container-btn__next[data-step]');
+      if (btnProfile) btnProfile.setAttribute('data-step', '4');
+    }
+  } else {
+    //SI SECCION BASICA SE VUELVE PASO 3 Y EXISTE
+    if ($stepBasic) {
+      $stepBasic.setAttribute('data-step', '3');
+      const btnProfile = $stepBasic.querySelector<HTMLButtonElement>('.container-btn__next[data-step]');
+      if (btnProfile) btnProfile.setAttribute('data-step', '3');
+    }
+  }
 };
 
 
-
-// Función para crear vista previa de una sola imagen (perfil)
+// FUNCION PARA CREAR VISTA PREVIA DE UNA SOLA IMAGEN(perfil)
 export const createProfileImagePreview = (container: HTMLElement, inputFile: HTMLInputElement) => {
   if (inputFile?.files && inputFile?.files.length as number > 0) {
     clearElementChild({ elements: [container] });
@@ -300,7 +314,7 @@ export const createProfileImagePreview = (container: HTMLElement, inputFile: HTM
   }
 };
 
-// Función para crear vista previa de varias imágenes (experiencias)
+// FUNCION PARA CREAR VISTA PREVIA DE DE VARIAS IMAGENES (experiencias)
 export const createExperienceImagesPreviews = (container: HTMLElement, inputFiles: HTMLInputElement) => {
   if (inputFiles?.files && inputFiles.files.length as number > 0) {
     clearElementChild({ elements: [container] });

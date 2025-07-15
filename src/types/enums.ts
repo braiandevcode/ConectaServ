@@ -11,5 +11,11 @@ export enum EKeyDataByStep {
     TWO = "2",
     THREE = "3",
     FOUR = "4",
-    FIVE = "5"
+}
+
+export enum EGroupCheckBox {
+    SERVICE='service[]',
+    CONTEXT='context[]',
+    DAY='day[]',
+    HOUR='hour[]'
 }

@@ -4,18 +4,16 @@ const getStepValidationMap = ({ hasBudget }: { hasBudget: boolean }): Record<num
   return hasBudget
     ? {
       0: 'client',
-      1: 'text',
-      2: 'selectedCategoryAndCheckBoxes',
-      3: 'checkbox',
-      4: 'radioBudgetFull',
-      5: 'filesTextareaTerms',
+      1: 'selectedCategoryAndCheckBoxes',
+      2: 'filesAndDescription',
+      3: 'radioBudgetFull',
+      4: 'text',
     }
     : {
       0: 'client',
-      1: 'text',
-      2: 'selectedCategoryAndCheckBoxes',
-      3: 'checkbox',
-      4: 'filesTextareaTerms',
+      1: 'selectedCategoryAndCheckBoxes',
+      2: 'filesAndDescription',
+      3: 'text',
     };
 };
 

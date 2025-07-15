@@ -2,8 +2,4 @@
 .prettierrc
 **/dist
 /node_modules
-registerProfessional-copy-test.css
-index.copy.css
-register-pro-copy-test.html
-registerProfessional-copy-test.ts
-test-modal.html
+/db/db.json
