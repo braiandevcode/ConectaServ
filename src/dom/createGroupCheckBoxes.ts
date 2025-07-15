@@ -5,12 +5,10 @@ const D: Document = document;
 
 const createGroupCheckBoxes = ({ options }: { options: TCategoryOption[] }) => {
     // CONTENEDOR PRINCIPAL DE SECCIONES
-    // const $FORM_CONTAINER_GROUPS: HTMLDivElement | null = D.querySelector('.form-professional-groupSpeciality');
     const $GROUP_CONTEXT_CHECKS = D.querySelector<HTMLDivElement>('.form-professional-groupSpeciality__contexts-body');
     const $GROUP_SPECIALITY_CHECKS = D.querySelector<HTMLDivElement>('.form-professional-groupSpeciality__services-body');
     const $GROUP_DAYS_CHECKS = D.querySelector<HTMLDivElement>('.form-professional-groupSpeciality__days-body');
     const $GROUP_HOUR_CHECKS = D.querySelector<HTMLDivElement>('.form-professional-groupSpeciality__hours-body');
-
 
     const resetAllCheckboxContainers = [
         $GROUP_CONTEXT_CHECKS,

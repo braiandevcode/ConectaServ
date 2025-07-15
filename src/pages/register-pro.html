@@ -28,13 +28,12 @@
     </header>
 
     <!-- MAIN -->
-    <!-- -------------------MODIFICAR EL "group-select" EN EL INDEX.CSS Y MODIFICAR ELEMENTOS FLEXBOX CON SUS PROPIEDADES ------------------->
     <main class="mb-2">
       <!-- REGISTRO DE PROFESSIONALES-->
       <div class="w-full c-flex c-flex-justify-center centered register-userProfessional">
         <div class="w-full register-userProfessional__container">
           <div class="c-flex c-flex-column gap-1/2 register-userProfessional__content">
-            <div type="button" class="c-flex c-flex-self-start c-flex-items-center gap-1/2 cursor-pointer register-userProfessional__arrow-left register-userProfessional__arrow-left--hidden" data-step_prev>
+            <div type="button" class="c-flex c-flex-self-start c-flex-items-center gap-1/2 cursor-pointer register-userProfessional__arrow-left register-userProfessional__arrow-left--hidden" data-step_prev="1">
               <i class="to-left fas fa-arrow-circle-left"></i>
             </div>
             <div class="w-full c-flex c-flex-items-center register-userProfessional__header">
@@ -59,117 +58,11 @@
                   </small>
                 </div>
               </div>
-              <!-- REGISTRO INFORMACION BASICA PASO 1-->
-              <div class="c-flex c-flex-column gap-3/2 form-basic form-step" data-step="1">
-                <!-- ENCABEZADO -->
-                <div class="c-flex c-flex-column c-flex-justify-center gap-1/2 register-formProfessional__header">
-                  <div class="c-flex c-flex-items-center gap-1 form-professional-groupSpeciality__header">
-                    <h3 class="form-professional-groupSpeciality__title">
-                      <i class="fas fa-id-card"></i>
-                      <span>Informacion basica</span>
-                    </h3>
-                  </div>
-                </div>
-
-                <!-- CAMPOS DEL FORMULARIO -->
-                <div class="c-flex c-flex-column gap-1 form-basic__fields">
-                  <!-- CAMPO: NOMBRE COMPLETO -->
-                  <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="fullName">
-                    <label for="fullName" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
-                      <span class="c-flex c-flex-items-center gap-1/2">
-                        <i class="fas fa-user"></i>
-                        <span>Nombre completo</span>
-                      </span>
-                      <span class="span-required">*</span>
-                    </label>
-                    <input type="text" name="fullName" id="fullName" class="form-basic__input" aria-label="Nombre completo" placeholder="Roberto Bustos" spellcheck="true" lang="es" autofocus required />
-                    <div><span class="has-error"></span></div>
-                  </div>
-
-                  <!-- CAMPO: NOMBRE DE USUARIO -->
-                  <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="userName">
-                    <label for="userName" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
-                      <span class="c-flex c-flex-items-center gap-1/2">
-                        <i class="fas fa-user-tag"></i>
-                        <span>Nombre de usuario</span>
-                      </span>
-                      <span class="span-required">*</span>
-                    </label>
-                    <input type="text" name="userName" id="userName" class="form-basic__input" aria-label="Nombre de usuario" placeholder="Roberto_Bustos.45" required />
-                    <div><span class="has-error"></span></div>
-                  </div>
-
-                  <!-- CAMPO: CORREO ELECTRONICO -->
-                  <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="email">
-                    <label for="email" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
-                      <span class="c-flex c-flex-items-center gap-1/2">
-                        <i class="fas fa-envelope"></i>
-                        <span>Correo electronico</span>
-                      </span>
-                      <span class="span-required">*</span>
-                    </label>
-                    <input type="text" name="email" id="email" class="form-basic__input" aria-label="Correo electronico" autocomplete="email" placeholder="test@example.com" required />
-                    <div><span class="has-error"></span></div>
-                  </div>
-
-                  <!-- CAMPO: UBICACION (SELECT) -->
-                  <div class="c-flex c-flex-column gap-1/2 form-basic__field form-basic__location" data-message="location">
-                    <label for="location" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
-                      <span class="c-flex c-flex-items-center gap-1/2">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Ubicacion</span>
-                      </span>
-                      <span class="span-required">*</span>
-                    </label>
-                    <select id="location" class="to-left form-basic__location-select" name="location">
-                      <option value="" disabled selected>Seleccione una ciudad</option>
-                      <option value="olavarria">Olavarria</option>
-                      <option value="azul">Azul</option>
-                      <option value="tandil">Tandil</option>
-                    </select>
-                    <div><span class="has-error"></span></div>
-                  </div>
-
-                  <!-- CAMPO: CONTRASENA -->
-                  <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="password">
-                    <label for="password" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
-                      <span class="c-flex c-flex-items-center gap-1/2">
-                        <i class="fas fa-lock"></i>
-                        <span>Contrasena</span>
-                      </span>
-                      <span class="span-required">*</span>
-                    </label>
-                    <input type="password" name="password" id="password" class="form-basic__input" aria-label="Contrasena" autocomplete="new-password" placeholder="***********" required />
-                    <div><span class="has-error"></span></div>
-                  </div>
-
-                  <!-- CAMPO: CONFIRMAR CONTRASENA -->
-                  <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="confirmPassword">
-                    <label for="confirmPassword" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
-                      <span class="c-flex c-flex-items-center gap-1/2">
-                        <i class="fas fa-user-lock"></i>
-                        <span>Confirmar contrasena</span>
-                      </span>
-                      <span class="span-required">*</span>
-                    </label>
-                    <input type="password" name="confirmPassword" id="confirmPassword" class="form-basic__input" aria-label="Confirmar contrasena" autocomplete="confirmPassword" placeholder="***********" required />
-                    <div><span class="has-error"></span></div>
-                  </div>
-                </div>
-
-                <!-- BOTON SIGUIENTE -->
-                <div class="c-flex c-flex-justify-end mb-2">
-                  <button type="button" disabled class="c-flex c-flex-justify-center c-flex-items-center gap-1/2 cursor-pointer btn container-btn__next" data-step="1">
-                    <span>Siguiente</span>
-                    <i class="fas fa-arrow-circle-right"></i>
-                  </button>
-                </div>
-              </div>
               <div class="c-flex c-flex-column c-flex-justify-center form-professional" data-section="professional">
-                <!-- REGISTRO PROFESIONAL SECCIONES DE PASO 2 Y 3 -->
+                <!-- REGISTRO PROFESIONAL SECCIONES DE PASO 1 Y 2 -->
                 <div class="c-flex c-flex-column gap-1 form-professional__sections">
-                  <!-- REGISTRO INFORMACION PROFESIONAL PASO 2 -->
-                  <div data-select="category" class="c-flex c-flex-column gap-1 form-professional-groupSelectCategory form-step form-step--hidden" data-step="2" data-message="category">
+                  <!-- REGISTRO INFORMACION PROFESIONAL PASO 1 -->
+                  <div data-select="category" class="c-flex c-flex-column gap-1 form-professional-groupSelectCategory form-step" data-step="1" data-message="category">
                     <div class="c-flex c-flex-items-center gap-1 form-professional-groupSelectCategory__header">
                       <h3 class="form-professional-groupSelectCategory__title">
                         <i class="fas fa-id-card"></i>
@@ -193,8 +86,8 @@
                     </select>
                     <div><span class="has-error"></span></div>
                   </div>
-                  <!-- SECCION ESPECIALIZACION PASO 3-->
-                  <div class="c-flex c-flex-column gap-1 form-professional-groupSpeciality form-step form-step--hidden" data-step="3">
+                  <!-- SECCION DETALLES DE ESPECIALIZACION CHECKBOXES PASO 2-->
+                  <div class="c-flex c-flex-column gap-1 form-professional-groupSpeciality form-step form-step--hidden" data-checks="groups" data-step="1">
                     <div class="c-flex c-flex-items-center gap-1 form-professional-groupSpeciality__header">
                       <h3 class="form-professional-groupSpeciality__title">
                         <i class="fas fa-id-card"></i>
@@ -218,15 +111,15 @@
                       </div>
                     </div>
                     <div class="mb-2 c-flex c-flex-justify-end">
-                      <button type="button" disabled class="c-flex c-flex-justify-center c-flex-items-center gap-1/2 cursor-pointer btn container-btn__next" data-step="3">
+                      <button type="button" disabled class="c-flex c-flex-justify-center c-flex-items-center gap-1/2 cursor-pointer btn container-btn__next" data-step="1">
                         <span>Siguiente</span>
                         <i class="fas fa-arrow-circle-right"></i>
                       </button>
                     </div>
                   </div>
                 </div>
-                <!--  SECCION PERFIL PERFIL PASO 5-->
-                <div class="mb-2 c-flex c-flex-column gap-1 form-professional-groupProfile form-step form-step--hidden" data-step="4">
+                <!--  SECCION PERFIL PASO POR DEFECTO 3-->
+                <div class="mb-2 c-flex c-flex-column gap-1 form-professional-groupProfile form-step form-step--hidden" data-step="2">
                   <div class="c-flex c-flex-items-center gap-1 form-professional-groupProfile__header">
                     <h3 class="form-professional-groupSelectCategory__title">
                       <i class="fas fa-id-card"></i>
@@ -240,7 +133,7 @@
                         <i class="fas fa-file-lines"></i>
                         <span>Descripción de perfil (Opcional)</span>
                       </label>
-                      <textarea id="description" name="description" class="w-full form-professional-groupProfile__textarea" placeholder="Cuentales a la gente sobre ti..." spellcheck="true" lang="es"></textarea>
+                      <textarea id="description" name="descriptionUser" class="w-full form-professional-groupProfile__textarea" placeholder="Cuentales a la gente sobre ti..." spellcheck="true" lang="es"></textarea>
                       <div><span class="has-error"></span></div>
                     </div>
                     <!-- IMAGEN DE PERFIL -->
@@ -287,24 +180,132 @@
                         <div><span class="has-error"></span></div>
                       </div>
                     </div>
+                  </div>
 
-                    <!-- TERMINOS Y CONDICIONES -->
-                    <div class="c-flex c-flex-justify-center c-flex-basis-full gap-3/2 form-basic register-formProfessional__terms">
-                      <div class="c-flex c-flex-justify-center c-flex-items-center gap-1 register-formProfessional__checkbox">
-                        <input id="terms" name="terms" type="checkbox" class="c-flex c-flex-items-center c-flex-justify-center register-formProfessional__checkbox-input" required />
-                        <label for="terms" class="register-formProfessional__checkbox-label">
-                          Acepto los
-                          <a href="../pages/termsAndConditions.html" class="register-formProfessional__link">Términos y Condiciones</a>
-                          y la
-                          <a href="../pages/privacyPolicy.html" class="register-formProfessional__link">Política de Privacidad</a>
-                          de ConectaServ
-                        </label>
-                      </div>
+                  <!-- BOTON SIGUIENTE -->
+                  <div class="c-flex c-flex-justify-end mb-2">
+                    <button type="button" disabled class="c-flex c-flex-justify-center c-flex-items-center gap-1/2 cursor-pointer btn container-btn__next" data-step="2">
+                      <span>Siguiente</span>
+                      <i class="fas fa-arrow-circle-right"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- REGISTRO INFORMACION BASICA PASOFINAL-->
+                <div class="c-flex c-flex-column gap-3/2 form-basic form-step form-step--hidden" data-step="3">
+                  <!-- ENCABEZADO -->
+                  <div class="c-flex c-flex-column c-flex-justify-center gap-1/2 register-formProfessional__header">
+                    <div class="c-flex c-flex-items-center gap-1 form-professional-groupSpeciality__header">
+                      <h3 class="form-professional-groupSpeciality__title">
+                        <i class="fas fa-id-card"></i>
+                        <span>Informacion basica</span>
+                      </h3>
                     </div>
                   </div>
+
+                  <!-- CAMPOS DEL FORMULARIO SECCION 5 -->
+                  <div class="c-flex c-flex-column gap-1 form-basic__fields">
+                    <!-- CAMPO: NOMBRE COMPLETO -->
+                    <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="fullName">
+                      <label for="fullName" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                        <span class="c-flex c-flex-items-center gap-1/2">
+                          <i class="fas fa-user"></i>
+                          <span>Nombre completo</span>
+                        </span>
+                        <span class="span-required">*</span>
+                      </label>
+                      <input type="text" name="fullName" id="fullName" class="form-basic__input" aria-label="Nombre completo" placeholder="Roberto Bustos" spellcheck="true" lang="es" autofocus required />
+                      <div><span class="has-error"></span></div>
+                    </div>
+
+                    <!-- CAMPO: NOMBRE DE USUARIO -->
+                    <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="userName">
+                      <label for="userName" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                        <span class="c-flex c-flex-items-center gap-1/2">
+                          <i class="fas fa-user-tag"></i>
+                          <span>Nombre de usuario</span>
+                        </span>
+                        <span class="span-required">*</span>
+                      </label>
+                      <input type="text" name="userName" id="userName" class="form-basic__input" aria-label="Nombre de usuario" placeholder="Roberto_Bustos.45" required />
+                      <div><span class="has-error"></span></div>
+                    </div>
+
+                    <!-- CAMPO: CORREO ELECTRONICO -->
+                    <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="email">
+                      <label for="email" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                        <span class="c-flex c-flex-items-center gap-1/2">
+                          <i class="fas fa-envelope"></i>
+                          <span>Correo electronico</span>
+                        </span>
+                        <span class="span-required">*</span>
+                      </label>
+                      <input type="text" name="email" id="email" class="form-basic__input" aria-label="Correo electronico" autocomplete="email" placeholder="test@example.com" required />
+                      <div><span class="has-error"></span></div>
+                    </div>
+
+                    <!-- CAMPO: UBICACION (SELECT) -->
+                    <div class="c-flex c-flex-column gap-1/2 form-basic__field form-basic__location" data-message="location">
+                      <label for="location" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                        <span class="c-flex c-flex-items-center gap-1/2">
+                          <i class="fas fa-map-marker-alt"></i>
+                          <span>Ubicacion</span>
+                        </span>
+                        <span class="span-required">*</span>
+                      </label>
+                      <select id="location" class="to-left form-basic__location-select" name="location">
+                        <option value="" disabled selected>Seleccione una ciudad</option>
+                        <option value="olavarria">Olavarria</option>
+                        <option value="azul">Azul</option>
+                        <option value="tandil">Tandil</option>
+                      </select>
+                      <div><span class="has-error"></span></div>
+                    </div>
+
+                    <!-- CAMPO: CONTRASENA -->
+                    <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="password">
+                      <label for="password" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                        <span class="c-flex c-flex-items-center gap-1/2">
+                          <i class="fas fa-lock"></i>
+                          <span>Contrasena</span>
+                        </span>
+                        <span class="span-required">*</span>
+                      </label>
+                      <input type="password" name="password" id="password" class="form-basic__input" aria-label="Contrasena" autocomplete="new-password" placeholder="***********" required />
+                      <div><span class="has-error"></span></div>
+                    </div>
+
+                    <!-- CAMPO: CONFIRMAR CONTRASENA -->
+                    <div class="c-flex c-flex-column gap-1/2 form-basic__field" data-message="confirmPassword">
+                      <label for="confirmPassword" class="c-flex c-flex-items-center gap-1/2 form-basic__label">
+                        <span class="c-flex c-flex-items-center gap-1/2">
+                          <i class="fas fa-user-lock"></i>
+                          <span>Confirmar contrasena</span>
+                        </span>
+                        <span class="span-required">*</span>
+                      </label>
+                      <input type="password" name="confirmPassword" id="confirmPassword" class="form-basic__input" aria-label="Confirmar contrasena" autocomplete="confirmPassword" placeholder="***********" required />
+                      <div><span class="has-error"></span></div>
+                    </div>
+                  </div>
+
+                  <!-- TERMINOS Y CONDICIONES -->
+                  <div class="c-flex c-flex-justify-center c-flex-basis-full gap-3/2 form-basic register-formProfessional__terms">
+                    <div class="c-flex c-flex-justify-center c-flex-items-center gap-1 register-formProfessional__checkbox">
+                      <input id="terms" name="terms" type="checkbox" class="c-flex c-flex-items-center c-flex-justify-center register-formProfessional__checkbox-input" required />
+                      <label for="terms" class="register-formProfessional__checkbox-label">
+                        Acepto los
+                        <a href="../pages/termsAndConditions.html" class="register-formProfessional__link">Términos y Condiciones</a>
+                        y la
+                        <a href="../pages/privacyPolicy.html" class="register-formProfessional__link">Política de Privacidad</a>
+                        de ConectaServ
+                      </label>
+                    </div>
+                  </div>
+
                   <!-- BOTON REGISTRO -->
                   <div class="c-flex c-flex-justify-end">
-                    <button type="submit" disabled class="c-flex-justify-center gap-1/2 cursor-pointer btn container-btn__next" data-step="4">
+                    <button type="submit" disabled class="c-flex-justify-center gap-1/2 cursor-pointer btn container-btn__next" data-step="3">
                       <span>Registrarse</span>
                       <i class="fa-solid fa-user-plus"></i>
                     </button>

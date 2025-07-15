@@ -5,7 +5,7 @@ import { TFieldName } from "../types/types.js";
 import validateStep from "../utils/validators/validateStep.js";
 import { globalStateValidationStep } from "../config/constant.js";
 
-const stepFourOrFiveFiles = ({ step, form, e, }: { step: number, form: HTMLFormElement, e: Event }): void | null => {
+const stepTwoFiles= ({ step, form, e, }: { step: number, form: HTMLFormElement, e: Event }): void | null => {
     const $CONTAINER_IMAGE_PROFILE = document.querySelector('.form-professional-groupProfile__previewImage') as HTMLElement | null;
     const $CONTAINER_IMAGES_EXPERIENCES = document.querySelector('.form-professional-groupProfile__previewMultipleImages') as HTMLElement | null;
 
@@ -57,9 +57,8 @@ const stepFourOrFiveFiles = ({ step, form, e, }: { step: number, form: HTMLFormE
 
             validateStep({ step, form });
         }
-
     }
 }
 
 
-export default stepFourOrFiveFiles;
+export default stepTwoFiles;

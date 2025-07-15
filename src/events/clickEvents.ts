@@ -25,7 +25,7 @@ export const clickEvents = (): void => {
     if (!(target instanceof HTMLElement)) return;
 
     // -----------------------EVENTO DE CLICK PARA SIGUIENTE PASO FORMULARIO REGISTRO PROFESIONAL--------------------------- //
-    handleClickNextButton({ target, btnPrev: $BTN_PREV, section: $SECTION_PROFESSION, selectCategory: $SELECT_CATEGORY })
+    handleClickNextButton({ target, btnPrev: $BTN_PREV })
 
     // ---------------------------EVENTO PASO ANTERIOR FORMULARIO REGISTRO PROFESIONAL------------------------------- //
     handleClickPrevButton({ target, btnPrev: $BTN_PREV, section: $SECTION_PROFESSION, selectCategory: $SELECT_CATEGORY });

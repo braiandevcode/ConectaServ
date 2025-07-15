@@ -1,3 +1,4 @@
+import { EGroupCheckBox } from "../types/enums.js";
 import { iDataByStep, iFormStateValidation, iNames, iPhatPages, IStateGlobalValidationStep } from "../interfaces/interfaces";
 import { TCategoryConfig, TCategoryKey, TOptionItem, TStatusByRegister } from "../types/types"; //IMPORTO  LOS MODULOS NECESARIOS DE TIPOS
 
@@ -78,11 +79,10 @@ export const formState: TStatusByRegister = {
   // ESTADO DE MAPEO DE VALIDACION DE PASOS OBJETO QUE PUEDEN MUTAR
   validationTypesByStep: {
     0: 'client',
-    1: 'text',
-    2: 'selectedCategoryAndCheckBoxes',
-    3: 'checkbox',
-    4: 'radioBudgetFull',
-    5: 'filesTextareaTerms',
+    1: 'selectedCategoryAndCheckBoxes',
+    2: 'filesAndDescription',
+    3: 'radioBudgetFull',
+    4: 'text',
   },
   dataByStep: {} as Partial<iDataByStep>
 };
@@ -121,7 +121,6 @@ export const categoryConfigs: Record<TCategoryKey, TCategoryConfig> = {
     ]
   }
 };
-
 
 // CONFIGURACION PARA MENSAJES DE ERROR EN CAMPOS
 export const formStateValidField: iFormStateValidation = {
@@ -195,7 +194,7 @@ export const formStateValidField: iFormStateValidation = {
     error: "",
     isValid: false,
   },
-  description: {
+  descriptionUser: {
     value: "",
     error: "",
     isValid: false,
@@ -214,10 +213,10 @@ export const formStateValidField: iFormStateValidation = {
 
 //CONFIG GROUP CHECKBOX PROFESSIONAL
 export const namesCheckBoxes: iNames = {
-  service: 'service[]',
-  context: 'context[]',
-  day: 'day[]',
-  hour: 'hour[]'
+  service: EGroupCheckBox.SERVICE,
+  context: EGroupCheckBox.CONTEXT,
+  day: EGroupCheckBox.DAY,
+  hour: EGroupCheckBox.HOUR
 };
 
 // OBJETO QUE PERMITE ACTULIZAR LOS ESTADOS DE CAMPOS EN CADA PASO A LA ESTRATEGIA

@@ -1,3 +1,4 @@
+import { TElementStep } from "../types/types.js";
 import toggleClassElement from "./toggleClassElement.js";
 
 // FUNCIONES AUXILIARES PARA MOSTRAR Y OCULTAR SECCIONES
@@ -113,8 +114,6 @@ export const convertBytes = (value: number): number => value * 1024 * 1024;
 //------------------ AUXILIAR PARA BOTON NEXT Y SIGUIENTE FORMULARIO REGISTRO----------------------------
 
 // FUNCION PARA OBTENER UNA SECCION DEL FORMULARIO SEGUN EL PASO
-export const getStepSection = (step: number): HTMLDivElement | null => document.querySelector(`.form-step[data-step="${step}"]`);
+export const getStepSection = (step: number): TElementStep => document.querySelector(`.form-step[data-step="${step}"]`);
 
-// FUNCION PARA VERIFICAR SI ESTA EN EL PASO DE CATEGORIA 3
-export const isCategoryStep = (step: number, select: HTMLSelectElement | null): boolean => step === 3 && select !== null;
 
