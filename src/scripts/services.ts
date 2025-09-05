@@ -6,10 +6,10 @@ const aplicateBtn = document.getElementById("aplicate__btn") as HTMLButtonElemen
 const filtersPanel = document.querySelector(".filters__panel") as HTMLElement;
 
 //Lectura de profesionales en la base de datos
-  fetch("../db/db.json")
+  fetch("http://localhost:3000/professional")
   .then(response => response.json())
   .then(data => {
-    createServices(data.professional);
+    createServices(data);
   })
   .catch(error => {
     console.error("Error cargando los profesionales:", error);
@@ -36,12 +36,19 @@ const filtersPanel = document.querySelector(".filters__panel") as HTMLElement;
           <p>"${service.description}"</p>
         </div>
         <div class="card__button--container">
-          <button class="btn">Ver perfil</button>
+          <button class="viewProfile__btn btn">Ver perfil</button>
         </div>
       </div>
     `;
 
     cardsContainer.appendChild(card);
+
+    // Agrego el evento al botón recién creado
+    const btn = card.querySelector(".viewProfile__btn") as HTMLButtonElement;
+    btn.addEventListener("click", () => {
+      window.location.href = `infoProvider.html`;
+    });
+    
   });
 }
 

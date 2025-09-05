@@ -38,6 +38,25 @@
         "Noche"
       ],
       "id": "16fa"
+    },
+    {
+      "id": "bda3",
+      "fullName": "Roberto Bustos",
+      "userName": "rober88",
+      "email": "n.a.v@hotmail.com",
+      "location": "Olavarria",
+      "password": "Naza123.",
+      "category": "Reparacion-mantenimiento",
+      "service[]": "",
+      "context[]": "",
+      "day[]": "",
+      "hour[]": "",
+      "budgeSelected": "no",
+      "reinsert": "no",
+      "amountBudge": 0,
+      "description": "",
+      "imageProfile": "",
+      "imageExperiences": []
     }
   ]
 }
