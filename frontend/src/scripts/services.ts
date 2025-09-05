@@ -1,4 +1,3 @@
-import apiRequest from "utils/apiRequest";
 
 const openFilters = document.querySelector(".filters__btn") as HTMLButtonElement;
 const closeFilters = document.querySelector(".filters__back") as HTMLButtonElement;
