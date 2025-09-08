@@ -1,7 +1,6 @@
-import { clickEvents } from "./events/clickEvents.js";
+
 import home from "./scripts/home.js";
 import register from "./scripts/register.js";
-import eventSubmit from "./events/eventSubmit.js";
 import { pathPages } from "./config/constant.js";
 import services from "./scripts/services.js";
 
@@ -17,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const path: string = window.location.pathname;
     const { PATH_FORM_CLIENT, PATH_FORM_PROFESSIONAL, PATH_TERMS, PATH_PRIVACY } = pathPages;
     
-    clickEvents();
     if (path === '/index.html' || path === '/') {
         home();
     };
