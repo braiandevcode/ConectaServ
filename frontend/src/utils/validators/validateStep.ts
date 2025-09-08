@@ -24,7 +24,7 @@ const validateStep = ({ step, form }: { step: number; form: HTMLFormElement | nu
 
     const strategy: TInputs = formState.validationTypesByStep[step]; //OBJETO QUE OBTIENE LA CLAVE DEL PASO Y VERIFICA EL VALOR
 
-    const descriptionText = form?.querySelector('[name="description"]') as HTMLTextAreaElement | null;
+    const descriptionText = form?.querySelector('[name="descriptionUser"]') as HTMLTextAreaElement | null;
     const profileInput = form?.querySelector('[name="imageProfile"]') as HTMLInputElement | null;
     const experiencesInput = form?.querySelector('[name="imageExperiences"]') as HTMLInputElement | null;
 
@@ -35,24 +35,26 @@ const validateStep = ({ step, form }: { step: number; form: HTMLFormElement | nu
 
     // VALIDAR SOLO LOS CAMPOS TOCADOS
     const allOptionalsValid =
-        (isDescriptionTouched ? isValidDescription : true) &&
-        (isProfileTouched ? isValidProfile : true) &&
-        (isExperiencesTouched ? isValidExperiences : true);
+        //SI TOCA EL CAMPO DESCRPCION DEBE VALIDAR SINO POR DEFECTO TRUE =>  ADEMAS
+        // SI TOCA EL INPUT DE PERFIL VALIDAR O TRUE => ADEMAS
+        // SI TOCA EL INPUT DE EXPERIENCIAS VALIDAR SINO TRUE => TODO DEBE SER TRUE POR DEFAULT SIEMPRE ES TRUE
+        (isDescriptionTouched ? isValidDescription : true) && (isProfileTouched ? isValidProfile : true) && (isExperiencesTouched ? isValidExperiences : true);
+
 
     //ESTRATEGIA FINAL PARA ESTE PASO
-    const filesTextareaTermsValid = isTerms && (
+    const filesAndDescriptionValid =(
+        // SI NO TOCO DESCRIPCION NI TOCO INPUT PERFIL NI TOCO EXPERIENCIAS => ES TRUE DE LO CONTRARIO ES FALSE
+        // O SI TODAS LAS OPCIONES SON VALIDAS, SI ESTAN EN TRUE: SI UNA DE ESTAS DOS ES VERDAD PERMITIR SEGUIR.
         (!isDescriptionTouched && !isProfileTouched && !isExperiencesTouched) || allOptionalsValid
     );
-
-
+    
     // ESTRATEGIA DE VALIDACION POR PASOS
     const strategies: Record<TInputs, boolean> = {
         client: isValidBasic && isSelected && isTerms, //TODOS LOS CAMPOS Y EL CHECK DE TERMINOS (REGISTRO CLIENTE)
-        text: isValidBasic && isSelected,
         selectedCategoryAndCheckBoxes: isSelected && isValidCheckBoxesDetailsProfession,
-        checkbox: isValidCheckBoxesDetailsProfession,
+        filesAndDescription: filesAndDescriptionValid,
         radioBudgetFull: isBudgeNo || (isBudgeYes && isValidBudgeAmount),
-        filesTextareaTerms: filesTextareaTermsValid,
+        text: isValidBasic && isSelected && isTerms,
     };
 
     const strategyValid: boolean = strategies[strategy]; //VALIDA EL PASO ACTUAL SEGUN EL VALOR DE ESTRATEGIA
@@ -66,7 +68,6 @@ const validateStep = ({ step, form }: { step: number; form: HTMLFormElement | nu
         Object.prototype.hasOwnProperty.call(formStateValidField, el.name) //QUE EL NAME ESTE EN ESE OBJETO
     );
 
-
     // SE AGREGA VALIDACIONES A LOS CAMPOS CON MENSAJES DE ERROR
     const allFieldsValid = fieldsToValidate.every(el => {
         //MAPEAR DEL OBJETO  "formStateValid" LA CLAVE QUE ES EQUIVALENTE AL NAME DEL INPUT Y ACCEDER A SUS VALORES ACTUALES
@@ -74,7 +75,7 @@ const validateStep = ({ step, form }: { step: number; form: HTMLFormElement | nu
 
         // SI EL CAMPO ES OPCIONAL Y ESTA VACIO LO CONSIDERAMOS VALIDO
         const isEmptyOptional =
-            (el.name === "description" && (!el.value.trim())) || //SI EL NAME ES "description" Y ESTA VACIO ES VALIDO
+            (el.name === "descriptionUser" && (!el.value.trim())) || //SI EL NAME ES "descriptionUser" Y ESTA VACIO ES VALIDO
             (el.name === "imageProfile" && (!(el as HTMLInputElement).files?.length)) || // O SI EL NAME ES "imageProfile" Y ESTA VACIO ES VALIDO
             (el.name === "imageExperiences" && (!(el as HTMLInputElement).files?.length)); // O SI EL NAME ES "imageExperiences" Y ESTA VACIO ES VALIDO
 
@@ -92,6 +93,8 @@ const validateStep = ({ step, form }: { step: number; form: HTMLFormElement | nu
 
     const isValid = (strategyValid && allFieldsValid);  //SI DE LA ESTRATEGIA Y LOS CAMPOS VERIFICADOS ESTAN OK SEGUIR
 
+    console.log('ES VALIDO ESTE PASO?: ', isValid);
+    
 
     formState.stepStatus = { ...formState.stepStatus, [step]: isValid };
 

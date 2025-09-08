@@ -9,7 +9,9 @@ export type TFormStep = {
 }
 
 // TIPADO QUE ESPECIFICAN COMBINACIONES O NO EN  CADA PASO, SEGUN LAS VARIANTES DE DE TIPOS DE ENTRADA QUE SE ENCUENTRAN
-export type TInputs = 'client' | 'text' | 'selectedCategoryAndCheckBoxes' | 'checkbox' | 'radioBudgetFull' | 'filesTextareaTerms';
+export type TInputs = 'client' | 'selectedCategoryAndCheckBoxes' | 'filesAndDescription' | 'radioBudgetFull' | 'text';
+
+export type  TElementStep = HTMLButtonElement | HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | HTMLDivElement | null;
 
 // TIPADO PARA FUNCION QUE SOLO ESPERA CAMPOS DE ENTRADA DE INPUTS O SELECTS
 export type TFormElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
@@ -101,3 +103,5 @@ export type TCbEventPropsRegistroCliente = {
     checkboxChecked: boolean;
   };
 };
+
+export type TData = string | string[] | number | boolean;

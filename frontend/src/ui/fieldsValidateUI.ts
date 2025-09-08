@@ -4,7 +4,7 @@ import { iFieldState } from "../interfaces/interfaces";
 import validateBudgetValue from "../utils/validators/validateBudgeValue.js";
 import { validateConfirmPassword, validateEmail, validateFullName, validateSelected, validatePassword, validateUserName } from "../utils/validators/validateBasicValue.js";
 import { validateDescription, validateImageExperiences, validateImageProfile } from "../utils/validators/validateProfileValue.js";
-import { capitalizeWords } from "./auxiliars.js";
+import { capitalizeWords, isValueField } from "./auxiliars.js";
 import validateGroupCheckBoxes from "../utils/validators/validateGroupCheckBoxes.js";
 
 //--------------------------------------------VALIDACIONES  DE CAMPOS CON MEN ----------------------------------------//
@@ -35,11 +35,19 @@ export const validateFieldsWithErrorsUI = ({ fieldName, value, values, file, fil
             break;
         case 'password':
             result = validatePassword(value);
+            formStateValidField.password = result; //GUARDAR RESULT
+            // REVALIDAR confirmPassword SI YA TIENE VALOR ESCRITO
+            const confirmValue = formStateValidField.confirmPassword?.value?.trim() ?? '';
+            // SI ES DIFERENTE DE VACIO
+            if (isValueField({ text: confirmValue.trim() })) {
+                const confirmResult = validateConfirmPassword(confirmValue);
+                formStateValidField.confirmPassword = confirmResult;
+            }
             break;
         case 'confirmPassword':
             result = validateConfirmPassword(value);
             break;
-        case 'description':
+        case 'descriptionUser':
             result = validateDescription(value);
             break;
         case 'amountBudge':
@@ -96,7 +104,7 @@ export const UIStepBudgeRadioButtons = (
         }
 
         return formStateValidField[fieldName] = result;
-    }    
+    }
 
     // Si NO COBRA PRESUPUESTO
     formState.stepStatus[4] = true;
@@ -104,7 +112,7 @@ export const UIStepBudgeRadioButtons = (
     elementRadioReinsert?.forEach(r => r.checked = r.value === 'no');
 
     // LIMPIAR Y DESHABILITAR CAMPO DEL MONTO
-    if (elementInputAmount) {        
+    if (elementInputAmount) {
         elementInputAmount.value = '';
         elementInputAmount.setAttribute('disabled', 'true');
         elementInputAmount.classList.remove('is-valid', 'is-invalid');
@@ -113,8 +121,6 @@ export const UIStepBudgeRadioButtons = (
         const span = parent?.querySelector('.containerMsgError .has-error') as HTMLSpanElement;
         if (span) span.textContent = ''; //SI EL ELEMENTO SPAN EXISTE LIMPIAR EL TEXCONTENT
     }
-
-
 
     return formStateValidField[fieldName] = {
         error: '',
