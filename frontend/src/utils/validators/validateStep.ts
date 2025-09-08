@@ -1,5 +1,5 @@
 import { formState, formStateValidField } from "../../config/constant.js";
-import { TFieldName, TInputs } from "../../types/types";
+import { TFieldName, TInputs } from "../../types/types.js";
 import { globalStateValidationStep } from "../../config/constant.js";
 
 // VALIDAR CAMPOS DE CADA PASO
