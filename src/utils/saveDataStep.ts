@@ -1,6 +1,6 @@
 import { ECategoryKey, EGroupCheckBox, EKeyDataByStep } from '../types/enums.js';
 import { formState } from '../config/constant.js';
-import { TFormElement } from '../types/types';
+import { TFormElement } from '../types/types.js';
 import isCategory from './validators/isCategory.js';
 import { capitalizeWords, formatDescription, normalizeSpaces, parseMontoToNumber } from '../ui/auxiliars.js';
 

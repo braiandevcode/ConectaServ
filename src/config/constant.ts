@@ -1,6 +1,6 @@
 import { EGroupCheckBox } from "../types/enums.js";
-import { iDataByStep, iFormStateValidation, iNames, iPhatPages, IStateGlobalValidationStep } from "../interfaces/interfaces";
-import { TCategoryConfig, TCategoryKey, TOptionItem, TStatusByRegister } from "../types/types"; //IMPORTO  LOS MODULOS NECESARIOS DE TIPOS
+import { iDataByStep, iFormStateValidation, iNames, iPhatPages, IStateGlobalValidationStep } from "../interfaces/interfaces.js";
+import { TCategoryConfig, TCategoryKey, TOptionItem, TStatusByRegister } from "../types/types.js"; //IMPORTO  LOS MODULOS NECESARIOS DE TIPOS
 
 // REPARACIÓN Y MANTENIMIENTO
 export const REPAIR_AND_MAINTENANCE: TOptionItem[] = [
