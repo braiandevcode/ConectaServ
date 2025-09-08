@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Encuentra un servicio de forma rapida y segura" />
+    <meta name="keywords" content="Contratar, Pago Online, Chat" />
+    <title>ConectaServ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+
+  <!-- CUERPO -->
+
+  <body>
+    <!-- CABECERA -->
+    <header class="header">
+      <div class="header__container">
+        <div class="card-logo">
+          <a href="./index.html" class="card-logo__logo">
+            <div class="card-logo__icon">
+              <i class="fas fa-hands-helping"></i>
+            </div>
+            <span class="card-logo__text">ConectaServ</span>
+          </a>
+        </div>
+        <button class="menu-toggle">
+          <i class="fas fa-list"></i>
+        </button>
+        <nav class="nav-links">
+          <div class="dropdown">
+            <a href="#" class="nav-item dropdown-toggle nav__link">
+              Categorías
+              <i class="fa-solid fa-angle-down"></i>
+            </a>
+            <div class="dropdown__menu">
+              <div class="dropdown__group">
+                <p class="dropdown__title">Reparaciones</p>
+                <a href="./src/pages/services.html" class="dropdown__item">Plomería</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Electricidad</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Pintura</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Carpintería</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Electrodomésticos</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Aire acondicionado</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Herrería</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Construcción en seco</a>
+              </div>
+
+              <div class="dropdown__group">
+                <p class="dropdown__title">Jardinería</p>
+                <a href="./src/pages/services.html" class="dropdown__item">Corte de pasto</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Poda de árboles</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Poda de arbustos</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Desmalezado</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Limpieza de jardín</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Fertilización/mantenimiento césped</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Plantación</a>
+              </div>
+
+              <div class="dropdown__group">
+                <p class="dropdown__title">Mudanzas y transporte</p>
+                <a href="./src/pages/services.html" class="dropdown__item">Mudanzas particulares</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Mudanzas comerciales</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Mudanzas locales</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Muzandas larga distancia</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Fletes por hora/viaje</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Transporte de muebles</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Transporte de electrodomésticos</a>
+                <a href="./src/pages/services.html" class="dropdown__item">Traslado de objetos frágiles</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav__link cursor-pointer" role="button">Iniciar Sesión</div>
+          <button class="color btnRegister">Registrarse</button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <h1>Encuentra prestadores de servicios confiables</h1>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="how-works">
+      <div class="container">
+        <h2>Cómo funciona</h2>
+        <div class="img-pasos__container">
+          <div class="img-container"></div>
+          <div class="pasos">
+            <div class="paso">
+              <i class="fas fa-clipboard-list paso__icono"></i>
+              <p>Busca a prestadores por categoría</p>
+            </div>
+            <div class="paso">
+              <i class="fas fa-user-check paso__icono"></i>
+              <p>Elige un trabajador de tu preferencia</p>
+            </div>
+            <div class="paso">
+              <i class="fas fa-comments-dollar paso__icono"></i>
+              <p>Chateá y paga</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOQUE MODAL ROL -->
+    <div class="c-flex c-flex-items-center c-flex-justify-center position-fixed w-full modal-role modal-role--hidden">
+      <div class="modal-role__container">
+        <div class="modal-role__content">
+          <div class="w-full c-flex c-flex-items-center gap-1 modal-role__header position-relative">
+            <h3 class="modal-role__title">Regístrate en ConectaServ</h3>
+            <button class="cursor-pointer position-absolute modal-role__close-btn">
+              <i class="fas fa-times modal-role__close-icon"></i>
+            </button>
+          </div>
+
+          <p class="modal-role__description">Selecciona el tipo de cuenta que deseas crear:</p>
+
+          <div class="c-flex c-flex-column gap-1 modal-role__cards">
+            <!-- TARJETA CLIENTE -->
+            <div data-role="client" class="cursor-pointer modal-role__card modal-rol__card--cliente">
+              <div class="c-flex c-flex-items-center gap-1 modal-role__card-inner">
+                <div class="modal-role__icon-container">
+                  <i class="fas fa-user modal-role__icon"></i>
+                </div>
+                <div class="modal-role__text">
+                  <h4 class="modal-role__card-title">Cliente</h4>
+                  <p class="modal-role__card-description">Busca y contrata profesionales para tus necesidades</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- TARJETA PROFESIONAL -->
+            <div data-role="professional" class="cursor-pointer modal-role__card modal-role__card--profesional">
+              <div class="c-flex c-flex-items-center gap-1 modal-role__card-inner">
+                <div class="modal-role__icon-container">
+                  <i class="fas fa-briefcase modal-role__icon"></i>
+                </div>
+                <div class="modal-role__text">
+                  <h4 class="modal-role__card-title">Profesional</h4>
+                  <p class="modal-role__card-description">Ofrece tus servicios y encuentra nuevos clientes</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PIE PÁGINA -->
+    <footer class="footer">
+      <div class="footer__container container">
+        <div class="footer__columns">
+          <div class="footer__logo">
+            <!-- LOGO REUTILIZABLE -->
+            <div class="card-logo">
+              <a href="#" class="card-logo__logo card-logo__logo--footer">
+                <div class="card-logo__icon--footer">
+                  <i class="fas fa-hands-helping"></i>
+                </div>
+                <span class="card-logo__text--footer">ConectaServ</span>
+              </a>
+            </div>
+            <p>Conectando personas con trabajadores de confianza.</p>
+          </div>
+
+          <div class="footer__links">
+            <h4>Enlaces</h4>
+            <ul>
+              <li><a href="#">Inicio</a></li>
+              <li><a href="#">¿Cómo funciona?</a></li>
+              <li><a href="#">Iniciar Sesión</a></li>
+              <li><a href="#">Registrarse</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-contact">
+            <h4>Contacto</h4>
+            <p>Email: ejemploemail@.com</p>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>&copy; 2025 ConectaServ. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="./dist/main.js" type="module"></script>
+  </body>
+</html>
