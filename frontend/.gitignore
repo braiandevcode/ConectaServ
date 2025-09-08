@@ -2,4 +2,5 @@
 .prettierrc
 **/dist
 /node_modules
-/db/db.json
+**/db/db.json
+**/*txt
