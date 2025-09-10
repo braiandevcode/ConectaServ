@@ -16,5 +16,5 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["./frontend/src/**/*", "./frontend/src/utils/allInputsFilled.ts"]
+  "include": ["./frontend/src/**/*"]
 }

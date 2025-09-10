@@ -7,7 +7,7 @@
     <meta name="keywords" content="Contratar, Pago Online, Chat" />
     <title>ConectaServ</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./src/index.css" />
+    <link rel="stylesheet" href="./index.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
 
@@ -73,7 +73,6 @@
           </div>
 
           <div class="nav__link cursor-pointer" role="button">Iniciar Sesión</div>
-          <button class="color btnRegister">Registrarse</button>
         </nav>
       </div>
     </header>
@@ -106,50 +105,6 @@
         </div>
       </div>
     </section>
-
-    <!-- BLOQUE MODAL ROL -->
-    <div class="c-flex c-flex-items-center c-flex-justify-center position-fixed w-full modal-role modal-role--hidden">
-      <div class="modal-role__container">
-        <div class="modal-role__content">
-          <div class="w-full c-flex c-flex-items-center gap-1 modal-role__header position-relative">
-            <h3 class="modal-role__title">Regístrate en ConectaServ</h3>
-            <button class="cursor-pointer position-absolute modal-role__close-btn">
-              <i class="fas fa-times modal-role__close-icon"></i>
-            </button>
-          </div>
-
-          <p class="modal-role__description">Selecciona el tipo de cuenta que deseas crear:</p>
-
-          <div class="c-flex c-flex-column gap-1 modal-role__cards">
-            <!-- TARJETA CLIENTE -->
-            <div data-role="client" class="cursor-pointer modal-role__card modal-rol__card--cliente">
-              <div class="c-flex c-flex-items-center gap-1 modal-role__card-inner">
-                <div class="modal-role__icon-container">
-                  <i class="fas fa-user modal-role__icon"></i>
-                </div>
-                <div class="modal-role__text">
-                  <h4 class="modal-role__card-title">Cliente</h4>
-                  <p class="modal-role__card-description">Busca y contrata profesionales para tus necesidades</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- TARJETA PROFESIONAL -->
-            <div data-role="professional" class="cursor-pointer modal-role__card modal-role__card--profesional">
-              <div class="c-flex c-flex-items-center gap-1 modal-role__card-inner">
-                <div class="modal-role__icon-container">
-                  <i class="fas fa-briefcase modal-role__icon"></i>
-                </div>
-                <div class="modal-role__text">
-                  <h4 class="modal-role__card-title">Profesional</h4>
-                  <p class="modal-role__card-description">Ofrece tus servicios y encuentra nuevos clientes</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- PIE PÁGINA -->
     <footer class="footer">
@@ -189,7 +144,6 @@
         </div>
       </div>
     </footer>
-
-    <script src="./dist/main.js" type="module"></script>
+    <script src="../dist/main.js" type="module"></script>
   </body>
 </html>

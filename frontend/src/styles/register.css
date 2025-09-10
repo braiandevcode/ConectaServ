@@ -51,7 +51,7 @@
 
 /* BOTON PARA VOLVER ATRAS */
 .register-userProfessional__arrow-left {
-  padding: .2rem;
+  padding: 0.2rem;
   user-select: none;
   color: var(--bg-secondary);
   border-radius: 50%;
@@ -72,8 +72,9 @@
 }
 
 /* ESTILOS DE BOTONES DE SIGUIENTE Y DE SUMBIT CUANDO ESTEN DESHABILITADOS */
+.form__btnSubmit--disabled:disabled,
 .container-btn__next:disabled {
-  opacity: .5;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -84,7 +85,7 @@
 
 /* TODOS LOS ASTERISCOS EN ROJO */
 .span-required {
-  color: #e91111;
+  color: #3452cd;
 }
 
 .form-professional-groupSpeciality__checks-wrapper {
@@ -122,10 +123,10 @@
 /* AREAS DE SUBIDA DE IMAGEN */
 .upload-area {
   border-style: dashed;
-  padding: .5rem;
+  padding: 0.5rem;
   text-align: center;
   color: var(--text-color-primary);
-  transition: border-color .5s linear;
+  transition: border-color 0.5s linear;
 }
 
 /* ICONO DE SUBIDA DE IMAGEN */
@@ -140,7 +141,7 @@
 .form-professional-groupProfile__label {
   font-weight: 500;
   text-align: center;
-  font-size: .725rem;
+  font-size: 0.725rem;
 }
 
 /*--------------------FALTA ESCONDER Y ESTILIZAR UN BOTON PARA AGREGAR FOTO ---------------*/
@@ -151,7 +152,7 @@
 
 .register-formClient__checkbox-label,
 .register-formProfessional__checkbox-label {
-  font-size: .6rem;
+  font-size: 0.6rem;
 }
 
 .form-basic__title-category {
@@ -201,18 +202,23 @@ input.is-invalid {
 /* FOCUS ADICIONAL */
 textarea.is-valid:focus,
 select.is-valid:focus,
-input:not([type='radio']):not([type='checkbox']).is-valid:focus {
+input:not([type="radio"]):not([type="checkbox"]).is-valid:focus {
   border-color: transparent;
   box-shadow: 0 0 0 4px #44d55ff0;
 }
 
+/* ESTILO PARA FOCO EN INPUTS */
+input.is-focus:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+}
+
 textarea.is-invalid:focus,
-input:not([type='radio']):not([type='checkbox']).is-invalid:focus {
+input:not([type="radio"]):not([type="checkbox"]).is-invalid:focus {
   border-color: transparent;
   box-shadow: 0 0 0 4px #e44444e6;
 }
-
-
 
 /*---------------------------------ELEMENTOS CON NONE------------------------------------*/
 /*BOTON DE REGISTRO ESCONDIDO*/
@@ -253,7 +259,7 @@ input:not([type='radio']):not([type='checkbox']).is-invalid:focus {
   margin: 5px; /* Espaciado entre las imágenes */
 }
 
-/* Efecto hover sobre las imágenes */
+/* EFECTO HOVER EN IMAGENES */
 .experience-image-preview:hover,
 .profile-image-preview:hover {
   transform: scale(1.05); /* Aumento en el tamaño */
@@ -270,6 +276,7 @@ input:not([type='radio']):not([type='checkbox']).is-invalid:focus {
 }
 
 /* ESTILOS PARA LAS IMÁGENES DEL PERFIL (SI SE MUESTRAN) */
+.form-professional-groupProfile__multipleImages > img,
 .form-professional-groupProfile__previewImage img {
   width: 150px;
   height: 150px;
@@ -278,10 +285,109 @@ input:not([type='radio']):not([type='checkbox']).is-invalid:focus {
   margin: 5px;
 }
 
+/* BOTON DE ELIMINAR FOTO EN REGISTRO */
+.form-professional-groupProfile__btn-trash {
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.upload-area__text--hidde {
+  display: none;
+}
+
+.modal-wrapper {
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0); /*SEMITRANSPARENTE */
+  backdrop-filter: blur(12px); /* PROPIEDAD QUE APLICA EL BLUR AL DOM DETRAS DEL MODAL */
+  z-index: 100;
+}
+
+.modal--hide,
+.modal-wrapper--hide {
+  transform: scale(0);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.modal {
+  transform: scale(1);
+  opacity: 1;
+  visibility: visible;
+  width: 90%;
+  max-width: 600px;
+  max-height: 400px;
+  background-color: var(--bg-primary);
+  border-radius: 12px;
+  padding: 1.1rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.4s linear, opacity 0.3s linear, visibility 0.3s linear;
+  z-index: 10;
+}
+
+/* QUITAR ESTILOS SOLO PARA EL LOADER */
+.modal--ghost {
+  box-shadow: none;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}
+
+.modal .modal__message {
+  color: var(--text-color-primary);
+}
+
+/* CONTENEDOR DE ICONO DE MODAL DE EXITO */
+.modal__icon-wrapper {
+  font-size: 8rem;
+}
+/* ICONO DE EXITO */
+.modal__icon-wrapper .fa-circle-check,
+.modal__icon-wrapper .fa-check-circle {
+  color: var(--color-success);
+}
+
+.modal__icon-wrapper .fa-thumbs-up,
+.modal__icon-wrapper .fa-solid.fa-circle-info {
+  color: #1e6aad;
+}
+
+.modal__icon-wrapper .fa-triangle-exclamation {
+  color: var(--color-warnning);
+}
+
+/* CONTENEDOR MODAL DE LOADER */
+.modal-spinner {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: rgba(5, 5, 5, 0);
+}
+
+/* EL SPINNER */
+.modal-spinner__spinner {
+  width: inherit;
+  height: inherit;
+  background-color: transparent;
+  border-radius: 50%;
+  border-top: 20px solid var(--bg-secondary);
+  border-right: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 20px solid transparent;
+  animation: spin 1.2s linear infinite;
+}
+
+/* ANIMACION DEL LOADER TIPICO */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 /* ASEGURAR QUE LOS EVENTOS DE HOVER SEAN PRECISOS SOLO PARA TABLET Y ESCRITORIO (INVESTIGADO) */
 @media (hover: hover) and (pointer: fine) {
-
   /* HOVER EN EL AREA */
   /*-------------------------------ANALIZAR Y CORREGIR ESTA PARTE-----------------------------------------*/
   .register-formClient__link:hover,
@@ -305,15 +411,13 @@ input:not([type='radio']):not([type='checkbox']).is-invalid:focus {
   }
 }
 
-
 /*-------------------------------------RESPONSIVE-------------------------------------------------------------/
 
 /* TABLET 768PX */
-@media (min-width:768px) {
-
+@media (min-width: 768px) {
   .register-formClient__checkbox-label,
   .register-formProfessional__checkbox-label {
-    font-size: .7rem;
+    font-size: 0.7rem;
   }
 
   .form-professional-groupProfile__containerImageProfile .form-professional__groupImagesExperiences,
@@ -345,14 +449,13 @@ input:not([type='radio']):not([type='checkbox']).is-invalid:focus {
   }
 
   .form-professional-groupProfile__label {
-    font-size: .875rem;
+    font-size: 0.875rem;
     text-align: start;
   }
 }
 
 /* ESCRITORIO 1024PX */
-@media (min-width:1024px) {
-
+@media (min-width: 1024px) {
   .register-userClient__title,
   .register-userProfessional__title {
     font-size: 1.75rem;
@@ -367,9 +470,9 @@ input:not([type='radio']):not([type='checkbox']).is-invalid:focus {
   }
 
   .register-userProfessional__arrow-left {
-    opacity: .8;
-    transform: scale(.9);
-    transition: opacity .3s ease-in-out, transform .3s linear;
+    opacity: 0.8;
+    transform: scale(0.9);
+    transition: opacity 0.3s ease-in-out, transform 0.3s linear;
   }
 
   .form-basic__title-category {
