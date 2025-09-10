@@ -1,6 +1,28 @@
-import { EEndpoint, EGroupCheckBox, EPathDomain, EPathPage, EPortServerDomain } from "../types/enums.js";
-import { iAbreviationURL, iDataByStep, iDomainUrlPath, iFieldConfig, iInputFieldOptions, iNamesGroupsChecks, iPhatPages } from "../interfaces/interfaces";
-import { TBasicFieldNames, TCategoryConfig, TCategoryKey, TFieldsNameValidate, TFieldState, TInputName, TOptionItem, TStatusByRegister } from "../types/types"; //IMPORTO  LOS MODULOS NECESARIOS DE TIPOS
+import {
+  EEndpoint,
+  EGroupCheckBox,
+  EPathDomain,
+  EPathPage,
+  EPortServerDomain,
+} from "../types/enums.js";
+import {
+  iAbreviationURL,
+  iDataByStep,
+  iDomainUrlPath,
+  iFieldConfig,
+  iNamesGroupsChecks,
+  iPhatPages,
+} from "../interfaces/interfaces";
+import {
+  TBasicFieldNames,
+  TCategoryConfig,
+  TCategoryKey,
+  TFieldsNameValidate,
+  TFieldState,
+  TInputName,
+  TOptionItem,
+  TStatusByRegister,
+} from "../types/types"; //IMPORTO  LOS MODULOS NECESARIOS DE TIPOS
 
 // REPARACIÓN Y MANTENIMIENTO
 export const REPAIR_AND_MAINTENANCE: TOptionItem[] = [
@@ -22,8 +44,14 @@ export const MOVING_AND_TRANSPORT: TOptionItem[] = [
   { label: "Mudanzas larga distancia", value: "mudanzas larga distancia" },
   { label: "Fletes por hora/viaje", value: "fletes por hora/viaje" },
   { label: "Transporte de muebles", value: "transporte de muebles" },
-  { label: "Transporte de electrodomésticos", value: "transporte de electrodomésticos" },
-  { label: "Traslado de objetos frágiles", value: "traslado de objetos frágiles" },
+  {
+    label: "Transporte de electrodomésticos",
+    value: "transporte de electrodomésticos",
+  },
+  {
+    label: "Traslado de objetos frágiles",
+    value: "traslado de objetos frágiles",
+  },
 ];
 
 // JARDINERÍA Y MANTENIMIENTO EXTERIOR
@@ -33,8 +61,14 @@ export const GARDENNING_AND_OUTDOOR_MAINTENANCE: TOptionItem[] = [
   { label: "Poda de arbustos", value: "poda de arbustos" },
   { label: "Desmalezado", value: "desmalezado" },
   { label: "Limpieza de jardín", value: "limpieza de jardín" },
-  { label: "Fertilización/mantenimiento césped", value: "fertilización/mantenimiento césped" },
-  { label: "Plantación/reparación césped", value: "plantación/reparación césped" },
+  {
+    label: "Fertilización/mantenimiento césped",
+    value: "fertilización/mantenimiento césped",
+  },
+  {
+    label: "Plantación/reparación césped",
+    value: "plantación/reparación césped",
+  },
 ];
 
 // CONFIGURACION DE ATRIBUTOS PARA LOS CAMPOS DEL FORMULARIO DE REGISTRO
@@ -187,7 +221,10 @@ export const categoryConfigs: Record<TCategoryKey, TCategoryConfig> = {
     hasContext: true,
     budget: false,
     options: [
-      { vectorGroupItemCheck: GARDENNING_AND_OUTDOOR_MAINTENANCE, type: "service" },
+      {
+        vectorGroupItemCheck: GARDENNING_AND_OUTDOOR_MAINTENANCE,
+        type: "service",
+      },
       { vectorGroupItemCheck: CONTEXTS, type: "context" },
       { vectorGroupItemCheck: DATE_DAYS, type: "day" },
       { vectorGroupItemCheck: DATE_HOUR, type: "hour" },
@@ -205,25 +242,79 @@ export const categoryConfigs: Record<TCategoryKey, TCategoryConfig> = {
   },
 };
 
-export const FIELDS_NAME_TO_VALIDATE = ["fullName", "userName", "email", "location", "password", "confirmPassword", "category", "service[]", "context[]", "day[]", "hour[]", "budgeSelected", "reinsert", "amountBudge", "descriptionUser", "imageProfile", "imageExperiences", "emailCode", "terms"] as const;
+export const FIELDS_NAME_TO_VALIDATE = [
+  "fullName",
+  "userName",
+  "email",
+  "location",
+  "password",
+  "confirmPassword",
+  "category",
+  "service[]",
+  "context[]",
+  "day[]",
+  "hour[]",
+  "budgeSelected",
+  "reinsert",
+  "amountBudge",
+  "descriptionUser",
+  "imageProfile",
+  "imageExperiences",
+  "emailCode",
+  "terms",
+] as const;
 
 // LISTA INMUTABLE PARA TIPOS DE FORMULARIOS
 export const TYPES_FORM = ["login", "verifyCode", "register"] as const;
 
 // LISTA INMUTABLE PARA TIPOS DE PASOS
-export const TYPES_STEP = ["stepRegister", "stepLayout", "stepNavigation"] as const;
+export const TYPES_STEP = [
+  "stepRegister",
+  "stepLayout",
+  "stepNavigation",
+] as const;
 
 // LISTA INMUTABLE PARA TIPOS DE PASOS EN FORMULARIO DE REGISTRO
-export const TYPES_FORM_STEP = ["stepZero", "stepOne", "stepTwo", "stepLast", "stepBudgeThree"] as const;
+export const TYPES_FORM_STEP = [
+  "stepZero",
+  "stepOne",
+  "stepTwo",
+  "stepLast",
+  "stepBudgeThree",
+] as const;
 
 // LISTA INPUTABLE DE PASOS QUE ESPECIFICAN LOS CAMPOS EXISTENTES A VALIDAR
-export const FIELDS_STEP = ["client", "selectedCategoryAndCheckBoxes", "filesAndDescription", "radioBudgetFull", "text"] as const;
+export const FIELDS_STEP = [
+  "client",
+  "selectedCategoryAndCheckBoxes",
+  "filesAndDescription",
+  "radioBudgetFull",
+  "text",
+] as const;
 
 // LISTA INPUTABLE DE TIPOS DE MODALES
-export const MODALS_TIYPE = ["loader", "success", "warn", "error", "login", "register", "codeVerify", "info"] as const;
+export const MODALS_TIYPE = [
+  "loader",
+  "role",
+  "success",
+  "warn",
+  "error",
+  "login",
+  "register",
+  "codeVerify",
+  "info",
+] as const;
 
 // LISTA INMUTABLE DE NOMBRES DE CAMPOS "readonly" con as const
-export const FIELDS_NAMES = ["fullName", "userName", "email", "password", "confirmPassword", "descriptionUser", "amountBudge"] as const;
+export const FIELDS_NAMES = [
+  "fullName",
+  "userName",
+  "email",
+  "password",
+  "confirmPassword",
+  "descriptionUser",
+  "amountBudge",
+] as const;
 
 //CONFIG GROUP CHECKBOX PROFESSIONAL
 export const namesCheckBoxes: iNamesGroupsChecks = {
@@ -250,7 +341,9 @@ export const namesCheckBoxes: iNamesGroupsChecks = {
 
 // VALIDAMOS SI ESTAMOS EN PRODUCCION O EN DESARROLLO
 const isProduction = EPathDomain.HOST_EXTERNAL !== "";
-const HOST: string = isProduction ? EPathDomain.HOST_EXTERNAL : EPathDomain.HOST_LOCAL;
+const HOST: string = isProduction
+  ? EPathDomain.HOST_EXTERNAL
+  : EPathDomain.HOST_LOCAL;
 
 // DEFINIMOS LA URL BASE PARA BACKEND Y FRONTEND
 const BASE_BACK_URL = `${HOST}${EPortServerDomain.PORT_BACK}`;
@@ -277,11 +370,18 @@ export const pathPages: iPhatPages = {
   PATH_PRIVACY: EPathPage.PATH_PRIVACY,
 };
 
-export const fieldsBasic: TBasicFieldNames[] = ["fullName", "userName", "email", "password", "confirmPassword"];
+export const fieldsBasic: TBasicFieldNames[] = [
+  "fullName",
+  "userName",
+  "email",
+  "password",
+  "confirmPassword",
+];
 
 // CREAR CONFIGURACION ACUMULANDO OBJETOS POR SU NAME
 // CONFIGURACION PARA MENSAJES DE ERROR EN CAMPOS
-export const formStateValidField: Record<TFieldsNameValidate, TFieldState> = FIELDS_NAME_TO_VALIDATE.reduce((acc, field) => {
-  acc[field] = { value: "", error: "", isValid: false }; //EJ PRIMER ITERACION: => fullName: { value: "", error: "", isValid: false }
-  return acc; //=> ACUMULADOR
-}, {} as Record<TFieldsNameValidate, TFieldState>);
+export const formStateValidField: Record<TFieldsNameValidate, TFieldState> =
+  FIELDS_NAME_TO_VALIDATE.reduce((acc, field) => {
+    acc[field] = { value: "", error: "", isValid: false }; //EJ PRIMER ITERACION: => fullName: { value: "", error: "", isValid: false }
+    return acc; //=> ACUMULADOR
+  }, {} as Record<TFieldsNameValidate, TFieldState>);

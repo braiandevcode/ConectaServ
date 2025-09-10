@@ -1,7 +1,7 @@
+import ModalBaseDto from "../../modules/modal/dto/ModalBaseDto.js";
+import ModalBase from "../../modules/modal/entities/ModalBase.js";
+import ModalBaseUI  from "../../modules/modal/ui/ModalBaseUI.js";
 import { addClassWithPromise } from "../../ui/auxiliars.js";
-import ModalBase from "../../modules/entities/ModalBase.js";
-import { ModalBaseUI } from "../../modules/modal/ui/ModalBaseUI.js";
-import ModalBaseOptions from "../../modules/dto/ModalBaseOptions.js";
 
 // SINGLETON => SE APLICA ESTE PATRON PORQUE SOLO DEBE EXISTIR UN UNICO LOADER COMPARTIDO EN TODA LA APP.
 // NO ES NECESARIO CREAR NUEVAS INSTANCIAS, YA QUE SIEMPRE SE REUTILIZA EL MISMO MODAL CARGADOR.
@@ -9,7 +9,7 @@ import ModalBaseOptions from "../../modules/dto/ModalBaseOptions.js";
 export class Loader extends ModalBase {
   private static instance: Loader | null = null;
 
-  private constructor(options: ModalBaseOptions, modalBaseUI:ModalBaseUI) {
+  private constructor(options: ModalBaseDto, modalBaseUI:ModalBaseUI) {
     super(options, modalBaseUI);
   }
 
@@ -37,7 +37,7 @@ export class Loader extends ModalBase {
   }
 
   //VER INSTANCIA UNICA
-  public static async getInstance(options: ModalBaseOptions, modalBaseUI:ModalBaseUI): Promise<Loader> {
+  public static async getInstance(options: ModalBaseDto, modalBaseUI:ModalBaseUI): Promise<Loader> {
     if (!Loader.instance) {
       try {
         Loader.instance = new Loader(options, modalBaseUI);
@@ -66,7 +66,7 @@ export class Loader extends ModalBase {
     // BLOQUE TRY PARA LOADER
     try {
       // INSTANCIA DEL OBJETO DE CONFIGURACION
-      const customModalOptions: ModalBaseOptions = new ModalBaseOptions({
+      const customModalOptions: ModalBaseDto= new ModalBaseDto({
         title: "Cargando...",
         classesContainerModal: "modal-wrapper--hide position-fixed c-flex c-flex-items-center c-flex-justify-center",
         classesModal: "c-flex c-flex-column c-flex-items-center c-flex-justify-center",

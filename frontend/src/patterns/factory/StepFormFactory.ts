@@ -1,13 +1,12 @@
-import FormStepTwoUI from "../../modules/form/register/ui/stepsUI/FormStepTwoUI.js";
-import FormStepOneUI from "../../modules/form/register/ui/stepsUI/FormStepOneUI.js";
+import FormRegister from "../../modules/form/controller/FormRegister.js";
+import InputBuilder from "../../modules/form/ui/builder/InputBuilder.js";
+import OptionGroupBuilder from "../../modules/form/ui/builder/OptionGrouBuilder.js";
+import FormRegisterUI from "../../modules/form/ui/FormRegisterUI.js";
+import FormStepLastUI from "../../modules/form/ui/FormStepLastUI.js";
 import { TTypeFormRegisterStep, TTypeStep } from "../../types/types";
-import FormStepLastUI from "../../modules/form/register/ui/stepsUI/FormStepLastUI.js";
-import FormStepBudgeThreeUI from "../../modules/form/register/ui/stepsUI/FormStepBudgeThreeUI.js";
-import FormRegister from "../../modules/form/register/FormRegister.js";
-import InputBuilder from "../../modules/form/register/builders/InputBuilder.js";
-import OptionGroupBuilder from "../../modules/form/register/builders/OptionGroupBuilder.js";
-import FormRegisterUI from "../../modules/form/register/ui/FormRegisterUI.js";
-import FormStepUI from "modules/form/register/ui/stepsUI/FormStepUI.js";
+import FormStepOneUI from "../../modules/form/ui/FormStepOneUI.js";
+import FormStepTwoUI from "../../modules/form/ui/FormStepTwoUI.js";
+import FormStepThreeUI from "../../modules/form/ui/FormStepThreeUI.js";
 
 // FABRICA DE PASOS UI
 export class StepFormFactory {
@@ -25,7 +24,7 @@ export class StepFormFactory {
       case "stepBudgeThree":
         const optionGroupBuilderStepThree: OptionGroupBuilder = new OptionGroupBuilder(formRegister);
         const inputBuilder: InputBuilder = new InputBuilder(formRegister);
-        return new FormStepBudgeThreeUI(inputBuilder, optionGroupBuilderStepThree).buildStep({ formRegisterUI });
+        return new FormStepThreeUI(inputBuilder, optionGroupBuilderStepThree).buildStep({ formRegisterUI });
       default:
         throw new Error(`Modal type "${nunmberStep}" no soportado`);
     }

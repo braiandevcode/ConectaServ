@@ -1,17 +1,17 @@
-import { TFormType } from "../../types/types";
-import FormRegister from "../../modules/form/register/FormRegister.js";
-import FormRegisterUI from "../../modules/form/register/ui/FormRegisterUI.js";
-import FormBase from "../../modules/entities/FormBase.js";
-import VerifyCodeForm from "../../modules/form/verifyCode/VerifyCodeForm.js";
-import FormBaseOptions from "../../modules/dto/FormBaseOptions.js";
+import FormRegister from "../../modules/form/controller/FormRegister.js";
+import VerifyCodeForm from "../../modules/form/controller/VerifyCodeForm.js";
+import FormBaseDto from "../../modules/form/dto/FormBaseDto.js";
+import FormBase from "../../modules/form/entities/FormBase.js";
+import FormRegisterUI from "../../modules/form/ui/FormRegisterUI.js";
+import FormStepUI from "../../modules/form/ui/FormStepUI.js";
 import VerifyCodeFormUI from "../../modules/form/ui/VerifyCodeFormUI.js";
-import FormStep from "../../modules/form/entities/FormStep.js";
-import FormStepUI from "../../modules/form/register/ui/stepsUI/FormStepUI.js";
+import FormStep from "../../modules/step/controller/FormStep.js";
+import { TFormType } from "../../types/types.js";
 
 // FABRICA DE MODALES
 export class FormFactory {
   // CREAR MODAL
-  static async createForm(type: TFormType, optionsForm: FormBaseOptions): Promise<FormBase> {
+  static async createForm(type: TFormType, optionsForm: FormBaseDto): Promise<FormBase> {
     // SEGUN EL CASO DEL TIPO SE  INSTANCIA UNA CLASE DE MODAL
     switch (type) {
       case "register":

@@ -1,15 +1,14 @@
 //IMPORTACIONES
-
 import { iTextAreaFieldOptions } from "../../../interfaces/interfaces";
-import FieldBaseOptions from "../../../modules/dto/FieldBaseOptions.js";
-import FormFieldBase from "../../../modules/entities/FormFieldBase.js";
+import FieldBaseDto from "../dto/FieldBaseDto.js";
+import FieldBase from "../entities/FieldBase.js";
 import TextAreaFieldUI from "../ui/TextAreaFieldUI.js";
 
 // CLASE PARA CAMPOS
-export default class TextAreaField extends FormFieldBase<string> {
+export default class TextAreaField extends FieldBase<string> {
   private cols: number;
   private rows: number;
-  constructor(options: FieldBaseOptions<string, iTextAreaFieldOptions>, private readonly textAreaFieldUI: TextAreaFieldUI) {
+  constructor(options: FieldBaseDto<string, iTextAreaFieldOptions>, private readonly textAreaFieldUI: TextAreaFieldUI) {
     super(options);
     this.cols = 0;
     this.rows = 0;

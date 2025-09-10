@@ -1,33 +1,27 @@
+import { iBtnIcon, iBtnText } from "../../../interfaces/interfaces";
+import FormRegister from "../../form/controller/FormRegister.js";
+import ButtonBaseDto from "../dto/ButtonsBaseDto.js";
+import ButtonBase from "../entities/ButtonBase.js";
+import ButtonBaseUI from "../ui/ButtonBaseUI.js";
+
 // CLASE CONCRETA => BOTON SIGUIENTE
 export class ButtonNext extends ButtonBase implements iBtnText, iBtnIcon {
-  constructor(buttonOptionsBase: ButtonsOptions) {
-    super(buttonOptionsBase);
+  constructor(buttonBaseUI:ButtonBaseUI) {
+    super(buttonBaseUI);
   }
 
-  protected render(): HTMLButtonElement {
-    // SI SE NECESITA ALTERAR EL LAYOUT PODRIA HACERLO EN ESTA PARTE => OK
-    return this.buttonElement;
+  public setText(): void {
+    this.applyBtnText(); //==> APLICAR TEXTO AL BOTON
   }
 
-  public setText(text: string): void {
-    const prevSpan = this.buttonElement.querySelector("span");
-    if (prevSpan) prevSpan.remove();
-    this.buttonOptionsBase.setBtnSpanText(text);
-    this.applyBtnText();
-  }
-
-  public setIcon(iconClass: string): void {
-    const prevIcon = this.buttonElement.querySelector("i");
-    //REEMPLAZAR CONTENIDO SIN REIMPLEMENTAR => applyClassesIcon
-    if (prevIcon) prevIcon.remove();
-    this.buttonOptionsBase.setIcon(iconClass);
-    this.applyClassesIcon();
+  public setIcon(): void {
+    this.applyClassesIcon(); //==> APLICAR ICONO
   }
 
   // ACTUALIZAR DATA DE BOTNO NEXT
-  public updateAttributeDataStep({ formRegister }: { formRegister: FormRegister }): void {
-    if (this.buttonElement.hasAttribute("data-step")) {
-      this.buttonElement.dataset.step = String(formRegister.getStepForm()); //REASIGNAR VALOR DEL PASO
-    }
-  }
+  // public updateAttributeDataStep({ formRegister }: { formRegister: FormRegister }): void {
+  //   if (this.buttonElement.hasAttribute("data-step")) {
+  //     this.buttonElement.dataset.step = String(formRegister.getStepForm()); //REASIGNAR VALOR DEL PASO
+  //   }
+  // }
 }

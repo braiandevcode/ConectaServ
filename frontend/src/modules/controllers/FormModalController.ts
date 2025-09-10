@@ -1,17 +1,17 @@
 // IMPORTACIONES
 import { TFormElement } from "../../types/types.js";
-import FormBase from "../../modules/entities/FormBase.js";
-import ModalBase from "../entities/ModalBase.js";
-import { ModalBaseUI } from "../modal/ui/ModalBaseUI.js";
-import ModalBaseOptions from "../../modules/dto/ModalBaseOptions.js";
-import FormBaseOptions from "../../modules/dto/FormBaseOptions.js";
+import FormBaseDto from "../form/dto/FormBaseDto.js";
+import FormBase from "../form/entities/FormBase.js";
+import ModalBaseDto from "../modal/dto/ModalBaseDto.js";
+import ModalBase from "../modal/entities/ModalBase.js";
+import ModalBaseUI  from "../modal/ui/ModalBaseUI.js";
 
 //ABSTRACCION => NO IMPORTA COMO
 //CONTROLADOR QUE UNE LOGICA DE FORMULARIO + MODALES COMPORTAMIENTO Y CONSTRUCCIÓN DE MODAL + FORMBASICO
 export abstract class FormModalController extends ModalBase {
   protected _formBase: FormBase; //COMPONE A BASE DE FORMULARIOS
 
-  constructor(protected optionsModal: ModalBaseOptions, protected uiModal:ModalBaseUI) {
+  constructor(protected optionsModal: ModalBaseDto, protected uiModal:ModalBaseUI) {
     super(optionsModal, uiModal);
     this._formBase = this.createFormBase(this._options, optionsModal) as FormBase; //CASTEAMOS A "FormBase"
   }
@@ -42,11 +42,11 @@ export abstract class FormModalController extends ModalBase {
     return this._formBase.getLabels();
   }
 
-  get _options(): FormBaseOptions {
+  get _options(): FormBaseDto {
     return this._formBase.options;
   }
 
-  protected abstract createFormBase(configBaseForm: FormBaseOptions, configBaseModal: ModalBaseOptions): Promise<FormBase> | FormBase;
+  protected abstract createFormBase(configBaseForm: FormBaseDto, configBaseModal: ModalBaseDto): Promise<FormBase> | FormBase;
 
   //DELEGACION: OBLIGA A LA CLASE SUBCLASE CONCRETA A IMPLEMENTAR COMO INSERTAR EL FORMULARIO
   protected abstract insertFormIntoModal(): Promise<void>;

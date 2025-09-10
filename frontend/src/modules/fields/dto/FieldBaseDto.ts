@@ -1,67 +1,69 @@
-import FieldBaseOptions from "../dto/FieldBaseOptions.js";
+// IMPORTACIONES
+import { iBaseFieldOptions } from "../../../interfaces/interfaces";
 
 // PLANTILLA PARA CREACION DE DIFERENTES CAMPOS
-export default abstract class FormFieldBase<T extends string | FileList | null = string> {
-  protected eventHandlers: {
-    change?: (value: T) => void;
-    blur?: (value: T) => void;
-    focus?: () => void;
-    input?: (value: T) => void;
-  } = {};
+// USAMOS DOS GENERICOS  PARA OPCIONES DINAMICAS Y PARA EL VALUE CON TIPOS PRIMITIVOS
+export default class FieldBaseDto<T = string | File | FileList | boolean | number | iBaseFieldOptions, O extends iBaseFieldOptions = iBaseFieldOptions> {
+  private readonly name: string; // SOLO LECTURA, NO SE PUEDE MODIFICAR DESPUES DEL CONSTRUCTOR
+  private readonly id: string; // SOLO LECTURA, IDENTIFICADOR FIJO DEL CAMPO
+  private readonly required: boolean; // SOLO LECTURA, INDICA SI EL CAMPO ES OBLIGATORIO
+  private value: T | null; // VARIABLE PRIVADA, SE PUEDE MODIFICAR DURANTE LA VIDA DEL OBJETO
+  private _disabled: boolean; // VARIABLE PRIVADA, INDICA SI EL CAMPO ESTÁ DESHABILITADO, PUEDE CAMBIAR
 
-  constructor(protected readonly options: FieldBaseOptions) {}
-
-  protected abstract render(): HTMLElement;
-  protected abstract getValue(): T | null;
-  protected abstract setValue(value: T): void;
-
-  // =========================
-  // REGISTRO DE EVENTOS
-  // =========================
-  public onChange(handler: (value: T) => void) {
-    this.eventHandlers.change = handler;
+  constructor(private readonly options: O) {
+    // SOLO LECTURA, CONFIGURACION INICIAL DEL CAMPO
+    this.name = options.name;
+    this.id = options.id ?? "";
+    (this.value = null), (this.required = options.required);
+    this._disabled = options.disabled;
   }
 
-  public onBlur(handler: (value: T) => void) {
-    this.eventHandlers.blur = handler;
+  // DESHABILITAR CAMPO
+  public disabled(): void {
+    this._disabled = true;
   }
 
-  public onFocus(handler: () => void) {
-    this.eventHandlers.focus = handler;
+  // HABILITAR CAMPO
+  public enabled(): void {
+    this._disabled = false;
   }
 
-  public onInput(handler: (value: T) => void) {
-    this.eventHandlers.input = handler;
+  public setRequired(required:boolean):void{
+    this.options.required = required;
   }
 
-  // MÉTODO PARA EJECUTAR EL HANDLER DE INPUTS
-  protected triggerEvent(event: keyof typeof this.eventHandlers) {
-    const handler = this.eventHandlers[event];
-    if (!handler) return; // SI NO HAY HANDLER NO SEGUIR
+  //--------------------------- PROPIEDADES DE ACCESOS ----------------------------------//
 
-    // SI EL EVENTO ES FOCUS
-    if (event === "focus") {
-      (handler as () => void)(); // => HANDLER SIN ARGUMENTO
-    } else {
-      // handler(this.getValue() as T | null) as T | null
-      (handler as (value: T | null) => void)(this.getValue() as T | null); //=> SINO PASAR EL VALUE DE TIPO => T O NULL
-    }
+  // VER VALOR DE VALUE
+  public get _value(): T | null {
+    return this.value;
   }
 
-  // protected validate(): boolean {
-  //   if (this.options._isRequired) {
-  //     if (this.options._value === null) return false;
+  public set _setValue(val: T | null) {
+    this.value = val;
+  }
 
-  //     if (typeof this.options._value === "string" && (this.options._value as string).trim() === "") {
-  //       return false;
-  //     }
+  public get _options(): O {
+    return this.options;
+  }
 
-  //     if (this.options._value instanceof FileList && this.options._value.length === 0) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
+  // VER VALOR DEL ID
+  public get _id(): string {
+    return this.id;
+  }
 
-  // protected abstract validate():void;
+  // VER VALOR DE NAME
+  public get _name(): string {
+    return this.name;
+  }
+
+  // VER VALOR DEL DISABLED
+  public get _currentDisabled(): boolean {
+    return this._disabled;
+  }
+
+  // VER VALOR DE REQUIRED
+  public get _isRequired(): boolean {
+    return this.required;
+  }
 }

@@ -2,21 +2,21 @@
 import { iFormStateValidation } from "../../../interfaces/interfaces";
 import apiRequest from "../../../utils/apiRequest.js";
 import { domainURLPath } from "../../../config/constant.js";
-import VerifyEmailModal from "./VerifyEmailModal.js";
 import { Loader } from "../../../patterns/singleton/Loader.js";
-import { isValueField, validateWithRegex } from "../../../utils/domUtils.js";
-import { TFieldState } from "../../../types/types";
-import FormBase from "../../../modules/entities/FormBase.js";
-import ModalBase from "../../entities/ModalBase.js";
-import FormBaseOptions from "../../../modules/dto/FormBaseOptions.js";
+import { TFieldState } from "../../../types/types";;
 import VerifyCodeFormUI from "../ui/VerifyCodeFormUI.js";
+import FormBase from "../entities/FormBase.js";
+import FormBaseDto from "../dto/FormBaseDto.js";
+import ModalBase from "../../modal/entities/ModalBase.js";
+import { isValueField, validateWithRegex } from "../../../utils/domUtils.js";
+import VerifyEmailModal from "../../../modules/modal/components/VerifyEmailModal.js";
 
 
 // FORMULARIO PARA VERIFICAR CODIGO DE EMAIL
 export default class VerifyCodeForm extends FormBase {
   private modal?:ModalBase;
 
-  constructor(formOptions: FormBaseOptions, private readonly ui: VerifyCodeFormUI) {
+  constructor(formOptions: FormBaseDto, private readonly ui: VerifyCodeFormUI) {
     super(formOptions, ui);
 
     // this.configForm = new FormOptions({ containerSelector: ".register-userProfessional__content", }); // => INSTANCIA

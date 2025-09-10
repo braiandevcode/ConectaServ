@@ -56,10 +56,10 @@ export enum EPathDomain{
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA
 export enum EPathPage {
-  PATH_FORM_CLIENT = "/src/pages/register-client.html",
-  PATH_FORM_PROFESSIONAL ="/src/pages/register-pro.html",
-  PATH_TERMS = "/src/pages/termsAndConditions.html",
-  PATH_PRIVACY = "/src/pages/privacyPolicy.html",
+  PATH_FORM_CLIENT = "/frontend/src/pages/register-client.html",
+  PATH_FORM_PROFESSIONAL ="/frontend/src/pages/register-pro.html",
+  PATH_TERMS = "/frontend/src/pages/termsAndConditions.html",
+  PATH_PRIVACY = "/frontend/src/pages/privacyPolicy.html",
 }
 
 // ENUM PARA TIPOS DE INPUTS

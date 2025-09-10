@@ -1,7 +1,7 @@
-import { TFieldState } from "../../../../types/types";
-import { IValidator } from "../../../../interfaces/interfaces";
-import { isValueField } from "../../../../utils/domUtils.js";
-import { formStateValidField } from "../../../../config/constant.js";
+import { formStateValidField } from "../../../config/constant.js";
+import { IValidator } from "../../../interfaces/interfaces";
+import { TFieldState } from "../../../types/types";
+import { isValueField } from "../../../utils/domUtils.js";
 
 // VALIDAR CONFIRMACION
 export default class ConfirmPasswordValidator implements IValidator {

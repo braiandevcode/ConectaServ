@@ -1,14 +1,15 @@
-import ButtonBaseOptions from "../../../../modules/dto/ButtonBaseOptions.js";
-import FormBaseOptions from "../../../dto/FormBaseOptions.js";
-import FormBaseUI from "../../ui/FormBaseUI.js";
-import FormRegister from "../FormRegister.js";
-import FormStepUI from "./stepsUI/FormStepUI.js";
-import { ButtonNext, ButtonPrev } from "../../../../modules/components/Buttons.js";
-import { ButtonFactory } from "../../../../patterns/factory/ButtonFactory.js";
+import { ButtonFactory } from "../../../patterns/factory/ButtonFactory.js";
+import { ButtonNext } from "../../buttons/components/ButtonNext.js";
+import { ButtonPrev } from "../../buttons/components/ButtonPrev.js";
+import ButtonBaseDto from "../../buttons/dto/ButtonsBaseDto.js";
+import FormRegister from "../controller/FormRegister.js";
+import FormBaseDto from "../dto/FormBaseDto.js";
+import FormBaseUI from "./FormBaseUI.js";
+import FormStepUI from "./FormStepUI.js";
 
 export default class FormRegisterUI extends FormBaseUI {
   private formStepUI: FormStepUI;
-  constructor(formBaseOptions: FormBaseOptions, formStepUI: FormStepUI) {
+  constructor(formBaseOptions: FormBaseDto, formStepUI: FormStepUI) {
     super(formBaseOptions);
     this.formStepUI = formStepUI;
   }
@@ -75,7 +76,7 @@ export default class FormRegisterUI extends FormBaseUI {
 
   // METODO REPETITIVO PARA CREAR BOTON PREVIO
   public createBtnPrev({ formRegister }: { formRegister: FormRegister }): ButtonPrev {
-    const buttonOptions: ButtonBaseOptions = new ButtonBaseOptions({
+    const buttonOptions: ButtonBaseDto = new ButtonBaseDto({
       disabled: false,
       "aria-label": "Regresar",
       type: "button",
@@ -90,7 +91,7 @@ export default class FormRegisterUI extends FormBaseUI {
   // METODO REPETITIVO PARA CREAR BOTON SIGUIENTE
   public createBtnNext({ formRegister }: { formRegister: FormRegister }): ButtonNext {
     //ESTABLECER CONFIGURACION PARA BOTON
-    const configOptionNextButton: ButtonBaseOptions = new ButtonBaseOptions({
+    const configOptionNextButton: ButtonBaseDto = new ButtonBaseDto({
       type: "button",
       btnText: "Siguiente",
       classesBtn: "btn c-flex c-flex-justify-center c-flex-items-center gap-1/2 cursor-pointer container-btn__next",
@@ -122,7 +123,7 @@ export default class FormRegisterUI extends FormBaseUI {
       formRegister.destroyBtnPrev(); // ===>REMOVER ANTES DE VOLVER A CREAR
       const instanceBtnPrev: ButtonPrev = formRegister.createBtnPrev(); // ==> CREAR INSTANCIA
 
-      closestForm.prepend(instanceBtnPrev.getElement()); // ==> ASIGNAR ELEMENTO AL CONTENEDOR ANCESTRO DEL FORMULARIO
+      closestForm.prepend(instanceBtnPrev.getBtnElement()); // ==> ASIGNAR ELEMENTO AL CONTENEDOR ANCESTRO DEL FORMULARIO
     });
   }
   // DESTRUI BOTON PREVIO

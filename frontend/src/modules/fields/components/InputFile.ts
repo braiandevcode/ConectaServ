@@ -1,11 +1,11 @@
 // IMPORTACIONES
 import { iInputFileOptions } from "../../../interfaces/interfaces";
-import FieldBaseOptions from "../../../modules/dto/FieldBaseOptions.js";
-import FormFieldBase from "../dto/FieldBaseDto.js";
+import FieldBaseDto from "../dto/FieldBaseDto.js";
+import FieldBase from "../entities/FieldBase.js";
 import InputFileUI from "../ui/InputFileUI.js";
 
-export default class InputFile extends FormFieldBase<FileList> {
-  constructor(options: FieldBaseOptions<FileList, iInputFileOptions>, private inputFileUI:InputFileUI) {
+export default class InputFile extends FieldBase<FileList> {
+  constructor(options: FieldBaseDto<FileList, iInputFileOptions>, private inputFileUI:InputFileUI) {
     super(options);
     this.attachEvents();
   }

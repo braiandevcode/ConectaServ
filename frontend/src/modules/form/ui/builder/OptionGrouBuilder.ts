@@ -1,15 +1,15 @@
 // IMPORTACIONES
-import { TCategoryOption, TOptionItem, TOptionsCheckForm, TOptionTypeGroup } from "../../../../types/types";
+import { TCategoryOption, TOptionItem, TOptionsCheckForm, TOptionTypeGroup } from "../../../../types/types.js";
 import clearElementChild from "../../../../dom/clearElementChild.js";
-import { attrFilled, convertTextOfTypes } from "../../../../utils/domUtils.js";
-import FormRegister from "../FormRegister.js";
 import FormFieldFactory from "../../../../patterns/factory/FormFieldFactory.js";
-import InputFieldCheck from "../../components/InputFieldCheck.js";
-import { readExistingData } from "../../../../utils/storageUtils.js";
 import { EGroupCheckBox, EKeyDataByStep, ENamesOfKeyLocalStorage } from "../../../../types/enums.js";
-import { ButtonNext } from "../../../components/Buttons.js";
-import FormRegisterUI from "../ui/FormRegisterUI.js";
 import { actionClassString } from "../../../../ui/auxiliars.js";
+import InputFieldCheck from "../../../../modules/fields/components/InputFieldCheck.js";
+import FormRegister from "../../../../modules/form/controller/FormRegister.js";
+import { attrFilled, convertTextOfTypes } from "../../../../utils/domUtils.js";
+import { readExistingData } from "../../../../utils/storageUtils.js";
+import FormRegisterUI from "../FormRegisterUI.js";
+import { ButtonNext } from "../../../../modules/buttons/components/ButtonNext.js";
 
 // BUILDER PARA CREACIÓN Y MANEJO DE GRUPOS DE OPCIONES CHECKBOX/RADIO PARA FORMULARIO
 export default class OptionGroupBuilder {
@@ -231,7 +231,7 @@ export default class OptionGroupBuilder {
       buildNewStep: () => formRegisterUI.getStepUI().buildStepTwo({ formRegister: this.formRegister, formRegisterUI }),
     });
 
-    $FOOTER.appendChild(btnInstanceNext.getElement()); // AGREGAR BOTON AL FOOTER
+    $FOOTER.appendChild(btnInstanceNext.getBtnElement()); // AGREGAR BOTON AL FOOTER
 
     // --- ARMAMOS TODO ---
     $MAIN.append($HEADER, $CHECKS_WRAPPER, $DATES_CONTAINER, $FOOTER);

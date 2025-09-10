@@ -1,45 +1,39 @@
 // IMPORTACIONES
-import { iFormOptions, iModalOptions } from "../../interfaces/interfaces.js";
-import CustomModal from "../../components/modal/CustomModal.js";
-import { FormBase } from "./FormBase.js";
-import { TFormElement } from "../../types/types.js";
+import { TFormElement } from "../../../types/types";
+import FormBaseDto from "../../form/dto/FormBaseDto.js";
+import FormBase from "../../form/entities/FormBase.js";
+import ModalBaseDto from "../dto/ModalBaseDto.js";
+
 
 // ABSTRACCION PAR DIFERENTE MODALES DE FORMULARIOS
 //(COMPORTAMIENTO Y CONSTRUCCIÓN DE MODAL + FORMBASICO)
-export abstract class FormModal extends CustomModal {
-  protected _formBase: FormBase; //COMPONE A BASE DE FORMULARIOS
+export abstract class FormModal {
+  protected _instanceFormBase: FormBase; //COMPONE A BASE DE FORMULARIOS
 
-  constructor(options: iModalOptions) {
-    super(options);
-    if (!options.formConfig) throw new Error("Se necesita config de formulario en options");
-
-    this._formBase = this.createFormBase(options.formConfig);
+  constructor(private readonly modalDto: ModalBaseDto, private readonly formDto: FormBaseDto) {
+    this._instanceFormBase = this.createFormBase(formDto);
   }
 
   // GETTERS CON "get" => DONDE NO REQUIERE FUNCIONALIDAD SOLO QUE ESTE PREPARADO PARA SER LLAMADO
   get Form():HTMLFormElement {
-    return this._formBase.getFormElement();
+    return this._instanceFormBase.getFormElement();
   }
 
   get Inputs(): TFormElement[] {
-    return this._formBase.getInputsElement();
+    return this._instanceFormBase.getInputs();
   }
 
-  get containerForm():HTMLElement | null{
-    if(this._formBase.getContainerForm()){
-      return this._formBase.getContainerForm();
-    }
-
-    return null;
+  public getContainerForm():HTMLElement | null{
+    return this._instanceFormBase.getContainerForm();
   }
 
   get Labels():HTMLLabelElement[] {
-    return this._formBase.getLabelsElement();
+    return this._instanceFormBase.getLabels();
   }
 
-  get Options(): iFormOptions{
-    return this.options;
-  }
+  // get Options(): iFormOptions{
+  //   return this.Options;
+  // }
 
-  protected abstract createFormBase(config: iFormOptions): FormBase;
+  protected abstract createFormBase(config: FormBaseDto): FormBase;
 }

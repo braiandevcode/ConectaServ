@@ -1,20 +1,22 @@
-import { ECategoryKey, EDefaultSelected, EKeyDataByStep, ENamesOfKeyLocalStorage } from "../../../../../types/enums.js";
-import { iBuildStepUI } from "../../../../../interfaces/interfaces.js";
-import FormFieldFactory from "../../../../../patterns/factory/FormFieldFactory.js";
-import CheckboxGroupBuilder from "../../builders/OptionGroupBuilder.js";
-import { categoryConfigs } from "../../../../../config/constant.js";
-import { TCategoryKey } from "../../../../../types/types.js";
-import { readExistingData } from "../../../../../utils/storageUtils.js";
-import FormRegister from "../../FormRegister.js";
-import SelectField from "../../../../../modules/form/components/SelectField.js";
-import FormRegisterUI from "../FormRegisterUI.js";
-import { attrFilled } from "../../../../../utils/domUtils.js";
-import { actionClassString } from "../../../../../ui/auxiliars.js";
+// IMPORTACIONES
+
+import { categoryConfigs } from "../../../config/constant.js";
+import { iBuildStepUI } from "../../../interfaces/interfaces";
+import FormFieldFactory from "../../../patterns/factory/FormFieldFactory.js";
+import { ECategoryKey, EDefaultSelected, EKeyDataByStep, ENamesOfKeyLocalStorage } from "../../../types/enums.js";
+import { TCategoryKey } from "../../../types/types";
+import { actionClassString } from "../../../ui/auxiliars.js";
+import { attrFilled } from "../../../utils/domUtils.js";
+import { readExistingData } from "../../../utils/storageUtils.js";
+import SelectField from "../../fields/components/SelectField.js";
+import FormRegister from "../controller/FormRegister.js";
+import OptionGroupBuilder from "./builder/OptionGrouBuilder.js";
+import FormRegisterUI from "./FormRegisterUI.js";
 
 // MODULO CLASE UI PARA EL PASO 1
 export default class FormStepOneUI implements iBuildStepUI {
-  private readonly checkGroupsBuilder: CheckboxGroupBuilder;
-  constructor(private readonly formRegister: FormRegister, checkGroupsBuilder: CheckboxGroupBuilder) {
+  private readonly checkGroupsBuilder: OptionGroupBuilder;
+  constructor(private readonly formRegister: FormRegister, checkGroupsBuilder: OptionGroupBuilder) {
     this.checkGroupsBuilder = checkGroupsBuilder;
   }
 

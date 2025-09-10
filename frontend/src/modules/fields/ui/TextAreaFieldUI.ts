@@ -1,11 +1,11 @@
 //IMPORTACIONES
-import FieldBaseOptions from "../../dto/FieldBaseOptions.js";
 import { iTextAreaFieldOptions } from "../../../interfaces/interfaces.js";
+import FieldBaseDto from "../dto/FieldBaseDto.js";
 
 // CLASE PARA CAMPOS
 export default class TextAreaFieldUI {
   private inputField: HTMLTextAreaElement;
-  constructor(private readonly options: FieldBaseOptions<string, iTextAreaFieldOptions>) {
+  constructor(private readonly options: FieldBaseDto<string, iTextAreaFieldOptions>) {
     this.inputField = document.createElement("textarea");
     this.buildInputFieldUI();
   }

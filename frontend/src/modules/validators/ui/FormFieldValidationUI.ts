@@ -1,5 +1,5 @@
-import { actionClassString } from "../../../../../ui/auxiliars.js";
-import { TFormElement } from "../../../../../types/types";
+import { TFormElement } from "../../../types/types";
+import { actionClassString } from "../../../ui/auxiliars.js";
 
 // MODULO RESPONSABLE DE ESTADOS Y COMPORTAMIENTOS EN UI MEDIANTE VALIDACIONES
 export default class FormFieldValidationUI {

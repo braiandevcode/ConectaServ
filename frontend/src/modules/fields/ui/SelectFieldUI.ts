@@ -1,12 +1,12 @@
 import { iSelectFieldOptions } from "../../../interfaces/interfaces";
-import FieldBaseOptions from "../../dto/FieldBaseOptions.js";
-import OptionItem from "../../form/components/OptionItem.js";
+import OptionItem from "../components/OptionItem.js";
+import FieldBaseDto from "../dto/FieldBaseDto.js";
 
 // CAMPO SELECT QUE HEREDA DE BASE
 export default class SelectFieldUI {
   private element: HTMLSelectElement;
   // EN this.options AL TIPO FieldBaseOptions LE AGREGAMOS EL TIPO ESPECIFICO DEL GENERICO "T" Y EL SEGUNDO DE "O"
-  constructor(private readonly options: FieldBaseOptions<string, iSelectFieldOptions>) {
+  constructor(private readonly options: FieldBaseDto<string, iSelectFieldOptions>) {
     this.element = document.createElement("select");
     this.buidSelect();
   }
@@ -27,7 +27,7 @@ export default class SelectFieldUI {
   private renderOptions(): void {
     // CREAR LAS OPCIONES SEGUN CONFIGURACION
     this.options._options.items.forEach((opt) => {
-      const option: OptionItem = new OptionItem(opt.value, opt.text, opt.disabled, opt.selected);
+      const option: OptionItem= new OptionItem(opt.value, opt.text, opt.disabled, opt.selected);
       const optioEl: HTMLOptionElement = option.getElement();
       this.element.appendChild(optioEl);
     });

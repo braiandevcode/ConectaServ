@@ -1,25 +1,19 @@
+import { iBtnIcon, iBtnText } from "../../../interfaces/interfaces";
+import ButtonBaseDto from "../dto/ButtonsBaseDto.js";
+import ButtonBase from "../entities/ButtonBase.js";
+import ButtonBaseUI from "../ui/ButtonBaseUI.js";
+
 //CLASE CONCRETA => BOTON SUBMIT
 export class ButtonSubmit extends ButtonBase implements iBtnText, iBtnIcon {
-  constructor(buttonOptionsBase: ButtonsOptions) {
-    super(buttonOptionsBase);
+  constructor(buttonBaseUI: ButtonBaseUI) {
+    super(buttonBaseUI);
   }
 
-  protected render(): HTMLButtonElement {
-    return this.buttonElement;
+  public setText(): void {
+    this.applyBtnText(); //==> APLICAR TEXTO AL BOTON
   }
 
-  public setText(text: string): void {
-    const prevSpan = this.buttonElement.querySelector("span");
-    if (prevSpan) prevSpan.remove();
-    this.buttonOptionsBase.setBtnSpanText(text);
-    this.applyBtnText();
-  }
-
-  public setIcon(iconClass: string): void {
-    const prevIcon = this.buttonElement.querySelector("i");
-    //REEMPLAZAR CONTENIDO SIN REIMPLEMENTAR => applyClassesIcon
-    if (prevIcon) prevIcon.remove();
-    this.buttonOptionsBase.setIcon(iconClass);
-    this.applyClassesIcon();
+  public setIcon(): void {
+    this.applyClassesIcon(); //==> APLICAR ICONO
   }
 }

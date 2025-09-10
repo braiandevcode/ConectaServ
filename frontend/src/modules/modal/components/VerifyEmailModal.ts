@@ -1,16 +1,16 @@
 import { FormFactory } from "../../../patterns/factory/FormFactory.js";
 import { FormModalController } from "../../controllers/FormModalController.js";
-import FormBase from "../../../modules/entities/FormBase.js";
-import { ModalBaseUI } from "../../modal/ui/ModalBaseUI.js";
-import ModalBaseOptions from "../../../modules/dto/ModalBaseOptions.js";
-import FormBaseOptions from "../../../modules/dto/FormBaseOptions.js";
+import FormBaseDto from "../../form/dto/FormBaseDto.js";
+import FormBase from "../../form/entities/FormBase.js";
+import ModalBaseDto from "../dto/ModalBaseDto.js";
+import  ModalBaseUI  from "../ui/ModalBaseUI.js";
 
 // MODAL QUE EXTIENDE DE FormModalController Y QUE INSTANCIA AL VerifyCodeForm PARA INSERTAR EN MODAL
 export default class VerifyEmailModal extends FormModalController {
   private codeVerificationPromise: Promise<void> | null = null;
   private resolveCodeVerification: (() => void) | null = null;
 
-  constructor(modalOptions: ModalBaseOptions, uiModal: ModalBaseUI) {
+  constructor(modalOptions: ModalBaseDto, uiModal: ModalBaseUI) {
     super(modalOptions, uiModal); //HEREDAMOS TODAS LAS PROPIEDADES ACCESIBLES DEL "CustomModal"
     this.setupVerificationPromise();
   }
@@ -33,7 +33,7 @@ export default class VerifyEmailModal extends FormModalController {
   }
 
   // ACA SE IMPLEMENTA CREACION DEL FORMULARIO
-  public async createFormBase(config: FormBaseOptions): Promise<FormBase> {
+  public async createFormBase(config: FormBaseDto): Promise<FormBase> {
     return await FormFactory.createForm("verifyCode", config);
   }
 

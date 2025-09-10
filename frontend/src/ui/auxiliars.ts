@@ -3,11 +3,11 @@ import toggleClassElement from "./toggleClassElement.js";
 
 // FUNCIONES AUXILIARES PARA MOSTRAR Y OCULTAR SECCIONES
 export const show = ({ $el, cls }: { $el: HTMLElement; cls: string }): void => {
-  toggleClassElement({ container: $el, className: cls, isRemoveClass: true });
+  toggleClassElement({ container: $el, className: [cls], isRemoveClass: true });
 };
 
 export const hide = ({ $el, cls }: { $el: HTMLElement; cls: string }): void => {
-  toggleClassElement({ container: $el, className: cls, isRemoveClass: false });
+  toggleClassElement({ container: $el, className: [cls], isRemoveClass: false });
 };
 
 // ----------------------------------------------AUXILIARES PARA VALIDACION DE CAMPOS-------------------------------------------//
@@ -121,3 +121,4 @@ export const actionClassString = (str: string, method: string, container: HTMLEl
       break;
   }
 };
+

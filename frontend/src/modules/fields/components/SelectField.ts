@@ -1,16 +1,15 @@
 // IMPORTACIONES
-
-import FormFieldBase from "../../../modules/entities/FormFieldBase.js";
 import SelectFieldUI from "../ui/SelectFieldUI.js";
-import FieldBaseOptions from "../../../modules/dto/FieldBaseOptions.js";
 import { iSelectFieldOptions } from "../../../interfaces/interfaces";
+import FieldBase from "../entities/FieldBase.js";
+import FieldBaseDto from "../dto/FieldBaseDto.js";
 
 
 // CAMPO SELECT QUE HEREDA DE BASE
-export default class SelectField extends FormFieldBase<string> {
+export default class SelectField extends FieldBase<string> {
   private stateChange = false;
 
-  constructor(options: FieldBaseOptions<string, iSelectFieldOptions>, private readonly selectFieldUI: SelectFieldUI) {
+  constructor(options: FieldBaseDto<string, iSelectFieldOptions>, private readonly selectFieldUI: SelectFieldUI) {
     super(options);
     this.attachEvents(); // SOLO ACA AGREGAMOS EL LISTENER AL DOM  => TAN PRONTO SE CREA EL SelectField, EL LISTENER YA ESTA ACTIVO
   }

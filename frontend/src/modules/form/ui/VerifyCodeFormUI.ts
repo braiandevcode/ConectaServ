@@ -1,12 +1,12 @@
 import FormFieldFactory from "../../../patterns/factory/FormFieldFactory.js";
-import FormBaseOptions from "../../../modules/dto/FormBaseOptions.js";
-import InputField from "../components/InputField.js";
-import VerifyCodeForm from "../verifyCode/VerifyCodeForm.js";
+import InputField from "../../fields/components/InputField.js";
+import VerifyCodeForm from "../controller/VerifyCodeForm.js";
+import FormBaseDto from "../dto/FormBaseDto.js";
 import FormBaseUI from "./FormBaseUI.js";
 
 // CLASE QUE SE ENCARGA DE CREACION Y/O LA UI EN FORMULARIO DE CODIGO DE VERIFICACION DE CORREO
 export default class VerifyCodeFormUI extends FormBaseUI {
-  constructor(options: FormBaseOptions) {
+  constructor(options: FormBaseDto) {
     super(options);
   }
 

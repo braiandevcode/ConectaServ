@@ -1,7 +1,7 @@
-import { TFieldState } from "../../../../types/types";
-import { IValidator } from "../../../../interfaces/interfaces";
-import { isValueField } from "../../../../utils/domUtils.js";
-import { formatMontoOnlyNumber, parseMontoToNumber } from "../../../../ui/auxiliars.js";
+import { IValidator } from "../../../interfaces/interfaces";
+import { TFieldState } from "../../../types/types";
+import { formatMontoOnlyNumber, parseMontoToNumber } from "../../../ui/auxiliars.js";
+import { isValueField } from "../../../utils/domUtils.js";
 
 // VALIDACION EN CAMPO PRESUPUESTO
 export default class BudgeValidator implements IValidator {

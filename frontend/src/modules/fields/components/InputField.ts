@@ -1,14 +1,14 @@
 //IMPORTACIONES
-import FieldBaseOptions from "../../dto/FieldBaseOptions.js";
 import { iInputFieldOptions } from "../../../interfaces/interfaces.js";
-import FormFieldBase from "../../entities/FormFieldBase.js";
 import InputFieldUI from "../ui/InputFieldUI.js";
 import { TFormElement } from "../../../types/types.js";
+import FieldBase from "../entities/FieldBase.js";
+import FieldBaseDto from "../dto/FieldBaseDto.js";
 
 // CLASE PARA CAMPOS
-export default class InputField extends FormFieldBase<string> {
+export default class InputField extends FieldBase<string> {
   private isValid: boolean;
-  constructor(options: FieldBaseOptions<string, iInputFieldOptions>, private readonly inputFieldUI: InputFieldUI) {
+  constructor(options: FieldBaseDto<string, iInputFieldOptions>, private readonly inputFieldUI: InputFieldUI) {
     super(options);
     this.isValid = false;
     this.attachEvents(); // SOLO ACA AGREGAMOS EL LISTENER AL DOM

@@ -1,16 +1,17 @@
-import { iBuildStepUI } from "../../../../../interfaces/interfaces";
-import { EDefaultSelected } from "../../../../../types/enums.js";
-import { ButtonFactory } from "../../../../../patterns/factory/ButtonFactory.js";
-import ButtonsOptions from "../../../../dto/ButtonBaseOptions.js";
-import FormRegister from "../../FormRegister.js";
-import InputBuilder from "../../builders/InputBuilder.js";
-import FormRegisterUI from "../FormRegisterUI.js";
-import FormFieldFactory from "../../../../../patterns/factory/FormFieldFactory.js";
-import SelectField from "../../../../../modules/form/components/SelectField.js";
-import InputFieldCheck from "modules/form/components/InputFieldCheck";
-import { actionClassString } from "../../../../../ui/auxiliars.js";
-import { attrFilled } from "../../../../../utils/domUtils.js";
-import { TFormElement } from "../../../../../types/types";
+import { iBuildStepUI } from "../../../interfaces/interfaces";
+import { ButtonFactory } from "../../../patterns/factory/ButtonFactory.js";
+import FormFieldFactory from "../../../patterns/factory/FormFieldFactory.js";
+import { EDefaultSelected } from "../../../types/enums.js";
+import { TFormElement } from "../../../types/types";
+import { actionClassString } from "../../../ui/auxiliars.js";
+import { attrFilled } from "../../../utils/domUtils.js";
+import ButtonBaseDto from "../../buttons/dto/ButtonsBaseDto.js";
+import InputFieldCheck from "../../fields/components/InputFieldCheck.js";
+import SelectField from "../../fields/components/SelectField.js";
+import FormRegister from "../controller/FormRegister.js";
+import InputBuilder from "./builder/InputBuilder.js";
+import FormRegisterUI from "./FormRegisterUI.js";
+
 
 // MODULO CLASE UI PARA ULTIMO PASO
 export default class FormStepLastUI implements iBuildStepUI {
@@ -191,7 +192,7 @@ export default class FormStepLastUI implements iBuildStepUI {
     const $CONTAINER_BTN: HTMLDivElement = document.createElement("div");
     actionClassString("mb-2 c-flex c-flex-justify-end", "add", $CONTAINER_BTN);
 
-    const InstanceConfigBtnSubmit: ButtonsOptions = new ButtonsOptions({
+    const InstanceConfigBtnSubmit: ButtonBaseDto = new ButtonBaseDto({
       type: "submit",
       btnText: "Enviar",
       classesBtn: "btn c-flex c-flex-justify-center c-flex-items-center gap-1/2 cursor-pointer container-btn__next",
@@ -202,7 +203,7 @@ export default class FormStepLastUI implements iBuildStepUI {
     // CREAR BOTON Y ESTABLECER CONFIGURACION
     const btnNextInstance = ButtonFactory.createButton("submit", InstanceConfigBtnSubmit);
 
-    $CONTAINER_BTN.appendChild(btnNextInstance.getElement()); // ==> AGREGA ELEMENTO 
+    $CONTAINER_BTN.appendChild(btnNextInstance.getBtnElement()); // ==> AGREGA ELEMENTO 
 
     $NEW_STEP.appendChild($CONTAINER_BTN);
 

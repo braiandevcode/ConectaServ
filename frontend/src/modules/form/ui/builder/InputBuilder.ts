@@ -1,11 +1,11 @@
 // IMPORTACIONES
 import { iAttributesContentForm } from "../../../../interfaces/interfaces";
-import FormRegisterUI from "../ui/FormRegisterUI.js";
-import InputField from "../../components/InputField.js";
 import FormFieldFactory from "../../../../patterns/factory/FormFieldFactory.js";
 import { actionClassString } from "../../../../ui/auxiliars.js";
 import { attrFilled } from "../../../../utils/domUtils.js";
-import FormRegister from "../FormRegister";
+import InputField from "../../../fields/components/InputField.js";
+import FormRegister from "../../controller/FormRegister.js";
+import FormRegisterUI from "../FormRegisterUI.js";
 
 // BUILDER PARA CREACIÓN DE CAMPOS DE FORMULARIO
 export default class InputBuilder{

@@ -75,7 +75,7 @@ button.color:active {
 
 .nav-links.active {
     display: flex;
-    z-index:999;
+    z-index:2;
 }
 
 

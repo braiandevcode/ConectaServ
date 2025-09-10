@@ -1,12 +1,14 @@
 //IMPORTACIONES
-import FieldBaseOptions from "../../dto/FieldBaseOptions.js";
-import { iInputFieldOptions } from "../../../interfaces/interfaces.js";
-import FormFieldValidationUI from "../register/ui/validationUI/FormFieldValidationUI.js";
+
+import { iInputFieldOptions } from "../../../interfaces/interfaces";
+import FormFieldValidationUI from "../../validators/ui/FormFieldValidationUI.js";
+import FieldBaseDto from "../dto/FieldBaseDto.js";
+
 
 // CLASE PARA CAMPOS RESPONSABLE DE UI ATADO A CLASE DE VALIDACION RESPONSABLE DE UI
 export default class InputFieldUI extends FormFieldValidationUI {
   private inputField: HTMLInputElement;
-  constructor(private readonly options: FieldBaseOptions<string, iInputFieldOptions>) {
+  constructor(private readonly options: FieldBaseDto<string, iInputFieldOptions>) {
     super();
     this.inputField = document.createElement("input");
     this.buildInputFieldUI();

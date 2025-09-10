@@ -1,7 +1,7 @@
 // IMPORTACIONES
-import FormBaseOptions from "../../modules/dto/FormBaseOptions.js";
-import FormBaseUI from "../../modules/form/ui/FormBaseUI.js";
-import { TFormElement } from "../../types/types";
+import { TFormElement } from "../../../types/types";
+import FormBaseDto from "../dto/FormBaseDto.js";
+import FormBaseUI from "../ui/FormBaseUI.js";
 
 // =============================
 // CLASE ABSTRACTA BASE DE FORM
@@ -13,7 +13,7 @@ export default abstract class FormBase {
   protected readonly labels: HTMLLabelElement[]; // READONLY
   private _isSending: boolean; // SI ESTA ENVIANDO
 
-  constructor(protected readonly formOptions: FormBaseOptions, protected readonly formBaseUI: FormBaseUI) {
+  constructor(protected readonly formOptions: FormBaseDto, protected readonly formBaseUI: FormBaseUI) {
     this.inputs = [];
     this.labels = [];
     this.form = this.formBaseUI.getFormElement(); // ASIGNO EN ATRIBUTO EL FORM QUE VIENE DE UI FORM
@@ -63,9 +63,17 @@ export default abstract class FormBase {
     this.formBaseUI.setSelector(selector);
   }
 
-  public getSlectorByClosestForm():string{
-    return this.formBaseUI.getSelector()
+  public getSlectorByClosestForm(): string {
+    return this.formBaseUI.getSelector();
   }
+
+  // MOSTRAR PADRE DEL FORMULARIO
+  public getContainerForm():HTMLElement | null{
+    if(this.form.parentElement){
+      return this.form.parentElement
+    }
+    return null;
+  };
 
   public getLabels(): HTMLLabelElement[] {
     if (this.labels.length === 0) return [];
@@ -79,11 +87,6 @@ export default abstract class FormBase {
     const isNotUndefined: boolean = this.inputs.every((l) => l !== undefined); //VERIFICAR QUE NO HAYA INDEFINIDOS EN NINGUNO
     if (!isNotUndefined) return []; //RETORNAR VACIO EN CASO QUE EXISTA UN UNDEFINED
     return this.inputs; //RETORNAR INPUTS
-  }
-
-  // MOSTRAR OPCIONES ESTABLECIDAS
-  public get options(): FormBaseOptions {
-    return this.formOptions;
   }
 
   // METODO PARA AAGREGAR INPUT NUEVO AL ARRAY
@@ -110,6 +113,11 @@ export default abstract class FormBase {
 
   public set isSending(value: boolean) {
     this._isSending = value;
+  }
+
+  // MOSTRAR OPCIONES ESTABLECIDAS
+  public get options(): FormBaseDto {
+    return this.formOptions;
   }
 
   // -------------------------METODOS ABSTRACTOS------------------------------------------//

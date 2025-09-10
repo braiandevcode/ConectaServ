@@ -1,4 +1,5 @@
 // IMPORTACIONES
+import FormValidationUI from "../modules/validators/ui/FormValidationUI.js";
 import {
   FIELDS_NAME_TO_VALIDATE,
   FIELDS_NAMES,
@@ -17,18 +18,17 @@ import {
   iTextAreaFieldOptions,
 } from "../interfaces/interfaces";
 import { ECategoryKey, EFieldType, EKeyDataByStep } from "./enums.js";
-import FormValidationUI from "../modules/form/register/ui/validationUI/FormFieldValidationUI.js";
-import FormFieldBase from "../modules/entities/FormFieldBase.js";
-import InputField from "../modules/form/components/InputField.js";
-import InputFieldUI from "../modules/form/ui/InputFieldUI.js";
-import InputFieldCheck from "../modules/form/components/InputFieldCheck.js";
-import InputFieldCheckUI from "../modules/form/ui/InputFieldCheckUI.js";
-import SelectFieldUI from "../modules/form/ui/SelectFieldUI.js";
-import InputFileUI from "../modules/form/ui/InputFileUI.js";
-import TextAreaFieldUI from "../modules/form/ui/TextAreaFieldUI.js";
-import SelectField from "../modules/form/components/SelectField.js";
-import InputFile from "../modules/form/components/InputFile.js";
-import TextAreaField from "../modules/form/components/TextAreaField.js";
+import SelectFieldUI from "../modules/fields/ui/SelectFieldUI.js";
+import InputFileUI from "../modules/fields/ui/InputFileUI.js";
+import InputFieldUI from "../modules/fields/ui/InputFieldUI.js";
+import TextAreaFieldUI from "../modules/fields/ui/TextAreaFieldUI.js";
+import InputFieldCheckUI from "../modules/fields/ui/InputFieldCheckUI.js";
+import SelectField from "../modules/fields/components/SelectField.js";
+import InputField from "../modules/fields/components/InputField.js";
+import InputFile from "../modules/fields/components/InputFile.js";
+import TextAreaField from "../modules/fields/components/TextAreaField.js";
+import InputFieldCheck from "../modules/fields/components/InputFieldCheck.js";
+import FieldBase from "../modules/fields/entities/FieldBase.js";
 
 // TIPADO PARA CADA PASOS DE FORMULARIO
 export type TFormStep = {
@@ -228,11 +228,11 @@ export type TFieldConcreteMap = {
 
 // RETORNOS GENERALES DE TIPO "FormFieldBase"
 export type TFieldBaseMap = {
-  select: FormFieldBase<string>;
-  input: FormFieldBase<string>;
-  file: FormFieldBase<FileList>;
-  textArea: FormFieldBase<string>;
-  fieldCheck: FormFieldBase<string>;
+  select: FieldBase<string>;
+  input: FieldBase<string>;
+  file: FieldBase<FileList>;
+  textArea: FieldBase<string>;
+  fieldCheck: FieldBase<string>;
 };
 
 export type TTypeField = keyof TFieldOptionsMap;

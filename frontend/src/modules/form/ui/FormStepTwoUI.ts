@@ -1,16 +1,18 @@
-import { iBuildStepUI } from "../../../../../interfaces/interfaces.js";
-import FormRegisterUI from "../FormRegisterUI.js";
-import FormFieldFactory from "../../../../../patterns/factory/FormFieldFactory.js";
-import FormRegister from "../../FormRegister.js";
-import { readExistingData } from "../../../../../utils/storageUtils.js";
-import { EKeyDataByStep, ENamesOfKeyLocalStorage } from "../../../../../types/enums.js";
-import ImagePreviewManager from "../../managers/ImagePreviewManager.js";
-import { ButtonNext } from "../../../../../modules/components/Buttons.js";
-import TextAreaField from "../../../../../modules/form/components/TextAreaField.js";
-import InputFile from "../../../../../modules/form/components/InputFile.js";
+// IMPORTACIONES
+
+import { iBuildStepUI } from "../../../interfaces/interfaces";
+import FormFieldFactory from "../../../patterns/factory/FormFieldFactory.js";
+import { EKeyDataByStep, ENamesOfKeyLocalStorage } from "../../../types/enums.js";
+import { actionClassString } from "../../../ui/auxiliars.js";
+import { attrFilled } from "../../../utils/domUtils.js";
+import { readExistingData } from "../../../utils/storageUtils.js";
+import { ButtonNext } from "../../buttons/components/ButtonNext.js";
+import InputFile from "../../fields/components/InputFile.js";
+import TextAreaField from "../../fields/components/TextAreaField.js";
+import FormRegister from "../controller/FormRegister.js";
+import ImagePreviewManager from "./builder/ImagePreviewManager.js";
+import FormRegisterUI from "./FormRegisterUI.js";
 import FormStepUI from "./FormStepUI.js";
-import { attrFilled } from "../../../../../utils/domUtils.js";
-import { actionClassString } from "../../../../../ui/auxiliars.js";
 
 // MODULO CLASE UI PARA EL PASO 2
 export default class FormStepTwoUI implements iBuildStepUI {
@@ -293,7 +295,7 @@ export default class FormStepTwoUI implements iBuildStepUI {
       buildNewStep: () => formRegisterUI.getStepUI().buildStepBudgeThree({ formRegister: this.formRegister, formRegisterUI }),
     });
 
-    $CONTAINER_BTN.appendChild(btnInstanceNext.getElement()); //GUARDAR ELEMENTO EN CONTENEDOR
+    $CONTAINER_BTN.appendChild(btnInstanceNext.getBtnElement()); //GUARDAR ELEMENTO EN CONTENEDOR
 
     // ENSAMBLAR
     $BODY.append($DESC_WRAPPER, $PROFILE_IMAGE_WRAPPER, $WRAPPER_IMAGE_EXP, $CONTAINER_BTN);

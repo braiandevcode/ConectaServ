@@ -1,8 +1,9 @@
 // IMPORTACIONES
 import { formState } from "../../../config/constant.js";
-import { TElementStep, TInputs } from "../../../types/types.js";
-import FormRegister from "../register/FormRegister.js";
-import FormStepUI from "../register/ui/stepsUI/FormStepUI.js";
+import { TInputs } from "../../../types/types.js";
+import FormRegister from "../../form/controller/FormRegister.js";
+import FormStepUI from "../../form/ui/FormStepUI.js";
+
 // import FormValidationCurrentStep from "../register/validators/FormValidationCurrentStep.js";
 
 // MODULO DE CLASE RESPONSABLE PARA LOS PASOS DEL FORMULARIO

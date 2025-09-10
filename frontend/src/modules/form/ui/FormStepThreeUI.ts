@@ -1,19 +1,21 @@
 // IMPORTACIONES
-import { iBuildStepUI } from "../../../../../interfaces/interfaces.js";
-import FormRegister from "../../FormRegister.js";
-import InputField from "../../../components/InputField.js";
-import OptionGroupBuilder from "../../builders/OptionGroupBuilder.js";
-import InputFieldCheck from "../../../components/InputFieldCheck.js";
-import { readExistingData } from "../../../../../utils/storageUtils.js";
-import { EKeyDataByStep, ENamesOfKeyLocalStorage } from "../../../../../types/enums.js";
-import InputBuilder from "../../builders/InputBuilder.js";
-import { ButtonNext } from "../../../../../modules/components/Buttons.js";
-import { ValidatorFactory } from "../../../../../patterns/factory/ValidatorFactory.js";
-import { TFieldState } from "../../../../../types/types.js";
-import FormRegisterUI from "../FormRegisterUI.js";
+
+import { iBuildStepUI } from "../../../interfaces/interfaces";
+import { ValidatorFactory } from "../../../patterns/factory/ValidatorFactory.js";
+import { EKeyDataByStep, ENamesOfKeyLocalStorage } from "../../../types/enums.js";
+import { TFieldState } from "../../../types/types.js";
+import { actionClassString } from "../../../ui/auxiliars.js";
+import { attrFilled } from "../../../utils/domUtils.js";
+import { readExistingData } from "../../../utils/storageUtils.js";
+import { ButtonNext } from "../../buttons/components/ButtonNext.js";
+import InputField from "../../fields/components/InputField.js";
+import InputFieldCheck from "../../fields/components/InputFieldCheck.js";
+import FormRegister from "../controller/FormRegister.js";
+import InputBuilder from "./builder/InputBuilder.js";
+import OptionGroupBuilder from "./builder/OptionGrouBuilder.js";
+import FormRegisterUI from "./FormRegisterUI.js";
 import FormStepUI from "./FormStepUI.js";
-import { attrFilled } from "../../../../../utils/domUtils.js";
-import { actionClassString } from "../../../../../ui/auxiliars.js";
+
 
 // MODULO CLASE UI PARA CONSTRUCCION DEL PASO PRESUPUESTO
 export default class FormStepThreeUI implements iBuildStepUI {
@@ -150,7 +152,7 @@ export default class FormStepThreeUI implements iBuildStepUI {
     // EJECUTAR RESTAURACION DE VALORES EN RADIOS DEL ALMACENAMIENTO LOCAL MEDIANTE EL NAME
     this.optionGroupBuilder.restoredRadioChecked("budgeSelected");
 
-    $CONTAINER_BTN.appendChild(createBtnInstanceNext.getElement()); //AGREGAR BOTONAL CONTENEDOR DE BOTON
+    $CONTAINER_BTN.appendChild(createBtnInstanceNext.getBtnElement()); //AGREGAR BOTONAL CONTENEDOR DE BOTON
 
     $NEW_STEP.appendChild($CONTAINER_BTN); // AGREGAR CONTENEDOR BOTON AL NUEVO PASO CREADO ==> $NEW_STEP
     return $NEW_STEP;

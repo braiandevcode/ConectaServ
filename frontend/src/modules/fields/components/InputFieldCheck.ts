@@ -1,6 +1,6 @@
 import { iInputFieldCheckOptions } from "../../../interfaces/interfaces";
-import FormFieldBase from "../../entities/FormFieldBase.js";
-import FieldBaseOptions from "../../dto/FieldBaseOptions.js";
+import FieldBaseDto from "../dto/FieldBaseDto.js";
+import FieldBase from "../entities/FieldBase.js";
 import InputFieldCheckUI from "../ui/InputFieldCheckUI.js";
 
 /*
@@ -13,9 +13,9 @@ import InputFieldCheckUI from "../ui/InputFieldCheckUI.js";
 */
 
 // CLASE PARA CAMPOS CHECKBOX/RADIO
-export default class InputFieldCheck extends FormFieldBase<string> {
+export default class InputFieldCheck extends FieldBase<string> {
   protected _hasSubscribed: boolean;
-  constructor(options: FieldBaseOptions<string, iInputFieldCheckOptions>, private readonly inputFieldCheckUI: InputFieldCheckUI) {
+  constructor(options: FieldBaseDto<string, iInputFieldCheckOptions>, private readonly inputFieldCheckUI: InputFieldCheckUI) {
     super(options);
     this._hasSubscribed = false;
     this.attachEvents();

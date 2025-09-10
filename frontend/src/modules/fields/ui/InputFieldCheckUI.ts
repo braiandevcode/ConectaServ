@@ -1,9 +1,9 @@
 import { iInputFieldCheckOptions } from "../../../interfaces/interfaces";
-import FieldBaseOptions from "../../dto/FieldBaseOptions.js";
+import FieldBaseDto from "../dto/FieldBaseDto.js";
 
 export default class InputFieldCheckUI {
   private inputFieldCheck: HTMLInputElement;
-  constructor(private readonly options: FieldBaseOptions<string, iInputFieldCheckOptions>) {
+  constructor(private readonly options: FieldBaseDto<string, iInputFieldCheckOptions>) {
     this.inputFieldCheck = document.createElement("input");
     this.buildInputFieldUI();
   }

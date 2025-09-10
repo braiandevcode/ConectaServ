@@ -1,9 +1,7 @@
 // IMPORTACIONES
-import FormRegisterUI from "modules/form/register/ui/FormRegisterUI.js";
-import FormRegister from "../modules/form/register/FormRegister.js";
+import FormRegisterUI from "../modules/form/ui/FormRegisterUI.js";
 import { EDefaultSelected, EKeyDataByStep } from "../types/enums.js";
 import { TCategoryKey, TFieldState, TFieldType, TFormElement, TTypeBtn, TWithOptional } from "../types/types";
-import FormStepUI from "modules/form/register/ui/stepsUI/FormStepUI.js";
 
 // INTERFACE OBSERVER
 export interface iOnchangeObserver {
@@ -28,7 +26,7 @@ export interface iFormSelectCategory {
 // TIPO DE INTERFACE PARA FUNCION DE TOGGLE DE AÑADIR/REMOVER CLASE EN ELEMENTO
 export interface iToggleClassElement {
   container: HTMLElement | null;
-  className: string;
+  className: string[];
   isRemoveClass: boolean;
 }
 

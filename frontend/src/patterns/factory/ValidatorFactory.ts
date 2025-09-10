@@ -1,17 +1,18 @@
 import { formStateValidField } from "../../config/constant.js";
-import FullNameValidator from "../../modules/form/register/validators/FullNameValidator.js";
+import BudgeValidator from "../../modules/validators/entities/BudgeValidator.js";
+import ConfirmPasswordValidator from "../../modules/validators/entities/ConfirmPasswordValidator.js";
+import DescriptionValidator from "../../modules/validators/entities/DescriptionValidator.js";
+import EmailValidator from "../../modules/validators/entities/EmailValidator.js";
+import FullNameValidator from "../../modules/validators/entities/FullNameValidator.js";
+import ImageExperiencesValidator from "../../modules/validators/entities/ImageExperiencesValidator.js";
+import ImageProfileValidator from "../../modules/validators/entities/ImageProfileValidator.js";
+import PasswordValidator from "../../modules/validators/entities/PasswordValidator.js";
+import SelectedValidator from "../../modules/validators/entities/SelectedValidator.js";
+import UserNameValidator from "../../modules/validators/entities/UserNameValidator.js";
 import { TFieldName, TFieldState, TValidateFieldParams } from "../../types/types.js";
 import { capitalizeWords } from "../../ui/auxiliars.js";
-import UserNameValidator from "../../modules/form/register/validators/UserNameValidator.js";
-import EmailValidator from "../../modules/form/register/validators/EmailValidator.js";
-import SelectedValidator from "../../modules/form/register/validators/SelectedValidator.js";
-import PasswordValidator from "../../modules/form/register/validators/PasswordValidator.js";
 import { isValueField } from "../../utils/domUtils.js";
-import ConfirmPasswordValidator from "../../modules/form/register/validators/ConfirmPasswordValidator.js";
-import DescriptionValidator from "../../modules/form/register/validators/DescriptionValidator.js";
-import BudgeValidator from "../../modules/form/register/validators/BudgeValidator.js";
-import ImageProfileValidator from "../../modules/form/register/validators/ImageProfileValidator.js";
-import ImageExperiencesValidator from "../../modules/form/register/validators/ImageExperiencesValidator.js";
+
 
 // FABRICA DE VALIDACIONES PARA REGISTRO
 export class ValidatorFactory {

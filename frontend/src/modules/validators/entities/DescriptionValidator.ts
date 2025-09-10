@@ -1,6 +1,6 @@
-import { TFieldState } from "../../../../types/types";
-import { IValidator } from "../../../../interfaces/interfaces";
-import { formatTextArea, isLengthValid, isValueField, validateWithRegex } from "../../../../utils/domUtils.js";
+import { IValidator } from "../../../interfaces/interfaces";
+import { TFieldState } from "../../../types/types";
+import { formatTextArea, isLengthValid, isValueField } from "../../../utils/domUtils.js";
 
 // VALIDACION DESCRIPCION (TEXTAREA)
 export default class DescriptionValidator implements IValidator {

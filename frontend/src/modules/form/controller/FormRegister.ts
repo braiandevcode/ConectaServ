@@ -3,13 +3,14 @@ import { EDefaultSelected, EGroupCheckBox, EKeyDataByStep, ENamesOfKeyLocalStora
 import { iFieldConfig } from "../../../interfaces/interfaces.js";
 import { TFormElement, TInputName } from "../../../types/types.js";
 import { fieldConfigs, formState } from "../../../config/constant.js";
-import { readExistingData } from "../../../utils/storageUtils.js";
+import FormBase from "../entities/FormBase.js";
+import FormRegisterUI from "../ui/FormRegisterUI.js";
+import FormBaseDto from "../dto/FormBaseDto.js";
+import FormStep from "../../step/controller/FormStep.js";
 import { formatTextArea } from "../../../utils/domUtils.js";
-import FormBase from "../../../modules/entities/FormBase.js";
-import FormBaseOptions from "../../../modules/dto/FormBaseOptions.js";
-import FormStep from "../entities/FormStep.js";
-import FormRegisterUI from "./ui/FormRegisterUI.js";
-import { ButtonNext, ButtonPrev } from "../../../modules/components/Buttons.js";
+import { readExistingData } from "../../../utils/storageUtils.js";
+import { ButtonPrev } from "../../buttons/components/ButtonPrev.js";
+import { ButtonNext } from "../../buttons/components/ButtonNext.js";
 
 // FORMULARIO DE REGISTRO
 export default class FormRegister extends FormBase {
@@ -19,7 +20,7 @@ export default class FormRegister extends FormBase {
   private ui: FormRegisterUI;
   private readonly formStep: FormStep;
 
-  constructor(formBaseOptions: FormBaseOptions, formStep: FormStep, ui: FormRegisterUI) {
+  constructor(formBaseOptions: FormBaseDto, formStep: FormStep, ui: FormRegisterUI) {
     super(formBaseOptions, ui);
     this.ui = ui;
     this.formStep = formStep;

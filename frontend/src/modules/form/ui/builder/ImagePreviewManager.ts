@@ -1,12 +1,12 @@
 // IMPORTACIONES
 import { TStoredImage } from "../../../../types/types";
 import clearElementChild from "../../../../dom/clearElementChild.js";
-import { getImageDataUrlFromIndexedDB, readExistingData } from "../../../../utils/storageUtils.js";
 import { EKeyDataByStep, ENamesOfKeyLocalStorage } from "../../../../types/enums.js";
-import { fileToStoredImage } from "../../../../utils/domUtils.js";
+import ButtonBaseDto from "../../../buttons/dto/ButtonsBaseDto.js";
 import { ButtonFactory } from "../../../../patterns/factory/ButtonFactory.js";
-import ButtonBaseOptions from "../../../dto/ButtonBaseOptions.js";
-import { ButtonCustom } from "../../../../modules/components/Buttons.js";
+import { ButtonCustom } from "../../../buttons/components/ButtonCustom.js";
+import { fileToStoredImage } from "../../../../utils/domUtils.js";
+import { getImageDataUrlFromIndexedDB, readExistingData } from "../../../../utils/storageUtils.js";
 
 // MANAGER PARA MANEJO DE PREVIEWS DE
 // ADMINISTRADOR DE VISTAS PREVIAS DE IMAGENES
@@ -57,7 +57,7 @@ export default class ImagePreviewManager {
     const dataUrl: string = result.data;
 
     // CONFIGURACION BOTON
-    const btnConfig: ButtonBaseOptions = new ButtonBaseOptions({
+    const btnConfig: ButtonBaseDto= new ButtonBaseDto({
       disabled: false,
       type: "button",
       "aria-label": "Eliminar imagen",
@@ -70,7 +70,7 @@ export default class ImagePreviewManager {
     // INSTANCIA POR FABRICA
     const btnTrash = ButtonFactory.createButton("custom", btnConfig) as ButtonCustom;
 
-    const btn: HTMLButtonElement = btnTrash.getElement(); //ELEMENTO BOTON
+    const btn: HTMLButtonElement = btnTrash.getBtnElement(); //ELEMENTO BOTON
 
     const img = document.createElement("img");
     img.setAttribute("src", dataUrl);
@@ -101,7 +101,7 @@ export default class ImagePreviewManager {
       containerImage.setAttribute("data-image", `${storedImage.idImage}`);
 
       // CONFIGURACION BOTON
-      const btnConfig: ButtonBaseOptions = new ButtonBaseOptions({
+      const btnConfig: ButtonBaseDto = new ButtonBaseDto({
         disabled: false,
         type: "button",
         "aria-label": "Eliminar imagen",
@@ -113,7 +113,7 @@ export default class ImagePreviewManager {
       });
       const btnTrash = ButtonFactory.createButton("custom", btnConfig) as ButtonCustom; //FABRICAR BOTON
 
-      const btn: HTMLButtonElement = btnTrash.getElement(); ///ELEMENTO
+      const btn: HTMLButtonElement = btnTrash.getBtnElement(); ///ELEMENTO
 
       const img = document.createElement("img");
       img.setAttribute("src", `${dataUrl}`);

@@ -1,10 +1,15 @@
 // IMPORTACIONES
-import { actionClassString } from "../../ui/auxiliars.js";
-import { iModalOptions, iOptionsBtnsModals } from "../../interfaces/interfaces";
 
-// CLASE DE OPCIONES DE MODALES
+import ButtonBaseDto from "../../../modules/buttons/dto/ButtonsBaseDto.js";
+import { iModalOptions } from "../../../interfaces/interfaces";
+import { actionClassString } from "../../../ui/auxiliars.js";
+
+// CLASE DE OPCIONES DE MODALES DTO
 export default class ModalBaseDto {
-  constructor(private readonly config: iModalOptions) {}
+  private btnsBaseDto: ButtonBaseDto[];
+  constructor(private readonly config: iModalOptions) {
+    this.btnsBaseDto = [];
+  }
 
   // METODO PRIVADO PARA AGREGAR CLASES
   /*
@@ -37,9 +42,6 @@ export default class ModalBaseDto {
 
   // METODO PARA AÑADIR CLASES AL MODAL
   public setClassModal(newClassModal: string | undefined, modalElement: HTMLElement): void {
-    // PRIMER ARGUMENTO => CLSASES POR STRING SEPARADAS POR ESPACIOS ("c-flex c-flex-justify-center etc.")
-    // SEGUNDO ARGUMENTO => ELEMENTO AL QUE SE LE AGREGAN LAS CLASES
-    // TERCER ARGUMENTO => EL TIPO EXISTENTE EN CONFIGURACION
     this.addClassIfExists(modalElement, "classesModal", newClassModal); // PRIMER ARGUMENTO => CLSASES POR STRING SEPARADAS POR ESPACIOS ("c-flex c-flex-justify-center etc.")
   }
 
@@ -63,14 +65,19 @@ export default class ModalBaseDto {
     this.addTextIfExists(element, "title", text);
   }
 
+  public addButtonBaseDto(instanceBtnDto:ButtonBaseDto):void{
+    this.btnsBaseDto.push(instanceBtnDto);
+  }
   // GETTERS Y SETTERS COMO PORPIEDADES DE ACCESO
   //   VER TITULO
   public get title(): string {
     return this.config.title;
   }
+
+
   // VER LISTA DE BOTONES
-  public get buttons(): Array<iOptionsBtnsModals> {
-    return this.config.buttons ?? [];
+  public get _btnsBaseDto(): Array<ButtonBaseDto> {
+    return this.btnsBaseDto?? [];
   }
 
   //   VER CLASES DE ICONO
@@ -90,7 +97,7 @@ export default class ModalBaseDto {
 
   //
   public get parentModalClass(): string | undefined {
-    return this.config.classesModal;
+    return this.config.classesContainerModal;
   }
 
   public get containerModal(): HTMLElement | null {

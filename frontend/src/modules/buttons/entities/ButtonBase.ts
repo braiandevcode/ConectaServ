@@ -1,8 +1,9 @@
 // IMPORTACIONES
-import { TTypeBtn } from "../../types/types";
-import ButtonsOptions from "../dto/ButtonBaseOptions.js";
-import { actionClassString } from "../../ui/auxiliars.js";
-import { attrFilled } from "../../utils/domUtils.js";
+import { TTypeBtn } from "../../../types/types.js";
+import { actionClassString } from "../../../ui/auxiliars.js";
+import { attrFilled } from "../../../utils/domUtils.js";
+import ButtonBaseDto from "../dto/ButtonsBaseDto.js";
+import ButtonBaseUI from "../ui/ButtonBaseUI.js";
 
 /*
   SE APLICAN:
@@ -15,99 +16,88 @@ import { attrFilled } from "../../utils/domUtils.js";
 
 // CLASE ABSTRACTA PARA BOTONES, GESTIONA ESTADO Y COMPORTAMIENTO BASE
 export default abstract class ButtonBase {
-  protected readonly buttonElement: HTMLButtonElement;
-  protected state: "IDLE" | "LOADING" | "DISABLED" = "IDLE";
-
-  constructor(protected readonly buttonOptionsBase: ButtonsOptions) {
-    this.buttonElement = document.createElement("button");
-    this.buttonOptionsBase.render(); // OPCIONES AL INICIO
+  private buttonElement: HTMLButtonElement;
+  constructor(private readonly buttonBaseUI: ButtonBaseUI) {
+    this.buttonElement = this.getBtnElement(); // OPCIONES AL INICIO
+    this.buttonBaseUI.render();
   }
 
   // METODO PARA APLICAR ATRIBUTOS AL BOTON
   public applyAttributes(): void {
-    if (!this.buttonOptionsBase) return;
-    if (this.buttonOptionsBase._attrs) attrFilled(this.buttonElement, this.buttonOptionsBase._attrs);
+    this.buttonBaseUI.applyAttributes();
   }
 
   // METODO PARA APLICAR CLASES AL BOTON
   public applyClassesBtn(): void {
-    if (this.buttonOptionsBase._btnClass) actionClassString(this.buttonOptionsBase._btnClass, "add", this.buttonElement);
+    this.buttonBaseUI.applyClassesBtn();
   }
 
   // METODO PARA APLICAR CLASES AL ICONO
   public applyClassesIcon(): void {
-    if (this.buttonOptionsBase._iconClass) {
-      const icon: HTMLElement = document.createElement("i");
-      actionClassString(this.buttonOptionsBase._iconClass, "add", icon);
-      this.buttonElement.append(icon);
-    }
+    this.buttonBaseUI.applyClassesIcon();
   }
 
   // METODO PARA APLICAR EL TEXTO AL SPAN DEL BOTON
   public applyBtnText(): void {
-    if (this.buttonOptionsBase._btnSpanText) {
-      const span: HTMLElement = document.createElement("span");
-      span.textContent = this.buttonOptionsBase._btnSpanText;
-      this.buttonElement.append(span);
-    }
+    this.buttonBaseUI.applyBtnText();
   }
 
   // AGREGAR ARIA LABEL
-  protected setAriaLabel():void{
-    if(this.buttonOptionsBase._ariaLabel){
-      this.buttonElement.setAttribute("aria-label", this.buttonOptionsBase._ariaLabel);
-    }
+  protected setAriaLabel(): void {
+    this.buttonBaseUI.setAriaLabel();
   }
 
-  protected setType(type: TTypeBtn): void {
-    this.buttonElement.type = type;
+  protected setType(): void {
+    this.buttonBaseUI.setType();
   }
-
+  
+  // HABILITAR EL BOTON
   public enable(): void {
-    this.state = "IDLE";
-    this.buttonElement.disabled = false;
+    this.buttonBaseUI.enable();
   }
 
+  // DESHABIITAR BOTON
   public disable(): void {
-    this.state = "DISABLED";
-    this.buttonOptionsBase.setDisabled(true);
-    this.buttonElement.setAttribute("disabled", "");
+    this.buttonBaseUI.disable();
   }
 
+  // MODIFICAR ISLOADING
   public setLoading(isLoading: boolean): void {
-    this.state = isLoading ? "LOADING" : "IDLE";
-    this.buttonElement.disabled = isLoading;
+    this.buttonBaseUI.setLoading(isLoading);
   }
 
-  public on(eventName: keyof HTMLElementEventMap, handler: EventListenerOrEventListenerObject): void {
+  // SUCRIBIR EVENTO AL BOTON
+  public on(
+    eventName: keyof HTMLElementEventMap,
+    handler: EventListenerOrEventListenerObject
+  ): void {
     this.buttonElement.addEventListener(eventName, handler);
   }
 
-  public off(eventName: keyof HTMLElementEventMap, handler: EventListenerOrEventListenerObject): void {
+  // REMOVER EVENTO AL BOTON
+  public off(
+    eventName: keyof HTMLElementEventMap,
+    handler: EventListenerOrEventListenerObject
+  ): void {
     this.buttonElement.removeEventListener(eventName, handler);
   }
 
-  public buildButton(): void {
-    this.applyClassesBtn();
-    this.applyClassesIcon();
-    this.applyBtnText();
-    this.applyAttributes();
-    this.setAriaLabel();
-    this.setType(this.buttonOptionsBase._type);
-
-    if (this.buttonOptionsBase._disabled) {
-      this.disable();
-    }
+  // INYECTAR CODIGO HTML AL BOTON
+  public setInnerHTML(html: string): void {
+    this.buttonElement.innerHTML = html;
   }
 
-  protected abstract render(): HTMLButtonElement;
+  //METODO QUE PERMITE AGREGAR UN NODO DOM O FRAGMENTO AL BOTON
+  public appendContent(content: HTMLElement | DocumentFragment): void {
+    this.buttonElement.appendChild(content);
+  }
 
-  public getElement(): HTMLButtonElement {
-    return this.buttonElement;
+  public getBtnElement(): HTMLButtonElement {
+    return this.buttonBaseUI.getBtnElement(); // OPCIONES AL INICIO
   }
 
   public init(): this {
-    this.buildButton();
+    this.buttonBaseUI.buildButton();
     return this;
   }
 }

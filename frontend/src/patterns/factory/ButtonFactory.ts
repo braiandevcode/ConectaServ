@@ -1,23 +1,31 @@
 // IMPORTACIONES
 import { TInstanceOfButton } from '../../types/types.js';
-import { ButtonCustom, ButtonNext, ButtonPrev, ButtonSubmit } from '../../modules/components/Buttons.js';
-import ButtonBase  from '../../modules/entities/ButtonBase.js';
-import ButtonBaseOptions from '../../modules/dto/ButtonBaseOptions.js';
+import ButtonBaseDto from '../../modules/buttons/dto/ButtonsBaseDto.js';
+import ButtonBase from '../../modules/buttons/entities/ButtonBase.js';
+import { ButtonSubmit } from '../../modules/buttons/components/ButtonSubmit.js';
+import { ButtonCustom } from '../../modules/buttons/components/ButtonCustom.js';
+import { ButtonNext } from '../../modules/buttons/components/ButtonNext.js';
+import { ButtonPrev } from '../../modules/buttons/components/ButtonPrev.js';
+import ButtonBaseUI from '../../modules/buttons/ui/ButtonBaseUI.js';
 
 export class ButtonFactory {
-  static createButton(type: TInstanceOfButton, options: ButtonBaseOptions): ButtonBase {
+  static createButton(type: TInstanceOfButton,buttonBaseDto:ButtonBaseDto): ButtonBase {
     switch (type) {
       case 'submit':
-        return new ButtonSubmit(options).init();
+        const buttonSubmitUI:ButtonBaseUI = new ButtonBaseUI(buttonBaseDto);
+        return new ButtonSubmit(buttonSubmitUI).init();
      case "next":
-        return new ButtonNext(options).init();
+      const buttonNextUI:ButtonBaseUI = new ButtonBaseUI(buttonBaseDto);
+        return new ButtonNext(buttonNextUI).init();
       case 'prev':
-        return new ButtonPrev(options).init();
+        const buttonPrevUI:ButtonBaseUI = new ButtonBaseUI(buttonBaseDto);
+        return new ButtonPrev(buttonPrevUI).init();
       case 'reset':
         // Aquí otro botón si tienes
         throw new Error('No implementado aún');
       case 'custom':
-        return new ButtonCustom(options).init();
+        const buttonCustomUI:ButtonBaseUI = new ButtonBaseUI(buttonBaseDto);
+        return new ButtonCustom(buttonCustomUI).init();
       default:
         throw new Error(`Tipo de botón "${type}" no soportado.`);
     }

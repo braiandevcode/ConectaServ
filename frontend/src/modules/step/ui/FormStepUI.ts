@@ -1,13 +1,13 @@
 // IMPORTACIONES
-import { StepFormFactory } from "../../../../../patterns/factory/StepFormFactory.js";
-import FormRegister from "../../FormRegister.js";
-import FormBaseUI from "../../../../../modules/form/ui/FormBaseUI.js";
-import FormBaseOptions from "../../../../../modules/dto/FormBaseOptions.js";
-import FormRegisterUI from "../FormRegisterUI.js";
+import { StepFormFactory } from "../../../patterns/factory/StepFormFactory.js";
+import FormRegister from "../../form/controller/FormRegister.js";
+import FormBaseDto from "../../form/dto/FormBaseDto.js";
+import FormBaseUI from "../../form/ui/FormBaseUI.js";
+import FormRegisterUI from "../../form/ui/FormRegisterUI.js";
 
 // MODULO QUE SE ENCARGA DE CAMBIOS DE ESTADO EN UI EN TIEMPO DE INTERACCION
 export default class FormStepUI extends FormBaseUI {
-  constructor(formBaseOptions: FormBaseOptions) {
+  constructor(formBaseOptions: FormBaseDto) {
     super(formBaseOptions);
   }
 

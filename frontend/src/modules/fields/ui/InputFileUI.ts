@@ -1,12 +1,12 @@
 // IMPORTACIONES
 import { iInputFileOptions } from "../../../interfaces/interfaces.js";
-import FieldBaseOptions from "../../dto/FieldBaseOptions.js";
+import FieldBaseDto from "../dto/FieldBaseDto.js";
 
 export default class InputFileUI {
   private inputFile: HTMLInputElement;
   private files: FileList | null = null; // GUARDAR ARCHIVOS INTERNAMENTE
 
-  constructor(private readonly options: FieldBaseOptions<FileList, iInputFileOptions>) {
+  constructor(private readonly options: FieldBaseDto<FileList, iInputFileOptions>) {
     this.inputFile = document.createElement("input");
     this.buildInputFile();
   }
