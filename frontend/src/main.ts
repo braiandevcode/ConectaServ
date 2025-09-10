@@ -76,6 +76,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (path === "/frontend/src/pages/services.html") {
     home();
-    // services();
+    services();
   }
 });
