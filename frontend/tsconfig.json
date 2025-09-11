@@ -2,9 +2,9 @@
   "compilerOptions": {
     "target": "ES2023",
     "module": "ES2022",
-    "baseUrl": "./frontend/src",
-    "rootDir": "./frontend/src",
-    "outDir": "./frontend/dist",
+    "baseUrl": "./src",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "paths": {
       "@config/*": ["config/*"],
       "@types/*": ["types/*"]
@@ -16,5 +16,5 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["./frontend/src/**/*"]
+  "include": ["src/**/*"]
 }
