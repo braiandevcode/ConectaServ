@@ -1,7 +1,7 @@
 // IMPORTACIONES
-import { TFormElement } from "../../../types/types";
-import FormBaseDto from "../dto/FormBaseDto.js";
-import FormBaseUI from "../ui/FormBaseUI.js";
+import {TFormElement} from '../../../types/types';
+import FormBaseDto from '../dto/FormBaseDto.js';
+import FormBaseUI from '../ui/FormBaseUI.js';
 
 // =============================
 // CLASE ABSTRACTA BASE DE FORM
@@ -13,7 +13,10 @@ export default abstract class FormBase {
   protected readonly labels: HTMLLabelElement[]; // READONLY
   private _isSending: boolean; // SI ESTA ENVIANDO
 
-  constructor(protected readonly formOptions: FormBaseDto, protected readonly formBaseUI: FormBaseUI) {
+  constructor(
+    protected readonly formOptions: FormBaseDto,
+    protected readonly formBaseUI: FormBaseUI,
+  ) {
     this.inputs = [];
     this.labels = [];
     this.form = this.formBaseUI.getFormElement(); // ASIGNO EN ATRIBUTO EL FORM QUE VIENE DE UI FORM
@@ -68,12 +71,12 @@ export default abstract class FormBase {
   }
 
   // MOSTRAR PADRE DEL FORMULARIO
-  public getContainerForm():HTMLElement | null{
-    if(this.form.parentElement){
-      return this.form.parentElement
+  public getContainerForm(): HTMLElement | null {
+    if (this.form.parentElement) {
+      return this.form.parentElement;
     }
     return null;
-  };
+  }
 
   public getLabels(): HTMLLabelElement[] {
     if (this.labels.length === 0) return [];

@@ -1,35 +1,63 @@
 // IMPORTACIONES
-import { iBaseFieldOptions } from "../../../interfaces/interfaces";
+import { iBaseFieldOptions } from '../../../interfaces/interfaces';
 
 // PLANTILLA PARA CREACION DE DIFERENTES CAMPOS
 // USAMOS DOS GENERICOS  PARA OPCIONES DINAMICAS Y PARA EL VALUE CON TIPOS PRIMITIVOS
-export default class FieldBaseDto<T = string | File | FileList | boolean | number | iBaseFieldOptions, O extends iBaseFieldOptions = iBaseFieldOptions> {
-  private readonly name: string; // SOLO LECTURA, NO SE PUEDE MODIFICAR DESPUES DEL CONSTRUCTOR
-  private readonly id: string; // SOLO LECTURA, IDENTIFICADOR FIJO DEL CAMPO
-  private readonly required: boolean; // SOLO LECTURA, INDICA SI EL CAMPO ES OBLIGATORIO
-  private value: T | null; // VARIABLE PRIVADA, SE PUEDE MODIFICAR DURANTE LA VIDA DEL OBJETO
-  private _disabled: boolean; // VARIABLE PRIVADA, INDICA SI EL CAMPO ESTÁ DESHABILITADO, PUEDE CAMBIAR
+export default abstract class FieldBaseDto<T = string | File | FileList | boolean | number | iBaseFieldOptions<string | File | FileList | boolean | number>, O extends iBaseFieldOptions<T> = iBaseFieldOptions<T>> {
+  private name: string;
+  private id: string;
+  private required: boolean;
+  private value: T | null;
+  private _disabled: boolean;
+  private autoFocus: boolean;
 
-  constructor(private readonly options: O) {
+  constructor(options: O) {
     // SOLO LECTURA, CONFIGURACION INICIAL DEL CAMPO
     this.name = options.name;
-    this.id = options.id ?? "";
-    (this.value = null), (this.required = options.required);
-    this._disabled = options.disabled;
+    this.id = options.id ?? '';
+    this.value = options.value || null;
+    this.required = options.required || false;
+    this._disabled = options.disabled || false;
+    this.autoFocus = options.autofocus || false;
   }
 
   // DESHABILITAR CAMPO
   public disabled(): void {
-    this._disabled = true;
+    this.setDisabled(true);
+  }
+
+  public setId(id: string): void {
+    this.id = id;
   }
 
   // HABILITAR CAMPO
   public enabled(): void {
-    this._disabled = false;
+    this.setDisabled(false);
   }
 
-  public setRequired(required:boolean):void{
-    this.options.required = required;
+  // HABILITAR CAMPO
+  public setName(name: string): void {
+    this.name = name;
+  }
+
+  // MODIFICAR VALOR DE REQUIRED
+  public setRequired(required: boolean): void {
+    this.required = required;
+  }
+
+  // MODIFICAR FOCUS DE CAMPO
+  public setFocus(focus: boolean): void {
+    this.autoFocus = focus;
+  }
+
+  // MODIFICAR VALOR DE CAMPO
+  public setValue(val: T | null): void {
+    this.value = val;
+  }
+
+  // MODIFICAR DISABLED
+  public setDisabled(disabled: boolean): void {
+    this._disabled = disabled;
   }
 
   //--------------------------- PROPIEDADES DE ACCESOS ----------------------------------//
@@ -39,12 +67,9 @@ export default class FieldBaseDto<T = string | File | FileList | boolean | numbe
     return this.value;
   }
 
-  public set _setValue(val: T | null) {
-    this.value = val;
-  }
-
-  public get _options(): O {
-    return this.options;
+  // VER VALOR DE VALUE
+  public get _autoFocus(): boolean {
+    return this.autoFocus;
   }
 
   // VER VALOR DEL ID

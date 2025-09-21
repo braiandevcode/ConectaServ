@@ -1,32 +1,28 @@
-import { capitalizeWords, normalizeSpaces, parseMontoToNumber } from "../../../ui/auxiliars.js";
-import { EDefaultSelected, EGroupCheckBox, EKeyDataByStep, ENamesOfKeyLocalStorage } from "../../../types/enums.js";
-import { iFieldConfig } from "../../../interfaces/interfaces.js";
-import { TFormElement, TInputName } from "../../../types/types.js";
-import { fieldConfigs, formState } from "../../../config/constant.js";
-import FormBase from "../entities/FormBase.js";
-import FormRegisterUI from "../ui/FormRegisterUI.js";
-import FormBaseDto from "../dto/FormBaseDto.js";
-import FormStep from "../../step/controller/FormStep.js";
-import { formatTextArea } from "../../../utils/domUtils.js";
-import { readExistingData } from "../../../utils/storageUtils.js";
-import { ButtonPrev } from "../../buttons/components/ButtonPrev.js";
-import { ButtonNext } from "../../buttons/components/ButtonNext.js";
+import { capitalizeWords, normalizeSpaces, parseMontoToNumber } from '../../../ui/auxiliars.js';
+import { EDefaultSelected, EGroupCheckBox, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../../types/enums.js';
+import { iFieldConfig } from '../../../interfaces/interfaces.js';
+import { TFormElement, TInputName, TLocationKey } from '../../../types/types.js';
+import { fieldConfigs, formState } from '../../../config/constant.js';
+import FormBase from '../entities/FormBase.js';
+import FormRegisterUI from '../ui/FormRegisterUI.js';
+import FormBaseDto from '../dto/FormBaseDto.js';
+import { formatTextArea } from '../../../utils/domUtils.js';
+import { readExistingData } from '../../../utils/storageUtils.js';
+import ButtonBaseUI from '../../../modules/buttons/ui/ButtonBaseUI.js';
 
 // FORMULARIO DE REGISTRO
 export default class FormRegister extends FormBase {
   private hasContext: boolean;
   private hasBudge: boolean;
   private bodyForm: HTMLDivElement;
-  private ui: FormRegisterUI;
-  private readonly formStep: FormStep;
+  private formRegisterUI: FormRegisterUI;
 
-  constructor(formBaseOptions: FormBaseDto, formStep: FormStep, ui: FormRegisterUI) {
-    super(formBaseOptions, ui);
-    this.ui = ui;
-    this.formStep = formStep;
+  constructor(formBaseOptions: FormBaseDto, formRegisterUI: FormRegisterUI) {
+    super(formBaseOptions, formRegisterUI);
+    this.formRegisterUI = formRegisterUI;
     this.hasContext = false;
     this.hasBudge = false;
-    this.bodyForm = this.ui.buildBody(); //CONSTRUCCION Y ASIGNACION DEL CUERPO PRINCIPAL DENTRO DEL FORMULARIO
+    this.bodyForm = this.formRegisterUI.buildBody(); //CONSTRUCCION Y ASIGNACION DEL CUERPO PRINCIPAL DENTRO DEL FORMULARIO
   }
 
   // CREAR EL FORM Y RETORNAR
@@ -37,12 +33,8 @@ export default class FormRegister extends FormBase {
 
   // IMPLEMENTACION DE CONTENIDO DEL FORMULARIO
   protected async insertIntoForm(): Promise<void> {
-    const formHeader: HTMLDivElement = this.ui.buildHeader();
-
-    const stepOne: HTMLDivElement = await this.formStep.formCurrentStepUI().buildStepOne({ formRegister: this, formRegisterUI: this.ui });
-    // const stepTwo: HTMLDivElement = await this.ui._stepUI.buildStepTwo({ formRegister: this });
-    // const stepThree: HTMLDivElement = await this.ui._stepUI.buildStepBudgeThree({formRegister: this });
-    // const stepLast: HTMLDivElement = await this.ui._stepUI.buildStepLast({ formRegister: this });
+    const formHeader: HTMLDivElement = this.formRegisterUI.buildHeader();
+    const stepOne: HTMLDivElement = await this.formRegisterUI.getStepUI().buildStep({ formRegister: this, formRegisterUI: this.formRegisterUI });
 
     this.bodyForm.append(stepOne);
 
@@ -71,75 +63,87 @@ export default class FormRegister extends FormBase {
     let stepData: Record<string, unknown> = {}; //OBJETO EN MEMORIA
 
     switch (stepKeyNumber) {
-      case EKeyDataByStep.ZERO: {
-        const fullNameInput = elements.find((el) => el.name === "fullName");
-        const usernameInput = elements.find((el) => el.name === "userName");
-        const emailInput = elements.find((el) => el.name === "email");
-        const locationInput = elements.find((el) => el.name === "location");
-        const acceptedTermsInput = elements.find((el) => el.name === "terms") as HTMLInputElement | undefined;
+      // case EKeyDataByStep.ZERO: {
+      //   const fullNameInput = elements.find((el) => el.name === 'fullName');
+      //   const usernameInput = elements.find((el) => el.name === 'userName');
+      //   const emailInput = elements.find((el) => el.name === 'email');
+      //   const locationInput = elements.find((el) => el.name === 'location');
+      //   const acceptedTermsInput = elements.find((el) => el.name === 'terms') as HTMLInputElement | undefined;
 
-        stepData = {
-          fullName: capitalizeWords(normalizeSpaces(fullNameInput?.value || "")),
-          userName: usernameInput?.value || "",
-          email: emailInput?.value.toLowerCase() || "",
-          location: capitalizeWords(locationInput?.value || ""),
-          terms: acceptedTermsInput?.checked || false,
-        };
-        break;
-      }
+      //   stepData = {
+      //     fullName: capitalizeWords(normalizeSpaces(fullNameInput?.value || '')),
+      //     userName: usernameInput?.value || '',
+      //     email: emailInput?.value.toLowerCase() || '',
+      //     location: capitalizeWords(locationInput?.value || ''),
+      //     terms: acceptedTermsInput?.checked || false,
+      //   };
+      //   break;
+      // }
       case EKeyDataByStep.ONE: {
-        const categoryInput = elements.find((el) => el.name === "category");
+        const categoryInput = elements.find((el) => el.name === 'category');
         const serviceValues = elements.filter((el) => el.name === EGroupCheckBox.SERVICE && (el as HTMLInputElement).checked).map((el) => el.value);
         const contextValues = elements.filter((el) => el.name === EGroupCheckBox.CONTEXT && (el as HTMLInputElement).checked).map((el) => el.value);
         const dayValues = elements.filter((el) => el.name === EGroupCheckBox.DAY && (el as HTMLInputElement).checked).map((el) => el.value);
         const hourValues = elements.filter((el) => el.name === EGroupCheckBox.HOUR && (el as HTMLInputElement).checked).map((el) => el.value);
 
         stepData = {
-          category: categoryInput?.value || EDefaultSelected.SELECT_CATEGORY,
-          "service[]": serviceValues,
-          ...(this.hasContext ? { "context[]": contextValues } : {}),
-          "day[]": dayValues,
-          "hour[]": hourValues,
+          category: categoryInput?.value ?? EDefaultSelected.SELECT_CATEGORY,
+          'service[]': serviceValues,
+          ...(this.hasContext ? { 'context[]': contextValues } : {}),
+          'day[]': dayValues,
+          'hour[]': hourValues,
         };
         break;
       }
       case EKeyDataByStep.TWO: {
-        const descriptionInput = (elements.find((el) => el.name === "descriptionUser") as HTMLTextAreaElement) ?? "";
+        const descriptionInput = (elements.find((el) => el.name === 'descriptionUser') as HTMLTextAreaElement) ?? '';
         stepData = {
           ...prevStepData,
           imageProfile: prevStepData.imageProfile ?? null,
           imageExperiences: prevStepData.imageExperiences ?? [],
-          descriptionUser: formatTextArea(descriptionInput?.value ?? ""),
+          descriptionUser: formatTextArea(descriptionInput?.value ?? ''),
         };
         break;
       }
       case EKeyDataByStep.THREE: {
-        const budgetSelectedInput = elements.find((el) => el.name === "budgeSelected" && (el as HTMLInputElement).checked);
-        const budgetAmountInput = elements.find((el) => el.name === "amountBudge");
-        const reinsertInput = elements.find((el) => el.name === "reinsert" && (el as HTMLInputElement).checked);
+        const budgetSelectedInput = elements.find((el) => el.name === 'budgeSelected' && (el as HTMLInputElement).checked);
+        const budgetAmountInput = elements.find((el) => el.name === 'amountBudge');
+        const reinsertInput = elements.find((el) => el.name === 'reinsert' && (el as HTMLInputElement).checked);
 
         stepData = {
           ...prevStepData,
-          budgeSelected: budgetSelectedInput?.value ?? prevStepData.budgeSelected ?? "no",
-          amountBudge: budgetAmountInput ? parseMontoToNumber(budgetAmountInput.value) : prevStepData.amountBudge ?? 0,
-          reinsert: reinsertInput?.value ?? prevStepData.reinsert ?? "no",
+          budgeSelected: budgetSelectedInput?.value ?? prevStepData.budgeSelected ?? 'no',
+          amountBudge: budgetAmountInput ? parseMontoToNumber(budgetAmountInput.value) : (prevStepData.amountBudge ?? 0),
+          reinsert: reinsertInput?.value ?? prevStepData.reinsert ?? 'no',
         };
         break;
       }
       case EKeyDataByStep.FOUR: {
-        const acceptedTermsInput = elements.find((el) => el.name === "terms") as HTMLInputElement | null;
-        const fullNameInput = elements.find((el) => el.name === "fullName");
-        const usernameInput = elements.find((el) => el.name === "userName");
-        const emailInput = elements.find((el) => el.name === "email");
-        const locationInput = elements.find((el) => el.name === "location");
+        const acceptedTermsInput = elements.find((el) => el.name === 'terms') as HTMLInputElement | null;
+        const fullNameInput = elements.find((el) => el.name === 'fullName');
+        const usernameInput = elements.find((el) => el.name === 'userName');
+        const emailInput = elements.find((el) => el.name === 'email');
+        const locationInput = elements.find((el) => el.name === 'location');
 
         stepData = {
-          fullName: capitalizeWords(normalizeSpaces(fullNameInput?.value || "")),
-          userName: usernameInput?.value || "",
-          email: emailInput?.value.toLowerCase() || "",
-          location: capitalizeWords(locationInput?.value || ""),
-          terms: acceptedTermsInput?.checked || false,
+          ...prevStepData,
+          ...(fullNameInput && {
+            fullName: capitalizeWords(normalizeSpaces(fullNameInput.value)),
+          }),
+          ...(usernameInput && {
+            userName: usernameInput.value,
+          }),
+          ...(emailInput && {
+            email: emailInput.value.toLowerCase(),
+          }),
+          ...(locationInput && {
+            location: capitalizeWords(locationInput.value as TLocationKey) ?? EDefaultSelected.SELECT_LOCATION,
+          }),
+          ...(acceptedTermsInput && {
+            terms: acceptedTermsInput.checked,
+          }),
         };
+
         break;
       }
       default:
@@ -158,11 +162,11 @@ export default class FormRegister extends FormBase {
   }
 
   public incrementStep(): void {
-    this.formStep.incrementStep(); //INCREMENTAR PASO
+    this.formRegisterUI.getStepUI().incrementStep(); //INCREMENTAR PASO
   }
 
   public decrementStep(): void {
-    this.formStep.decrementStep(); //DECREMENTAR PASO
+    this.formRegisterUI.getStepUI().decrementStep(); //DECREMENTAR PASO
   }
 
   //---------------------------------GETTERS Y SETTERS---------------------------------------------//
@@ -173,7 +177,7 @@ export default class FormRegister extends FormBase {
 
   // MOSTRAR ELEMENTO DE FORMULARIO
   public getStepForm(): number {
-    return this.formStep.getStep();
+    return this.formRegisterUI.getStepUI().getStep();
   }
 
   // MODIFICAR BOOLEANO DE SI TIENE GRUPOS DE CHECKS CONTEXTO(HABITOS DE TRABAJOS DEL TAKER) O NO
@@ -188,32 +192,22 @@ export default class FormRegister extends FormBase {
 
   // MODIFICAR PASO DEL REGISTRO
   public setStep(step: number): void {
-    return this.formStep.setStep(step);
+    return this.formRegisterUI.getStepUI().setStep(step);
+  }
+
+  // CREAR BOTON  SIGUIENTE
+  public createBtnNext(): ButtonBaseUI {
+    return this.formRegisterUI.createBtnNext({ formRegister: this, formRegisterUI: this.formRegisterUI }); //RETORNAR INSTANCIA BOTON SIGUIENTE
   }
 
   // CREAR BOTON PREVIO
-  public createBtnPrev(): ButtonPrev {
-    return this.ui.createBtnPrev({ formRegister: this }); //RETORNAR INSTANCIA BOTON PREVIO
+  public createBtnPrev(): ButtonBaseUI {
+    return this.formRegisterUI.createBtnPrev({ formRegister: this, formRegisterUI: this.formRegisterUI }); //RETORNAR INSTANCIA BOTON SIGUIENTE
   }
-
-  // CREAR BOTON PREVIO
-  public createBtnNext(): ButtonNext {
-    return this.ui.createBtnNext({ formRegister: this }); //RETORNAR INSTANCIA BOTON PREVIO
-  }
-
-  //SUSCRIBIR INSTANCIA BOTON SIGUIENTE
-  public suscribeBtnNextClick({ instanceBtn, buildNewStep }: { instanceBtn: ButtonNext; buildNewStep: ({ formRegister }: { formRegister: FormRegister }) => Promise<HTMLDivElement> }) {
-    this.ui.suscribeClickBtnNext({ instanceBtn, formRegister: this, formRegisterUI: this.ui, buildNewStep });
-  }
-
-  // //SUSCRIBIR INSTANCIA BOTON PREVIO
-  // public suscribeBtnPrevClick({ instanceBtn }: { instanceBtn: ButtonNext }) {
-  //   this.ui.suscribeClickBtnPrev({ instanceBtn, formRegister: this, formRegisterUI: this.ui });
-  // }
 
   // ELIMINAR BOTON PREVIO
   public destroyBtnPrev(): void {
-    this.ui.destroyBtnPrev(); //REMOVER ELEMENTO
+    this.formRegisterUI.destroyBtnPrev(); //REMOVER ELEMENTO
   }
 
   // -----------USANDO PROPIEDADES ACCESORIAS-----------------------//
@@ -232,5 +226,11 @@ export default class FormRegister extends FormBase {
   }
 
   // IMPLEMENTACION DE EVENTOS DEL FORMULARIO
-  protected async attachFormEvents(): Promise<void> {}
+  public async attachFormEvents(): Promise<void> {
+    this._formElement.addEventListener('submit', (e: SubmitEvent) => {
+      e.preventDefault();
+      console.log('Hello');
+      console.log(this.getStepForm());
+    });
+  }
 }

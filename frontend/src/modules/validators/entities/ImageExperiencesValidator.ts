@@ -1,12 +1,11 @@
-import { IValidator } from "../../../interfaces/interfaces";
-import { TFieldState } from "../../../types/types";
-import { convertBytes } from "../../../ui/auxiliars.js";
-
+import {IValidator} from '../../../interfaces/interfaces';
+import {TFieldState} from '../../../types/types';
+import {convertBytes} from '../../../ui/auxiliars.js';
 
 // VALIDACION ENTRADA IMAGEN DEL PERFIL
 export default class ImageExperiencesValidator implements IValidator {
   public validate(files: FileList | null): TFieldState {
-    const allowedTypes: string[] = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    const allowedTypes: string[] = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     const maxSizeMB: number = 5;
     const maxImages: number = 10;
     const maxTotalSizeMB: number = 50;
@@ -14,7 +13,7 @@ export default class ImageExperiencesValidator implements IValidator {
 
     if (!files || files.length === 0) {
       // CAMPO OPCIONAL: VALOR VACIO Y VALIDO
-      return { error: "", value: null, isValid: true };
+      return {error: '', value: null, isValid: true};
     }
 
     if (files.length > maxImages) {
@@ -60,7 +59,7 @@ export default class ImageExperiencesValidator implements IValidator {
     }
 
     return {
-      error: "",
+      error: '',
       value: filesArray,
       isValid: true,
     };

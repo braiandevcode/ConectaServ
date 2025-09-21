@@ -1,6 +1,6 @@
-import { IValidator } from "../../../interfaces/interfaces";
-import { TFieldState } from "../../../types/types";
-import { isLengthValid, isValueField, validateWithRegex } from "../../../utils/domUtils.js";
+import {IValidator} from '../../../interfaces/interfaces';
+import {TFieldState} from '../../../types/types';
+import {isLengthValid, isValueField, validateWithRegex} from '../../../utils/domUtils.js';
 
 // VALIDACION PARA NOMBRE DE USUARIO
 export default class UserNameValidator implements IValidator {
@@ -8,43 +8,43 @@ export default class UserNameValidator implements IValidator {
     const valueNoSpaces: string = value.trim(); //QUITAR ESPACIOS EN BLANCO AL INICIO Y FINAL
 
     //SI EL CAMPO ESTA VACIO
-    if (!isValueField({ text: valueNoSpaces })) {
+    if (!isValueField({text: valueNoSpaces})) {
       return {
-        error: "El campo no puede estar vacío",
+        error: 'El campo no puede estar vacío',
         value: valueNoSpaces,
         isValid: false,
       };
     }
 
     // VALIDAR QUE NO SEA MENOR A 4 CARACTERES EN TOTAL
-    if (!isLengthValid({ text: valueNoSpaces, num: 4 })) {
+    if (!isLengthValid({text: valueNoSpaces, num: 4})) {
       return {
-        error: "Debe tener al menos 4 caracteres",
+        error: 'Debe tener al menos 4 caracteres',
         value: valueNoSpaces,
         isValid: false,
       };
     }
 
     // SI EN TODA LA CADENA DEL NOMBRE DE USUARIO CONTIENE ALGUN ESPACIADO/TAB => ERROR
-    if (validateWithRegex({ pattern: /\s/, text: valueNoSpaces })) {
+    if (validateWithRegex({pattern: /\s/, text: valueNoSpaces})) {
       return {
-        error: "El nombre de usuario no puede contener espacios",
+        error: 'El nombre de usuario no puede contener espacios',
         value: valueNoSpaces,
         isValid: false,
       };
     }
 
     // SOLO LETRAS mayusculas/minusculas, NUMEROS, PUNTOS(.),Y GUIONES BAJOS (_), SI NO SE CUMPLE
-    if (!validateWithRegex({ pattern: /^[a-zA-Z0-9._]+$/, text: valueNoSpaces })) {
+    if (!validateWithRegex({pattern: /^[a-zA-Z0-9._]+$/, text: valueNoSpaces})) {
       return {
-        error: "Solo letras, números, puntos y guiones bajos permitidos.",
+        error: 'Solo letras, números, puntos y guiones bajos permitidos.',
         value: valueNoSpaces,
         isValid: false,
       };
     }
 
     // QUE NO COMIENCE CON PUNTO(.) O UN GUION BAJO (_).
-    if (validateWithRegex({ pattern: /^(\.|_)/, text: valueNoSpaces })) {
+    if (validateWithRegex({pattern: /^(\.|_)/, text: valueNoSpaces})) {
       return {
         error: 'No puede comenzar ni terminar con "." o "_"',
         value: valueNoSpaces,
@@ -53,7 +53,7 @@ export default class UserNameValidator implements IValidator {
     }
 
     // QUE NO CONTENGA DOS PUNTOS CONSECUTIVOS(..)
-    if (validateWithRegex({ pattern: /(\.\.)/, text: valueNoSpaces })) {
+    if (validateWithRegex({pattern: /(\.\.)/, text: valueNoSpaces})) {
       return {
         error: 'No puede contener puntos".." consecutivos',
         value: valueNoSpaces,
@@ -62,7 +62,7 @@ export default class UserNameValidator implements IValidator {
     }
 
     // QUE NO CONTENGA TRES GUIONES BAJOS CONSECUTIVOS (___) AL FINAL
-    if (validateWithRegex({ pattern: /(___)$/, text: valueNoSpaces })) {
+    if (validateWithRegex({pattern: /(___)$/, text: valueNoSpaces})) {
       return {
         error: 'No puede contener mas de 2 guiones bajos "__" consecutivos al final',
         value: valueNoSpaces,
@@ -70,6 +70,6 @@ export default class UserNameValidator implements IValidator {
       };
     }
 
-    return { error: "", value: valueNoSpaces, isValid: true };
+    return {error: '', value: valueNoSpaces, isValid: true};
   }
 }

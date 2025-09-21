@@ -1,34 +1,36 @@
 // IMPORTACIONES
-import { iFormStateValidation } from "../../../interfaces/interfaces";
-import apiRequest from "../../../utils/apiRequest.js";
-import { domainURLPath } from "../../../config/constant.js";
-import { Loader } from "../../../patterns/singleton/Loader.js";
-import { TFieldState } from "../../../types/types";;
-import VerifyCodeFormUI from "../ui/VerifyCodeFormUI.js";
-import FormBase from "../entities/FormBase.js";
-import FormBaseDto from "../dto/FormBaseDto.js";
-import ModalBase from "../../modal/entities/ModalBase.js";
-import { isValueField, validateWithRegex } from "../../../utils/domUtils.js";
-import VerifyEmailModal from "../../../modules/modal/components/VerifyEmailModal.js";
-
+import {iFormStateValidation} from '../../../interfaces/interfaces';
+import apiRequest from '../../../utils/apiRequest.js';
+import {domainURLPath} from '../../../config/constant.js';
+import {Loader} from '../../../patterns/singleton/Loader.js';
+import {TFieldState} from '../../../types/types';
+import VerifyCodeFormUI from '../ui/VerifyCodeFormUI.js';
+import FormBase from '../entities/FormBase.js';
+import FormBaseDto from '../dto/FormBaseDto.js';
+import ModalBase from '../../modal/entities/ModalBase.js';
+import {isValueField, validateWithRegex} from '../../../utils/domUtils.js';
+import VerifyEmailModal from '../../../modules/modal/components/VerifyEmailModal.js';
 
 // FORMULARIO PARA VERIFICAR CODIGO DE EMAIL
 export default class VerifyCodeForm extends FormBase {
-  private modal?:ModalBase;
+  private modal?: ModalBase;
 
-  constructor(formOptions: FormBaseDto, private readonly ui: VerifyCodeFormUI) {
+  constructor(
+    formOptions: FormBaseDto,
+    private readonly ui: VerifyCodeFormUI,
+  ) {
     super(formOptions, ui);
 
     // this.configForm = new FormOptions({ containerSelector: ".register-userProfessional__content", }); // => INSTANCIA
   }
 
-  public setModal(modal:ModalBase){
+  public setModal(modal: ModalBase) {
     this.modal = modal;
   }
   //METODO PARA CREAR EL FORMULARIO
   public async createForm(): Promise<HTMLFormElement> {
     await this.insertIntoForm();
-    return this.getFormElement()
+    return this.getFormElement();
     // return await this.createFormVerifyCode(this.containerForm); //RETORNA EL FORMULARIO
   }
 
@@ -39,19 +41,19 @@ export default class VerifyCodeForm extends FormBase {
 
   // AUXILIAR PARA VALIDAR EL CODIGO
   private validateCode = (userCode: string) => {
-    if (!isValueField({ text: userCode })) {
+    if (!isValueField({text: userCode})) {
       return {
         value: userCode,
-        error: "Codigo requerido",
+        error: 'Codigo requerido',
         isValid: false,
       } as TFieldState;
     }
 
     // SI NO ES UN NUMERO
-    if (!validateWithRegex({ pattern: /^[0-9]+$/, text: userCode })) {
+    if (!validateWithRegex({pattern: /^[0-9]+$/, text: userCode})) {
       return {
         value: userCode,
-        error: "No valido, Debe ser un número",
+        error: 'No valido, Debe ser un número',
         isValid: false,
       } as TFieldState;
     }
@@ -60,7 +62,7 @@ export default class VerifyCodeForm extends FormBase {
     if (userCode.length !== 6) {
       return {
         value: userCode,
-        error: "El número debe tener 6 dígitos.",
+        error: 'El número debe tener 6 dígitos.',
         isValid: false,
       } as TFieldState;
     }
@@ -68,7 +70,7 @@ export default class VerifyCodeForm extends FormBase {
     // SINO
     return {
       value: userCode,
-      error: "",
+      error: '',
       isValid: true,
     } as TFieldState;
   };
@@ -77,34 +79,34 @@ export default class VerifyCodeForm extends FormBase {
    * OBTIENE EL VALOR ACTUAL DEL INPUT DE CODIGO, LO LIMPIA Y LO VALIDA.
    * UTIL PARA REUTILIZAR LA LOGICA TANTO AL ESCRIBIR COMO AL ENVIAR EL FORMULARIO.
    */
-  protected getInputAndValidate(): { value: string; validate: TFieldState } {
+  protected getInputAndValidate(): {value: string; validate: TFieldState} {
     const input = this.form.querySelector<HTMLInputElement>('input[name="emailCode"]'); // REFERENCIAR POR NAME
-    if (!input) throw new Error("Elemento input no encontrado"); // SI NO EXISTE ELEMENTO INPUT RETORNAR
+    if (!input) throw new Error('Elemento input no encontrado'); // SI NO EXISTE ELEMENTO INPUT RETORNAR
 
     const userCode = input.value.trim(); //QUITAR ESPACIOS Y GUARDAR EN MEMORIA
     const validateValueCode = this.validateCode(userCode); //VALIDAR ENTRADA
 
-    return { value: userCode, validate: validateValueCode };
+    return {value: userCode, validate: validateValueCode};
   }
 
   // METODO QUE EN ESTE CONTEXTO SE ENCARGA DE ESPERAR EL BOOLEAN DE VALIDO
   private isCodeValid(code: string): boolean {
-    const savedCode = localStorage.getItem("verificationCode");
-    const { validate } = this.getInputAndValidate();
+    const savedCode = localStorage.getItem('verificationCode');
+    const {validate} = this.getInputAndValidate();
     const isValid: boolean = Boolean(savedCode) && validate.isValid && code === savedCode;
     return isValid;
   }
 
   // ----------------ESTADOS EN UI-------------------------------------------------//
   //UI DE EEVENTO INPUT
-  private handleInputUI(input: HTMLInputElement): { isValid: boolean; code: string } {
+  private handleInputUI(input: HTMLInputElement): {isValid: boolean; code: string} {
     const code = input.value.trim();
-    const { isValid, error } = this.validateCode(code);
+    const {isValid, error} = this.validateCode(code);
     const parentInput = input.closest(`[data-message="${input.name}"]`);
-    const span = parentInput?.querySelector<HTMLSpanElement>(".has-error");
+    const span = parentInput?.querySelector<HTMLSpanElement>('.has-error');
 
-    input.classList.toggle("is-valid", isValid);
-    input.classList.toggle("is-invalid", !isValid);
+    input.classList.toggle('is-valid', isValid);
+    input.classList.toggle('is-invalid', !isValid);
     if (span) span.textContent = error;
 
     if (isValid) {
@@ -118,22 +120,22 @@ export default class VerifyCodeForm extends FormBase {
     return {
       isValid,
       code,
-    } as { isValid: boolean; code: string };
+    } as {isValid: boolean; code: string};
   }
 
   //UI DE EVENTO SUBMIT
   private async handleSubmitUI(): Promise<void> {
     await Loader.show();
-    const { value, validate } = this.getInputAndValidate();
+    const {value, validate} = this.getInputAndValidate();
     if (!validate || !validate.isValid) {
       //  this.btnForm.getBtnSubmit().setAttribute("disabled", "true");  //==>>>> DESHABILITAR BOTON
       //  this.btnForm.getBtnSubmit().classList.add("form__btnSubmit--disabled"); // AGREGAR CLASE A BOTON PARA OPACAR
       return;
     }
 
-    const savedCode = localStorage.getItem("verificationCode");
+    const savedCode = localStorage.getItem('verificationCode');
     if (!savedCode) {
-      throw new Error("Codigo no guardado");
+      throw new Error('Codigo no guardado');
     }
 
     if (!this.isCodeValid(value)) {
@@ -155,7 +157,7 @@ export default class VerifyCodeForm extends FormBase {
       return;
     }
 
-    if (this.modal && (this.modal instanceof VerifyEmailModal)) {
+    if (this.modal && this.modal instanceof VerifyEmailModal) {
       this.modal.setCodeAsVerified();
     }
   }
@@ -167,9 +169,8 @@ export default class VerifyCodeForm extends FormBase {
 
     // BLOQUE TRY MARA SUCCES REGISTRO
     try {
-
-      if(!this.modal){
-        throw new Error("No se pudo instanciar modal exito registro");
+      if (!this.modal) {
+        throw new Error('No se pudo instanciar modal exito registro');
       }
       // CONFIGURACIONMODAL VERIFICACION => SUCCESS
       // const configModalVerifySuccess: ModalBaseOptions = new ModalBaseOptions({
@@ -190,31 +191,31 @@ export default class VerifyCodeForm extends FormBase {
 
       return this.modal;
     } catch (err) {
-      console.error("Error inesperado:", err);
+      console.error('Error inesperado:', err);
       throw err;
     }
   };
 
   //METODO PARA CONTINUAR EL REGISTRO LUEGO DE SI TODO FUE BIEN EN VERIFICACION
-  public async continueRegistration({ combinedData }: { combinedData: Record<string, unknown> }): Promise<ModalBase> {
+  public async continueRegistration({combinedData}: {combinedData: Record<string, unknown>}): Promise<ModalBase> {
     try {
       // ENVIO DE LOS DATOS AL BACKEND
       const parsed = await apiRequest<iFormStateValidation>(`${domainURLPath.URL_SERVER_PROFESSIONAL}`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(combinedData), //SERIALIZAR
       });
 
       if (!parsed) {
-        throw new Error("Error inesperado en proceso de registro");
+        throw new Error('Error inesperado en proceso de registro');
       }
 
       //---------------MODAL DE AVISO DE EXITO-------------------//
       return await this.registerModalSuccess();
     } catch (err) {
-      console.error("Error al insertar datos");
+      console.error('Error al insertar datos');
       throw err;
     }
   }
@@ -224,12 +225,12 @@ export default class VerifyCodeForm extends FormBase {
   // METODO EVENTO ENTRADA INPUT
   protected handleInput(): void {
     const input = this.form.querySelector<HTMLInputElement>('input[name="emailCode"]');
-    if (!input) throw new Error("Elemento input no encontrado");
+    if (!input) throw new Error('Elemento input no encontrado');
 
-    input.addEventListener("input", () => {
+    input.addEventListener('input', () => {
       this.handleInputUI(input); //ACTUALIZA UI
     });
-    input.dispatchEvent(new Event("input")); // inicializa el estado
+    input.dispatchEvent(new Event('input')); // inicializa el estado
   }
 
   // METODO EVENTO SUBMIT
@@ -241,6 +242,6 @@ export default class VerifyCodeForm extends FormBase {
   // EVENTOS DEL FORMULARIO DE VERIFICACION
   protected async attachFormEvents(): Promise<void> {
     this.handleInput();
-    this.form.addEventListener("submit", this.handleSubmit.bind(this)); //UTILIZAR bind PORQUE QUIERO QUE ESPERE Y SEPA SU CONTEXTO
+    this.form.addEventListener('submit', this.handleSubmit.bind(this)); //UTILIZAR bind PORQUE QUIERO QUE ESPERE Y SEPA SU CONTEXTO
   }
 }

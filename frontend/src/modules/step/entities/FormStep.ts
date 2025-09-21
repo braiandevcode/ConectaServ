@@ -1,15 +1,14 @@
 // IMPORTACIONES
-import { formState } from "../../../config/constant.js";
-import { TInputs } from "../../../types/types.js";
-import FormRegister from "../../form/controller/FormRegister.js";
-import FormStepUI from "../../form/ui/FormStepUI.js";
+import { formState } from '../../../config/constant.js';
+import { TInputs } from '../../../types/types.js';
+import FormRegister from '../../form/controller/FormRegister.js';
 
 // import FormValidationCurrentStep from "../register/validators/FormValidationCurrentStep.js";
 
 // MODULO DE CLASE RESPONSABLE PARA LOS PASOS DEL FORMULARIO
 export default class FormStep {
   private step: number;
-  constructor(private readonly formStepUI: FormStepUI) {
+  constructor() {
     this.step = 1;
   }
 
@@ -43,21 +42,17 @@ export default class FormStep {
   public getStepValidationMap({ formRegister }: { formRegister: FormRegister }): Record<number, TInputs> {
     return formRegister._hasBudge //BANDERA PARA DEFINIR SI CONTIENE PRESUPUESTO O NO
       ? {
-          0: "client",
-          1: "selectedCategoryAndCheckBoxes",
-          2: "filesAndDescription",
-          3: "radioBudgetFull",
-          4: "text",
+          0: 'client',
+          1: 'selectedCategoryAndCheckBoxes',
+          2: 'filesAndDescription',
+          3: 'radioBudgetFull',
+          4: 'text',
         }
       : {
-          0: "client",
-          1: "selectedCategoryAndCheckBoxes",
-          2: "filesAndDescription",
-          3: "text",
+          0: 'client',
+          1: 'selectedCategoryAndCheckBoxes',
+          2: 'filesAndDescription',
+          3: 'text',
         };
-  }
-
-  public formCurrentStepUI():FormStepUI{
-    return this.formStepUI;
   }
 }

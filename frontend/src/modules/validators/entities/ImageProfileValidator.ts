@@ -1,20 +1,20 @@
-import { IValidator } from "../../../interfaces/interfaces";
-import { TFieldState } from "../../../types/types";
+import {IValidator} from '../../../interfaces/interfaces';
+import {TFieldState} from '../../../types/types';
 
 // VALIDACION PARA IMAGEN DEL PERFIL
 export default class ImageProfileValidator implements IValidator {
   validate(file: File | null): TFieldState {
-     const allowedTypes: string[] = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    const allowedTypes: string[] = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     const maxSizeMB: number = 5;
 
     if (!file) {
       // CAMPO OPCIONAL
-      return { error: "", value: null, isValid: true };
+      return {error: '', value: null, isValid: true};
     }
 
     if (!allowedTypes.includes(file.type)) {
       return {
-        error: "Formato de imagen no válido. Usa JPG, JPEG, PNG o WEBP.",
+        error: 'Formato de imagen no válido. Usa JPG, JPEG, PNG o WEBP.',
         value: null,
         isValid: false,
       };
@@ -28,6 +28,6 @@ export default class ImageProfileValidator implements IValidator {
       };
     }
 
-    return { error: "", value: file, isValid: true };
+    return {error: '', value: file, isValid: true};
   }
 }

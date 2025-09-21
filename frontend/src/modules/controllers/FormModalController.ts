@@ -1,17 +1,20 @@
 // IMPORTACIONES
-import { TFormElement } from "../../types/types.js";
-import FormBaseDto from "../form/dto/FormBaseDto.js";
-import FormBase from "../form/entities/FormBase.js";
-import ModalBaseDto from "../modal/dto/ModalBaseDto.js";
-import ModalBase from "../modal/entities/ModalBase.js";
-import ModalBaseUI  from "../modal/ui/ModalBaseUI.js";
+import {TFormElement} from '../../types/types.js';
+import FormBaseDto from '../form/dto/FormBaseDto.js';
+import FormBase from '../form/entities/FormBase.js';
+import ModalBaseDto from '../modal/dto/ModalBaseDto.js';
+import ModalBase from '../modal/entities/ModalBase.js';
+import ModalBaseUI from '../modal/ui/ModalBaseUI.js';
 
 //ABSTRACCION => NO IMPORTA COMO
 //CONTROLADOR QUE UNE LOGICA DE FORMULARIO + MODALES COMPORTAMIENTO Y CONSTRUCCIÓN DE MODAL + FORMBASICO
 export abstract class FormModalController extends ModalBase {
   protected _formBase: FormBase; //COMPONE A BASE DE FORMULARIOS
 
-  constructor(protected optionsModal: ModalBaseDto, protected uiModal:ModalBaseUI) {
+  constructor(
+    protected optionsModal: ModalBaseDto,
+    protected uiModal: ModalBaseUI,
+  ) {
     super(optionsModal, uiModal);
     this._formBase = this.createFormBase(this._options, optionsModal) as FormBase; //CASTEAMOS A "FormBase"
   }

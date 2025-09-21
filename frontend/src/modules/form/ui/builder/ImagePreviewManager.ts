@@ -1,12 +1,12 @@
 // IMPORTACIONES
-import { TStoredImage } from "../../../../types/types";
-import clearElementChild from "../../../../dom/clearElementChild.js";
-import { EKeyDataByStep, ENamesOfKeyLocalStorage } from "../../../../types/enums.js";
-import ButtonBaseDto from "../../../buttons/dto/ButtonsBaseDto.js";
-import { ButtonFactory } from "../../../../patterns/factory/ButtonFactory.js";
-import { ButtonCustom } from "../../../buttons/components/ButtonCustom.js";
-import { fileToStoredImage } from "../../../../utils/domUtils.js";
-import { getImageDataUrlFromIndexedDB, readExistingData } from "../../../../utils/storageUtils.js";
+import {TStoredImage} from '../../../../types/types';
+import clearElementChild from '../../../../dom/clearElementChild.js';
+import {EKeyDataByStep, ENamesOfKeyLocalStorage} from '../../../../types/enums.js';
+import ButtonBaseDto from '../../../buttons/dto/ButtonsBaseDto.js';
+import {ButtonFactory} from '../../../../patterns/factory/ButtonFactory.js';
+import {fileToStoredImage} from '../../../../utils/domUtils.js';
+import {getImageDataUrlFromIndexedDB, readExistingData} from '../../../../utils/storageUtils.js';
+import ButtonBaseUI from '../../../../modules/buttons/ui/ButtonBaseUI.js';
 
 // MANAGER PARA MANEJO DE PREVIEWS DE
 // ADMINISTRADOR DE VISTAS PREVIAS DE IMAGENES
@@ -47,7 +47,7 @@ export default class ImagePreviewManager {
   }
 
   public async createImageProfile(container: HTMLElement, storedImage: TStoredImage | null): Promise<void | null> {
-    clearElementChild({ elements: [container] });
+    clearElementChild({elements: [container]});
     if (!storedImage) return null;
 
     const result: Record<string, string> | null = await getImageDataUrlFromIndexedDB(storedImage.idImage, ENamesOfKeyLocalStorage.IMAGE_INDEXED_DB);
@@ -57,32 +57,35 @@ export default class ImagePreviewManager {
     const dataUrl: string = result.data;
 
     // CONFIGURACION BOTON
-    const btnConfig: ButtonBaseDto= new ButtonBaseDto({
+    const btnConfig: ButtonBaseDto = new ButtonBaseDto({
       disabled: false,
-      type: "button",
-      "aria-label": "Eliminar imagen",
-      classesBtn: "btn btn-trash position-absolute form-professional-groupProfile__btn-trash",
-      iconBtnClasses: "fa-solid fa-trash",
+      type: 'button',
+      'aria-label': 'Eliminar imagen',
+      classesBtn: 'btn btn-trash position-absolute form-professional-groupProfile__btn-trash',
+      iconBtnClasses: 'fa-solid fa-trash',
       attrs: {
-        "data-image": `${storedImage.idImage}`,
+        'data-image': `${storedImage.idImage}`,
       },
+      eventName: 'click',
+      handler: () => console.log('Imagen Eliminada'),
+      isLoading: false,
     });
     // INSTANCIA POR FABRICA
-    const btnTrash = ButtonFactory.createButton("custom", btnConfig) as ButtonCustom;
+    const btnTrash: ButtonBaseUI = ButtonFactory.createButton('custom', btnConfig);
 
     const btn: HTMLButtonElement = btnTrash.getBtnElement(); //ELEMENTO BOTON
 
-    const img = document.createElement("img");
-    img.setAttribute("src", dataUrl);
-    img.setAttribute("alt", "Vista previa del perfil");
-    img.setAttribute("data-image", `${storedImage.idImage}`);
+    const img = document.createElement('img');
+    img.setAttribute('src', dataUrl);
+    img.setAttribute('alt', 'Vista previa del perfil');
+    img.setAttribute('data-image', `${storedImage.idImage}`);
 
-    img.classList.add("profile-image-preview");
+    img.classList.add('profile-image-preview');
     container.append(img, btn);
   }
 
   public async createImagesExperience(container: HTMLElement, storedImages: TStoredImage[] | null): Promise<void | null | Array<[]>> {
-    clearElementChild({ elements: [container] });
+    clearElementChild({elements: [container]});
     if (!storedImages || storedImages.length === 0) return [];
 
     const $FRAGMENT = document.createDocumentFragment(); //FRAGMENT
@@ -96,30 +99,33 @@ export default class ImagePreviewManager {
 
       const dataUrl: string = result.data;
 
-      const containerImage: HTMLDivElement = document.createElement("div");
-      containerImage.classList.add("form-professional-groupProfile__multipleImages", "c-flex", "c-flex-wrap", "gap-2", "position-relative");
-      containerImage.setAttribute("data-image", `${storedImage.idImage}`);
+      const containerImage: HTMLDivElement = document.createElement('div');
+      containerImage.classList.add('form-professional-groupProfile__multipleImages', 'c-flex', 'c-flex-wrap', 'gap-2', 'position-relative');
+      containerImage.setAttribute('data-image', `${storedImage.idImage}`);
 
       // CONFIGURACION BOTON
       const btnConfig: ButtonBaseDto = new ButtonBaseDto({
         disabled: false,
-        type: "button",
-        "aria-label": "Eliminar imagen",
-        classesBtn: "btn btn-trash position-absolute form-professional-groupProfile__btn-trash",
-        iconBtnClasses: "fa-solid fa-trash",
+        type: 'button',
+        'aria-label': 'Eliminar imagen',
+        classesBtn: 'btn btn-trash position-absolute form-professional-groupProfile__btn-trash',
+        iconBtnClasses: 'fa-solid fa-trash',
         attrs: {
-          "data-image": `${storedImage.idImage}`,
+          'data-image': `${storedImage.idImage}`,
         },
+        eventName: 'click',
+        handler: () => console.log('Eliminar imagen'),
+        isLoading: false,
       });
-      const btnTrash = ButtonFactory.createButton("custom", btnConfig) as ButtonCustom; //FABRICAR BOTON
+      const btnTrash: ButtonBaseUI = ButtonFactory.createButton('custom', btnConfig); //FABRICAR BOTON
 
       const btn: HTMLButtonElement = btnTrash.getBtnElement(); ///ELEMENTO
 
-      const img = document.createElement("img");
-      img.setAttribute("src", `${dataUrl}`);
-      img.setAttribute("alt", "Vista previa del experiencia");
+      const img = document.createElement('img');
+      img.setAttribute('src', `${dataUrl}`);
+      img.setAttribute('alt', 'Vista previa del experiencia');
 
-      img.classList.add("experience-image-preview");
+      img.classList.add('experience-image-preview');
 
       containerImage.append(img, btn);
       $FRAGMENT.append(containerImage);

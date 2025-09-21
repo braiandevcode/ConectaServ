@@ -1,19 +1,20 @@
-import { iBtnIcon, iBtnText } from "../../../interfaces/interfaces";
-import ButtonBaseDto from "../dto/ButtonsBaseDto.js";
-import ButtonBase from "../entities/ButtonBase.js";
-import ButtonBaseUI from "../ui/ButtonBaseUI.js";
+import ButtonBaseDto from '../dto/ButtonsBaseDto.js';
+import ButtonBase from '../entities/ButtonBase.js';
 
 // CLASE CONCRETA => BOTON ESTANDAR
-export class ButtonCustom extends ButtonBase implements iBtnText, iBtnIcon {
-  constructor(buttonBaseUI:ButtonBaseUI) {
-    super(buttonBaseUI);
+export class ButtonCustom extends ButtonBase {
+  constructor(buttonBaseDto: ButtonBaseDto) {
+    super(buttonBaseDto);
   }
 
-  public setText(): void {
-    this.applyBtnText(); //==> APLICAR TEXTO AL BOTON
-  }
+  public override subscribe(btn: HTMLButtonElement): void {
+    this.on(btn, 'click', () => console.log('siguiente'));
 
-  public setIcon(): void {
-    this.applyClassesIcon(); //==> APLICAR ICONO
+    this.on(btn, 'keydown', (e) => {
+      const keyboardEvent = e as KeyboardEvent;
+      if (keyboardEvent.key === 'Enter') {
+        console.log('Siguiente');
+      }
+    });
   }
 }

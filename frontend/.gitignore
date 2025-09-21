@@ -1,5 +1,6 @@
 .env
 .prettierrc
+.prettierrc.json
 **/dist
 /node_modules
 **/db/db.json

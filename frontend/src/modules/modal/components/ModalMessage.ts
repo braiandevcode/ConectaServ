@@ -1,34 +1,34 @@
 // IMPORTACIONES
-import ModalBaseDto from "../dto/ModalBaseDto.js";
-import ModalBase from "../entities/ModalBase.js";
-import ModalBaseUI  from "../ui/ModalBaseUI.js";
+import ModalBaseDto from '../dto/ModalBaseDto.js';
+import ModalBase from '../entities/ModalBase.js';
+import ModalBaseUI from '../ui/ModalBaseUI.js';
 
 // CLASE MODAL DE EXITO DE REGISTRO
 export default class ModalMessage extends ModalBase {
-  constructor(optionsModal: ModalBaseDto, modalBaseUI:ModalBaseUI) {
+  constructor(optionsModal: ModalBaseDto, modalBaseUI: ModalBaseUI) {
     super(optionsModal, modalBaseUI);
   }
 
   // IMPLEMENTACION DEL CONTENIDO BASE MODAL
-  public composeBaseContent(): ModalBase{
+  public composeBaseContent(): ModalBase {
     const elements: HTMLElement[] = [];
 
-    const titleEl = document.createElement("h2"); // CREAR ELEMENTO
-    titleEl.classList.add("modal__title"); //AÑADIR SUS CLASES
+    const titleEl = document.createElement('h2'); // CREAR ELEMENTO
+    titleEl.classList.add('modal__title'); //AÑADIR SUS CLASES
     this.options.setTextTitleElement(titleEl, this.options.title);
     elements.push(titleEl); // AGREGAR EL TITULO AL ARRAY DE ELEMENTOS HIJOS DEL MODAL
 
     // MENSAJE
-    const messageEl = document.createElement("p"); //CREAR ETIQUETA PARRAFO
-    messageEl.classList.add("modal__message"); // AÑADIRLE CLASE
+    const messageEl = document.createElement('p'); //CREAR ETIQUETA PARRAFO
+    messageEl.classList.add('modal__message'); // AÑADIRLE CLASE
 
     this.options.setTextMessageElement(messageEl, this.options.getMessage()); // AGREGAR EL NODO DE TEXTO DE MENSAJE
 
     elements.push(messageEl); // AGREGAR EL PARRAFO AL ARRAY DE ELEMENTOS HIJOS DEL MODAL
 
-    const iconWrapper = document.createElement("div"); //CREAR
-    iconWrapper.classList.add("modal__icon-wrapper"); //CONTENEDOR DE ICONO
-    const icon = document.createElement("i");
+    const iconWrapper = document.createElement('div'); //CREAR
+    iconWrapper.classList.add('modal__icon-wrapper'); //CONTENEDOR DE ICONO
+    const icon = document.createElement('i');
     this.options.setClassIcon(this.options.iconClass, icon);
 
     iconWrapper.appendChild(icon);

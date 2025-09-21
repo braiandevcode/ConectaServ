@@ -1,27 +1,21 @@
-import { iBtnIcon, iBtnText } from "../../../interfaces/interfaces";
-import FormRegister from "../../form/controller/FormRegister.js";
-import ButtonBaseDto from "../dto/ButtonsBaseDto.js";
-import ButtonBase from "../entities/ButtonBase.js";
-import ButtonBaseUI from "../ui/ButtonBaseUI.js";
+import ButtonBaseDto from '../dto/ButtonsBaseDto.js';
+import ButtonBase from '../entities/ButtonBase.js';
 
 // CLASE CONCRETA => BOTON SIGUIENTE
-export class ButtonNext extends ButtonBase implements iBtnText, iBtnIcon {
-  constructor(buttonBaseUI:ButtonBaseUI) {
-    super(buttonBaseUI);
+export class ButtonNext extends ButtonBase {
+  constructor(buttonBaseDto: ButtonBaseDto) {
+    super(buttonBaseDto);
   }
 
-  public setText(): void {
-    this.applyBtnText(); //==> APLICAR TEXTO AL BOTON
-  }
+  // USAR SI SE QUIERE SUSCRIBIR A MAS DE UN EVENTO
+  public override subscribe(btn: HTMLButtonElement): void {
+    this.on(btn, 'click', () => console.log('siguiente'));
 
-  public setIcon(): void {
-    this.applyClassesIcon(); //==> APLICAR ICONO
+    this.on(btn, 'keydown', (e) => {
+      const keyboardEvent = e as KeyboardEvent;
+      if (keyboardEvent.key === 'Enter') {
+        console.log('Siguiente');
+      }
+    });
   }
-
-  // ACTUALIZAR DATA DE BOTNO NEXT
-  // public updateAttributeDataStep({ formRegister }: { formRegister: FormRegister }): void {
-  //   if (this.buttonElement.hasAttribute("data-step")) {
-  //     this.buttonElement.dataset.step = String(formRegister.getStepForm()); //REASIGNAR VALOR DEL PASO
-  //   }
-  // }
 }

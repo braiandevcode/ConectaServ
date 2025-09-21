@@ -1,9 +1,10 @@
-import { ButtonFactory } from "../../../patterns/factory/ButtonFactory.js";
-import ModalBase from "../entities/ModalBase.js";
-import ModalBaseUI  from "../ui/ModalBaseUI.js";
-import ModalBaseDto from "../dto/ModalBaseDto.js";
-import ButtonBaseDto from "../../../modules/buttons/dto/ButtonsBaseDto.js";
-import { pathPages } from "../../../config/constant.js";
+import {ButtonFactory} from '../../../patterns/factory/ButtonFactory.js';
+import ModalBase from '../entities/ModalBase.js';
+import ModalBaseUI from '../ui/ModalBaseUI.js';
+import ModalBaseDto from '../dto/ModalBaseDto.js';
+import ButtonBaseDto from '../../../modules/buttons/dto/ButtonsBaseDto.js';
+import {pathPages} from '../../../config/constant.js';
+import ButtonBaseUI from '../../../modules/buttons/ui/ButtonBaseUI.js';
 
 export default class ModalRoleSelector extends ModalBase {
   constructor(options: ModalBaseDto, ui: ModalBaseUI) {
@@ -12,32 +13,27 @@ export default class ModalRoleSelector extends ModalBase {
 
   // METODO PARA CREAR TARJETA BOTON PARA CLIENTE
   private createClientButtonFragment(): DocumentFragment {
-    const fragment = document.createDocumentFragment();
+    const fragment: DocumentFragment = document.createDocumentFragment();
 
-    const inner = document.createElement("div");
-    inner.classList.add(
-      "c-flex",
-      "c-flex-items-center",
-      "gap-1",
-      "modal-role__card-inner"
-    );
+    const inner: HTMLDivElement = document.createElement('div');
+    inner.classList.add('c-flex', 'c-flex-items-center', 'gap-1', 'modal-role__card-inner');
 
-    const iconWrapper = document.createElement("div");
-    iconWrapper.classList.add("modal-role__icon-container");
+    const iconWrapper: HTMLDivElement = document.createElement('div');
+    iconWrapper.classList.add('modal-role__icon-container');
 
-    const icon = document.createElement("i");
-    icon.classList.add("fas", "fa-user", "modal-role__icon");
+    const icon: HTMLElement = document.createElement('div');
+    icon.classList.add('fas', 'fa-user', 'modal-role__icon');
 
-    const textWrapper = document.createElement("div");
-    textWrapper.classList.add("modal-role__text");
+    const textWrapper: HTMLDivElement = document.createElement('div');
+    textWrapper.classList.add('modal-role__text');
 
-    const title = document.createElement("h4");
-    title.classList.add("modal-role__card-title");
-    title.textContent = "Cliente";
+    const title = document.createElement('h4');
+    title.classList.add('modal-role__card-title');
+    title.textContent = 'Cliente';
 
-    const desc = document.createElement("p");
-    desc.classList.add("modal-role__card-description");
-    desc.textContent = "Busca y contrata profesionales para tus necesidades";
+    const desc: HTMLParagraphElement = document.createElement('p');
+    desc.classList.add('modal-role__card-description');
+    desc.textContent = 'Busca y contrata profesionales para tus necesidades';
 
     iconWrapper.appendChild(icon);
     textWrapper.append(title, desc);
@@ -49,32 +45,27 @@ export default class ModalRoleSelector extends ModalBase {
 
   // METODO PARA CREAR TARJETA BOTON PARA PROFESIONAL
   private createProfessionalButtonFragment(): DocumentFragment {
-    const fragment = document.createDocumentFragment();
+    const fragment: DocumentFragment = document.createDocumentFragment();
 
-    const inner = document.createElement("div");
-    inner.classList.add(
-      "c-flex",
-      "c-flex-items-center",
-      "gap-1",
-      "modal-role__card-inner"
-    );
+    const inner: HTMLDivElement = document.createElement('div');
+    inner.classList.add('c-flex', 'c-flex-items-center', 'gap-1', 'modal-role__card-inner');
 
-    const iconWrapper = document.createElement("div");
-    iconWrapper.classList.add("modal-role__icon-container");
+    const iconWrapper: HTMLDivElement = document.createElement('div');
+    iconWrapper.classList.add('modal-role__icon-container');
 
-    const icon = document.createElement("i");
-    icon.classList.add("fas", "fa-briefcase", "modal-role__icon");
+    const icon: HTMLElement = document.createElement('div');
+    icon.classList.add('fas', 'fa-briefcase', 'modal-role__icon');
 
-    const textWrapper = document.createElement("div");
-    textWrapper.classList.add("modal-role__text");
+    const textWrapper: HTMLDivElement = document.createElement('div');
+    textWrapper.classList.add('modal-role__text');
 
-    const title = document.createElement("h4");
-    title.classList.add("modal-role__card-title");
-    title.textContent = "Profesional";
+    const title = document.createElement('h4');
+    title.classList.add('modal-role__card-title');
+    title.textContent = 'Profesional';
 
-    const desc = document.createElement("p");
-    desc.classList.add("modal-role__card-description");
-    desc.textContent = "Ofrece tus servicios y encuentra nuevos clientes";
+    const desc: HTMLParagraphElement = document.createElement('p');
+    desc.classList.add('modal-role__card-description');
+    desc.textContent = 'Ofrece tus servicios y encuentra nuevos clientes';
 
     iconWrapper.appendChild(icon);
     textWrapper.append(title, desc);
@@ -88,84 +79,80 @@ export default class ModalRoleSelector extends ModalBase {
     const elements: HTMLElement[] = [];
 
     //HEADER DEL MODAL
-    const header = document.createElement("div");
-    header.classList.add(
-      "modal-role__header",
-      "position-relative",
-      "c-flex",
-      "c-flex-items-center",
-      "gap-1",
-      "w-full"
-    );
+    const header: HTMLDivElement = document.createElement('div');
+    header.classList.add('modal-role__header', 'position-relative', 'c-flex', 'c-flex-items-center', 'gap-1', 'c-flex-justify-center', 'w-full');
 
     //TITULO
-    const titleEl = document.createElement("h3");
-    titleEl.classList.add("modal-role__title");
+    const titleEl: HTMLHeadElement = document.createElement('h3');
+    titleEl.classList.add('modal-role__title');
     this.options.setTextTitleElement(titleEl, this.options.title);
 
     //BOTON CERRAR
-    const closeBtnDto = new ButtonBaseDto({
+    const closeBtnDto: ButtonBaseDto = new ButtonBaseDto({
       disabled: false,
-      type: "button",
-      "aria-label": "Cerrar modal",
-      iconBtnClasses: "fas fa-times modal-role__close-icon",
-      classesBtn: "cursor-pointer position-absolute modal-role__close-btn",
+      type: 'button',
+      'aria-label': 'Cerrar modal',
+      iconBtnClasses: 'fas fa-times modal-role__close-icon',
+      classesBtn: 'cursor-pointer position-absolute modal-role__close-btn',
+      eventName: 'click',
+      handler: () => this.hideAndRemove(),
+      isLoading: false,
     });
 
-    const closeBtn = ButtonFactory.createButton("custom", closeBtnDto);
-    closeBtn.on("click", () => this.hideAndRemove());
+    const instanceCloseBtn: ButtonBaseUI = ButtonFactory.createButton('custom', closeBtnDto);
+    instanceCloseBtn.on(); //ESCUCHA EVENTO
 
     header.appendChild(titleEl);
-    header.appendChild(closeBtn.getBtnElement());
+    header.appendChild(instanceCloseBtn.getBtnElement());
     elements.push(header);
 
-    // Descripción
-    const desc = document.createElement("p");
-    desc.classList.add("modal-role__description");
-    desc.textContent = "Selecciona el tipo de cuenta que deseas crear:";
+    // DESCRIPCION
+    const desc: HTMLParagraphElement = document.createElement('p');
+    desc.classList.add('modal-role__description');
+    desc.textContent = 'Selecciona el tipo de cuenta que deseas crear:';
     elements.push(desc);
 
     // CARD WRAPPER
-    const cardsWrapper = document.createElement("div");
-    cardsWrapper.classList.add(
-      "c-flex",
-      "c-flex-column",
-      "gap-1",
-      "modal-role__cards"
-    );
+    const cardsWrapper: HTMLDivElement = document.createElement('div');
+    cardsWrapper.classList.add('c-flex', 'c-flex-column', 'gap-1', 'modal-role__cards');
 
     // BOTÓN CLIENTE
-    const clientBtnDto = new ButtonBaseDto({
+    const clientBtnDto: ButtonBaseDto = new ButtonBaseDto({
       disabled: false,
-      type: "button",
-      "aria-label": "Elegir cliente",
-      attrs: { "data-role": "client" },
-      classesBtn: "cursor-pointer modal-role__card modal-role__card--cliente",
+      type: 'button',
+      'aria-label': 'Elegir cliente',
+      attrs: {'data-role': 'client'},
+      classesBtn: 'cursor-pointer modal-role__card modal-role__card--cliente',
+      eventName: 'click',
+      handler: () => {
+        console.log('Cliente seleccionado');
+        this.hideAndRemove();
+      },
+      isLoading: false,
     });
 
-    const clientBtn = ButtonFactory.createButton("custom", clientBtnDto);
-    clientBtn.appendContent(this.createClientButtonFragment());
-    clientBtn.on("click", () => {
-      console.log("Cliente seleccionado");
-      this.hideAndRemove();
-    });
+    const clientBtn: ButtonBaseUI = ButtonFactory.createButton('custom', clientBtnDto);
+    clientBtn.setCustomContentFragment(this.createClientButtonFragment());
+    clientBtn.on(); //ESCUCHAR EVENTO
 
     // BOTÓN PROFESIONAL
     const proBtnDto = new ButtonBaseDto({
       disabled: false,
-      type: "button",
-      "aria-label": "Elegir profesional",
-      attrs: { "data-role": "professional" },
-      classesBtn:
-        "cursor-pointer modal-role__card modal-role__card--profesional",
+      type: 'button',
+      'aria-label': 'Elegir profesional',
+      attrs: {'data-role': 'professional'},
+      classesBtn: 'cursor-pointer modal-role__card modal-role__card--profesional',
+      eventName: 'click',
+      handler: () => {
+        location.href = pathPages.PATH_FORM_PROFESSIONAL; // ==> IR A PAGINA PROFESIONAL
+        this.hideAndRemove();
+      },
+      isLoading: false,
     });
 
-    const proBtn = ButtonFactory.createButton("custom", proBtnDto);
-    proBtn.appendContent(this.createProfessionalButtonFragment());
-    proBtn.on("click", () => {
-      location.href = pathPages.PATH_FORM_PROFESSIONAL; // ==> IR A PAGINA PROFESIONAL
-      this.hideAndRemove();
-    });
+    proBtnDto.setCustomContentFragment(this.createProfessionalButtonFragment());
+    const proBtn = ButtonFactory.createButton('custom', proBtnDto);
+    proBtn.on(); //ESCUCHAR EVENTO
 
     cardsWrapper.append(clientBtn.getBtnElement(), proBtn.getBtnElement());
     elements.push(cardsWrapper);

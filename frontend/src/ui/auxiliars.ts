@@ -1,43 +1,31 @@
-// IMPORTACIONES
-import toggleClassElement from "./toggleClassElement.js";
-
-// FUNCIONES AUXILIARES PARA MOSTRAR Y OCULTAR SECCIONES
-export const show = ({ $el, cls }: { $el: HTMLElement; cls: string }): void => {
-  toggleClassElement({ container: $el, className: [cls], isRemoveClass: true });
-};
-
-export const hide = ({ $el, cls }: { $el: HTMLElement; cls: string }): void => {
-  toggleClassElement({ container: $el, className: [cls], isRemoveClass: false });
-};
-
 // ----------------------------------------------AUXILIARES PARA VALIDACION DE CAMPOS-------------------------------------------//
 
 //-----------------------------FUNCIONES REUTILIZABLES PARA VALIDAR---------------------------------------------------------//
 
-export const normalizeSpaces = (str: string): string => str.replace(/\s+/g, " "); //QUITAR TODOS LOS ESPACIOS DEL TABULADOR Y RESETEAR UN SOLO TAB DE ESPACIO
+export const normalizeSpaces = (str: string): string => str.replace(/\s+/g, ' '); //QUITAR TODOS LOS ESPACIOS DEL TABULADOR Y RESETEAR UN SOLO TAB DE ESPACIO
 
 // SEPARAR LA CADENA POR ESPACIOS
 // MAPEAR, CREAR NUEVO ARREGLO DONDE CADA PALABRA O CADENA EN SU INDICE 0(PRIMER CARACTER) SEA MAYUSCULAS Y EL RESTO MINUSCULAS ["lucas", "gonzales"] => ["Lucas", "Gonzales"]
 // UNIR CON join() generando una sola cadena "Lucas Gonzales".
 export const capitalizeWords = (str: string): string =>
   str
-    .split(" ")
+    .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(" ");
+    .join(' ');
 
 //----------------------------------------------FUNCIONES DE PARSEOS Y FORMATO DE NUMEROS---------------------------------------//
 // FUNCION PARA PARSEAR MONTO
 // CONVERTIR A NUMERO FLOTANTE CON DECIMALES Y REEMPLAZA DE FORMA GLOBAL(ES DECIR, LA EXPREXION REGULAR INDICA RECORRER TODO EL TEXTO) UN NUMERO COMO  1000 A 1000.00
 export const parseMontoToNumber = (value: string): number => {
-  return parseFloat(value.replace(/\./g, "").replace(",", ".")) || 0;
+  return parseFloat(value.replace(/\./g, '').replace(',', '.')) || 0;
 };
 
 // FUNCION PARA FORMATEAR VISUALMENTE COMO "10.000,00"
 export const formatMontoOnlyNumber = (value: string): string => {
-  const numericValue = typeof value === "number" ? value : parseMontoToNumber(value); // PARSEAR EL VALOR SI NO ES TIPO NUMERO
-  if (isNaN(numericValue)) return ""; //SI EL VALOR ES NO UN NUMERO VALIDO RETORNAR CADENA VACIA
+  const numericValue = typeof value === 'number' ? value : parseMontoToNumber(value); // PARSEAR EL VALOR SI NO ES TIPO NUMERO
+  if (isNaN(numericValue)) return ''; //SI EL VALOR ES NO UN NUMERO VALIDO RETORNAR CADENA VACIA
 
-  return numericValue.toLocaleString("es-ES", {
+  return numericValue.toLocaleString('es-ES', {
     minimumFractionDigits: 2, //FRACCION MINIMA DE DIGITOS
     maximumFractionDigits: 2, //FRACCION MAXIMA DE DIGITOS
   });
@@ -50,11 +38,11 @@ export const formatMontoOnlyNumber = (value: string): string => {
 // -  minimumFractionDigits / maximumFractionDigits:ASEGURA QUE SIEMPRE HAY 2 DECIMALES.
 // FUNCION PARA FORMATEAR CON SIMMBOLO "ARS"
 export const formatMontoWithCurrency = (value: string | number): string => {
-  const numericValue = typeof value === "number" ? value : parseMontoToNumber(value);
-  if (isNaN(numericValue)) return "";
-  return numericValue.toLocaleString("es-AR", {
-    style: "currency",
-    currency: "ARS",
+  const numericValue = typeof value === 'number' ? value : parseMontoToNumber(value);
+  if (isNaN(numericValue)) return '';
+  return numericValue.toLocaleString('es-AR', {
+    style: 'currency',
+    currency: 'ARS',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
@@ -65,12 +53,12 @@ export const convertBytes = (value: number): number => value * 1024 * 1024;
 
 // FUNCION AUXILIAR QUE SIRVE PARA VERIFICAR SI CONTIENE UNA CLASE Y SI EL BOTON ES DE TIPO "button"
 export const isContainSelectorAndBtn = (container: HTMLElement, selector: string, containerBtn: HTMLElement): boolean | null => {
-  const btn: HTMLButtonElement | null = containerBtn.querySelector("button");
+  const btn: HTMLButtonElement | null = containerBtn.querySelector('button');
   if (!btn) return null;
-  return container.classList.contains(selector) && btn.type === "button";
+  return container.classList.contains(selector) && btn.type === 'button';
 };
 
-export const evaluateSelectedOptionDefault = ({ vectorValuesDefault, optionToSelect }: { vectorValuesDefault: string[]; optionToSelect: HTMLOptionElement }): boolean => {
+export const evaluateSelectedOptionDefault = ({vectorValuesDefault, optionToSelect}: {vectorValuesDefault: string[]; optionToSelect: HTMLOptionElement}): boolean => {
   // CHEQUEAR SI EL VALOR ES PLACEHOLDER (IGNORANDO MAYUS/minus)
   return vectorValuesDefault.some((ph) => ph.toLowerCase() === optionToSelect.value.toLowerCase());
 };
@@ -82,7 +70,7 @@ export const addClassWithPromise = async (container: HTMLElement, className: str
       container.classList.add(className);
       resolve();
     } else {
-      reject(new Error("No se encontró el nodo padre del container"));
+      reject(new Error('No se encontró el nodo padre del container'));
     }
   });
 };
@@ -90,29 +78,28 @@ export const addClassWithPromise = async (container: HTMLElement, className: str
 // FUNCION REUTILIZABLE QUE ITERA SOBRE ARRAR DE STRING PERMITIENDO ENCADENAR CLASES A UN NODO ELEMENTO
 export const actionClassString = (str: string, method: string, container: HTMLElement): void => {
   switch (method) {
-    case "add":
+    case 'add':
       str
         .trim()
         .split(/\s+/)
         .forEach((cls) => container.classList.add(cls));
       break;
-    case "remove":
+    case 'remove':
       str
         .trim()
         .split(/\s+/)
         .forEach((cls) => container.classList.remove(cls));
       break;
-    case "replace":
+    case 'replace':
       // ELIMINAR ANTES TODAS LAS ACTUALES
       container.classList.forEach((cls) => container.classList.remove(cls));
-      
+
       // ASIGNAR NUEVAS
       str
         .trim()
         .split(/\s+/)
         .forEach((cls) => {
           // SI SE PASA ANTERIORES
-
           container.classList.add(cls);
         });
       break;
@@ -121,4 +108,3 @@ export const actionClassString = (str: string, method: string, container: HTMLEl
       break;
   }
 };
-

@@ -1,34 +1,4 @@
-.modal-role {
-  top: 0;
-  left: 0;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6);
-  inset: 0;
-  z-index: 1000;
-  transform: scale(1);
-  transition: opacity 0.3s ease, transform .3s ease-in-out;
-}
-
-.modal-role--hidden {
-  transform: scale(0);
-}
-
-.modal-role__container {
-  width: 90%;
-  max-width: 600px;
-  max-height: 400px;
-  background-color: var(--bg-primary);
-  border-radius: 12px;
-  padding: 1.1rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
 /* ========== HEADER ========== */
-.modal-role__header>div:last-child {
-  width: 100%;
-  gap: 1rem;
-}
-
 .modal-role__close-btn {
   background: none;
   border: none;

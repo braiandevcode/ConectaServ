@@ -1,12 +1,10 @@
-import { iFormOptions } from "../../../interfaces/interfaces";
+import {iFormOptions} from '../../../interfaces/interfaces';
 
 // CLASE DE OPCIONES DE FORMULARIO
 export default class FormBaseDto {
   constructor(private config: iFormOptions) {}
 
   // ----GETTERS Y SETTERS ACCESORIOS-----------//
-
-  // ---------- GETTERS ----------
 
   // MOSTRAR ATRIBUTOS DEL FORMULARIO
   public get _attributesForm(): Record<string, string> | undefined {
@@ -59,7 +57,7 @@ export default class FormBaseDto {
     this.config.classContainerForm = value;
   }
 
-  // MODIFICAR CLASES DE SELECTOR DADO AL CONTENEDOR PADRE DIRECTO DEL FORMULARIO 
+  // MODIFICAR CLASES DE SELECTOR DADO AL CONTENEDOR PADRE DIRECTO DEL FORMULARIO
   public set _containerSelector(value: string) {
     this.config.containerSelector = value;
   }

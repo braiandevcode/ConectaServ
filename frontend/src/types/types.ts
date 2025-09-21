@@ -1,34 +1,19 @@
 // IMPORTACIONES
-import FormValidationUI from "../modules/validators/ui/FormValidationUI.js";
-import {
-  FIELDS_NAME_TO_VALIDATE,
-  FIELDS_NAMES,
-  FIELDS_STEP,
-  MODALS_TIYPE,
-  TYPES_FORM,
-  TYPES_FORM_STEP,
-  TYPES_STEP,
-} from "../config/constant.js";
-import {
-  iFormStateValidation,
-  iInputFieldCheckOptions,
-  iInputFieldOptions,
-  iInputFileOptions,
-  iSelectFieldOptions,
-  iTextAreaFieldOptions,
-} from "../interfaces/interfaces";
-import { ECategoryKey, EFieldType, EKeyDataByStep } from "./enums.js";
-import SelectFieldUI from "../modules/fields/ui/SelectFieldUI.js";
-import InputFileUI from "../modules/fields/ui/InputFileUI.js";
-import InputFieldUI from "../modules/fields/ui/InputFieldUI.js";
-import TextAreaFieldUI from "../modules/fields/ui/TextAreaFieldUI.js";
-import InputFieldCheckUI from "../modules/fields/ui/InputFieldCheckUI.js";
-import SelectField from "../modules/fields/components/SelectField.js";
-import InputField from "../modules/fields/components/InputField.js";
-import InputFile from "../modules/fields/components/InputFile.js";
-import TextAreaField from "../modules/fields/components/TextAreaField.js";
-import InputFieldCheck from "../modules/fields/components/InputFieldCheck.js";
-import FieldBase from "../modules/fields/entities/FieldBase.js";
+import FormValidationUI from '../modules/validators/ui/FormValidationUI.js';
+import { FIELDS_NAME_TO_VALIDATE, FIELDS_NAMES, FIELDS_STEP, MODALS_TIYPE, TYPES_FORM, TYPES_FORM_STEP, TYPES_STEP } from '../config/constant.js';
+import { iFormStateValidation, iInputFieldCheckOptions, iInputFieldOptions, iInputFileOptions, iSelectFieldOptions, iTextAreaFieldOptions } from '../interfaces/interfaces';
+import { ECategoryKey, EFieldType, EKeyDataByStep, ELocationKey } from './enums.js';
+import SelectFieldUI from '../modules/fields/ui/SelectFieldUI.js';
+import InputFileUI from '../modules/fields/ui/InputFileUI.js';
+import InputFieldUI from '../modules/fields/ui/InputFieldUI.js';
+import TextAreaFieldUI from '../modules/fields/ui/TextAreaFieldUI.js';
+import InputFieldCheckUI from '../modules/fields/ui/InputFieldCheckUI.js';
+import SelectField from '../modules/fields/components/SelectField.js';
+import InputField from '../modules/fields/components/InputField.js';
+import InputFile from '../modules/fields/components/InputFile.js';
+import TextAreaField from '../modules/fields/components/TextAreaField.js';
+import InputFieldCheck from '../modules/fields/components/InputFieldCheck.js';
+import FieldBase from '../modules/fields/entities/FieldBase.js';
 
 // TIPADO PARA CADA PASOS DE FORMULARIO
 export type TFormStep = {
@@ -38,39 +23,22 @@ export type TFormStep = {
 };
 
 // TIPADO PARA TIPOS DE INSTANCIAS EN BOTONES
-export type TInstanceOfButton =
-  | "submit"
-  | "cancel"
-  | "reset"
-  | "custom"
-  | "next"
-  | "close"
-  | "prev";
+export type TInstanceOfButton = 'submit' | 'cancel' | 'reset' | 'custom' | 'next' | 'close' | 'prev';
 
 // TIPADO PARA ATRIBUTO "type" EN BOTONES
-export type TTypeBtn = "button" | "submit" | "reset";
+export type TTypeBtn = 'button' | 'submit' | 'reset';
 
 // TIPADO QUE ESPECIFICAN CADA PASO, SEGUN LAS VARIANTES DE TIPOS DE ENTRADA QUE SE ENCUENTRAN
 export type TInputs = (typeof FIELDS_STEP)[number];
 
 // TIPOS ACEPTABLES DE INPUTS EN CADA PASO
-export type TElementStep =
-  | HTMLButtonElement
-  | HTMLInputElement
-  | HTMLTextAreaElement
-  | HTMLSelectElement
-  | HTMLDivElement
-  | null;
+export type TElementStep = HTMLButtonElement | HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | HTMLDivElement | null;
 
 // TIPADO PARA FUNCION QUE SOLO ESPERA CAMPOS DE ENTRADA DE INPUTS O SELECTS
-export type TFormElement =
-  | HTMLInputElement
-  | HTMLSelectElement
-  | HTMLTextAreaElement;
+export type TFormElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 // HELPER TYPE
-export type TWithOptional<T, K extends keyof T> = Omit<T, K> &
-  Partial<Pick<T, K>>;
+export type TWithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 // TIPO DE OBJETO PARA CAMPOS DEL PASO 4
 export type TToggleBudgetFieldsProps = {
@@ -96,20 +64,23 @@ export type TStatusByRegister = {
   dataByStep: Record<string, any>;
 };
 // TIPADO DE LOS NOMBRES DE LAS CATEGORIAS
-export type TCategoryKey =
-  | ECategoryKey.REPAIR
-  | ECategoryKey.GARDEN
-  | ECategoryKey.MOVE;
-
+export type TCategoryKey = ECategoryKey.REPAIR | ECategoryKey.GARDEN | ECategoryKey.MOVE;
+export type TLocationKey = ELocationKey.OLAVARRIA | ELocationKey.AZUL | ELocationKey.TANDIL;
 // TIPADO DE GRUPOS DE CHECKBOXES
-export type TOptionTypeGroup = "service" | "context" | "day" | "hour";
+export type TOptionTypeGroup = 'service' | 'context' | 'day' | 'hour';
 
 // TIPOS DE INSTANCIAS DE MODALES
 export type TModalType = (typeof MODALS_TIYPE)[number];
-export type TFormRole = "professional" | "client";
+export type TFormRole = 'professional' | 'client';
 export type TFormType = (typeof TYPES_FORM)[number];
 export type TTypeStep = (typeof TYPES_STEP)[number];
-export type TTypeFormRegisterStep = (typeof TYPES_FORM_STEP)[number];
+
+// TIPO UNION
+// export type TTypeFormRegisterStep = (typeof TYPES_FORM_STEP)[number];
+
+export type TTypeFormRegisterStep = EKeyDataByStep;
+
+export type TKeys = keyof typeof EKeyDataByStep;
 
 // TIPADO PARA LOS GRUPOS DE UNA CATEGORIA Y LOS TIPOS
 export type TCategoryOption = {
@@ -168,12 +139,7 @@ export type TFieldState = {
 export type TData = string | TIdString | string[] | number | boolean;
 
 // SOLO PARA CAMPOS DE TEXTO DEL ULTIMO PASO
-export type TBasicFieldNames =
-  | "fullName"
-  | "userName"
-  | "email"
-  | "password"
-  | "confirmPassword";
+export type TBasicFieldNames = 'fullName' | 'userName' | 'email' | 'password' | 'confirmPassword';
 
 export type TFieldType = `${EFieldType}`; //ESTO ASEGURA QUE TFieldType SEA EXACTAMENTE UNO DE LOS VALORES DEL ENUM (Y NO SUS CLAVES).
 
@@ -236,3 +202,6 @@ export type TFieldBaseMap = {
 };
 
 export type TTypeField = keyof TFieldOptionsMap;
+
+// TIPAR PARA ATRIBUTOS ABIERTOS A CUALQUIER NOMBRE RESPETANDO SU TIPO DE CLAVE Y TIPO DE VALORES ADMITIDOS
+export type TCustomAttributes = Record<string, string | number | boolean>;

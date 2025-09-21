@@ -1,22 +1,25 @@
 // IMPORTACIONES
 
-import { categoryConfigs } from "../../../config/constant.js";
-import { iBuildStepUI } from "../../../interfaces/interfaces";
-import FormFieldFactory from "../../../patterns/factory/FormFieldFactory.js";
-import { ECategoryKey, EDefaultSelected, EKeyDataByStep, ENamesOfKeyLocalStorage } from "../../../types/enums.js";
-import { TCategoryKey } from "../../../types/types";
-import { actionClassString } from "../../../ui/auxiliars.js";
-import { attrFilled } from "../../../utils/domUtils.js";
-import { readExistingData } from "../../../utils/storageUtils.js";
-import SelectField from "../../fields/components/SelectField.js";
-import FormRegister from "../controller/FormRegister.js";
-import OptionGroupBuilder from "./builder/OptionGrouBuilder.js";
-import FormRegisterUI from "./FormRegisterUI.js";
+import { categoryConfigs } from '../../../config/constant.js';
+import { iBuildStepUI } from '../../../interfaces/interfaces';
+import FormFieldFactory from '../../../patterns/factory/FormFieldFactory.js';
+import { ECategoryKey, EDefaultSelected, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../../types/enums.js';
+import { TCategoryKey } from '../../../types/types';
+import { actionClassString } from '../../../ui/auxiliars.js';
+import { attrFilled } from '../../../utils/domUtils.js';
+import { readExistingData } from '../../../utils/storageUtils.js';
+import SelectField from '../../fields/components/SelectField.js';
+import FormRegister from '../controller/FormRegister.js';
+import OptionGroupBuilder from './builder/OptionGroupBuilder.js';
+import FormRegisterUI from './FormRegisterUI.js';
 
 // MODULO CLASE UI PARA EL PASO 1
 export default class FormStepOneUI implements iBuildStepUI {
   private readonly checkGroupsBuilder: OptionGroupBuilder;
-  constructor(private readonly formRegister: FormRegister, checkGroupsBuilder: OptionGroupBuilder) {
+  constructor(
+    private readonly formRegister: FormRegister,
+    checkGroupsBuilder: OptionGroupBuilder,
+  ) {
     this.checkGroupsBuilder = checkGroupsBuilder;
   }
 
@@ -26,10 +29,10 @@ export default class FormStepOneUI implements iBuildStepUI {
     if (!config) return;
 
     // BUSCAR O CREAR WRAPPER
-    let wrapper = groupSelect.querySelector(".form-professional-groupSpeciality__wrapper") as HTMLElement;
+    let wrapper = groupSelect.querySelector('.form-professional-groupSpeciality__wrapper') as HTMLElement;
     if (!wrapper) {
-      wrapper = document.createElement("div");
-      actionClassString("mb-2 w-full form-professional-groupSpeciality__wrapper", "add", wrapper);
+      wrapper = document.createElement('div');
+      actionClassString('mb-2 w-full form-professional-groupSpeciality__wrapper', 'add', wrapper);
 
       // INSERTAR COMO HERMANO DEL SELECT
       groupSelect.appendChild(wrapper);
@@ -53,14 +56,8 @@ export default class FormStepOneUI implements iBuildStepUI {
 
     this.checkGroupsBuilder.restoredGroupChecked(); // RESTAURAR VALORES DE LOS CHECKS EN TRUE
 
-    // if (value === ECategoryKey.REPAIR) {
-    //   this.formRegister.setBudge(true); //SETEAR A TRUE ==> SIGNIFICA QUE EL PASO 3 ES PRESUPUESTO
-    // } else {
-    //   this.formRegister.setBudge(false); //SETEAR A FALSE ==> SIGNIFICA QUE EL PASO 3 ES EL ULTIMO
-    // }
-
     // GUARDAR ESTADO ACTUAL DE SELECT Y CHECKBOXES EN LOCALSTORAGE
-    this.formRegister.saveDataStepPersistence({ step: 1, elements: [$SELECT_ELEMENT, ...this.checkGroupsBuilder.getInputsChecks()] }); //SELECT Y RESTO DE CAMPOS DEL PASO 1
+    this.formRegister.saveDataStepPersistence({ step: this.formRegister.getStepForm(), elements: [$SELECT_ELEMENT, ...this.checkGroupsBuilder.getInputsChecks()] }); //SELECT Y RESTO DE CAMPOS DEL PASO 1
   }
 
   // CREACION DEL PASO 1
@@ -70,58 +67,58 @@ export default class FormStepOneUI implements iBuildStepUI {
     const stepOneData = existingData[EKeyDataByStep.ONE] ?? {};
     const persistedCategory = stepOneData.category ?? EDefaultSelected.SELECT_CATEGORY; //SI EL VALOR DE IZQUIERDA ES NULL O UNDEFINED TOMA EL DE LA DERECHA
 
-    const wrapper = document.createElement("div");
-    actionClassString("c-flex c-flex-column gap-1 form-professional__sections", "add", wrapper);
+    const wrapper = document.createElement('div');
+    actionClassString('c-flex c-flex-column gap-1 form-professional__sections', 'add', wrapper);
 
     // GRUPO: SELECCIONAR CATEGORIA //
-    const groupSelect = document.createElement("div");
+    const groupSelect = document.createElement('div');
 
     // AUXILIAR PARA AÑADIR ATRIBUTOS
     attrFilled(groupSelect, {
-      class: "c-flex c-flex-column gap-1 form-professional-groupSelectCategory form-step",
-      "data-step": `${this.formRegister.getStepForm()}`,
-      "data-message": "category",
-      "data-inputSelectInstance": "category",
+      class: 'c-flex c-flex-column gap-1 form-professional-groupSelectCategory form-step',
+      'data-step': `${this.formRegister.getStepForm()}`,
+      'data-message': 'category',
     });
 
     // HEADER
-    const header = document.createElement("div");
-    actionClassString("c-flex c-flex-items-center gap-1 form-professional-groupSelectCategory__header", "add", header);
+    const header = document.createElement('div');
+    actionClassString('c-flex c-flex-items-center gap-1 form-professional-groupSelectCategory__header', 'add', header);
 
-    const title = document.createElement("h3");
-    actionClassString("form-professional-groupSelectCategory__title", "add", title);
+    const title = document.createElement('h3');
+    actionClassString('form-professional-groupSelectCategory__title', 'add', title);
 
-    const icon = document.createElement("i");
-    actionClassString("fas fa-id-card", "add", icon);
+    const icon = document.createElement('i');
+    actionClassString('fas fa-id-card', 'add', icon);
 
-    const titleText = document.createElement("span");
-    titleText.textContent = "Seleccionar Categoría";
+    const titleText = document.createElement('span');
+    titleText.textContent = 'Seleccionar Categoría';
 
     title.append(icon, titleText);
     header.appendChild(title);
 
     // CREAMOS EL ELEMENTO SELECT CON SU OPCIONES
-    const inputSelectInstance: SelectField = FormFieldFactory.createFieldForm("select", {
-      id: "category",
-      name: "category",
+    const inputSelectInstance: SelectField = FormFieldFactory.createFieldForm('select', {
+      id: 'category',
+      name: 'category',
       value: persistedCategory,
+      autofocus: false,
       disabled: false,
       required: false,
       items: [
         { value: EDefaultSelected.SELECT_CATEGORY, text: EDefaultSelected.SELECT_CATEGORY, disabled: true, selected: true },
-        { value: ECategoryKey.REPAIR, text: "Reparación y mantenimiento", disabled: false, selected: false },
-        { value: ECategoryKey.MOVE, text: "Mudanza y Transporte", disabled: false, selected: false },
-        { value: ECategoryKey.GARDEN, text: "Jardinería", disabled: false, selected: false },
+        { value: ECategoryKey.REPAIR, text: 'Reparación y mantenimiento', disabled: false, selected: false },
+        { value: ECategoryKey.MOVE, text: 'Mudanza y Transporte', disabled: false, selected: false },
+        { value: ECategoryKey.GARDEN, text: 'Jardinería', disabled: false, selected: false },
       ],
     });
 
-    const $SELECT_ELEMENT= inputSelectInstance.render() as HTMLSelectElement;
-    const $LABLE_CATEGORY_ELEMENT:HTMLLabelElement = document.createElement("label");
-    $LABLE_CATEGORY_ELEMENT.textContent = ""; /// => LABEL VACIO
+    const $SELECT_ELEMENT = inputSelectInstance.render() as HTMLSelectElement;
+    const $LABLE_CATEGORY_ELEMENT: HTMLLabelElement = document.createElement('label');
+    $LABLE_CATEGORY_ELEMENT.textContent = ''; /// => LABEL VACIO
 
     // AUXILIAR PARA AGREGAR ATRIBUTOS
     attrFilled($LABLE_CATEGORY_ELEMENT, {
-      class: "c-flex c-flex-items-centergap-1/2form-professional-groupSelectCategory__label",
+      class: 'c-flex c-flex-items-centergap-1/2form-professional-groupSelectCategory__label',
       for: $SELECT_ELEMENT.id,
     });
 
@@ -129,28 +126,28 @@ export default class FormStepOneUI implements iBuildStepUI {
     this.formRegister.addNewInput($SELECT_ELEMENT); // ==> SE AGREGA EL NUEVO INPUT AQUI
 
     // AUXILIAR PARA AÑADIR CLASES NECESARIAS
-    actionClassString("w-full form-professional-groupSelectCategory__select", "add", $SELECT_ELEMENT);
+    actionClassString('w-full form-professional-groupSelectCategory__select', 'add', $SELECT_ELEMENT);
 
     //ESTRUCTURA INTERNA LABEL ICONOS + TEXTO
-    const spanWrap = document.createElement("span");
-    actionClassString("c-flex c-flex-items-center gap-1/2", "add", spanWrap);
+    const spanWrap = document.createElement('span');
+    actionClassString('c-flex c-flex-items-center gap-1/2', 'add', spanWrap);
 
-    const iconLayer = document.createElement("i");
-    actionClassString("fas fa-layer-group", "add", iconLayer);
+    const iconLayer = document.createElement('i');
+    actionClassString('fas fa-layer-group', 'add', iconLayer);
 
-    const labelText = document.createElement("span");
-    labelText.textContent = "Elegir categoría";
+    const labelText = document.createElement('span');
+    labelText.textContent = 'Elegir categoría';
 
     spanWrap.append(iconLayer, labelText);
 
-    const spanRequired = document.createElement("span");
-    actionClassString("span-required", "add", spanRequired);
-    spanRequired.textContent = "*";
+    const spanRequired = document.createElement('span');
+    actionClassString('span-required', 'add', spanRequired);
+    spanRequired.textContent = '*';
 
     $LABLE_CATEGORY_ELEMENT.append(spanWrap, spanRequired);
 
     // ERROR SPAN 1
-    const errorDiv1 = formRegisterUI.spanError({ text: "", classessChild: "has-error" });
+    const errorDiv1 = formRegisterUI.spanError({ text: '', classessChild: 'has-error' });
     groupSelect.append(header, $LABLE_CATEGORY_ELEMENT, $SELECT_ELEMENT, errorDiv1);
 
     // JUNTAR TODO EN EL WRAPPER
@@ -160,16 +157,16 @@ export default class FormStepOneUI implements iBuildStepUI {
     // CUANDO EL USUARIO CAMBIA DE CATEGORIA
     inputSelectInstance.onChange((value) => {
       const currentCategory = value as TCategoryKey;
-      // SI LA CATEGORÍA PERSISTIDA != CATEGORÍA ACTUAL Y NO ES "Seleccione una categoria"
+      // SI LA CATEGORÍA PERSISTIDA  EXISTE Y CATEGORÍA ACTUAL Y NO ES "Seleccione una categoria"
       if (persistedCategory && persistedCategory !== currentCategory) {
         // RESETEAR CHECKS
-        this.checkGroupsBuilder.resetGroupChecks();
+        this.checkGroupsBuilder.resetGroupChecks(formRegisterUI.getStepUI().getStepByString());
       }
       this.handlerSelect({ value, groupSelect, $SELECT_ELEMENT, formRegisterUI });
     }); //EJECUTAR EL HANDLER DEL ONCHANGE(LA CALLBACK)
 
-    // DISPPARA EVENTO CON VALOR ACTUAL DEL SELECT AUTOMATICAMENTE EJECUTANDO EL HANDLER AL QUE SE SUSCRIBIÓ ANTES
-    inputSelectInstance.setValueAndTrigger(persistedCategory);
+    // DISPARA EVENTO CON VALOR ACTUAL DEL SELECT AUTOMATICAMENTE EJECUTANDO EL HANDLER AL QUE SE SUSCRIBIÓ ANTES
+    inputSelectInstance.triggerEvent('change');
 
     return wrapper;
   }

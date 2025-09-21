@@ -1,14 +1,14 @@
 // IMPORTACIONES
-import { iAttributesContentForm } from "../../../../interfaces/interfaces";
-import FormFieldFactory from "../../../../patterns/factory/FormFieldFactory.js";
-import { actionClassString } from "../../../../ui/auxiliars.js";
-import { attrFilled } from "../../../../utils/domUtils.js";
-import InputField from "../../../fields/components/InputField.js";
-import FormRegister from "../../controller/FormRegister.js";
-import FormRegisterUI from "../FormRegisterUI.js";
+import { iAttributesContentForm } from '../../../../interfaces/interfaces';
+import FormFieldFactory from '../../../../patterns/factory/FormFieldFactory.js';
+import { actionClassString } from '../../../../ui/auxiliars.js';
+import { attrFilled } from '../../../../utils/domUtils.js';
+import InputField from '../../../fields/components/InputField.js';
+import FormRegister from '../../controller/FormRegister.js';
+import FormRegisterUI from '../FormRegisterUI.js';
 
 // BUILDER PARA CREACIÓN DE CAMPOS DE FORMULARIO
-export default class InputBuilder{
+export default class InputBuilder {
   private inputs: HTMLInputElement[];
   private instanceFields: InputField[];
   constructor(private readonly formRegister: FormRegister) {
@@ -18,28 +18,29 @@ export default class InputBuilder{
   //------------------METODOS PUBLICOS--------------------------------------//
 
   // METODO PARA CREACION DE CAMPO => text, password, email, tel etc...(EN CADA LLAMADA UNA NUEVA INSTANCIA Y CREACION DE CUERPO REUTILIZABLE)
-  public createField({ attrsInput, iconClass, textSpan, formRegisterUI }: Pick<iAttributesContentForm, "attrsInput"> & { textSpan: string; iconClass: string, formRegisterUI:FormRegisterUI }): HTMLDivElement {
-    const wrapper = document.createElement("div");
+  public createField({ attrsInput, iconClass, textSpan, formRegisterUI }: Pick<iAttributesContentForm, 'attrsInput'> & { textSpan: string; iconClass: string; formRegisterUI: FormRegisterUI }): HTMLDivElement {
+    const wrapper: HTMLDivElement = document.createElement('div');
 
     // AUXILIAR PARA AGREGAR ATRIBUTOS
     attrFilled(wrapper, {
-      class:"c-flex c-flex-column gap-1/2 form-basic__field",
-      "data-message": attrsInput.id,
+      class: 'c-flex c-flex-column gap-1/2 form-basic__field',
+      'data-message': attrsInput.id,
     });
-    
-    //CREO Y CONFIGURO LA INSTANCIA DE ESTE MOMENTO
-    const inputInstance: InputField = FormFieldFactory.createFieldForm("input", {
+
+    //CREO Y CONFIGURO LA INSTANCIA EN ESTE MOMENTO PARA CADA NUEVA ISTANCIA DE CAMPOS
+    const inputInstance: InputField = FormFieldFactory.createFieldForm('input', {
       id: attrsInput.id,
       name: attrsInput.name,
-      type: attrsInput.type ?? "text",
-      value: attrsInput.value ?? "",
-      required: attrsInput.disabled ?? false,
+      type: attrsInput.type ?? 'text',
+      value: attrsInput.value ?? '',
+      required: attrsInput.required ?? false,
       disabled: attrsInput.disabled ?? false,
       autocomplete: attrsInput.autocomplete,
-      autofocus: attrsInput.autofocus,
-      "aria-label": attrsInput["aria-label"],
+      autofocus: attrsInput.autofocus ?? false,
+      'aria-label': attrsInput['aria-label'],
       lang: attrsInput.lang,
-      spellcheck: attrsInput.spellcheck ?? false,
+      autocompleteValue: attrsInput.autocompleteValue ?? 'off',
+      spellcheck: attrsInput.spellcheck,
       placeholder: attrsInput.placeholder,
     });
 
@@ -47,35 +48,35 @@ export default class InputBuilder{
 
     const $INPUT_ELEMENT = inputInstance.render() as HTMLInputElement;
     // AUXILIAR PARA AGREGAR CLASES EN STRING SEPARADOS POR ESPACIOS
-    actionClassString("form-basic__input", "add", $INPUT_ELEMENT);
+    actionClassString('form-basic__input', 'add', $INPUT_ELEMENT);
     this.inputs.push($INPUT_ELEMENT); //GUARDAR NUEVO ELEMENTO INPUT DE CAMPO EN ARRAY
     this.formRegister.addNewInput($INPUT_ELEMENT); //==> AGREGO NUEVO INPUT AL FORM
 
-    const label: HTMLLabelElement = document.createElement("label");
+    const label: HTMLLabelElement = document.createElement('label');
 
     attrFilled(label, {
-      class: "c-flex c-flex-items-center gap-1/2 form-basic__label",
-      for:attrsInput.id,
+      class: 'c-flex c-flex-items-center gap-1/2 form-basic__label',
+      for: attrsInput.id,
     });
     this.formRegister.addNewLabel(label); //==> AGREGO NUEVO LABEL AL FORM
 
-    const iconWrap = document.createElement("span");
-    actionClassString("c-flex c-flex-items-center gap-1/2", "add", iconWrap);
-  
-    const icon = document.createElement("i");
-    actionClassString(iconClass, "add", icon); //AGREGAR LAS CLASES DINAMICAMENTE PASAR COMO STRING
+    const iconWrap = document.createElement('span');
+    actionClassString('c-flex c-flex-items-center gap-1/2', 'add', iconWrap);
 
-    const text = document.createElement("span");
+    const icon = document.createElement('i');
+    actionClassString(iconClass, 'add', icon); //AGREGAR LAS CLASES DINAMICAMENTE PASAR COMO STRING
+
+    const text = document.createElement('span');
     text.textContent = textSpan;
 
-    const required = document.createElement("span");
-    actionClassString("span-required", "add", required);
-    required.textContent = "*";
+    const required = document.createElement('span');
+    actionClassString('span-required', 'add', required);
+    required.textContent = '*';
 
     iconWrap.append(icon, text);
     label.append(iconWrap, required);
 
-    const errorContainer:HTMLDivElement = formRegisterUI.spanError({ text: "", classesParent:"containerMsgError", classessChild: "has-error" });
+    const errorContainer: HTMLDivElement = formRegisterUI.spanError({ text: '', classesParent: 'containerMsgError', classessChild: 'has-error' });
 
     wrapper.append(label, $INPUT_ELEMENT, errorContainer);
     return wrapper;
@@ -92,7 +93,7 @@ export default class InputBuilder{
   }
 
   // MOSTRAR INSTANCIA DEL FORMULARIO
-  public getFormRegister():FormRegister{
+  public getFormRegister(): FormRegister {
     return this.formRegister;
   }
 
