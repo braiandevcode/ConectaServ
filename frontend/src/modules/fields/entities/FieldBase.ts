@@ -1,15 +1,12 @@
-import FieldBaseDto from "../dto/FieldBaseDto.js";
+import { iFieldEvents } from 'interfaces/interfaces.js';
+import FieldBaseDto from '../dto/FieldBaseDto.js';
 
 // PLANTILLA PARA CREACION DE DIFERENTES CAMPOS
 export default abstract class FieldBase<T extends string | FileList | null = string> {
-  protected eventHandlers: {
-    change?: (value: T) => void;
-    blur?: (value: T) => void;
-    focus?: () => void;
-    input?: (value: T) => void;
-  } = {};
-
-  constructor(protected readonly options: FieldBaseDto) {}
+  protected eventHandlers: iFieldEvents<T>;
+  constructor(protected readonly fieldBaseDto: FieldBaseDto) {
+    this.eventHandlers = {};
+  }
 
   protected abstract render(): HTMLElement;
   protected abstract getValue(): T | null;
@@ -40,28 +37,11 @@ export default abstract class FieldBase<T extends string | FileList | null = str
     if (!handler) return; // SI NO HAY HANDLER NO SEGUIR
 
     // SI EL EVENTO ES FOCUS
-    if (event === "focus") {
+    if (event === 'focus') {
       (handler as () => void)(); // => HANDLER SIN ARGUMENTO
     } else {
       // handler(this.getValue() as T | null) as T | null
       (handler as (value: T | null) => void)(this.getValue() as T | null); //=> SINO PASAR EL VALUE DE TIPO => T O NULL
     }
   }
-
-  // protected validate(): boolean {
-  //   if (this.options._isRequired) {
-  //     if (this.options._value === null) return false;
-
-  //     if (typeof this.options._value === "string" && (this.options._value as string).trim() === "") {
-  //       return false;
-  //     }
-
-  //     if (this.options._value instanceof FileList && this.options._value.length === 0) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
-
-  // protected abstract validate():void;
 }

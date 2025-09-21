@@ -1,15 +1,16 @@
 // IMPORTACIONES
-import { TCategoryOption, TOptionItem, TOptionsCheckForm, TOptionTypeGroup } from "../../../../types/types.js";
-import clearElementChild from "../../../../dom/clearElementChild.js";
-import FormFieldFactory from "../../../../patterns/factory/FormFieldFactory.js";
-import { EGroupCheckBox, EKeyDataByStep, ENamesOfKeyLocalStorage } from "../../../../types/enums.js";
-import { actionClassString } from "../../../../ui/auxiliars.js";
-import InputFieldCheck from "../../../../modules/fields/components/InputFieldCheck.js";
-import FormRegister from "../../../../modules/form/controller/FormRegister.js";
-import { attrFilled, convertTextOfTypes } from "../../../../utils/domUtils.js";
-import { readExistingData } from "../../../../utils/storageUtils.js";
-import FormRegisterUI from "../FormRegisterUI.js";
-import { ButtonNext } from "../../../../modules/buttons/components/ButtonNext.js";
+import { TCategoryOption, TOptionItem, TOptionsCheckForm, TOptionTypeGroup } from '../../../../types/types.js';
+import clearElementChild from '../../../../dom/clearElementChild.js';
+import FormFieldFactory from '../../../../patterns/factory/FormFieldFactory.js';
+import { EGroupCheckBox, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../../../types/enums.js';
+import { actionClassString } from '../../../../ui/auxiliars.js';
+import InputFieldCheck from '../../../fields/components/InputFieldCheck.js';
+import FormRegister from '../../controller/FormRegister.js';
+import { attrFilled, convertTextOfTypes } from '../../../../utils/domUtils.js';
+import { readExistingData } from '../../../../utils/storageUtils.js';
+import FormRegisterUI from '../FormRegisterUI.js';
+import ButtonBaseUI from '../../../buttons/ui/ButtonBaseUI.js';
+import { GROUPS_BY_STEP } from '../../../../config/constant.js';
 
 // BUILDER PARA CREACIÓN Y MANEJO DE GRUPOS DE OPCIONES CHECKBOX/RADIO PARA FORMULARIO
 export default class OptionGroupBuilder {
@@ -28,29 +29,29 @@ export default class OptionGroupBuilder {
 
     // MAPEAR ICONOS POR SU TIPO
     const iconByType: Record<TOptionTypeGroup, string> = {
-      service: "fa-tools",
-      context: "fa-building",
-      day: "fa-calendar-day",
-      hour: "fa-clock",
+      service: 'fa-tools',
+      context: 'fa-building',
+      day: 'fa-calendar-day',
+      hour: 'fa-clock',
     };
 
     // HEADER DEL GRUPO DE CHECKBOXES (SOLO UNA VEZ)
-    const $DIV_HEADER: HTMLDivElement = document.createElement("div");
-    actionClassString("c-flex c-flex-items-center gap-1 form-professional-groupSpeciality__context-header", "add", $DIV_HEADER);
+    const $DIV_HEADER: HTMLDivElement = document.createElement('div');
+    actionClassString('c-flex c-flex-items-center gap-1 form-professional-groupSpeciality__context-header', 'add', $DIV_HEADER);
 
-    const $ICON: HTMLElement = document.createElement("i");
+    const $ICON: HTMLElement = document.createElement('i');
     const iconName = iconByType[type as TOptionTypeGroup];
-    actionClassString(`fas ${iconName}`, "add", $ICON);
+    actionClassString(`fas ${iconName}`, 'add', $ICON);
 
-    const $H4: HTMLHeadingElement = document.createElement("h4");
-    actionClassString("c-flex c-flex-items-center c-flex-justify-center gap-1/2 form-professional-groupSpeciality__label", "add", $H4);
+    const $H4: HTMLHeadingElement = document.createElement('h4');
+    actionClassString('c-flex c-flex-items-center c-flex-justify-center gap-1/2 form-professional-groupSpeciality__label', 'add', $H4);
 
-    const $SPAN_TITLE: HTMLSpanElement = document.createElement("span");
+    const $SPAN_TITLE: HTMLSpanElement = document.createElement('span');
     $SPAN_TITLE.textContent = convertTextOfTypes({ textType: type });
 
-    const $SPAN_REQUIRED: HTMLSpanElement = document.createElement("span");
-    actionClassString("span-required", "add", $SPAN_REQUIRED);
-    $SPAN_REQUIRED.textContent = "*";
+    const $SPAN_REQUIRED: HTMLSpanElement = document.createElement('span');
+    actionClassString('span-required', 'add', $SPAN_REQUIRED);
+    $SPAN_REQUIRED.textContent = '*';
 
     $H4.append($SPAN_TITLE, $SPAN_REQUIRED);
     $DIV_HEADER.append($ICON, $H4);
@@ -65,25 +66,26 @@ export default class OptionGroupBuilder {
 
     // RECORRER VECTOR Y CREAR ELEMENTOS
     vectorGroupItemCheck.forEach((el, i) => {
-      const $DIV_SERVICE: HTMLDivElement = document.createElement("div");
+      const $DIV_SERVICE: HTMLDivElement = document.createElement('div');
 
       // INPUT CHECKSBOX
-      const inputCheck: InputFieldCheck = FormFieldFactory.createFieldForm("inputCheck", {
-        type: "checkbox",
+      const inputCheck: InputFieldCheck = FormFieldFactory.createFieldForm('inputCheck', {
+        type: 'checkbox',
         name: `${type}[]`,
         disabled: false,
         required: true,
         id: `${type}-${i}`,
         value: el.value,
         checked: false,
+        autofocus: false,
       });
 
-      inputCheck.setValue(el.value); //SETEAR AQUI EL VALUE QUE AUN NO EXISTE PARA QUE LO GUARDE LUEGO
+      inputCheck.setValue(el.value); //SETEAR AQUI EL VALUE QUE AUN NO EXISTE PARA QUE LO GUARDE LUEGO EN DTO(FUENTE DE LA VERDAD) Y DOM
 
       this.instancesFieldChecks.push(inputCheck);
 
       const $INPUT_CHECK = inputCheck.render() as HTMLInputElement;
-      actionClassString(`c-flex c-flex-justify-center c-flex-items-center cursor-pointer ${type}__input`, "add", $INPUT_CHECK); //AGREGAMOS LAS CLASES
+      actionClassString(`c-flex c-flex-justify-center c-flex-items-center cursor-pointer ${type}__input`, 'add', $INPUT_CHECK); //AGREGAMOS LAS CLASES
       this.checkBoxes.push($INPUT_CHECK); //AGREGAR A ARRAY DE INPUTS CHECKS EN THIS
       this.formRegister.addNewInput($INPUT_CHECK); //AGREGAR NUEVO INPUT AL FORMULARIO PRINCIPAL
 
@@ -93,17 +95,15 @@ export default class OptionGroupBuilder {
 
       // SI EL VALOR ESTA INCLUIDO EN LA PERSISTENCIA
       if (persistedValues.includes(el.value)) {
-        inputCheck.checked(); //MARCA CHECK AL INPUT
+        inputCheck.checked(); //MARCA CHECKED AL INPUT
         inputCheck.setValue(el.value);
       }
 
-      $INPUT_CHECK.value = inputCheck.getValue() as string;
-
-      const $LABEL_CHECK: HTMLLabelElement = document.createElement("label");
+      const $LABEL_CHECK: HTMLLabelElement = document.createElement('label');
       this.formRegister.addNewLabel($LABEL_CHECK);
 
       // CREACION DE CHECKS DE CADA GRUPO
-      actionClassString(`c-flex c-flex-items-center gap-1/2 ${type}`, "add", $DIV_SERVICE);
+      actionClassString(`c-flex c-flex-items-center gap-1/2 ${type}`, 'add', $DIV_SERVICE);
 
       // AUXILIAR PARA AGREGAR ATRIBUTOS
       attrFilled($LABEL_CHECK, {
@@ -134,15 +134,18 @@ export default class OptionGroupBuilder {
 
       // SI ES ARRAY => CHECKBOXES, SI ES STRING => RADIO
       if (Array.isArray(persisted)) {
-        const isChecked: boolean = persisted.includes(inputValue);
-        instance.setValueAndTrigger(inputValue, isChecked);
+        if (inputValue !== null) {
+          const isChecked: boolean = persisted.includes(inputValue);
+          instance.setValueAndTrigger(inputValue, isChecked);
+        }
       } else {
-        const isChecked: boolean = persisted === inputValue; // => SI ES IGUAL
-
-        // SI COINCIDE CON EL PRIMER NAME DEL RADIO EN CHECKED =====> SALIR DEL BUCLE
-        if (isChecked) {
-          instance.setValueAndTrigger(persisted, isChecked); // USAR EL PERSISTIDO
-          break; //SALGO PARA EVITAR DUPLICACION DE EVENTO
+        if (inputValue !== null) {
+          const isChecked: boolean = persisted === inputValue; // => SI ES IGUAL
+          // SI COINCIDE CON EL PRIMER NAME DEL RADIO EN CHECKED =====> SALIR DEL BUCLE
+          if (isChecked) {
+            instance.setValueAndTrigger(persisted, isChecked); // USAR EL PERSISTIDO
+            break; //SALGO PARA EVITAR DUPLICACION DE EVENTO
+          }
         }
       }
     }
@@ -157,79 +160,73 @@ export default class OptionGroupBuilder {
     clearElementChild({ elements: [wrapper] }); // ==> LIMIPIAR AL PRINCIPIO
 
     // --- CONTENEDOR PRINCIPAL ---
-    const $MAIN: HTMLDivElement = document.createElement("div");
+    const $MAIN: HTMLDivElement = document.createElement('div');
     // AUXILIAR PARA AGREGAR ATRIBUTOS AL MAIN
     attrFilled($MAIN, {
-      class: "c-flex c-flex-column gap-1 form-professional-groupSpeciality form-step",
-      "data-step": `${this.formRegister.getStepForm()}`,
-      "data-checks": "groups",
+      class: 'c-flex c-flex-column gap-1 form-professional-groupSpeciality form-step',
+      'data-step': `${this.formRegister.getStepForm()}`,
+      'data-checks': 'groups',
     });
 
     // --- HEADER PRINCIPAL ---
-    const $HEADER: HTMLDivElement = document.createElement("div");
-    actionClassString("c-flex c-flex-items-center gap-1 form-professional-groupSpeciality__header", "add", $HEADER);
+    const $HEADER: HTMLDivElement = document.createElement('div');
+    actionClassString('c-flex c-flex-items-center gap-1 form-professional-groupSpeciality__header', 'add', $HEADER);
 
-    const $H3 = document.createElement("h3");
-    actionClassString("form-professional-groupSpeciality__title", "add", $H3);
+    const $H3 = document.createElement('h3');
+    actionClassString('form-professional-groupSpeciality__title', 'add', $H3);
 
-    const $ICON = document.createElement("i");
-    actionClassString("fas fa-id-card", "add", $ICON);
+    const $ICON = document.createElement('i');
+    actionClassString('fas fa-id-card', 'add', $ICON);
 
-    const $SPAN_TITLE = document.createElement("span");
-    $SPAN_TITLE.textContent = "Detalles de tu actividad";
+    const $SPAN_TITLE = document.createElement('span');
+    $SPAN_TITLE.textContent = 'Detalles de tu actividad';
 
     $H3.append($ICON, $SPAN_TITLE);
     $HEADER.appendChild($H3);
 
     // --- WRAPPERS INTERMEDIOS ---
-    const $CHECKS_WRAPPER: HTMLDivElement = document.createElement("div");
-    actionClassString("mb-2 c-flex gap-2 form-professional-groupSpeciality__checks-wrapper", "add", $CHECKS_WRAPPER);
+    const $CHECKS_WRAPPER: HTMLDivElement = document.createElement('div');
+    actionClassString('mb-2 c-flex gap-2 form-professional-groupSpeciality__checks-wrapper', 'add', $CHECKS_WRAPPER);
 
-    const $CONTAINER_SPECIALITY: HTMLDivElement = document.createElement("div");
-    actionClassString("c-flex c-flex-column gap-1 form-professional-groupSpeciality__containerChecksSpecialitys", "add", $CONTAINER_SPECIALITY);
+    const $CONTAINER_SPECIALITY: HTMLDivElement = document.createElement('div');
+    actionClassString('c-flex c-flex-column gap-1 form-professional-groupSpeciality__containerChecksSpecialitys', 'add', $CONTAINER_SPECIALITY);
 
-    const $SERVICES_BODY: HTMLDivElement = document.createElement("div");
-    actionClassString("c-flex c-flex-column gap-1/2 form-professional-groupSpeciality__services-body", "add", $SERVICES_BODY);
+    const $SERVICES_BODY: HTMLDivElement = document.createElement('div');
+    actionClassString('c-flex c-flex-column gap-1/2 form-professional-groupSpeciality__services-body', 'add', $SERVICES_BODY);
 
     $CONTAINER_SPECIALITY.appendChild($SERVICES_BODY);
 
-    const $CONTEXT_WRAPPER: HTMLDivElement = document.createElement("div");
-    actionClassString("c-flex gap-3 form-professional-groupSpeciality__checks-wrapper", "add", $CHECKS_WRAPPER);
+    const $CONTEXT_WRAPPER: HTMLDivElement = document.createElement('div');
+    actionClassString('c-flex gap-3 form-professional-groupSpeciality__checks-wrapper', 'add', $CHECKS_WRAPPER);
 
-    const $CONTEXTS_BODY: HTMLDivElement = document.createElement("div");
-    actionClassString("c-flex c-flex-column c-flex-basis-full gap-1/2 form-professional-groupSpeciality__contexts-body", "add", $CONTEXTS_BODY);
+    const $CONTEXTS_BODY: HTMLDivElement = document.createElement('div');
+    actionClassString('c-flex c-flex-column c-flex-basis-full gap-1/2 form-professional-groupSpeciality__contexts-body', 'add', $CONTEXTS_BODY);
 
     $CONTEXT_WRAPPER.appendChild($CONTEXTS_BODY);
 
     $CHECKS_WRAPPER.append($CONTAINER_SPECIALITY, $CONTEXT_WRAPPER);
 
     // --- HORARIOS ---
-    const $DATES_CONTAINER: HTMLDivElement = document.createElement("div");
-    actionClassString("c-flex c-flex-column gap-1 form-professional-groupSpeciality__containerChecksDates", "add", $DATES_CONTAINER);
+    const $DATES_CONTAINER: HTMLDivElement = document.createElement('div');
+    actionClassString('c-flex c-flex-column gap-1 form-professional-groupSpeciality__containerChecksDates', 'add', $DATES_CONTAINER);
 
-    const $DATES_BODY: HTMLDivElement = document.createElement("div");
-    actionClassString("c-flex gap-3 form-professional-groupSpeciality__dates-body", "add", $DATES_BODY);
+    const $DATES_BODY: HTMLDivElement = document.createElement('div');
+    actionClassString('c-flex gap-3 form-professional-groupSpeciality__dates-body', 'add', $DATES_BODY);
 
-    const $DAYS_BODY: HTMLDivElement = document.createElement("div");
-    actionClassString("c-flex c-flex-column gap-1/2 form-professional-groupSpeciality__days-body", "add", $DAYS_BODY);
+    const $DAYS_BODY: HTMLDivElement = document.createElement('div');
+    actionClassString('c-flex c-flex-column gap-1/2 form-professional-groupSpeciality__days-body', 'add', $DAYS_BODY);
 
-    const $HOURS_BODY: HTMLDivElement = document.createElement("div");
-    actionClassString("c-flex c-flex-column gap-1/2 form-professional-groupSpeciality__hours-body", "add", $HOURS_BODY);
+    const $HOURS_BODY: HTMLDivElement = document.createElement('div');
+    actionClassString('c-flex c-flex-column gap-1/2 form-professional-groupSpeciality__hours-body', 'add', $HOURS_BODY);
 
     $DATES_BODY.append($DAYS_BODY, $HOURS_BODY);
     $DATES_CONTAINER.appendChild($DATES_BODY);
 
     // --- FOOTER CON BOTÓN ---
-    const $FOOTER: HTMLDivElement = document.createElement("div");
-    actionClassString("mb-2 c-flex c-flex-justify-end", "add", $FOOTER);
+    const $FOOTER: HTMLDivElement = document.createElement('div');
+    actionClassString('mb-2 c-flex c-flex-justify-end', 'add', $FOOTER);
 
-    const btnInstanceNext: ButtonNext = this.formRegister.createBtnNext(); //INSTANCIAR
-
-    //SUSCRIBIR EVENTO DE CLICK AL BOTON
-    this.formRegister.suscribeBtnNextClick({
-      instanceBtn: btnInstanceNext,
-      buildNewStep: () => formRegisterUI.getStepUI().buildStepTwo({ formRegister: this.formRegister, formRegisterUI }),
-    });
+    const btnInstanceNext: ButtonBaseUI = this.formRegister.createBtnNext(); //INSTANCIAR
 
     $FOOTER.appendChild(btnInstanceNext.getBtnElement()); // AGREGAR BOTON AL FOOTER
 
@@ -271,8 +268,8 @@ export default class OptionGroupBuilder {
       if (!inputInstance._hasSuscribeOnchange) {
         // POR CADA INSTANCIA DE CHECKBOX SUSCRIBIR
         inputInstance.onChange((val) => {
-          const elementsToPersist = [selectEl, ...this.checkBoxes]; //=> ELEMENTOS A PERSISTIR EN STORAGES
-          this.formRegister.saveDataStepPersistence({ step: 1, elements: elementsToPersist });
+          const elementsToPersist: (HTMLSelectElement | HTMLInputElement)[] = [selectEl, ...this.checkBoxes]; //=> ELEMENTOS A PERSISTIR EN STORAGES
+          this.formRegister.saveDataStepPersistence({ step: this.formRegister.getStepForm(), elements: elementsToPersist });
         });
       }
       inputInstance.suscribe(); //SUSCRIBE A EVENTO CHANGE
@@ -310,27 +307,37 @@ export default class OptionGroupBuilder {
     this.restore(stepThreeData, name);
   }
 
-  // METODO PARA LIMPIAR GRUPOS DE CHECKBOX
-  public resetGroupChecks(): void {
-    //  DESMARCAR TODOS LOS CHECKS DEL WRAPPER
+  public resetGroupChecks(stepKey: EKeyDataByStep): void {
+    // DESMARCA TODOS LOS CHECKBOXES ASOCIADOS A LA INSTANCIA ACTUAL
     this.getInstanceFieldChecks().forEach((input) => {
-      input.disChecked(); //NO ME IMPORTA COMO => PASAME EL CHECKED A FALSE
+      input.disChecked(); // PONE EN FALSE EL ESTADO CHECKED DE CADA INPUT
     });
 
-    //LIMPIAR STORAGE PARA ESTOS ARRAYS
-    const stepOneData = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA)[EKeyDataByStep.ONE] ?? {};
-    stepOneData[EGroupCheckBox.SERVICE] = [];
-    stepOneData[EGroupCheckBox.CONTEXT] = [];
-    stepOneData[EGroupCheckBox.DAY] = [];
-    stepOneData[EGroupCheckBox.HOUR] = [];
+    // LEE LOS DATOS EXISTENTES DEL LOCAL STORAGE USANDO LA CLAVE STEP_DATA
+    const existingData = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA);
 
-    //----------------GUARDAR NUEVAMENTE---------------------------//
+    // OBTIENE LOS DATOS DEL PASO SELECCIONADO O CREA UNO NUEVO VACIO SI NO EXISTE
+    const stepData = existingData[stepKey] ?? {};
 
-    //1- INDICO A QUE CLAVE DE ALMACENAMIENTO GUARDAR EL OBJETO
-    //2- PASO LA COPIA DE TODO EL OBJETO QUE EXISTIA
-    //3- PISO LOS VALORES DEL OBJETO CON LOS NUEVOS VALORES MODIFICADOS
-    //4- SERIALIZAR TODO A CADENA DE TEXTO
-    localStorage.setItem(ENamesOfKeyLocalStorage.STEP_DATA, JSON.stringify({ ...readExistingData(ENamesOfKeyLocalStorage.STEP_DATA), [EKeyDataByStep.ONE]: stepOneData }));
+    // OBTIENE EL ARRAY DE GRUPOS DE CHECKS A RESETEAR PARA ESTE PASO
+    const groupsToReset: string[] = GROUPS_BY_STEP[stepKey] ?? [];
+
+    // POR CADA GRUPO DEFINIDO, VACIA SU CONTENIDO (DEJA EL ARRAY VACIO)
+    groupsToReset.forEach((groupKey) => {
+      stepData[groupKey] = [];
+    });
+
+    // ACTUALIZA EL LOCAL STORAGE CON LOS NUEVOS DATOS MODIFICADOS
+    // 1. SE MANTIENE EL OBJETO EXISTENTE
+    // 2. SE SOBRESCRIBE EL PASO MODIFICADO CON LOS NUEVOS GRUPOS VACIOS
+    // 3. SE CONVIERTE TODO A STRING Y SE GUARDA EN EL LOCAL STORAGE
+    localStorage.setItem(
+      ENamesOfKeyLocalStorage.STEP_DATA,
+      JSON.stringify({
+        ...existingData,
+        [stepKey]: stepData,
+      }),
+    );
   }
 
   // VER ARRAY DE CHECKS
@@ -357,9 +364,9 @@ export default class OptionGroupBuilder {
   // METODO DE CREACION DE RADIOS PRESUPUESTO
   public createRadioLabel({ value, labelText, checked, disabled, name, customClasses }: { value: string; labelText: string; checked: boolean; disabled: boolean; name: string; customClasses?: string[] }): HTMLLabelElement {
     // CREACION DE RADIO
-    const inputInstance: InputFieldCheck = FormFieldFactory.createFieldForm("inputCheck", {
+    const inputInstance: InputFieldCheck = FormFieldFactory.createFieldForm('inputCheck', {
       name,
-      type: "radio",
+      type: 'radio',
       required: false,
       checked,
       disabled,
@@ -371,25 +378,25 @@ export default class OptionGroupBuilder {
     this.instancesFieldChecks.push(inputInstance); //AGREGAR A VECTOR DE INSTANCIACIONES
 
     const $INPUT_RADIO = inputInstance.render() as HTMLInputElement;
-    actionClassString("c-flex c-flex-items-center c-flex-justify-center cursor-pointer radio-option__input", "add", $INPUT_RADIO);
+    actionClassString('c-flex c-flex-items-center c-flex-justify-center cursor-pointer radio-option__input', 'add', $INPUT_RADIO);
     this.checkBoxes.push($INPUT_RADIO); //AGREGAR A VECTOR DE INPUT
 
-    const $LABEL: HTMLLabelElement = document.createElement("label");
+    const $LABEL: HTMLLabelElement = document.createElement('label');
 
     $LABEL.classList.add(
-      "c-flex",
-      "c-flex-items-center",
-      "gap-1/2",
-      "cursor-pointer",
-      "radio-option",
-      ...(customClasses ?? []) // LA UNICA DIFERENCIA DE CLASES Y ESTILOS
+      'c-flex',
+      'c-flex-items-center',
+      'gap-1/2',
+      'cursor-pointer',
+      'radio-option',
+      ...(customClasses ?? []), // LA UNICA DIFERENCIA DE CLASES Y ESTILOS
     );
 
     this.formRegister.addNewInput($INPUT_RADIO);
     this.formRegister.addNewLabel($LABEL);
 
-    const span = document.createElement("span");
-    actionClassString("radio-option__label", "add", span);
+    const span = document.createElement('span');
+    actionClassString('radio-option__label', 'add', span);
 
     span.textContent = labelText;
     $LABEL.append($INPUT_RADIO, span);

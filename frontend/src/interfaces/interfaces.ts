@@ -1,7 +1,9 @@
 // IMPORTACIONES
-import FormRegisterUI from "../modules/form/ui/FormRegisterUI.js";
-import { EDefaultSelected, EKeyDataByStep } from "../types/enums.js";
-import { TCategoryKey, TFieldState, TFieldType, TFormElement, TTypeBtn, TWithOptional } from "../types/types";
+import ButtonBaseUI from '../modules/buttons/ui/ButtonBaseUI.js';
+import FormRegister from '../modules/form/controller/FormRegister.js';
+import FormRegisterUI from '../modules/form/ui/FormRegisterUI.js';
+import { EDefaultSelected, EKeyDataByStep } from '../types/enums.js';
+import { TCategoryKey, TCustomAttributes, TFieldState, TFieldType, TFormElement, TTypeBtn } from '../types/types';
 
 // INTERFACE OBSERVER
 export interface iOnchangeObserver {
@@ -37,15 +39,39 @@ export interface iRadioButton {
   value?: string;
 }
 
+// INTERFACES PARA EVENTOS EN CAMPOS DE FORMULARIOS
+export interface iFieldEvents<T extends string | FileList | null = string> {
+  change?: (value: T) => void;
+  blur?: (value: T) => void;
+  focus?: () => void;
+  input?: (value: T) => void;
+}
+
+export interface iChange<T> {
+  onChange(handler: (value: T) => void): void;
+}
+
+export interface iBlur<T> {
+  onBlur(handler: (value: T) => void): void;
+}
+
+export interface iFocus {
+  onFocus(handler: () => void): void;
+}
+
+export interface iInput<T> {
+  onInput(handler: (value: T) => void): void;
+}
+
 // DATOS DEL REGISTRO DEL PROFESIONAL
 export interface iDataByStep {
-  [EKeyDataByStep.ZERO]: {
-    fullName: string;
-    username: string;
-    email: string;
-    location: string;
-    terms: boolean;
-  };
+  // [EKeyDataByStep.ZERO]: {
+  //   fullName: string;
+  //   username: string;
+  //   email: string;
+  //   location: string;
+  //   terms: boolean;
+  // };
   [EKeyDataByStep.ONE]: {
     category: TCategoryKey; //SOLO CATEGORIA SELECCIONADA
     service: string[];
@@ -85,10 +111,10 @@ export interface iFormStateValidation {
 
   // PASO 1 CATEGORIA
   category: TFieldState;
-  "service[]": TFieldState;
-  "context[]": TFieldState;
-  "day[]": TFieldState;
-  "hour[]": TFieldState;
+  'service[]': TFieldState;
+  'context[]': TFieldState;
+  'day[]': TFieldState;
+  'hour[]': TFieldState;
 
   // PASO 2 PERFIL
   descriptionUser: TFieldState;
@@ -197,7 +223,7 @@ export interface iPhatPages {
 // INTERFAZ ESPECIFICA PARA LOS SELECTED DEL FORMULARIO EN VALIDACIONES SIMILARES CON DIFERENTE VALUES Y MENSAJES
 export interface IDefaultSelectedOnError {
   default: EDefaultSelected;
-  error: "";
+  error: '';
 }
 
 // INTERFACE ESPECIFICA PARA BOTON/ES DE MODALES
@@ -212,7 +238,7 @@ export interface iOptionsBtnsModals {
 // OPCIONES DEL MODAL DE TIPO FORMULARIO
 export interface iFormOptions {
   attributesForm?: Record<string, string>;
-  containerMainForm?: HTMLElement,
+  containerMainForm?: HTMLElement;
   classListForm?: string;
   classGroupInputs?: string; //CLASES OPCIONALES PARA LOS CONTENEDORES (GRUPO) DE LOS INPUTS
   classContainerForm?: string;
@@ -240,8 +266,13 @@ export interface iModalOptions {
 // INTERFACE PARA ATRIBUTOS TIPICOS DE FORMULARIOS
 export interface iAttributesContentForm {
   attrsInput: iFieldConfig;
-  elementType?: "input" | "select" | "textarea"; //PARA TIPO DE ELEMENTO, FORMA MAS DECLARATIVA Y CLARA DE ANALIZAR QUE SE TIPO DE ELEMENTO CREARÁ.PD: instanceof SOLO SIRVE PARA ANALIZAR EN TIEMPO DE EJECUCIÓN NO DE CREACION.
-  selectOptions?: { value: string; text: string; disabled?: boolean; selected?: boolean }[];
+  elementType?: 'input' | 'select' | 'textarea'; //PARA TIPO DE ELEMENTO, FORMA MAS DECLARATIVA Y CLARA DE ANALIZAR QUE SE TIPO DE ELEMENTO CREARÁ.PD: instanceof SOLO SIRVE PARA ANALIZAR EN TIEMPO DE EJECUCIÓN NO DE CREACION.
+  selectOptions?: {
+    value: string;
+    text: string;
+    disabled?: boolean;
+    selected?: boolean;
+  }[];
   attributesForm?: Record<string, string>;
 }
 
@@ -249,13 +280,13 @@ export interface iAttributesContentForm {
 export interface iBtn {
   disabled: boolean;
 
-  "aria-label"?: string;
+  'aria-label'?: string;
 
   /**
    * ATRIBUTOS HTML ADICIONALES PARA EL BOTON.
    * EJEMPLO: { 'data-step': 2, disabled: true }
    */
-  attrs?: Record<string, string | number | boolean>;
+  attrs?: TCustomAttributes;
 
   /**
    * CLASES CSS PARA EL ICONO DENTRO DEL BOTON.
@@ -276,19 +307,15 @@ export interface iBtn {
    * TIPO BOTON HTML.
    */
   type: TTypeBtn;
+
+  isLoading: boolean;
+
+  eventName: keyof HTMLElementEventMap;
+  handler: EventListenerOrEventListenerObject;
 }
 
-// INTERFACE PARA CONSTRUCCION DE PASOS
-// export interface iBuildStepUI {
-//   buildStep<T extends { formRegisterUI: FormRegisterUI }>(
-//     param: T
-//   ): HTMLDivElement | void | Promise<HTMLElement | void>;
-// }
-
 export interface iBuildStepUI {
-  buildStep(
-    param: { formRegisterUI: FormRegisterUI; }
-  ): HTMLDivElement | void | Promise<HTMLElement | void>;
+  buildStep(param: { formRegisterUI: FormRegisterUI }): HTMLDivElement | void | Promise<HTMLElement | void>;
 }
 // INTERFAZ PARA CONSTRUIR EL DOM DE FORMULARIO
 export interface iBuildFormUI {
@@ -296,13 +323,13 @@ export interface iBuildFormUI {
 }
 
 // INTERFAZ BASE
-export interface iBaseFieldOptions {
+export interface iBaseFieldOptions<T> {
   name: string;
   id?: string;
-  value: string;
+  value: T;
   required: boolean;
   disabled: boolean;
-  autofocus?: boolean;
+  autofocus: boolean;
 }
 
 // INTERFACE PARA BOTONES QUE NECESITEN IMPLEMENTAR SU TEXTO
@@ -316,10 +343,11 @@ export interface iBtnIcon {
 }
 
 export interface iTextField {
-  "aria-label"?: string;
-  spellcheck?: boolean | "true" | "false";
+  'aria-label'?: string;
+  spellcheck?: boolean;
   lang?: string;
   autocomplete: boolean;
+  autocompleteValue?: string;
 }
 
 export interface iFieldConfig {
@@ -331,39 +359,47 @@ export interface iFieldConfig {
   required?: boolean;
   disabled?: boolean;
   autofocus?: boolean;
-  spellcheck?: boolean | "true" | "false";
+  spellcheck?: boolean;
   lang?: string;
   autocomplete: boolean;
-  "aria-label"?: string;
+  autocompleteValue: string;
+  'aria-label'?: string;
 }
 
 // INTERFACES ESPECÍFICAS
+export interface iOptionsItems {
+  value: string;
+  text: string;
+  disabled: boolean;
+  selected: boolean;
+}
+
 // PARA SELECTS
-export interface iSelectFieldOptions extends iBaseFieldOptions {
+export interface iSelectFieldOptions extends iBaseFieldOptions<string> {
   // ATRIBUTOS PARA LOS OPTIONS
-  items: { value: string; text: string; disabled?: boolean; selected?: boolean }[];
-  "aria-label"?: string;
+  items: iOptionsItems[];
+  'aria-label'?: string;
 }
 
 // PARA CAMPOS NORMALES text, password etc.
-export interface iInputFieldOptions extends iBaseFieldOptions, iTextField {
+export interface iInputFieldOptions extends iBaseFieldOptions<string>, iTextField {
   type: TFieldType;
   placeholder?: string;
 }
 
-export interface iInputFieldCheckOptions extends TWithOptional<iBaseFieldOptions, "id" | "autofocus"> {
+export interface iInputFieldCheckOptions extends iBaseFieldOptions<string> {
   checked: boolean;
   type: string;
 }
 
 // PARA CAMPOS DE ARCHIVOS
-export interface iInputFileOptions extends iBaseFieldOptions {
+export interface iInputFileOptions extends iBaseFieldOptions<string> {
   accept?: string;
   multiple?: boolean;
   type: TFieldType;
 }
 
-export interface iTextAreaFieldOptions extends iBaseFieldOptions, iTextField {
+export interface iTextAreaFieldOptions extends iBaseFieldOptions<string>, iTextField {
   rows: number;
   cols: number;
   placeholder?: string;
@@ -371,11 +407,16 @@ export interface iTextAreaFieldOptions extends iBaseFieldOptions, iTextField {
 }
 
 // PARA CAMPOS DE ARCHIVOS
-export interface iTextAreaFileOptions extends iBaseFieldOptions {
-  accept?: string;
-  multiple?: boolean;
-  type: TFieldType;
-  placeholder: string;
+// export interface iTextAreaFileOptions extends iBaseFieldOptions<> {
+//   // accept?: string;
+//   // multiple?: boolean;
+//   type: TFieldType;
+//   placeholder: string;
+// }
+
+// CONTRATO PARA IMPLEMENTAR EN BOTONES QUE REQUIERAN ACTUALIZAR ATRIBUTO EN BOTON
+export interface iDataStep {
+  updateAttributeDataStep({ btnInstance, formRegister }: { btnInstance: ButtonBaseUI; formRegister: FormRegister }): void;
 }
 
 // INTERFACE PARA RETORNO DE VALIDACIONES EN CAMPOS
@@ -385,4 +426,73 @@ export interface iValidateField {
 
 export interface IValidator {
   validate(value?: string | File | FileList | null): TFieldState;
+}
+
+// APLICANDO PRINCIPIO ISP ==> PARA TRIBUTOS HTML
+// PARA CHECKS
+export interface iCheckbox {
+  checked(): void;
+  disChecked(): void;
+}
+
+// PARA TIPOS
+export interface iInputType {
+  setType(type: TFieldType): void;
+}
+
+// PARA AGREGAR NAME
+export interface iName {
+  setName(name: string): void;
+}
+
+// PARA ID
+export interface iIdentifier {
+  setId(id: string): void;
+}
+
+// PARA REQUIRED
+export interface isRequired {
+  required(): void;
+  disRequired(): void;
+}
+
+// PARA PLACEHOLDER
+export interface iPlaceHolder {
+  setPlaceholder(placeholder: string): void;
+}
+
+// PARA AUTOCOMPLETE
+export interface iAutocomplete {
+  setAutocomplete(autocomplete: boolean): void;
+  setAutocompleteValue(value: string): void;
+}
+
+// PARA DESHABILITAR O HABILITAR
+export interface iEnableAndDisabledAutocomplete {
+  enableAutocomplete(): void;
+  disabledAutocomplete(): void;
+}
+
+// PARA ARIA LABEL
+export interface iAriaLabel {
+  // AGREGAR NUEVO AREA LABEL
+  setAriaLabel(labelArea: string): void;
+}
+
+// PARA TEXTCONTENT
+export interface iTextContent {
+  addTextContent(text: string): void;
+}
+
+// PARA CORRECCION Y TIPO DE LENGUA A CORREGUIR
+export interface iSpellcheckAndLang {
+  // SETEAR EL LANG
+  setLang(lang: string): void;
+  // SETEAR EL SPELLCHECK
+  setSpellcheck(spellcheck: boolean): void;
+}
+
+export interface iFile {
+  setAccept(value: string): void;
+  setMultiple(multiple: boolean): void;
 }

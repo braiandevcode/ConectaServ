@@ -1,39 +1,39 @@
 // IMPORTACIONES
-import { formState, formStateValidField } from "../../../config/constant";
-import { TFieldName, TInputs } from "../../../types/types";
-import FormRegister from "../../form/controller/FormRegister.js";
-import FormValidationCurrentStepDto from "../dto/FormValidationCurrentStepDto.js";
+import {formState, formStateValidField} from '../../../config/constant';
+import {TFieldName, TInputs} from '../../../types/types';
+import FormRegister from '../../form/controller/FormRegister.js';
+import FormValidationCurrentStepDto from '../dto/FormValidationCurrentStepDto.js';
 
 // MODULO DE LOGICA DE VALIDACION DEL FROMULARIO
 export default class FormValidationCurrentStepUI {
   constructor(private readonly formValidationCurrentStepDto: FormValidationCurrentStepDto) {}
 
-//   // VALIDACIONES PASO 1
-//   public stepOne(): void {
+  //   // VALIDACIONES PASO 1
+  //   public stepOne(): void {
 
-//   }
+  //   }
 
-//   //   // SELECTECT CATEGORIA PASO UNO
-//   //   public stepOneSelectCategory() {}
+  //   //   // SELECTECT CATEGORIA PASO UNO
+  //   //   public stepOneSelectCategory() {}
 
-//   // VALIDACIONES PASO 2
-//   public stepTwo(): void | null {}
+  //   // VALIDACIONES PASO 2
+  //   public stepTwo(): void | null {}
 
-//   // VALIDACIONES PASO 3 PRESUPUESTO
-//   public stepThreeBudge(): void | null {}
+  //   // VALIDACIONES PASO 3 PRESUPUESTO
+  //   public stepThreeBudge(): void | null {}
 
-//   // VALIDACIONES CAMPOS ULTIMO PASO
-//   public stepLast(): void {}
+  //   // VALIDACIONES CAMPOS ULTIMO PASO
+  //   public stepLast(): void {}
 
   // VALIDAR CAMPOS DE CADA PASO
-  public validateStep({ step, formRegister }: { step: number; formRegister: FormRegister; listSectionProfile?: string[] }): void {
+  public validateStep({step, formRegister}: {step: number; formRegister: FormRegister; listSectionProfile?: string[]}): void {
     const $BUTTON = formRegister.getFormElement().querySelector(`.container-btn__next[data-step="${step}"]`) as HTMLButtonElement | undefined; // REFERENCIAR BOTO DE PASOS SIGUIENTE
 
     if (!$BUTTON) return; //ASEGURAR QUE EXISTA ELEMENTO DE BOTON
 
     // const { isTerms, isSelected, isSelectedLocation, isValidCheckBoxesDetailsProfession, isBudgeNo, isBudgeYes, isValidBasic, isValidBudgeAmount, isValidExperiences, isValidProfile, isValidDescription } = globalStateValidationStep;
 
-    const strategy: TInputs= formState.validationTypesByStep[step]; //OBJETO QUE OBTIENE LA CLAVE DEL PASO Y VERIFICA EL VALOR
+    const strategy: TInputs = formState.validationTypesByStep[step]; //OBJETO QUE OBTIENE LA CLAVE DEL PASO Y VERIFICA EL VALOR
 
     const descriptionText = formRegister.getFormElement().querySelector('[name="descriptionUser"]') as HTMLTextAreaElement | null;
     const profileInput = formRegister.getFormElement().querySelector('[name="imageProfile"]') as HTMLInputElement | null;
@@ -49,7 +49,9 @@ export default class FormValidationCurrentStepUI {
       //SI TOCA EL CAMPO DESCRPCION DEBE VALIDAR SINO POR DEFECTO TRUE =>  ADEMAS
       // SI TOCA EL INPUT DE PERFIL VALIDAR O TRUE => ADEMAS
       // SI TOCA EL INPUT DE EXPERIENCIAS VALIDAR SINO TRUE => TODO DEBE SER TRUE POR DEFAULT SIEMPRE ES TRUE
-      (isDescriptionTouched ?  this.formValidationCurrentStepDto.isIsValidDescription() : true) && (isProfileTouched ? this.formValidationCurrentStepDto.isIsValidProfile() : true) && (isExperiencesTouched ? this.formValidationCurrentStepDto.isIsValidExperiences() : true);
+      (isDescriptionTouched ? this.formValidationCurrentStepDto.isIsValidDescription() : true) &&
+      (isProfileTouched ? this.formValidationCurrentStepDto.isIsValidProfile() : true) &&
+      (isExperiencesTouched ? this.formValidationCurrentStepDto.isIsValidExperiences() : true);
 
     //ESTRATEGIA FINAL PARA ESTE PASO
     const filesAndDescriptionValid =
@@ -73,7 +75,7 @@ export default class FormValidationCurrentStepUI {
 
     // CREA UNA LISTA  DONDE SU NAME ESTE EN formStateValidate
     const fieldsToValidate = inputsInStep.filter(
-      (el) => el.name && Object.prototype.hasOwnProperty.call(formStateValidField, el.name) //QUE EL NAME ESTE EN ESE OBJETO
+      (el) => el.name && Object.prototype.hasOwnProperty.call(formStateValidField, el.name), //QUE EL NAME ESTE EN ESE OBJETO
     );
 
     // SE AGREGA VALIDACIONES A LOS CAMPOS CON MENSAJES DE ERROR
@@ -83,28 +85,33 @@ export default class FormValidationCurrentStepUI {
 
       // SI EL CAMPO ES OPCIONAL Y ESTA VACIO LO CONSIDERAMOS VALIDO
       const isEmptyOptional =
-        (el.name === "descriptionUser" && !el.value.trim()) || //SI EL NAME ES "descriptionUser" Y ESTA VACIO ES VALIDO
-        (el.name === "imageProfile" && !(el as HTMLInputElement).files?.length) || // O SI EL NAME ES "imageProfile" Y ESTA VACIO ES VALIDO
-        (el.name === "imageExperiences" && !(el as HTMLInputElement).files?.length); // O SI EL NAME ES "imageExperiences" Y ESTA VACIO ES VALIDO
+        (el.name === 'descriptionUser' && !el.value.trim()) || //SI EL NAME ES "descriptionUser" Y ESTA VACIO ES VALIDO
+        (el.name === 'imageProfile' && !(el as HTMLInputElement).files?.length) || // O SI EL NAME ES "imageProfile" Y ESTA VACIO ES VALIDO
+        (el.name === 'imageExperiences' && !(el as HTMLInputElement).files?.length); // O SI EL NAME ES "imageExperiences" Y ESTA VACIO ES VALIDO
 
-      const isValidOverride = el.name === "amountBudge" ? this.formValidationCurrentStepDto.isIsValidBudgeAmount : field?.isValid;
+      const isValidOverride = el.name === 'amountBudge' ? this.formValidationCurrentStepDto.isIsValidBudgeAmount : field?.isValid;
       // DEVUELVE TRUE SI:
       // - EL CAMPO ES OPCIONAL Y ESTA VACIO (POR LO TANTO VALIDO)
       // - O EL CAMPO ES VALIDO (isValidOverride)
       // - O EL PRESUPUESTO ES NO
       // - O EL PRESUPUESTO ES SI Y ES VALIDO
 
-      return isEmptyOptional || this.formValidationCurrentStepDto.isIsBudgeNo() || (this.formValidationCurrentStepDto.isIsBudgeYes() && this.formValidationCurrentStepDto.isIsValidBudgeAmount()) || isValidOverride === true;
+      return (
+        isEmptyOptional ||
+        this.formValidationCurrentStepDto.isIsBudgeNo() ||
+        (this.formValidationCurrentStepDto.isIsBudgeYes() && this.formValidationCurrentStepDto.isIsValidBudgeAmount()) ||
+        isValidOverride === true
+      );
     });
 
     const isValid = strategyValid && allFieldsValid; //SI DE LA ESTRATEGIA Y LOS CAMPOS VERIFICADOS ESTAN OK SEGUIR
 
-    formState.stepStatus = { ...formState.stepStatus, [step]: isValid };
+    formState.stepStatus = {...formState.stepStatus, [step]: isValid};
 
     if (isValid) {
-      $BUTTON?.removeAttribute("disabled");
+      $BUTTON?.removeAttribute('disabled');
     } else {
-      $BUTTON?.setAttribute("disabled", "true");
+      $BUTTON?.setAttribute('disabled', 'true');
     }
   }
 }

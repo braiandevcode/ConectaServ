@@ -1,8 +1,8 @@
 // FUNCION REUTILIZABLE PARA TODO TIPO DE ACCIONES CON FETCH
-const apiRequest = async<T>(url: string, options: RequestInit = {} ):Promise<T> => {
+const apiRequest = async <T>(url: string, options: RequestInit = {}): Promise<T> => {
   try {
     const response = await fetch(url, options); //CONSULTA
-    
+
     // SI FALLO ALGO
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -15,5 +15,5 @@ const apiRequest = async<T>(url: string, options: RequestInit = {} ):Promise<T> 
     console.error('API request error:', error);
     throw error;
   }
-}
+};
 export default apiRequest;

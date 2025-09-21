@@ -1,65 +1,87 @@
-import { iSelectFieldOptions } from "../../../interfaces/interfaces";
-import OptionItem from "../components/OptionItem.js";
-import FieldBaseDto from "../dto/FieldBaseDto.js";
+import { iIdentifier, iName, isRequired } from 'interfaces/interfaces.js';
+import OptionItem from '../components/OptionItem.js';
+import SelectFieldDto from '../dto/SelectFieldDto.js';
 
 // CAMPO SELECT QUE HEREDA DE BASE
-export default class SelectFieldUI {
+export default class SelectFieldUI implements iName, iIdentifier, isRequired {
   private element: HTMLSelectElement;
-  // EN this.options AL TIPO FieldBaseOptions LE AGREGAMOS EL TIPO ESPECIFICO DEL GENERICO "T" Y EL SEGUNDO DE "O"
-  constructor(private readonly options: FieldBaseDto<string, iSelectFieldOptions>) {
-    this.element = document.createElement("select");
-    this.buidSelect();
+  constructor(private readonly fieldSelectDto: SelectFieldDto) {
+    this.element = document.createElement('select');
+    this.buildSelect();
   }
 
   // CONSTRUIR EL DOM DEL SELECT
-  public buidSelect(): void {
-    this.element.setAttribute("id", this.options._id);
-    this.element.setAttribute("name", this.options._name);
-    if (this.options._currentDisabled) this.element.setAttribute("disabled", "true");
-    if (this.options._isRequired) this.element.setAttribute("required", "");
-    if (this.options._options.autofocus) this.element.setAttribute("autofocus", "");
-    if (this.options._value) this.element.value = this.options._value;
+  public buildSelect(): void {
+    this.setId(this.fieldSelectDto._id);
+    this.setName(this.fieldSelectDto._name);
+    this.isOnFocus(this.fieldSelectDto._autoFocus);
+    if (this.fieldSelectDto._currentDisabled) this.disabled();
+    if (this.fieldSelectDto._isRequired) this.required();
 
     // CREAR LAS OPCIONES SEGUN CONFIGURACION
     this.renderOptions();
+    this.setValue(this.fieldSelectDto._value as string);
+  }
+
+  public setId(id: string): void {
+    this.fieldSelectDto.setId(id); // ==> UNICA FUENTE DE LA VERDAD DTO
+    this.element.setAttribute('id', id); // APLICAR VALOR DE ID A ELEMENTO
+  }
+
+  public setName(name: string): void {
+    this.fieldSelectDto.setName(name); // ==> UNICA FUENTE DE LA VERDAD DTO
+    this.element.setAttribute('name', name);
   }
 
   private renderOptions(): void {
     // CREAR LAS OPCIONES SEGUN CONFIGURACION
-    this.options._options.items.forEach((opt) => {
-      const option: OptionItem= new OptionItem(opt.value, opt.text, opt.disabled, opt.selected);
+    this.fieldSelectDto.itemsOption.forEach((opt) => {
+      const option: OptionItem = new OptionItem(opt.value, opt.text, opt.disabled, opt.selected);
       const optioEl: HTMLOptionElement = option.getElement();
       this.element.appendChild(optioEl);
     });
   }
 
   // AÑADIR VALOR AL DOM
-  public setValue(): void {
-    // SI EXISTE ELEMENTO Y SI EL VALOR NO ES NULL
-    if (this.element && this.options._value) {
-      this.element.value = this.options._value; //ASIGNAR EL VALOR AL ELEMENTO
-    }
+  public setValue(value: string): void {
+    this.fieldSelectDto.setValue(value); //SETEAR EL DTO
+    this.element.value = value; //ASIGNAR EL VALOR AL ELEMENTO
   }
 
-  // AGREGAR AUTOFOCUS
-  public addAutoFocus(): void {
-    // SI EXISTE ELEMENTO Y SI EL VALOR NO ES NULL
-    if (this.element && this.options._options.autofocus) {
-      this.element.setAttribute("autofocus", "");
-    }
+  // SETEO DE FOCUS
+  private isOnFocus(focus: boolean) {
+    this.fieldSelectDto.setFocus(focus); //SETEAR EL DTO
+    this.fieldSelectDto._autoFocus ? this.element.setAttribute('autofocus', '') : this.element.removeAttribute('autofocus');
   }
 
-  // REMOVER AUTOFOCUS
-  public removeAutoFocus(): void {
-    // SI EXISTE ELEMENTO Y SI EL VALOR NO ES NULL
-    if (this.element && this.element.hasAttribute("autofocus")) {
-      this.element.removeAttribute("autofocus");
-    }
+  public required(): void {
+    this.setRequired(true);
   }
 
-    // VER VALOR ACTUAL DEL SELECT
+  public disRequired(): void {
+    this.setRequired(false);
+  }
+
+  // DESHABILITAR CAMPO
+  public disabled(): void {
+    this.fieldSelectDto.disabled(); // => DESHABILITAR EN DTO UNICA FUENTE DE LA VERDAD
+    this.element.setAttribute('disabled', ''); // => ACTUALIZAMOS ATRIBUTO
+  }
+
+  // HABILITAR CAMPO
+  public enable(): void {
+    this.fieldSelectDto.enabled(); // => HABILITAR EN DTO UNICA FUENTE DE LA VERDAD
+    this.element.removeAttribute('disabled'); // => REMOVEMOS EL ATRIBUTO EN ELEMENTO
+  }
+
+  private setRequired(required: boolean): void {
+    this.fieldSelectDto.setRequired(required); // ==> SETEAR DTO FUENTE DE LA VERDAD
+    required ? this.element.setAttribute('required', '') : this.element.removeAttribute('required'); // REQUERIR VALOR O NO
+  }
+
+  // VER VALOR ACTUAL DEL SELECT
   public getValue(): string {
-    return this.element.value;
+    return this.fieldSelectDto._value as string;
   }
 
   // ACCESOR DE PROPIEDAD PARA VER ELEMENTO

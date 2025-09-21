@@ -1,37 +1,25 @@
-
-import { ButtonFactory } from "../../../patterns/factory/ButtonFactory.js";
-import { hide, show } from "../../../ui/auxiliars.js";
-import ButtonBaseDto from "../../buttons/dto/ButtonsBaseDto.js";
-import ModalBaseDto from "../dto/ModalBaseDto.js";
+import ButtonBaseUI from '../../../modules/buttons/ui/ButtonBaseUI.js';
+import {ButtonFactory} from '../../../patterns/factory/ButtonFactory.js';
+import {actionClassString} from '../../../ui/auxiliars.js';
+import ButtonBaseDto from '../../buttons/dto/ButtonsBaseDto.js';
+import ModalBaseDto from '../dto/ModalBaseDto.js';
 
 export default class ModalBaseUI {
-  private wrapper: HTMLDivElement;
-  private modal: HTMLDivElement;
+  public wrapper: HTMLDivElement;
+  public modal: HTMLDivElement;
 
-  // ATRIBUTO CONFIGURATIVO DE EVENTOS DE BOTONES EN MODALES
-  protected event?: {
-    on?: (
-      eventName: keyof HTMLElementEventMap,
-      handler: EventListenerOrEventListenerObject
-    ) => void;
-    off?: (
-      eventName: keyof HTMLElementEventMap,
-      handler: EventListenerOrEventListenerObject
-    ) => void;
-  };
-
-  constructor(private readonly options: ModalBaseDto) {
-    this.wrapper = document.createElement("div");
-    this.modal = document.createElement("div");
+  constructor(private readonly modalBaseDto: ModalBaseDto) {
+    this.wrapper = document.createElement('div');
+    this.modal = document.createElement('div');
     this.buildModal();
   }
 
   // CONSTRUCCION DEL MODAL
   private buildModal(): void {
     // SI SE AGREGAN MAS CLASES AÑADIR AL BUILDER
-    this.options.setClassContainerModal(this.options.parentModalClass,this.wrapper);
+    this.modalBaseDto.setClassContainerModal(this.modalBaseDto.parentModalClass, this.wrapper);
     // SI SE LE AÑADEN MAS CLASES AL MODAL AGREGAR
-    this.options.setClassModal(this.options.modalClass, this.modal);
+    this.modalBaseDto.setClassModal(this.modalBaseDto.modalClass, this.modal);
     this.wrapper.appendChild(this.modal); //==> AGREGAR AL WRAPPER EL MODAL
   }
 
@@ -47,7 +35,7 @@ export default class ModalBaseUI {
 
   // AGREGAR AL DOM EL WRAPPER UN CONTENEDOR CREADO O AL BODY
   public addToDOM(): void {
-    const parent: HTMLElement = this.options.containerModal ?? document.body;
+    const parent: HTMLElement = this.modalBaseDto.containerModal ?? document.body;
     parent.appendChild(this.wrapper);
   }
 
@@ -59,21 +47,15 @@ export default class ModalBaseUI {
   }
 
   // MOSTRAR
-  public show(classRemoveWrapper = "modal-wrapper--hide", classRemoveModal = "modal--hide"): void {
-    show({ $el: this.wrapper, cls: classRemoveWrapper });
-    show({ $el: this.modal, cls: classRemoveModal });
-
-    console.log(this.wrapper);
-    console.log(classRemoveWrapper);
-    console.log("************************************************");
-    console.log(this.modal);
-    console.log(classRemoveModal);
+  public show(classRemoveWrapper = 'modal-wrapper--hide', classRemoveModal = 'modal--hide'): void {
+    actionClassString(classRemoveWrapper, 'remove', this.wrapper);
+    actionClassString(classRemoveModal, 'remove', this.modal);
   }
 
   // OCULTAR
-  public hide(classAddWrapper = "modal-wrapper--hide", classAddModal = "modal--hide"): void {
-    hide({ $el: this.wrapper, cls: classAddWrapper });
-    hide({ $el: this.modal, cls: classAddModal });
+  public hide(classAddWrapper = 'modal-wrapper--hide', classAddModal = 'modal--hide'): void {
+    actionClassString(classAddWrapper, 'add', this.wrapper);
+    actionClassString(classAddModal, 'add', this.modal);
   }
 
   // DELAY PARA APARECER O ESCONDERSE
@@ -83,54 +65,33 @@ export default class ModalBaseUI {
 
   // METODO QUE CREA BOTONES EN MODAL
   public createButtons(): HTMLElement | null {
-    if (
-      !Array.isArray(this.options._btnsBaseDto) ||
-      this.options._btnsBaseDto.length === 0
-    )
-      return null;
+    if (!Array.isArray(this.modalBaseDto._btnsBaseDto) || this.modalBaseDto._btnsBaseDto.length === 0) return null;
 
-    const buttonsWrapper = document.createElement("div");
-    buttonsWrapper.classList.add("modal__buttons");
+    const buttonsWrapper = document.createElement('div');
+    buttonsWrapper.classList.add('modal__buttons');
 
     const fragment = document.createDocumentFragment();
 
-    for (const btn of this.options._btnsBaseDto) {
-      const configButton = new ButtonBaseDto({
-        type: "button",
+    for (const btn of this.modalBaseDto._btnsBaseDto) {
+      const configButton: ButtonBaseDto = new ButtonBaseDto({
+        type: 'button',
         btnText: btn._btnSpanText,
         disabled: btn._disabled,
-        "aria-label": btn._ariaLabel,
+        'aria-label': btn._ariaLabel,
         attrs: btn._attrs,
         classesBtn: btn._btnClass,
         iconBtnClasses: btn._iconClass,
+        eventName: btn._eventName,
+        handler: btn._handler,
+        isLoading: btn._isLoading,
       });
 
-      const buttonInstance = ButtonFactory.createButton("custom", configButton);
+      const buttonInstance: ButtonBaseUI = ButtonFactory.createButton('custom', configButton);
 
       fragment.appendChild(buttonInstance.getBtnElement());
     }
 
     buttonsWrapper.appendChild(fragment);
-    return buttonsWrapper;
-  }
-
-  // CREAR BOTONES EN MODAL CON EVENTO
-  public createButtonsWithHandlers(
-    btnConfigs: Array<{
-      dto: ButtonBaseDto;
-      eventName: keyof HTMLElementEventMap;
-      handler: EventListenerOrEventListenerObject;
-    }>
-  ): HTMLElement {
-    const buttonsWrapper = document.createElement("div");
-    buttonsWrapper.classList.add("modal__buttons");
-
-    for (const { dto, eventName, handler } of btnConfigs) {
-      const buttonInstance = ButtonFactory.createButton("custom", dto);
-      buttonInstance.on(eventName, handler);
-      buttonsWrapper.appendChild(buttonInstance.getBtnElement());
-    }
-
     return buttonsWrapper;
   }
 

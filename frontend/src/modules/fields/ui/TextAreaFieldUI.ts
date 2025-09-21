@@ -1,116 +1,159 @@
 //IMPORTACIONES
-import { iTextAreaFieldOptions } from "../../../interfaces/interfaces.js";
-import FieldBaseDto from "../dto/FieldBaseDto.js";
+import {iEnableAndDisabledAutocomplete, iAriaLabel, iIdentifier, iName, iPlaceHolder, iSpellcheckAndLang, isRequired, iTextContent, iAutocomplete} from 'interfaces/interfaces.js';
+import TextAreaFieldDto from '../dto/TextAreaFieldDto.js';
 
 // CLASE PARA CAMPOS
-export default class TextAreaFieldUI {
+export default class TextAreaFieldUI implements iAriaLabel, iName, iPlaceHolder, iSpellcheckAndLang, iIdentifier, isRequired, iAutocomplete, iTextContent, iEnableAndDisabledAutocomplete {
   private inputField: HTMLTextAreaElement;
-  constructor(private readonly options: FieldBaseDto<string, iTextAreaFieldOptions>) {
-    this.inputField = document.createElement("textarea");
+  constructor(private readonly fieldTextAreaDto: TextAreaFieldDto) {
+    this.inputField = document.createElement('textarea');
     this.buildInputFieldUI();
   }
-
+  // LEER DATOS DE CONFIGURACION Y CONTRUIR CAMPO
   public buildInputFieldUI(): void {
     // ESTABLECER TIPO DE INPUT
-    this.inputField.setAttribute("name", this.options._name);
+    this.setName(this.fieldTextAreaDto._name);
+    this.isOnFocus(this.fieldTextAreaDto._autoFocus);
     // APLICAR ATRIBUTOS SOLO SI SON TRUE O TIENEN VALOR
-    if (this.options._options["aria-label"]) this.inputField.setAttribute("aria-label", this.options._options["aria-label"]); // ACEPTAR TIPOS DE
-    if (this.options._options.cols > 0) this.inputField.setAttribute("cols", String(this.options._options.cols));
-    if (this.options._options.placeholder) this.inputField.setAttribute("placeholder", this.options._options.placeholder);
-    if (this.options._options.rows > 0) this.inputField.setAttribute("rows", String(this.options._options.rows));
-    if (this.options._options.lang) this.inputField.setAttribute("lang", this.options._options.lang);
-    if (this.options._options.spellcheck) this.inputField.setAttribute("spellcheck", String(this.options._options.spellcheck));
-    if (this.options._options.autofocus) this.inputField.setAttribute("autofocus", "");
-    if (this.options._options.id) this.inputField.setAttribute("id", this.options._options.id);
-    if (this.options._currentDisabled) this.inputField.setAttribute("disabled", "true"); // DESHABILITAR INPUT
-    if (this.options._isRequired) this.inputField.setAttribute("required", ""); // REQUERIR SELECCIÓN
-    if (this.options._value) this.inputField.value = this.options._value;
-    if (this.options._options.textContent) this.inputField.textContent;
+    if (this.fieldTextAreaDto._arialabel) this.setAriaLabel(this.fieldTextAreaDto._arialabel);
+    if (this.fieldTextAreaDto._cols > 0) this.setCols(this.fieldTextAreaDto._cols);
+    if (this.fieldTextAreaDto._placeholder) this.setPlaceholder(this.fieldTextAreaDto._placeholder);
+    if (this.fieldTextAreaDto._rows > 0) this.setRows(this.fieldTextAreaDto._rows);
+    if (this.fieldTextAreaDto._lang) this.setLang(this.fieldTextAreaDto._lang);
+    if (this.fieldTextAreaDto._spellcheck) this.setSpellcheck(this.fieldTextAreaDto._spellcheck);
+    if (this.fieldTextAreaDto._id) this.setId(this.fieldTextAreaDto._id);
+    if (this.fieldTextAreaDto._currentDisabled) this.disabled(); // DESHABILITAR INPUT
+    if (this.fieldTextAreaDto._isRequired) this.required();
+    if (this.fieldTextAreaDto._value) this.setValue(this.fieldTextAreaDto._value as string);
+    if (this.fieldTextAreaDto._textContent) this.addTextContent(this.fieldTextAreaDto._textContent);
+    if (this.fieldTextAreaDto._isautocomplete) this.setAutocomplete(this.fieldTextAreaDto._isautocomplete);
+    if (this.fieldTextAreaDto._autocompleteValue) this.setAutocompleteValue(this.fieldTextAreaDto._autocompleteValue);
   }
 
   // AÑADIR VALOR AL DOM
-  public setValue(): void {
-    // SI EXISTE ELEMENTO Y SI EL VALOR NO ES NULL
-    if (this.inputField && this.options._value) {
-      this.inputField.value = this.options._value; //ASIGNAR EL VALOR AL ELEMENTO
-    }
+  public setValue(value: string): void {
+    this.fieldTextAreaDto.setValue(value); // SETEAR EL DTO UNICA FUENTE DE LA VERDAD
+    this.inputField.value = this.fieldTextAreaDto._value as string; //ASIGNAR EL VALOR AL ELEMENTO
   }
 
-  // AGREGAR AUTOFOCUS
-  public addAutoFocus(): void {
-    // SI EXISTE ELEMENTO Y SI EL VALOR NO ES NULL
-    if (this.inputField) {
-      this.setFocus(true); //TRUE
-    }
+  // MODIFICAR COLUMNAS
+  public setCols(cols: number) {
+    this.fieldTextAreaDto.setCols(cols); // SETEAR EL DTO UNICA FUENTE DE LA VERDAD
+    this.inputField.setAttribute('cols', String(cols)); //ASIGNAR EL VALOR AL ELEMENTO
   }
 
-  // REMOVER AUTOFOCUS
-  public removeAutoFocus(): void {
-    // SI EXISTE ELEMENTO Y SI EL VALOR NO ES NULL
-    if (this.inputField && this.inputField.hasAttribute("autofocus")) {
-      this.setFocus(false); //FALSO
-    }
+  // MODIFICAR FILAS
+  public setRows(rows: number): void {
+    this.fieldTextAreaDto.setRows(rows); // SETEAR EL DTO UNICA FUENTE DE LA VERDAD
+    this.inputField.setAttribute('rows', String(rows)); //ASIGNAR EL VALOR AL ELEMENTO
+  }
+
+  // ----------IMPLEMENTACIONES DE CONTRATOS DE INTERFACES--------------------//
+  // MODIFICAR NAME DE ELEMENTO
+  public setName(name: string) {
+    this.fieldTextAreaDto.setName(name); // SETEAR EL DTO UNICA FUENTE DE LA VERDAD
+    this.inputField.setAttribute('name', name); //ASIGNAR EL VALOR AL ELEMENTO
+  }
+
+  // MODIFICAR ID
+  public setId(id: string): void {
+    this.fieldTextAreaDto.setId(id); // SETEAR EL DTO UNICA FUENTE DE LA VERDAD
+    this.inputField.setAttribute('id', id); //ASIGNAR EL VALOR AL ELEMENTO
+  }
+
+  // AGREGAR NUEVO AREA LABEL
+  public setAriaLabel(labelArea: string): void {
+    this.fieldTextAreaDto.setAariaLabel(labelArea); // SETEAR EL DTO UNICA FUENTE DE LA VERDAD
+    this.inputField.setAttribute('aria-label', labelArea); //ASIGNAR EL VALOR AL ELEMENTO
   }
 
   // SETEAR EL PLACEHOLDER
-  public setPlaceHolder(placeholder: string): void {
-    this.inputField.setAttribute("placeholder", placeholder);
+  public setPlaceholder(placeholder: string): void {
+    this.fieldTextAreaDto.setPlaceholder(placeholder); // SETEAR EL DTO UNICA FUENTE DE LA VERDAD
+    this.inputField.setAttribute('placeholder', placeholder);
   }
 
   // SETEAR EL LANG
   public setLang(lang: string): void {
-    this.inputField.setAttribute("lang", lang);
+    this.fieldTextAreaDto.setLang(lang); // SETEAR EL DTO UNICA FUENTE DE LA VERDAD
+    this.inputField.setAttribute('lang', lang);
   }
 
   // SETEAR EL SPELLCHECK
-  public setSpellcheck(spellcheck: string): void {
-    this.inputField.setAttribute("spellcheck", spellcheck);
+  public setSpellcheck(spellcheck: boolean): void {
+    this.fieldTextAreaDto.setSpellcheck(spellcheck); // SETEAR EL DTO UNICA FUENTE DE LA VERDAD
+    spellcheck ? this.inputField.setAttribute('spellcheck', '') : this.inputField.removeAttribute('spellcheck');
   }
 
   // DESHABILITAR CAMPO
   public disabled(): void {
-    this.options.disabled(); // => DISABLED A TRUE
-    this.inputField.setAttribute("disabled", ""); // => ACTUALIZAMOS ATRIBUTO
+    this.fieldTextAreaDto.disabled(); // => DESHABILITAR EN DTO UNICA FUENTE DE LA VERDAD
+    this.inputField.setAttribute('disabled', ''); // => ACTUALIZAMOS ATRIBUTO
   }
 
   // HABILITAR CAMPO
   public enable(): void {
-    this.options.enabled(); // => DISABLED A FALSE
-    this.inputField.removeAttribute("disabled"); // => REMOVEMOS EL ATRIBUTO EN ELEMENTO
+    this.fieldTextAreaDto.enabled(); // => HABILITAR EN DTO UNICA FUENTE DE LA VERDAD
+    this.inputField.removeAttribute('disabled'); // => REMOVEMOS EL ATRIBUTO EN ELEMENTO
   }
 
+  //HABILITAR AUTOCOMPLETO
   public enableAutocomplete(): void {
     this.setAutocomplete(true);
   }
 
-  public disableAutocomplete(): void {
+  // DESHABILITAR AUTOCOMPLETE
+  public disabledAutocomplete(): void {
     this.setAutocomplete(false);
   }
 
-  // SETEAR EL PLACEHOLDER
+  // REQUERIR
   public required(): void {
     this.setRequired(true);
   }
 
+  // NO REQUERIR
   public disRequired(): void {
     this.setRequired(false);
   }
 
-  //---------------------------------------------- METODOS PRIVADOS---------------------------------------------//
-  // SETEAR BOOLEAN AUTOCOMPLETE
-  private setAutocomplete(state: boolean): void {
-    this.options._options.autocomplete = state;
-    this.inputField.setAttribute("autocomplete", state ? "on" : "off");
+  // AGREGAR TEXTO A ELEMENTO
+  public addTextContent(text: string): void {
+    this.fieldTextAreaDto.addTextContent(text); //PRIMERO SETEAR DTO
+    this.inputField.textContent = text;
   }
 
+  //---------------------------------------------- METODOS PRIVADOS---------------------------------------------//
+  // SETEAR BOOLEAN AUTOCOMPLETE
+  public setAutocomplete(autocomplete: boolean): void {
+    this.fieldTextAreaDto.setAutocomplete(autocomplete); // ==> SETEA EL AUTOCOMPLETE BOOLEAN EN DTO
+    this.setAutocompleteValue(this.fieldTextAreaDto._autocompleteValue); //==> SETEA EL AUTOCOMPLETE VALOR EN DTO
+    this.inputField.setAttribute('autocomplete', this.fieldTextAreaDto._autocompleteValue); // ==> APLICCAR VALOR DEL DTO AL ELEMENTO
+  }
+
+  // SETEAR VALOR EN ATRIBUTO AUTOCOMPLETE
+  public setAutocompleteValue(value: string): void {
+    if (this.fieldTextAreaDto._isautocomplete) {
+      if (value !== '' && value !== 'off') this.fieldTextAreaDto.setAutocompleteValue(value);
+      else {
+        console.error('El autocomplete debe tener un valor'); // EN CASO DE ERROR
+        return;
+      }
+    } else this.fieldTextAreaDto.setAutocompleteValue('off');
+  }
+
+  // PRIVADO PARA AJUSTAR REQUIRED
   private setRequired(required: boolean): void {
-    this.options.setRequired(required);
-    this.options._isRequired ? this.inputField.setAttribute("required", "") : this.inputField.removeAttribute("required"); // REQUERIR VALOR O NO
+    this.fieldTextAreaDto.setRequired(required); // ==> SETEAR DTO UNICA FUENTE DE VERDAD
+    // TERNARIO SI ES TRUE O FALSE
+    this.fieldTextAreaDto._isRequired ? this.inputField.setAttribute('required', '') : this.inputField.removeAttribute('required'); // REQUERIR VALOR O NO
   }
 
   // SETEO DE FOCUS
-  private setFocus(focus: boolean) {
-    focus ? this.inputField.setAttribute("autofocus", "") : this.inputField.removeAttribute("autofocus");
+  private isOnFocus(focus: boolean) {
+    this.fieldTextAreaDto.setFocus(focus); // ==> SETEAR DTO UNICA FUENTE DE VERDAD
+    // TERNARIO SI FOCUS ES TRUE O FALSE
+    this.fieldTextAreaDto._autoFocus ? this.inputField.setAttribute('autofocus', '') : this.inputField.removeAttribute('autofocus');
   }
 
   //------------------------------ PROPIEDADES DE ACCESO-----------------------------//

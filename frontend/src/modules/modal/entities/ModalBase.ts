@@ -1,32 +1,33 @@
 //IMPORTACIONES
-
-import { WaitOptions } from "../../../types/types";
-import ModalBaseDto from "../dto/ModalBaseDto.js";
-import  ModalBaseUI  from "../ui/ModalBaseUI.js";
+import {WaitOptions} from '../../../types/types';
+import ModalBaseDto from '../dto/ModalBaseDto.js';
+import ModalBaseUI from '../ui/ModalBaseUI.js';
 
 // PLANTILLA DE MODALES BASE
 export default abstract class ModalBase {
   protected appendElements: HTMLElement[];
 
-  constructor(protected readonly options: ModalBaseDto, protected readonly ui: ModalBaseUI) {
+  constructor(
+    protected readonly options: ModalBaseDto,
+    protected readonly ui: ModalBaseUI,
+  ) {
     this.appendElements = [];
     this.ui.appendContent(this.appendElements); //RENDER INICIAL
   }
-  
 
   // CREAR BOTONES
   public createButtons(): HTMLElement | null {
     return this.ui.createButtons(); // ==> RESPONSABLE UI
   }
 
-  public getModalElement():HTMLDivElement{
+  public getModalElement(): HTMLDivElement {
     return this.ui._modal;
   }
 
   // AGREGAR ELEMENTOS DE MODAL
   public appendToModal(element: HTMLElement): void {
     this.appendElements.push(element); //AGREGAR AL ARRAY
-    this.ui.appendElement(element);// AGREGAR ELEMENTO AL CONTENEDOR 
+    this.ui.appendElement(element); // AGREGAR ELEMENTO AL CONTENEDOR
   }
 
   public add(): void {
@@ -37,11 +38,11 @@ export default abstract class ModalBase {
     this.ui.removeFromDOM();
   }
 
-  public show(opts: { classRemoveWrapper?: string; classRemoveModal?: string } = {}): void {
+  public show(opts: {classRemoveWrapper?: string; classRemoveModal?: string} = {}): void {
     this.ui.show(opts.classRemoveWrapper, opts.classRemoveModal);
   }
 
-  public hide(opts: { classAddWrapper?: string; classAddModal?: string } = {}): void {
+  public hide(opts: {classAddWrapper?: string; classAddModal?: string} = {}): void {
     this.ui.hide(opts.classAddWrapper, opts.classAddModal);
   }
 
@@ -49,7 +50,7 @@ export default abstract class ModalBase {
     return this.ui.delay(ms);
   }
 
-  public async waitWithPromise<T = void>({ ms, cb }: WaitOptions<T>): Promise<T | void> {
+  public async waitWithPromise<T = void>({ms, cb}: WaitOptions<T>): Promise<T | void> {
     return new Promise<T | void>((resolve) => {
       setTimeout(async () => {
         if (cb) {
@@ -64,13 +65,13 @@ export default abstract class ModalBase {
 
   public async hideAndRemove(): Promise<void> {
     this.hide();
-    await this.delay(500);
+    await this.delay(1000);
     this.remove();
   }
 
-  public async addAndShow(): Promise<void> {    
+  public async addAndShow(): Promise<void> {
     this.add();
-    await this.delay(500);
+    await this.delay(300);
     this.show();
   }
 

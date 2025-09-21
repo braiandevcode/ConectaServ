@@ -1,9 +1,9 @@
-import { FormFactory } from "../../../patterns/factory/FormFactory.js";
-import { FormModalController } from "../../controllers/FormModalController.js";
-import FormBaseDto from "../../form/dto/FormBaseDto.js";
-import FormBase from "../../form/entities/FormBase.js";
-import ModalBaseDto from "../dto/ModalBaseDto.js";
-import  ModalBaseUI  from "../ui/ModalBaseUI.js";
+import {FormFactory} from '../../../patterns/factory/FormFactory.js';
+import {FormModalController} from '../../controllers/FormModalController.js';
+import FormBaseDto from '../../form/dto/FormBaseDto.js';
+import FormBase from '../../form/entities/FormBase.js';
+import ModalBaseDto from '../dto/ModalBaseDto.js';
+import ModalBaseUI from '../ui/ModalBaseUI.js';
 
 // MODAL QUE EXTIENDE DE FormModalController Y QUE INSTANCIA AL VerifyCodeForm PARA INSERTAR EN MODAL
 export default class VerifyEmailModal extends FormModalController {
@@ -34,13 +34,13 @@ export default class VerifyEmailModal extends FormModalController {
 
   // ACA SE IMPLEMENTA CREACION DEL FORMULARIO
   public async createFormBase(config: FormBaseDto): Promise<FormBase> {
-    return await FormFactory.createForm("verifyCode", config);
+    return await FormFactory.createForm('verifyCode', config);
   }
 
   // ESPERAR QUE EL CODIGO SE VERIFIQUE CORRECTAMENTE
   public async waitForCodeVerification(): Promise<void> {
     if (!this.codeVerificationPromise) {
-      throw new Error("Promise no inicializada");
+      throw new Error('Promise no inicializada');
     }
     await this.codeVerificationPromise;
   }
@@ -48,7 +48,7 @@ export default class VerifyEmailModal extends FormModalController {
   // AGREGA EL CODIGO Y ESPERA A QUE SE RESUELVA POR METODO "resolveCodeVerification"
   public setCodeAsVerified(): void {
     if (!this.resolveCodeVerification) {
-      throw new Error("resolveCodeVerification no fue inicializada");
+      throw new Error('resolveCodeVerification no fue inicializada');
     }
     this.resolveCodeVerification();
   }

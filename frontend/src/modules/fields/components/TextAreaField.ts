@@ -1,17 +1,13 @@
 //IMPORTACIONES
-import { iTextAreaFieldOptions } from "../../../interfaces/interfaces";
-import FieldBaseDto from "../dto/FieldBaseDto.js";
+import { iInput } from "../../../interfaces/interfaces";
+import TextAreaFieldDto from "../dto/TextAreaFieldDto.js";
 import FieldBase from "../entities/FieldBase.js";
 import TextAreaFieldUI from "../ui/TextAreaFieldUI.js";
 
 // CLASE PARA CAMPOS
-export default class TextAreaField extends FieldBase<string> {
-  private cols: number;
-  private rows: number;
-  constructor(options: FieldBaseDto<string, iTextAreaFieldOptions>, private readonly textAreaFieldUI: TextAreaFieldUI) {
-    super(options);
-    this.cols = 0;
-    this.rows = 0;
+export default class TextAreaField extends FieldBase<string> implements iInput<string> {
+  constructor(private fieldTextAreaDto: TextAreaFieldDto, private readonly textAreaFieldUI: TextAreaFieldUI) {
+    super(fieldTextAreaDto);
     this.attachEvents(); //  TAN PRONTO SE CREA => EL LISTENER YA ESTA ACTIVO
   }
 
@@ -21,40 +17,19 @@ export default class TextAreaField extends FieldBase<string> {
   }
 
   // VER VALOR DE INPUT
-  public getValue(): string | null {
-    return this.textAreaFieldUI._inputElement.value;
+  public getValue(): string {
+    return this.fieldTextAreaDto._value as string;
   }
 
-  // AGREAGAR COLUMNAS
-  public setCols(cols: number): void {
-    this.cols = cols;
-  }
-
-  // AGREGAR FILAS
-  public setRows(rows: number): void {
-    this.rows = rows;
-  }
-
-  // SETEO EL VALOR Y LO ACTUALIZO EN EL DOM
+  // METODO QUE MODIFICA NUEVO VALUE
   public setValue(value: string): void {
-    this.options._setValue = value;
-    this.textAreaFieldUI.setValue(); //=> NO ME IMPORTA COMO AÑADELO AL DOM
+    this.textAreaFieldUI.setValue(value);
   }
 
+  // MODIFICAR NUEVO VALOR Y AUTO EJECUTAR EVENTO
   public setValueAndTrigger(value: string): void {
     this.setValue(value);
     this.triggerEvent("input");
-  }
-
-  // -------------------------PROPIEDADES DE ACCESO--------------------------//
-  //VER CANTIDAD DE COLUMNAS TEXTAREA
-  get _cols(): number {
-    return this.cols;
-  }
-
-  //VER CANTIDAD DE FILAS TEXTAREA
-  get _rows(): number {
-    return this.rows;
   }
 
   // RENDER DEL ELEMENTO EN UI

@@ -1,34 +1,62 @@
 // IMPORTACIONES
-import { StepFormFactory } from "../../../patterns/factory/StepFormFactory.js";
-import FormRegister from "../../form/controller/FormRegister.js";
-import FormBaseDto from "../../form/dto/FormBaseDto.js";
-import FormBaseUI from "../../form/ui/FormBaseUI.js";
-import FormRegisterUI from "../../form/ui/FormRegisterUI.js";
+import { EKeyDataByStep } from '../../../types/enums.js';
+import { StepFormFactory } from '../../../patterns/factory/StepFormFactory.js';
+import FormBaseUI from '../../../modules/form/ui/FormBaseUI.js';
+import FormBaseDto from '../../../modules/form/dto/FormBaseDto.js';
+import FormRegister from '../../../modules/form/controller/FormRegister.js';
+import FormRegisterUI from '../../../modules/form/ui/FormRegisterUI.js';
+import FormStep from '../entities/FormStep.js';
 
 // MODULO QUE SE ENCARGA DE CAMBIOS DE ESTADO EN UI EN TIEMPO DE INTERACCION
 export default class FormStepUI extends FormBaseUI {
-  constructor(formBaseOptions: FormBaseDto) {
+  constructor(
+    private formStep: FormStep,
+    formBaseOptions: FormBaseDto,
+  ) {
     super(formBaseOptions);
   }
 
-  // LLAMA A LA CREACION DEL PASO 1
-  public async buildStepOne({ formRegister, formRegisterUI}: { formRegister: FormRegister; formRegisterUI: FormRegisterUI }): Promise<HTMLDivElement> {
-    return await StepFormFactory.createStep("stepRegister", "stepOne", formRegisterUI, formRegister);
+  // METODO DONDE EL VALOR DEBE SER SI O SI DEL TIPO EKeyDataByStep
+  private isEKeyDataByStep(value: any): value is EKeyDataByStep {
+    return Object.values(EKeyDataByStep).includes(value);
   }
 
-  // LLAMA A LA CREACION DEL PASO 2
-  public async buildStepTwo({ formRegister, formRegisterUI }: { formRegister: FormRegister; formRegisterUI: FormRegisterUI; }): Promise<HTMLDivElement> {
-    return await StepFormFactory.createStep("stepRegister", "stepTwo", formRegisterUI, formRegister);
+  //LLAMA A LA CREACION DEL PASO
+  public async buildStep({ formRegister, formRegisterUI }: { formRegister: FormRegister; formRegisterUI: FormRegisterUI }): Promise<HTMLDivElement> {
+    return await StepFormFactory.createStep('stepRegister', this.getStepByString(), formRegisterUI, formRegister);
   }
 
-  // LLAMA A LA CREACIOON DE ULTIMO PASO
-  public async buildStepLast({ formRegister, formRegisterUI }: { formRegister: FormRegister; formRegisterUI: FormRegisterUI; }): Promise<HTMLDivElement> {
-    return await StepFormFactory.createStep("stepRegister", "stepLast", formRegisterUI, formRegister);
+  // MOSTRAR VALOR DEL PASO
+  public getStep(): number {
+    return this.formStep.getStep();
   }
 
-  // LLAMA A LA CREACIOON DE ULTIMO PASO
-  public async buildStepBudgeThree({ formRegister, formRegisterUI }: { formRegister: FormRegister; formRegisterUI: FormRegisterUI }): Promise<HTMLDivElement> {
-    return await StepFormFactory.createStep("stepRegister", "stepBudgeThree", formRegisterUI, formRegister);
+  // VER PASO ACTUAL TIPADO A "EKeyDataByStep"
+  public getStepByString(): EKeyDataByStep {
+    // OBTIENE EL PASO ACTUAL COMO STRING DESDE formStep
+    const rawStep = String(this.formStep.getStep());
+
+    // VALIDA SI EL VALOR OBTENIDO ES UN PASO DEFINIDO EN EKeyDataByStep
+    if (!this.isEKeyDataByStep(rawStep)) {
+      throw new Error(`Invalid step: ${rawStep}`); // SI NO ES VALIDO, LANZA ERROR
+    }
+
+    // RETORNA EL PASO YA VALIDADO Y TIPADO COMO EKeyDataByStep
+    return rawStep;
+  }
+
+  public setStep(step: number): void {
+    this.formStep.setStep(step);
+  }
+
+  // METODO PARA INCREMENTAR PASO
+  public incrementStep(): void {
+    this.formStep.incrementStep();
+  }
+
+  // METODO PARA BAJAR PASO
+  public decrementStep(): void {
+    this.formStep.decrementStep();
   }
 
   // METODO PARA DESTRUIR PASO
@@ -36,16 +64,13 @@ export default class FormStepUI extends FormBaseUI {
     stepSectionElement.remove();
   }
 
-  // METODO PARA ACTUALIZAR
-  public async updateStep({ formRegister, buildNewStep }: { formRegister: FormRegister; buildNewStep: ({ formRegister, }: { formRegister: FormRegister; }) => Promise<HTMLDivElement> }): Promise<HTMLDivElement | null> {
-    formRegister.decrementStep(); //DECREMENTAR PARA ENCONTRAR VIEJA REFERENCIA
-    
-    const oldStep:HTMLDivElement | null = document.querySelector(`[data-step="${formRegister.getStepForm()}"]`);
-    console.log(oldStep);
-    
-    if(!oldStep) return null;
+  // METODO PARA ACTUALIZAR PASO EN UI
+  public async updateCurrentStep({ step, formRegister, formRegisterUI }: { step: number; formRegister: FormRegister; formRegisterUI: FormRegisterUI }): Promise<HTMLDivElement | void> {
+    const currentStep: HTMLDivElement | null = document.querySelector(`[data-step="${step}"]`); //GUARDA EN MEMORIA REFERENCIA AL PASO ACTUAL
 
-    this.destroyStep({ stepSectionElement: oldStep });
-    return await buildNewStep({ formRegister }); // ==>EJECUTAR METODO DE PASO DINAMICAMENTE
+    if (!currentStep) return; // RETORNAR NULL
+
+    this.destroyStep({ stepSectionElement: currentStep }); // ==> DESTRUIR EL PASO ACTUAL
+    return await this.buildStep({ formRegister, formRegisterUI }); // ==> EJECUTAR METODO DE PASO DINAMICAMENTE ES ASYNCRONO
   }
 }

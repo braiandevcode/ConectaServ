@@ -1,21 +1,17 @@
 // IMPORTACIONES
-import { TFieldType, TIdString, TStoredImage } from "../types/types";
-import { EFieldType, ENamesOfKeyLocalStorage } from "../types/enums.js";
+import {TFieldType, TIdString, TStoredImage} from '../types/types';
+import {EFieldType, ENamesOfKeyLocalStorage} from '../types/enums.js';
 
-import { TITLES_GROUP_CHECKS_MAP } from "../config/constant.js";
+import {TITLES_GROUP_CHECKS_MAP} from '../config/constant.js';
 
 // FUNCION QUE SEGUN EL TIPO EN EL MAPEO RETORNA UN TEXTO PARA EL ELEMNTO DEL DOM
-export const convertTextOfTypes = ({
-  textType,
-}: {
-  textType: string;
-}): string => {
-  return TITLES_GROUP_CHECKS_MAP[textType] || "Grupo";
+export const convertTextOfTypes = ({textType}: {textType: string}): string => {
+  return TITLES_GROUP_CHECKS_MAP[textType] || 'Grupo';
 };
 
 // FUNCION QUE RETORNA UN OBJETO CON UNA PROMESA
 export const fileToStoredImage = async (file: File): Promise<TStoredImage> => {
-  const { name, size, type } = file; //DESESTRUCTURAMOS OBJETO DE FILE
+  const {name, size, type} = file; //DESESTRUCTURAMOS OBJETO DE FILE
   const idImage: TIdString = crypto.randomUUID(); //ID UNICA DE IMAGEN
 
   // LEER COMO BASE64 Y GUARDAR EN IndexedDB
@@ -28,14 +24,11 @@ export const fileToStoredImage = async (file: File): Promise<TStoredImage> => {
   });
 
   // DEVOLVER OBJETO SIN dataUrl
-  return { name, size, type, idImage };
+  return {name, size, type, idImage};
 };
 
 // HELPER PARA ASIGNAR ATRIBUTOS DE DE OBJETO QUE SE LE PASA
-export const attrFilled = (
-  element: HTMLElement,
-  attrs: Record<string, string | number | boolean>
-): void => {
+export const attrFilled = (element: HTMLElement, attrs: Record<string, string | number | boolean>): void => {
   Object.entries(attrs).forEach(([key, value]) => {
     element.setAttribute(key, String(value));
   });
@@ -53,13 +46,13 @@ export const attrFilled = (
 */
 export const formatTextArea = (text: string): string => {
   // SI EL TEXTO ESTÁ VACIO O SOLO CONTIENE ESPACIOS, RETORNAR VACÍO
-  if (!text || text.trim().length === 0) return "";
+  if (!text || text.trim().length === 0) return '';
 
   let formatted: string = text
     .toLowerCase()
-    .replace(/\t+/g, " ") // REEMPLAZA TABS POR UN ESPACIO
-    .replace(/\s{2,}/g, " ") //REEMPLAZA MULTIPLES ESPACIOS POR UNO SOLO
-    .replace(/\s*([.!?])\s*/g, "$1 ") //ELIMINA ESPACIOS ANTES DE UN SIGNO Y DEJA SOLO UNO DESPUES
+    .replace(/\t+/g, ' ') // REEMPLAZA TABS POR UN ESPACIO
+    .replace(/\s{2,}/g, ' ') //REEMPLAZA MULTIPLES ESPACIOS POR UNO SOLO
+    .replace(/\s*([.!?])\s*/g, '$1 ') //ELIMINA ESPACIOS ANTES DE UN SIGNO Y DEJA SOLO UNO DESPUES
     .trim();
 
   // CAPITALIZAR LA PRIMERA LETRA DEL TEXTO
@@ -67,12 +60,9 @@ export const formatTextArea = (text: string): string => {
 
   // CAPITALIZAR LA LETRA DESPUES DE UN PUNTO, SIGNO DE EXCLAMACION O INTERROGACION,
   // SIN IMPORTAR CUÁNTOS ESPACIOS O TABS HAYA DESPUÉS DEL SIGNO
-  formatted = formatted.replace(
-    /([.!?])([\s]*)(\w)/g,
-    (_, signo, __, letra) => {
-      return `${signo} ${letra.toUpperCase()}`;
-    }
-  );
+  formatted = formatted.replace(/([.!?])([\s]*)(\w)/g, (_, signo, __, letra) => {
+    return `${signo} ${letra.toUpperCase()}`;
+  });
 
   // RETORNAR EL TEXTO FORMATEADO
   return formatted;
@@ -80,25 +70,12 @@ export const formatTextArea = (text: string): string => {
 
 // ----------------METODOS AUXILIARES PARA FOMULARIOS--------------------//
 // SI UN CAMPO TIENE CONTENIDO
-export const isValueField = ({ text }: { text: string }): boolean =>
-  text.trim() !== "";
+export const isValueField = ({text}: {text: string}): boolean => text.trim() !== '';
 
-export const isLengthValid = ({
-  text,
-  num,
-}: {
-  text: string;
-  num: number;
-}): boolean => text.length >= num; // SI ES MAYOR O IGUAL AL NUMERO DE CARACTERES QUE SE LE PASE
+export const isLengthValid = ({text, num}: {text: string; num: number}): boolean => text.length >= num; // SI ES MAYOR O IGUAL AL NUMERO DE CARACTERES QUE SE LE PASE
 
 // FUNCION PARA VALIDAR UNA EXPRESION REGULAR DINAMICAMENTE
-export const validateWithRegex = ({
-  pattern,
-  text,
-}: {
-  pattern: RegExp;
-  text: string;
-}): boolean => {
+export const validateWithRegex = ({pattern, text}: {pattern: RegExp; text: string}): boolean => {
   return pattern.test(text);
 };
 
