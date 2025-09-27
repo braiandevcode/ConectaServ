@@ -4,8 +4,12 @@ const closeFilters = document.querySelector(".filters__back") as HTMLButtonEleme
 const aplicateBtn = document.getElementById("aplicate__btn") as HTMLButtonElement;
 const filtersPanel = document.querySelector(".filters__panel") as HTMLElement;
 
+// (window as any).loadProfessionalsByService = loadProfessionalsByService;
+
 //Lectura de profesionales en la base de datos
-  fetch("http://localhost:3000/professional")
+
+export function loadTaskersByService(serviceName: string){
+  fetch("http://localhost:3000/services/${serviceName}/taskers")
   .then(response => response.json())
   .then(data => {
     createServices(data);
@@ -13,6 +17,7 @@ const filtersPanel = document.querySelector(".filters__panel") as HTMLElement;
   .catch(error => {
     console.error("Error cargando los profesionales:", error);
   });
+};
 
 //Funcion para crear las cards de profesionales dinamicamente
   function createServices(services: any[]) {
