@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Tasker } from './tasker/entities/tasker.entity';
 import { Location } from './location/entities/location.entity';
 import { Category } from './category/entities/category.entity';
+import { ServicesModule } from './services/services.module';
 
 @Module({
   imports: [
@@ -36,7 +37,8 @@ import { Category } from './category/entities/category.entity';
     }),
     Tasker,
     Location,
-    Category
+    Category,
+    ServicesModule
   ],
   controllers: [AppController],
   providers: [AppService],
