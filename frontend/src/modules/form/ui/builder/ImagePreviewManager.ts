@@ -22,17 +22,6 @@ import ButtonBaseUI from '../../../../modules/buttons/ui/ButtonBaseUI.js';
 */
 
 export default class ImagePreviewManager {
-  // METODO PARA CREAR VISTA PREVIA DE UNA SOLA IMAGEN(perfil)
-  public async createProfileImagePreview(container: HTMLElement, inputFile: HTMLInputElement): Promise<void> {
-    if (inputFile?.files && (inputFile?.files.length as number) > 0) {
-      const file = inputFile.files[0];
-      const dataFile: TStoredImage = await fileToStoredImage(file);
-      const stepData = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA);
-      stepData[EKeyDataByStep.TWO].imageProfile = dataFile;
-      localStorage.setItem(ENamesOfKeyLocalStorage.STEP_DATA, JSON.stringify(stepData));
-      await this.createImageProfile(container, dataFile);
-    }
-  }
 
   // METODO PARA CREAR VISTA PREVIA DE DE VARIAS IMAGENES (experiencias)
   public async createExperienceImagesPreviews(container: HTMLElement, inputFiles: HTMLInputElement): Promise<void | null> {
@@ -46,6 +35,17 @@ export default class ImagePreviewManager {
     }
   }
 
+    // METODO PARA CREAR VISTA PREVIA DE UNA SOLA IMAGEN(perfil)
+  public async createProfileImagePreview(container: HTMLElement, inputFile: HTMLInputElement): Promise<void> {
+    if (inputFile?.files && (inputFile?.files.length as number) > 0) {
+      const file = inputFile.files[0];
+      const dataFile: TStoredImage = await fileToStoredImage(file);
+      const stepData = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA);
+      stepData[EKeyDataByStep.TWO].imageProfile = dataFile;
+      localStorage.setItem(ENamesOfKeyLocalStorage.STEP_DATA, JSON.stringify(stepData));
+      await this.createImageProfile(container, dataFile);
+    }
+  }
   public async createImageProfile(container: HTMLElement, storedImage: TStoredImage | null): Promise<void | null> {
     clearElementChild({elements: [container]});
     if (!storedImage) return null;
