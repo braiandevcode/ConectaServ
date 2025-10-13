@@ -1,0 +1,402 @@
+button.color {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #2E77BB, #1E5DA3);
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    transition: all 0.25s ease;
+}
+
+button.color:hover {
+    background: linear-gradient(135deg, #1E5DA3, #2E77BB);
+}
+
+button.color:active {
+    background: #1E5DA3;
+}
+
+.btn {
+  min-width: unset;
+  width: unset;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 1rem
+}
+
+/* -- Header -- */
+.header {
+    padding: 1rem 0;
+    background-color: white ;
+}
+
+.header__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1700px;
+    margin: auto;
+    padding: 0 1rem
+}
+
+.menu-toggle {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.header .nav-links {
+    background-color: white;
+    display: none;
+    flex-direction: column;
+    align-items: baseline;
+    gap: 1rem;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+}
+
+.nav__link,
+.dropdown__title {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+}
+
+.nav-links.active {
+    display: flex;
+    z-index:2;
+}
+
+
+.dropdown__menu {
+    background-color: white;
+    display: none;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 0.5rem;
+}
+
+.dropdown.open .dropdown__menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.dropdown__item {
+    text-decoration: none;
+    color: black;
+}
+
+
+/*Header desktop*/
+@media(min-width:850px){
+    .menu-toggle {
+        display: none;
+    }
+
+    .header .container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .header .nav-links {
+        display: flex;
+        position: static;
+        padding: 0;
+        flex-direction: row;
+        align-items: center
+    }
+
+    .dropdown__menu {
+        background-color: white;
+        display: none;
+        flex-direction: row;
+        gap: 0.5rem;
+        padding: 0.5rem;
+    }
+
+    .dropdown.open .dropdown__menu {
+        display: flex;
+        flex-direction: row;
+        position: absolute;
+        justify-content: center;
+        top: 80px;
+        left: 0;
+        right: 0;
+        width: auto;
+        z-index:999;
+    }
+}
+
+/*Footer*/
+.footer {
+    background-color: var(--bg-secondary);
+    background-color: var(--bg-secondary);
+    padding: 40px 20px;
+    font-size: 0.9rem;
+    color: #fff;
+    margin-top: 8rem;
+}
+
+.footer__columns {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.card-logo,
+.card-logo__logo {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.5rem;
+    font-size: x-large;
+}
+
+.card-logo__icon {
+    background: linear-gradient(45deg, rgb(20, 78, 126), rgb(99, 142, 176), transparent);
+    padding: 0.8rem;
+    border-radius: 10px;
+}
+
+.card-logo__icon--footer {
+    background: var(--bg-primary);
+    padding: 0.8rem;
+    border-radius: 10px;
+}
+
+.card-logo__logo {
+    font-weight: bold;
+    color: rgba(239, 237, 237, 0.937);
+    text-decoration: none;
+}
+
+.card-logo__logo--footer {
+    font-weight: bold;
+    color: var(--bg-secondary);
+    text-decoration: none;
+}
+
+.card-logo__text {
+    color: rgb(20, 78, 126);
+}
+
+.card-logo__text--footer {
+    color: var(--bg-primary);
+}
+
+.footer-column h4 {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+    text-decoration: none;
+    color: #fff;
+    transition: opacity 0.2s ease;
+}
+
+.footer-column ul li a:hover {
+    opacity: 0.8;
+}
+
+.footer__links ul {
+    list-style-type: none;
+}
+
+.footer__links ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer__links ul li a:hover {
+    text-decoration: underline;
+}
+
+.footer__logo {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.footer-bottom {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #e0e0e0;
+}
+
+/* Footer desktop */
+@media (min-width: 720px) {
+    .footer__columns {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .footer-bottom {
+        text-align: center;
+        margin-top: 40px;
+    }
+}
+
+
+
+/* Filtros */
+.main-content {
+    padding: 1rem;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: flex-start; */
+}
+
+.filters__btn{
+ background-color: transparent;
+  color: #2563EB;
+  border: 2px solid #2563EB;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  max-width: max-content;
+}
+
+.filters__btn:active{
+  background-color: #2563EB;
+  color: white;
+}
+
+.filters__back {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    display: flex;
+    cursor: pointer;
+    width: fit-content;
+    
+}
+
+.filters__panel{
+    position: absolute;
+    top:0;
+    left:0;
+    background: white;
+    width:100%;
+    padding:2rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.filter__group{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+#aplicate__btn{
+   max-width: none;
+}
+
+/* Tarjetas */
+.cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card{
+    background-color: white;
+    padding: 1rem;
+    border-radius: 10px;
+    max-width: 900px;
+}
+
+.card__content{
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card__info-container{
+    flex-direction: row;
+    display: flex;
+    gap: 1rem;
+}
+
+.card__button--container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.card__img{
+    height: 90px;
+    width: 90px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Escritorio*/
+@media (min-width: 768px){
+.main-content{
+    /* display: flex; */
+    flex-direction: row;
+    gap: 3rem;
+}
+
+.cards{
+    align-items: center;
+    max-width: 900px;
+}
+
+.filters__panel{
+    display: flex;
+    flex-direction: column;
+    padding: 3rem;
+    border-right: 1px solid #ccc;
+    position: relative;
+    background: none;
+    width: auto;
+}
+
+.filters__btn{
+    display: none;
+}
+
+.filters__back{
+    display: none;
+}
+
+#aplicate__btn{
+    display: none;
+}
+
+
+
+}

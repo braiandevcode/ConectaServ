@@ -1,0 +1,13 @@
+/* IMPORTAR ORDENADAMENTE PARA EVITAR PROBLEMAS DE CASCADAS */
+@import url('./styles/utilities/reset.css'); /*RESETEO*/
+@import url('./styles/utilities/utilities.css'); /*UTILITIES*/
+@import url('./styles/utilities/base.css'); /*BASE*/
+@import url('./styles/header.css');
+@import url('./styles/home.css'); /*HOME*/
+@import url('./styles/modalRol.css'); /*MODAL DE ROL*/
+@import url('./styles/register.css'); /*REGISTRO PROFESIONAL*/
+@import url('./styles/services.css'); /*SERVICIOS*/
+@import url('./styles/infoProvider.css'); /*INFO PRESTADOR*/
+@import url('./styles/loader.css'); /*ESTILOS AL LOADER*/
+/* SE AGREGA EL PODER DE TAILWINDCSS */
+@import "tailwindcss";
