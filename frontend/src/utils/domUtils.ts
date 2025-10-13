@@ -1,21 +1,21 @@
 // IMPORTACIONES
-import {TFieldType, TIdString, TStoredImage} from '../types/types';
-import {EFieldType, ENamesOfKeyLocalStorage} from '../types/enums.js';
+import { TFieldType, TIdString, TStoredImage } from '../types/types';
+import { EFieldType } from '../types/enums.js';
 
-import {TITLES_GROUP_CHECKS_MAP} from '../config/constant.js';
+import { TITLES_GROUP_CHECKS_MAP } from '../config/constant.js';
 
 // FUNCION QUE SEGUN EL TIPO EN EL MAPEO RETORNA UN TEXTO PARA EL ELEMNTO DEL DOM
-export const convertTextOfTypes = ({textType}: {textType: string}): string => {
+export const convertTextOfTypes = ({ textType }: { textType: string }): string => {
   return TITLES_GROUP_CHECKS_MAP[textType] || 'Grupo';
 };
 
 // FUNCION QUE RETORNA UN OBJETO CON UNA PROMESA
 export const fileToStoredImage = async (file: File): Promise<TStoredImage> => {
-  const {name, size, type} = file; //DESESTRUCTURAMOS OBJETO DE FILE
+  const { name, size, type } = file; //DESESTRUCTURAMOS OBJETO DE FILE
   const idImage: TIdString = crypto.randomUUID(); //ID UNICA DE IMAGEN
 
   // LEER COMO BASE64 Y GUARDAR EN IndexedDB
-  const dataUrl = await new Promise<string>((res, rej) => {
+  await new Promise<string>((res, rej) => {
     //INSTANCIAR LA PROMESA
     const r = new FileReader(); //INSTANCIAR CONSTRUCTO FileReader
     r.onload = () => res(String(r.result)); //ESCUCHAR EVENTO onload Y EJECUTAR CALLBACK, SI TODO FUE BIEN OBTENER EL "result"
@@ -24,7 +24,7 @@ export const fileToStoredImage = async (file: File): Promise<TStoredImage> => {
   });
 
   // DEVOLVER OBJETO SIN dataUrl
-  return {name, size, type, idImage};
+  return { name, size, type, idImage };
 };
 
 // HELPER PARA ASIGNAR ATRIBUTOS DE DE OBJETO QUE SE LE PASA
@@ -70,12 +70,12 @@ export const formatTextArea = (text: string): string => {
 
 // ----------------METODOS AUXILIARES PARA FOMULARIOS--------------------//
 // SI UN CAMPO TIENE CONTENIDO
-export const isValueField = ({text}: {text: string}): boolean => text.trim() !== '';
+export const isValueField = ({ text }: { text: string }): boolean => text.trim() !== '';
 
-export const isLengthValid = ({text, num}: {text: string; num: number}): boolean => text.length >= num; // SI ES MAYOR O IGUAL AL NUMERO DE CARACTERES QUE SE LE PASE
+export const isLengthValid = ({ text, num }: { text: string; num: number }): boolean => text.length >= num; // SI ES MAYOR O IGUAL AL NUMERO DE CARACTERES QUE SE LE PASE
 
 // FUNCION PARA VALIDAR UNA EXPRESION REGULAR DINAMICAMENTE
-export const validateWithRegex = ({pattern, text}: {pattern: RegExp; text: string}): boolean => {
+export const validateWithRegex = ({ pattern, text }: { pattern: RegExp; text: string }): boolean => {
   return pattern.test(text);
 };
 
