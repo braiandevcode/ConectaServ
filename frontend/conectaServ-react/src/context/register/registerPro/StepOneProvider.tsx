@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, type ChangeEvent } from 'react';
-import { ECategoryKey, EKeyDataByStep } from '../../../types/enums';
+import { ECategoryKey, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../../types/enums';
 import type { TCategoryKey, TFieldState, TOptionWork, TTypeContextStepOne } from '../../../types/types';
 import { StepOneContext } from './StepOneContext';
 import useRegisterPro from '../../../hooks/useRegisterPro';
@@ -18,7 +18,6 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
 
   // EFECTO SOLO PARA ELIMINAR DEL STORAGE EL PASO PRESUPUESTO
   useEffect(() => {
-
     console.log('ME LLAMARON DE : StepOneProvider');
 
     //SI LA BANDERA DE QUE PRESUPUESTO ES FALSE
@@ -43,7 +42,7 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
   // EFECTO PARA OBSERVAR SI CONTIENE O NO GRUPO CONTEXT Y REVALIDAR
   useEffect(() => {
     console.log('ME LLAMARON DE : StepOneProvider');
-    
+
     // SI NO HAY GRUO DE CHECKS DE CONTEXTO (HABITOS)
     if (!hasContext) {
       // SETEAR DATA GLOBAL EN STORAGE
@@ -56,11 +55,17 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
     setIsStepValid(validateCurrentStep()); //REVALIDAR
   }, [hasContext, formState]); //==> OBSERVAR ESTADO "hasContext" EXTERNO EN "professionalProvider" Y EJECUTAR
 
+  // ACTUALIZAR STORAGE DE INTERACCION
+  const updateHasInteracted = (newValue: boolean) => {
+    localStorage.setItem(ENamesOfKeyLocalStorage.INTERACTED, String(newValue));
+    setHasInteracted(newValue);
+  };
+
   //---------------------------------------------------------------------EVENTOS --------------------------------------------------------------------//
   // EVENTO CHANGE DE SELECCION DE CATEGORIA
   // EVENTO DE CAMBIO DEL SELECT
   const handleChangeSelected = (e: ChangeEvent<HTMLSelectElement>) => {
-    setHasInteracted(true); //ACTIVAMOS QUE INTERACTUO
+    updateHasInteracted(true); //ACTIVAMOS QUE INTERACTUO
     setIsResetDetailsWork(true);
     const value = e.target.value as TCategoryKey; //GUARDAMOS VALOR ELEGIDO Y CASTEAMOS AL TIPADO ESTRICTO PARA CATEGORIA
 

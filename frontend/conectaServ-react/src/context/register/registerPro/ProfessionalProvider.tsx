@@ -47,8 +47,8 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   //--------------------------------------------------------------------HOOKS DE REACT--------------------------------------------------------------------//
   const location = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
-  const { client, setIsModalOpen, setIsModalClosed } = useMain();
-  const { setIsSending, isSending, terms, password, confirmPassword, setTerms, codeEmail, setCodeEmail } = useRegister();
+  const { setIsModalOpen, setIsModalClosed } = useMain();
+  const { setIsSending, isSending, terms, password, confirmPassword, setTerms, updateCodeEmail } = useRegister();
 
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
   // ---------------------------------------------------------------------ESTADO GENERALES------------------------------------------------------------------//
@@ -59,8 +59,9 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
     return storedStep ? parseInt(storedStep, 10) : 1; //SI NO ES NULL PARSEA A NUMERO SI ES NULO , SINO POR DEFECTO ES 1
   });
 
-  // ------------------------FRAGMENTO CODIGO DE VERIFICACION---------------------------//
 
+
+  // ------------------------FRAGMENTO CODIGO DE VERIFICACION---------------------------//
   // CARGAR LA PUBLIC_KEY DESDE VARIABLE DE ENTORNO
   const PUBLIC_KEY = import.meta.env.VITE_PUBLIC_KEY; // ==> CLAVE PUBLICA
   const SERVICE_ID = import.meta.env.VITE_SERVICE_ID; // ==> ID SERVICIO
@@ -72,14 +73,14 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   // FUNCION PARA ENVIAR CODIGO
-  async function sendCodeToUser(email: string) {
+  async function sendCodeToUser(emailUser: string) {
     const generatedCode: number = generateRandomNumber(); //GENERAR RANDOM
 
-    setCodeEmail(generatedCode.toString()); //SETEO NUMERO RANDOM Y PARSEO A STRING
+    updateCodeEmail(generatedCode.toString()); //SETEO NUMERO RANDOM Y PARSEO A STRING
 
     // OBJETO DE CONFIGURACION PARA ENVIO
     const templateParams: TVerifyCode = {
-      to_email: email, // ==> CORREO DE DESTINO
+      to_email: emailUser, // ==> CORREO DE DESTINO
       verification_code: generatedCode, //==> CODIGO GENERADO A LA PLANTILLA
     };
 
@@ -95,7 +96,6 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   //--------------------------FIN FRAGMENTO VERIFICACION-------------------------------------//
-
   const stored = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA); //LEEO Y PARSEO OBJETO GENERAL DE PASOS
 
   // OBJETO GENERAL DE PASOS CON VALORES POR DEFECTO Y PARA ALMACENAR EN STROAGE
@@ -122,9 +122,6 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
 
   //ESTADO DE INTERACCION DEL USUARIO EN UN CAMPO
   const [hasInteracted, setHasInteracted] = useState<boolean>(() => {
-    // SI ES NULL, NULL === TRUE, RESULTADO  ==> FALSE
-    //SI EXISTE Y ES TRUE, TRUE === TRUE, RESULTADO ==> TRUE
-    //SI EXISTE Y ES FALSE, FALSE === TRUE, RESULTADO ==> FALSE
     return localStorage.getItem(ENamesOfKeyLocalStorage.INTERACTED) === 'true'; //LEER KEY DE interacted EN ALMACENAMIENTO  DE STORAGE Y COMPARAR
   });
 
@@ -191,14 +188,12 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
 
   // ----------------------------------------------------EFECTOS PARA ESTADOS GENERALES----------------------------------------------------------------------//
 
-  // EFECTO PARA ALMACENAR EN STORAGE SI HAY INTERACCION, LOS DATOS QUE INGRESA EL PROFESIONAL Y REVALIDAR CAMPOS AL MONTARSE
+  // // EFECTO PARA ALMACENAR EN STORAGE SI HAY INTERACCION, LOS DATOS QUE INGRESA EL PROFESIONAL Y REVALIDAR CAMPOS AL MONTARSE
   useEffect(() => {
-    //SI NO INTERACTUO O NUNCA SE ELIGIO ROL O EL ROLE ES CLIENTE ==> NO EJECUTAR
-    if (!hasInteracted || client === null || client) return;
-    localStorage.setItem(ENamesOfKeyLocalStorage.INTERACTED, String(hasInteracted));
+    //SI NO INTERACTUO 
+    if (!hasInteracted) return;
     localStorage.setItem(ENamesOfKeyLocalStorage.STEP_DATA, JSON.stringify(stepData));
-    localStorage.setItem('codeEmail', codeEmail);
-  }, [step, hasInteracted, stepData]); //HAY AL MENOS UN ESTADO EXTERNO, POR EL CUAL NO ME PROHIBE AGREGAR INTERNOS SI SE REQUIERE
+  }, [stepData]); //HAY AL MENOS UN ESTADO EXTERNO
 
   // EFECTO PARA FORZAR A RENDERIZAR HOME
   useEffect(() => {
@@ -258,7 +253,7 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (isSending) return; // SI YA SE ESTA ENVIANDO, NO HACER NADA
 
-    await sendCodeToUser(stepData[EKeyDataByStep.FOUR].email) // ==> TOMO REFERENCIA EL EMAIL ALMACENADO EN STORAGE
+    await sendCodeToUser(stepData[EKeyDataByStep.FOUR].email); // ==> TOMO REFERENCIA EL EMAIL ALMACENADO EN STORAGE
 
     setIsSending(true); //SI SE ESTA ENVIANDO MOSTRAR MODAL DE VERIFICACION DE CODIGO
     setIsModalClosed(true); //SETEAR A TRUE => MODAL CERRADO

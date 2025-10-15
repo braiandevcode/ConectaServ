@@ -10,6 +10,7 @@ import StepFour from './StepFour';
 import FooterConditionsTerm from './FooterConditionsTerm';
 import useRegister from '../hooks/useRegister';
 import VerifyEmailModal from './VerifyEmailModal';
+import ButtonRegister from './ButtonRegister';
 
 // **MACHETE PARA RESPETAR Y ENTENDER REACT EN PROCESO DE DESARROLLO**//
 
@@ -22,7 +23,7 @@ import VerifyEmailModal from './VerifyEmailModal';
 
 // FORMULARIO PROFESIONAL
 export default function RegisterPro() {
-  const { isStepValid, hasInteracted, handleClickNext, valueSelected, step, onSubmitForm, hasBudge, handleClickPrev } = useRegisterPro(); //HOOK PARA ESTADOS DE REGISTRO PROFESIONAL
+  const { hasInteracted, valueSelected, step, onSubmitForm, hasBudge, handleClickPrev } = useRegisterPro(); //HOOK PARA ESTADOS DE REGISTRO PROFESIONAL
   const { isSending } = useRegister();
   // ------------------------VARIABLES Y/O CONSTANTES---------------------------------------------//
   const isLastStep: boolean = (step === 3 && !hasBudge) || (hasBudge && step === 4); //EL ULTIMO PASO;
@@ -84,10 +85,10 @@ export default function RegisterPro() {
               </div>
               {hasInteracted && (
                 <div className='mb-2 c-flex c-flex-justify-end'>
-                  <button type={isLastStep ? 'submit' : 'button'} disabled={!isStepValid} className='c-flex c-flex-justify-center c-flex-items-center gap-1/2 cursor-pointer btn container-btn__next' onClick={isLastStep ? undefined : handleClickNext}>
+                  <ButtonRegister variant='btn container-btn__next'>
                     {isLastStep ? <span>Enviar</span> : <span>Siguiente</span>}
                     <i className={isLastStep ? 'fas fa-solid fa-user-plus' : 'fas fa-arrow-circle-right'}></i>
-                  </button>
+                  </ButtonRegister>
                 </div>
               )}
             </form>

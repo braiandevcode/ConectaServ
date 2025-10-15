@@ -2,6 +2,7 @@ import type React from 'react';
 import type { TRegister } from '../../types/types';
 import { useState } from 'react';
 import { RegisterContext } from './RegisterContext';
+import { ENamesOfKeyLocalStorage } from '../../types/enums';
 // import { EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../types/enums';
 // import { readExistingData } from '../../utils/storageUtils';
 
@@ -21,7 +22,12 @@ const RegisterProvider = ({ children }: { children: React.ReactNode }) => {
   //--------------------------------------------------ESTADOS  CAMPOS BASICOS DE REGISTRO ------------------------------------------------------------------------------------------//
   const [password, setPassword] = useState<string>(''); //ESTADO EN TIEMPO RUNTIME PARA PASSWORD
   const [confirmPassword, setConfirmPassword] = useState<string>(''); //ESTADO EN TIEMPO RUNTIME PARA CONFIRMPASSWORD
-  
+
+  //-------ACTUALIZAR EN STORAGE CODIGO DE VERIFICACION-------------------//
+  const updateCodeEmail = (newCode: string): void => {
+    localStorage.setItem(ENamesOfKeyLocalStorage.CODE, String(newCode));
+    setCodeEmail(newCode);
+  };
 
   //ONCHANGE TERMINOS Y CONDICIONES
   const onChangeTerms = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +37,7 @@ const RegisterProvider = ({ children }: { children: React.ReactNode }) => {
   //VALORES DE ESTADOS QUE CONSUME EL CONTEXTO
   const contextValuesRegister: TRegister = {
     codeEmail,
-    setCodeEmail,
+    updateCodeEmail,
     setInteractedConfirmPassword,
     setInteractedPassword,
     onChangeTerms,

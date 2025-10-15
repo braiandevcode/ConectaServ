@@ -48,6 +48,7 @@ export enum ENamesOfKeyLocalStorage {
   CURRENT_STEP = 'currentStep',
   IMAGE_INDEXED_DB = 'my-image-db',
   INTERACTED = 'interacted',
+  CODE='codeEmail'
 }
 
 // ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES

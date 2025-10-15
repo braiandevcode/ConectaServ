@@ -283,7 +283,8 @@ export type TRegister = Omit<TStepFourProps, 'handleChangeLocation' | 'handleCon
   terms: boolean;
   isSending:boolean;
   codeEmail:string,
-  setCodeEmail: React.Dispatch<React.SetStateAction<string>>
+  // setCodeEmail: React.Dispatch<React.SetStateAction<string>>
+  updateCodeEmail:(newCode: string) => void;
   setIsSending: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
