@@ -1,26 +1,19 @@
 import { createContext } from 'react';
 import type { TRegister } from '../../types/types';
-import { ELocationKey } from '../../types/enums';
 
 // DEFINIR VALORES POR DEFECTO DE LOS ESTADOS
 const defaultRegisterContext: TRegister = {
-  isSending:false,
+  codeEmail:'', // ==> INICIO CODIGO A CERO
+  setCodeEmail: () => {},
+  isSending:false, // ==> INICIO LOADING EN FALSE
   setIsSending: () => {},
   interactedConfirmPassword:false,
   setInteractedConfirmPassword: () => {},
   setInteractedPassword: () => {},
   setConfirmPassword: () => {},
   setPassword: () => {},
-  setStoredFullName: () => {},
-  setStoredUserName: () => {},
-  setStoredEmail: () => {},
-  setStoredLocation: () => {},
   setTerms: () => {},
   interactedPassword: false,
-  storedFullName: '',
-  storedUserName: '',
-  storedLocation: ELocationKey.NONE,
-  storedEmail: '',
   confirmPassword: '',
   password: '',
   terms: false,

@@ -6,9 +6,11 @@ import CheckboxGroup from './CheckBoxGroup';
 
 // COMPONENTE CONTENEDOR QUE CONTIENE TODOS LOS GRUPOS SEGUN CATEGORIA
 const CheckboxGroupsContainer = () => {
- const { stepData } = useRegisterPro(); // ==> HOOK REGISTRO PROFESIONAL
+  const { stepData } = useRegisterPro(); // ==> HOOK REGISTRO PROFESIONAL
+
+  // EXCLUYO AL NONE EN TIPADO
   const config: TCategoryConfig = categoryConfigs[stepData[EKeyDataByStep.ONE].category as Exclude<TCategoryKey, ECategoryKey.NONE>];
-  
+
   return (
     <div className='c-flex c-flex-column gap-1 form-professional-groupSpeciality'>
       {config &&

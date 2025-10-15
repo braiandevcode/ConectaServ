@@ -31,6 +31,7 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
 
   // EFECTO PARA CARGAR IMAGEN DE PERFIL
   useEffect(() => {
+     console.log('ME LLAMARON DE : StepTwoProvider');
     if (stepData[EKeyDataByStep.TWO].imageProfile) {
       // CARGAR EL SOURCE DE IMAGEN MEDIANTE FUNCION INVOCADA
       loadImage({ setSrc, storedImage: stepData[EKeyDataByStep.TWO].imageProfile });

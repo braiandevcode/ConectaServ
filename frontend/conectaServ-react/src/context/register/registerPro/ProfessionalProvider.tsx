@@ -18,6 +18,9 @@ import UserNameValidator from '../../../modules/validators/UserNameValidator';
 import FullNameValidator from '../../../modules/validators/FullNameValidator';
 import useMain from '../../../hooks/useMain';
 import useRegister from '../../../hooks/useRegister';
+import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
+import generateRandomNumber from '../../../utils/generateRandomNumber';
+import type { TVerifyCode } from '../../../types/typeVerifyCode';
 
 /*
 ****EXPLICACION DEL FLUJO ENTRE VALIDAR Y ALMACENAR EN STRORAGE:*****
@@ -45,7 +48,7 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
   const { client, setIsModalOpen, setIsModalClosed } = useMain();
-  const { setIsSending, isSending, terms, storedEmail, storedFullName, storedUserName, storedLocation, password, confirmPassword } = useRegister();
+  const { setIsSending, isSending, terms, password, confirmPassword, setTerms, codeEmail, setCodeEmail } = useRegister();
 
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
   // ---------------------------------------------------------------------ESTADO GENERALES------------------------------------------------------------------//
@@ -55,6 +58,43 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
     const storedStep = localStorage.getItem(ENamesOfKeyLocalStorage.CURRENT_STEP); // LEO CURRENT_STEP UNA SOLA VEZ
     return storedStep ? parseInt(storedStep, 10) : 1; //SI NO ES NULL PARSEA A NUMERO SI ES NULO , SINO POR DEFECTO ES 1
   });
+
+  // ------------------------FRAGMENTO CODIGO DE VERIFICACION---------------------------//
+
+  // CARGAR LA PUBLIC_KEY DESDE VARIABLE DE ENTORNO
+  const PUBLIC_KEY = import.meta.env.VITE_PUBLIC_KEY; // ==> CLAVE PUBLICA
+  const SERVICE_ID = import.meta.env.VITE_SERVICE_ID; // ==> ID SERVICIO
+  const TEMPLATE_VERIFICATION_ID = import.meta.env.VITE_TEMPLATE_ID; // ==> ID PLANTILLA
+
+  // INICIALIZAR LIBRERIA
+  emailjs.init({
+    publicKey: PUBLIC_KEY, //==> CLAVE
+  });
+
+  // FUNCION PARA ENVIAR CODIGO
+  async function sendCodeToUser(email: string) {
+    const generatedCode: number = generateRandomNumber(); //GENERAR RANDOM
+
+    setCodeEmail(generatedCode.toString()); //SETEO NUMERO RANDOM Y PARSEO A STRING
+
+    // OBJETO DE CONFIGURACION PARA ENVIO
+    const templateParams: TVerifyCode = {
+      to_email: email, // ==> CORREO DE DESTINO
+      verification_code: generatedCode, //==> CODIGO GENERADO A LA PLANTILLA
+    };
+
+    // INTENTAR ENVIO
+    try {
+      const response: EmailJSResponseStatus = await emailjs.send(SERVICE_ID, TEMPLATE_VERIFICATION_ID, templateParams);
+      console.log('Correo con código enviado con éxito!', response.status);
+      return { success: true, code: generatedCode };
+    } catch (err) {
+      console.error('Fallo al enviar el código:', err);
+      return { success: false, error: err };
+    }
+  }
+
+  //--------------------------FIN FRAGMENTO VERIFICACION-------------------------------------//
 
   const stored = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA); //LEEO Y PARSEO OBJETO GENERAL DE PASOS
 
@@ -131,10 +171,10 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
     reinsert: { value: stepData[EKeyDataByStep.THREE]?.reinsert as string, error: '', isValid: false },
 
     // PASO 4
-    fullName: fullNameValidator.validate(storedFullName ?? ''),
-    userName: userNameValidator.validate(storedUserName ?? ''),
-    email: emailValidator.validate(storedEmail ?? ''),
-    location: selectedCategoryValidator.validate(storedLocation ?? ''),
+    fullName: fullNameValidator.validate(stepData[EKeyDataByStep.FOUR].fullName) ?? '',
+    userName: userNameValidator.validate(stepData[EKeyDataByStep.FOUR].userName ?? ''),
+    email: emailValidator.validate(stepData[EKeyDataByStep.FOUR].email ?? ''),
+    location: selectedCategoryValidator.validate(stepData[EKeyDataByStep.FOUR].location ?? ''),
     password: passwordValidator.validate(password ?? ''),
     confirmPassword: confirmPasswordValidator.validate(confirmPassword ?? ''),
 
@@ -157,7 +197,8 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
     if (!hasInteracted || client === null || client) return;
     localStorage.setItem(ENamesOfKeyLocalStorage.INTERACTED, String(hasInteracted));
     localStorage.setItem(ENamesOfKeyLocalStorage.STEP_DATA, JSON.stringify(stepData));
-  }, [client, step, hasInteracted, stepData]); //HAY AL MENOS UN ESTADO EXTERNO, POR EL CUAL NO ME PROHIBE AGREGAR INTERNOS SI SE REQUIERE
+    localStorage.setItem('codeEmail', codeEmail);
+  }, [step, hasInteracted, stepData]); //HAY AL MENOS UN ESTADO EXTERNO, POR EL CUAL NO ME PROHIBE AGREGAR INTERNOS SI SE REQUIERE
 
   // EFECTO PARA FORZAR A RENDERIZAR HOME
   useEffect(() => {
@@ -179,9 +220,6 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   }, [location.pathname, navigate]); //==> DEPENDE DE CAMBIOS EN LOCATION Y NAVIGATE, HOOKS DE REACT
 
   // -------------------------------------------------------- EVENTOS --------------------------------------------------------------------//
-
-  // ------------------------------EVENTO GENERAL DE PSOS DEL FORMULARIO------------------------------------//
-
   // EVENTO DE CLICK PARA EL SIGUIENTE PASO
   const handleClickNext = () => {
     // ASEGURO DE QUE SI ES VALIDO AUMENTO
@@ -192,7 +230,7 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
         return newStep;
       });
       setIsResetDetailsWork(false);
-      // SCROLLEAMOS SUAVE HACIA ARRIBA EN CADA EVENTO
+      // SCROLLEAR SUAVE HACIA ARRIBA EN CADA EVENTO
       scrolledTop();
     }
   };
@@ -204,6 +242,7 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
       localStorage.setItem(ENamesOfKeyLocalStorage.CURRENT_STEP, stepPrev.toString());
       return stepPrev;
     });
+    setTerms(false); //POR DEFAULT SE VACIA CHECK, LUEGO DEL EVENTO SETEAR A FALSE
     setIsResetDetailsWork(false);
     // SCROLLEAMOS SUAVE HACIA ARRIBA EN CADA EVENTO
     scrolledTop();
@@ -212,10 +251,15 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   // EVENTO SUBMIT FORM
   const onSubmitForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault(); //PREVENIR
-    if (!isStepValid || step !== 4) return; //SI NO ES VALIDO ASEGURA NO SEGUIR
 
-    // SI YA SE ESTA ENVIANDO, NO HACER NADA
-    if (isSending) return;
+    const isNotValidAndStepNotValid: boolean = !isStepValid || (hasBudge && step !== 4) || (!hasBudge && step !== 3);
+
+    if (isNotValidAndStepNotValid) return; //SI NO ES VALIDO ASEGURA NO SEGUIR
+
+    if (isSending) return; // SI YA SE ESTA ENVIANDO, NO HACER NADA
+
+    await sendCodeToUser(stepData[EKeyDataByStep.FOUR].email) // ==> TOMO REFERENCIA EL EMAIL ALMACENADO EN STORAGE
+
     setIsSending(true); //SI SE ESTA ENVIANDO MOSTRAR MODAL DE VERIFICACION DE CODIGO
     setIsModalClosed(true); //SETEAR A TRUE => MODAL CERRADO
     setIsModalOpen(true);
@@ -260,19 +304,21 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
       case 3: {
         // ASEGURAR QUE SIEMPRE TENGA EL "hasBudge" EN TRUE
         if (hasBudge) {
-          console.log('En validacion: ', formState.budgeSelected.value);
-          console.log('En validacion: ', formState.amountBudge.value);
-
+          const currentAmount: number = (formState.amountBudge.value as string).trim() !== '' ? parseInt(formState.amountBudge.value as string) : 0;
           if (formState.budgeSelected.value === 'yes') {
             // SI ELIGE "SÍ", DEBE SER UN MONTO VÁLIDO
             isValid = formState.amountBudge.isValid;
           } else if (formState.budgeSelected.value === 'no') {
-            // const noHasStored:boolean = parseInt(formState.amountBudge.value as string) === 0;
-            const hasStored: boolean = stepData[EKeyDataByStep.THREE]?.amountBudge === 0;
-            isValid = hasStored;
+            const hasNotAmount: boolean = currentAmount === 0;
+            isValid = hasNotAmount;
           } else {
             isValid = false;
           }
+        } else {
+          const { fullName, userName, email, location, password, confirmPassword } = formState;
+          const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms;
+          isValid = isValidStep;
+          return isValid;
         }
         return isValid;
       }

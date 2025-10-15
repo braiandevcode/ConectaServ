@@ -25,7 +25,7 @@ export default function RegisterPro() {
   const { isStepValid, hasInteracted, handleClickNext, valueSelected, step, onSubmitForm, hasBudge, handleClickPrev } = useRegisterPro(); //HOOK PARA ESTADOS DE REGISTRO PROFESIONAL
   const { isSending } = useRegister();
   // ------------------------VARIABLES Y/O CONSTANTES---------------------------------------------//
-  const isLastStep: boolean = (step === 3 && !hasBudge) || step === 4; //MOMENTO PARA MOSTRAR EL ULTIMO PASO;
+  const isLastStep: boolean = (step === 3 && !hasBudge) || (hasBudge && step === 4); //EL ULTIMO PASO;
   const isBudge: boolean = step === 3 && hasBudge;
 
   return (

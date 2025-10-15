@@ -33,7 +33,7 @@ const VerifyEmailModal = () => {
   // CON ALIAS PARA NO CHOCAR CON VARIABLE DE ESTADO
   const { valueSelected: valueSelectedAlias, ...res } = stepData[EKeyDataByStep.ONE];
 
-//   CREA NUEVO OBJETO APLANADO
+  //   CREA NUEVO OBJETO APLANADO
   const aplanarObjeto = {
     // SE PROPAGAN TODAS LAS PROPIEDADES DE CADA PASO
     ...res,
@@ -85,8 +85,6 @@ const VerifyEmailModal = () => {
           <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
             <h2>Verificación de Email</h2>
             <p>Ingresa el código que te enviamos por correo.</p>
-
-            {/* FORMULARIO DENTRO DEL MODAL */}
             <form onSubmit={handleSubmit}>
               <input
                 type='text'

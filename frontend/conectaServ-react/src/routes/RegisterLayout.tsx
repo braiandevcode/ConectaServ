@@ -6,7 +6,7 @@ import RegisterProvider from '../context/register/RegisterProvider';
 // ESTE LAYOUT ESTA A UNA RUTA O GRUPOS DE RUTASY SE USA COMO CONTENEDOR PARA ESAS RUTAS.
 const RegisterLayout = () => {
   return (
-    // ERRORBOUNDARY CAPTURA ERRORES EN CUALQUIER COMPONENTE HIJO Y EVITA QUE SE ROMPA LA APP
+    // ERROR BOUNDARY CAPTURA ERRORES EN CUALQUIER COMPONENTE HIJO Y EVITA QUE SE ROMPA LA APP
     <ErrorBoundary>
       <RegisterProvider>
         <Outlet />

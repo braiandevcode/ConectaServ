@@ -23,6 +23,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "crypto-js": "^4.2.0",
     "zod": "^3.25.20"
   }

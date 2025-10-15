@@ -11,31 +11,29 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
   const selectedCategoryValidator: SelectedValidator = new SelectedValidator(); //==> INSTANCIAR VALIDADOR DE SELECT
 
   // CONTEXTO PADRE GENERAL DEL FORMULARIO
-  const {
-    setStepData,
-    hasBudge,
-    setIsStepValid,
-    setFormState,
-    setHasInteracted,
-    setValueSelected,
-    setHasBudge,
-    setHasContext,
-    setIsResetDetailsWork,
-    validateCurrentStep,
-    formState,
-    hasContext,
-  } = useRegisterPro();
+  const { setStepData, hasBudge, setIsStepValid, setFormState, setHasInteracted, setValueSelected, setHasBudge, setHasContext, setIsResetDetailsWork, validateCurrentStep, formState, hasContext } = useRegisterPro();
   const { verifyGroup } = useVerifyGroup(); //HOOK PARA MANEJAR LOGICA DE ELECCION DE DETALLES DE TRABAJO
 
   const titleRef = useRef<HTMLSelectElement>(null); // ==> REF PARA ACCEDER AL VALOR ACTUAL DE ELEMENTOS SELECT DEL DOM
 
   // EFECTO SOLO PARA ELIMINAR DEL STORAGE EL PASO PRESUPUESTO
   useEffect(() => {
+
+    console.log('ME LLAMARON DE : StepOneProvider');
+
     //SI LA BANDERA DE QUE PRESUPUESTO ES FALSE
     if (!hasBudge) {
-      // SETEAR DATA GLOBAL EN STORAGE
+      // LIMIAR TODO ANTES
+      setFormState((prev) => ({
+        ...prev,
+        amountBudge: { value: '', error: '', isValid: false },
+        budgeSelected: { value: '', error: '', isValid: false },
+        reinsert: { value: '', error: '', isValid: false },
+      }));
+
+      // SETEAR DATA GLOBAL EN STORAGE SIN EL PASO 3
       setStepData((prev) => {
-        const copy = { ...prev };// COPIAR ATOS PREVIOS
+        const copy = { ...prev }; // COPIAR ATOS PREVIOS
         delete copy[EKeyDataByStep.THREE]; // ==> ELIMINAR PASO 3
         return copy;
       });
@@ -44,10 +42,12 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
 
   // EFECTO PARA OBSERVAR SI CONTIENE O NO GRUPO CONTEXT Y REVALIDAR
   useEffect(() => {
+    console.log('ME LLAMARON DE : StepOneProvider');
+    
     // SI NO HAY GRUO DE CHECKS DE CONTEXTO (HABITOS)
     if (!hasContext) {
       // SETEAR DATA GLOBAL EN STORAGE
-       setStepData((prev) => {
+      setStepData((prev) => {
         const copy = { ...prev }; // COPIAR TODO
         delete copy[EKeyDataByStep.ONE]['context[]']; // ==> ELIMINAR SOLO ATRIBUTO "context[]"
         return copy;
@@ -95,7 +95,7 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
   const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>, group: TOptionWork) => {
     setIsResetDetailsWork(false); //NO RESETEAR
     verifyGroup({ e, group }); //==> INVOCAR FUNCION DE HOOK PARA VERFICAR CHECKSBOXES
-    setIsStepValid(validateCurrentStep()); //==> VALIDAR SEGUN FUNCION PRINCIPAL DE PASOS
+    // setIsStepValid(validateCurrentStep()); //==> VALIDAR SEGUN FUNCION PRINCIPAL DE PASOS
   };
 
   const contextStepOneValue: TTypeContextStepOne = {

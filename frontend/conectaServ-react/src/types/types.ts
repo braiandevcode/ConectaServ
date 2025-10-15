@@ -173,16 +173,16 @@ export type TStepFourProps = {
   handleChangeLocation: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   handlePassword: (e: React.FormEvent<HTMLInputElement>) => void;
   handleConfirmPassword: (e: React.FormEvent<HTMLInputElement>) => void;
-  setStoredFullName: React.Dispatch<React.SetStateAction<string>>;
-  setStoredUserName: React.Dispatch<React.SetStateAction<string>>;
-  setStoredEmail: React.Dispatch<React.SetStateAction<string>>;
-  setStoredLocation: React.Dispatch<React.SetStateAction<TLocationKey>>;
+  // setStoredFullName: React.Dispatch<React.SetStateAction<string>>;
+  // setStoredUserName: React.Dispatch<React.SetStateAction<string>>;
+  // setStoredEmail: React.Dispatch<React.SetStateAction<string>>;
+  // setStoredLocation: React.Dispatch<React.SetStateAction<TLocationKey>>;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
   setConfirmPassword: React.Dispatch<React.SetStateAction<string>>;
-  storedEmail: string;
-  storedUserName: string;
-  storedLocation: ELocationKey;
-  storedFullName: string;
+  // storedEmail: string;
+  // storedUserName: string;
+  // storedLocation: ELocationKey;
+  // storedFullName: string;
   confirmPassword: string;
   password: string;
 };
@@ -282,6 +282,8 @@ export type TRegister = Omit<TStepFourProps, 'handleChangeLocation' | 'handleCon
   setTerms: React.Dispatch<React.SetStateAction<boolean>>;
   terms: boolean;
   isSending:boolean;
+  codeEmail:string,
+  setCodeEmail: React.Dispatch<React.SetStateAction<string>>
   setIsSending: React.Dispatch<React.SetStateAction<boolean>>;
 };
 

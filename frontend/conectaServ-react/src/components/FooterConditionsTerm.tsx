@@ -1,9 +1,10 @@
-import { Link } from "react-router";
-import useRegister from "../hooks/useRegister";
+import { Link } from 'react-router';
+import useRegister from '../hooks/useRegister';
 
-// COMPONENTE FOOTER DE FORMULARIO TERMINOS Y CONDICIONES 
+// COMPONENTE FOOTER DE FORMULARIO TERMINOS Y CONDICIONES
 const FooterConditionsTerm = () => {
-  const { onChangeTerms } = useRegister(); //HOOK PASO 4
+  const { onChangeTerms } = useRegister(); //HOOK REGISTRO GENERAL
+
   return (
     <>
       <div className='c-flex c-flex-justify-center c-flex-basis-full gap-3/2 form-basic register-formProfessional__terms'>
