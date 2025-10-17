@@ -1,6 +1,6 @@
 import { createContext } from 'react';
-import type { TRegisterPro } from '../../../types/types';
 import { emptyStepData, formStateValidField } from '../../../config/constant';
+import type { TRegisterPro } from '../../../types/typeRegisterProfessional';
 
 // DEFINIR VALORES POR DEFECTO DE LOS ESTADOS
 const defaultContextProfessional: TRegisterPro = {

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import type { TMain } from '../../types/types';
 import MainContext from './MainContext';
 import { ENamesOfKeyLocalStorage, EPathPage } from '../../types/enums';
 import { clearPersistence } from '../../utils/storageUtils';
+import type { TMain } from '../../types/typeMain';
 
 // PROVEEMOS LOGICA Y ESTADOS AL CONTEXTO PRINCIPAL
 const MainProvider = ({ children }: { children: React.ReactNode }) => {
@@ -39,9 +39,11 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
     // SI EL ROL GUARDADO ES CLIENTE Y ESTAMOS EN LA RUTA CORRECTA
     if (location.pathname === EPathPage.PATH_FORM_CLIENT && stored === 'client') {
       setClient(true);
-    }else if (location.pathname === EPathPage.PATH_FORM_PROFESSIONAL && stored === 'pro') { // SI EL ROL GUARDADO ES PRO Y ESTAMOS EN LA RUTA CORRECTA
+    } else if (location.pathname === EPathPage.PATH_FORM_PROFESSIONAL && stored === 'pro') {
+      // SI EL ROL GUARDADO ES PRO Y ESTAMOS EN LA RUTA CORRECTA
       setClient(false);
-    }else {  // SI NO HAY ROL VALIDO O NO ESTAMOS EN UNA RUTA DE REGISTRO
+    } else {
+      // SI NO HAY ROL VALIDO O NO ESTAMOS EN UNA RUTA DE REGISTRO
       localStorage.removeItem('role');
       localStorage.removeItem(ENamesOfKeyLocalStorage.CLIENT_DATA);
       // LIMPIAR DATOS ASÍNCRONAMENTE
@@ -63,6 +65,11 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
 
   // ------------------EVENTOS--------------------------------------------------//
 
+  // EVENTO PARA CERRAR MODAL
+  const closeModal = (): void => {
+    setIsModalOpen(false);
+  };
+
   // FUNCION PARA ABRIR O CERRAR EL MODAL
   const handleToggleModal = () => {
     setIsModalClosed((prev) => !prev); //LO CONTRARIO A LO QUE VENGA
@@ -83,6 +90,7 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const contextMainValue: TMain = {
+    closeModal,
     setIsModalOpen,
     setIsModalClosed,
     setLoading,

@@ -3,6 +3,8 @@ import type { TRegister } from '../../types/types';
 
 // DEFINIR VALORES POR DEFECTO DE LOS ESTADOS
 const defaultRegisterContext: TRegister = {
+  inputCodeEmail:'',
+  setInputCodeEmail: () => {},
   codeEmail: '', // ==> INICIO CODIGO A CERO
   updateCodeEmail: () => {},
   isSending: false, // ==> INICIO LOADING EN FALSE

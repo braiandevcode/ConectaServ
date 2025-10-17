@@ -1,14 +1,12 @@
 import { useLocation, useNavigate } from 'react-router';
-import type { TRegisterPro, TStepData } from '../../../types/types';
 import { ProfessionalContext } from './ProfessionalContext';
-import React, { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { ECategoryKey, EDefaultSelected, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../../types/enums';
 import { readExistingData } from '../../../utils/storageUtils';
 import DescriptionValidator from '../../../modules/validators/DescriptionValidator';
 import ImageProfileValidator from '../../../modules/validators/ImageProfileValidator';
 import ImageExperiencesValidator from '../../../modules/validators/ImageExperiencesValidator';
 import SelectedValidator from '../../../modules/validators/SelectedValidator';
-import type { iFormStateValidation } from '../../../interfaces/interfaces';
 import { emptyStepData } from '../../../config/constant';
 import BudgeValidator from '../../../modules/validators/BudgeValidator';
 import ConfirmPasswordValidator from '../../../modules/validators/ConfirmPasswordValidator';
@@ -21,6 +19,10 @@ import useRegister from '../../../hooks/useRegister';
 import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 import generateRandomNumber from '../../../utils/generateRandomNumber';
 import type { TVerifyCode } from '../../../types/typeVerifyCode';
+import CodeValidator from '../../../modules/validators/CodeValidator';
+import type { TStepData } from '../../../types/typeStepData';
+import type { iFormStateValidationPro } from '../../../interfaces/iFormStateValidationPro';
+import type { TRegisterPro } from '../../../types/typeRegisterProfessional';
 
 /*
 ****EXPLICACION DEL FLUJO ENTRE VALIDAR Y ALMACENAR EN STRORAGE:*****
@@ -43,23 +45,20 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   const emailValidator: EmailValidator = new EmailValidator();
   const passwordValidator: PasswordValidator = new PasswordValidator();
   const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordValidator();
+  const codeValidator: CodeValidator = new CodeValidator();
 
   //--------------------------------------------------------------------HOOKS DE REACT--------------------------------------------------------------------//
   const location = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
   const { setIsModalOpen, setIsModalClosed } = useMain();
-  const { setIsSending, isSending, terms, password, confirmPassword, setTerms, updateCodeEmail } = useRegister();
+  const { setIsSending, isSending, terms, password, confirmPassword, setTerms, inputCodeEmail, updateCodeEmail } = useRegister();
 
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
-  // ---------------------------------------------------------------------ESTADO GENERALES------------------------------------------------------------------//
-
   // ESTADO PARA EL PASO ACTUAL DEL FORMULARIO
   const [step, setStep] = useState<number>(() => {
     const storedStep = localStorage.getItem(ENamesOfKeyLocalStorage.CURRENT_STEP); // LEO CURRENT_STEP UNA SOLA VEZ
     return storedStep ? parseInt(storedStep, 10) : 1; //SI NO ES NULL PARSEA A NUMERO SI ES NULO , SINO POR DEFECTO ES 1
   });
-
-
 
   // ------------------------FRAGMENTO CODIGO DE VERIFICACION---------------------------//
   // CARGAR LA PUBLIC_KEY DESDE VARIABLE DE ENTORNO
@@ -149,25 +148,25 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   const [isFocus, setIsFocus] = useState<boolean>(false); //PERMITE INDICAR SI SE HIZO O NO FOCO
 
   // OBJETO INICIAL DE VALIDACIONES QUE LEERA LOS DATOS EN ALMACEN LOCAL Y VALIDARA O DEJAR VALORES POR DEFECTO
-  const initialFormState: iFormStateValidation = {
-    // PASO 1
+  const initialFormState: iFormStateValidationPro = {
+    // ESTADOS DE ENTRADA EN PASO 1
     category: selectedCategoryValidator.validate(stepData[EKeyDataByStep.ONE].category ?? ''),
     'service[]': { value: stepData[EKeyDataByStep.ONE]['service[]'] ?? [], error: '', isValid: false },
     'context[]': { value: stepData[EKeyDataByStep.ONE]['context[]'] ?? [], error: '', isValid: false },
     'day[]': { value: stepData[EKeyDataByStep.ONE]['day[]'] ?? [], error: '', isValid: false },
     'hour[]': { value: stepData[EKeyDataByStep.ONE]['hour[]'] ?? [], error: '', isValid: false },
 
-    // PASO 2
+    // ESTADOS DE ENTRADA EN PASO 2
     descriptionUser: descriptionValidator.validate(stepData[EKeyDataByStep.TWO].descriptionUser ?? ''),
     imageProfile: imageProfileValidator.validate(stepData[EKeyDataByStep.TWO].imageProfile),
     imageExperiences: imageExperiencesValidator.validate(stepData[EKeyDataByStep.TWO].imageExperiences),
 
-    // PASO 3
+    // ESTADOS DE ENTRADA EN PASO 3
     amountBudge: budgeValidator.validate(String(stepData[EKeyDataByStep.THREE]?.amountBudge ?? '')),
     budgeSelected: { value: stepData[EKeyDataByStep.THREE]?.budgeSelected as string, error: '', isValid: false },
     reinsert: { value: stepData[EKeyDataByStep.THREE]?.reinsert as string, error: '', isValid: false },
 
-    // PASO 4
+    // ESTADOS DE ENTRADA EN PASO 4
     fullName: fullNameValidator.validate(stepData[EKeyDataByStep.FOUR].fullName) ?? '',
     userName: userNameValidator.validate(stepData[EKeyDataByStep.FOUR].userName ?? ''),
     email: emailValidator.validate(stepData[EKeyDataByStep.FOUR].email ?? ''),
@@ -175,22 +174,20 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
     password: passwordValidator.validate(password ?? ''),
     confirmPassword: confirmPasswordValidator.validate(confirmPassword ?? ''),
 
-    // EXTRA
-    emailCode: { value: stored?.extra?.emailCode ?? '', error: '', isValid: true },
+    // ESTADOS DE ENTRADA EN VERIFICACION DE CODIGO
+    emailCode: codeValidator.validate(inputCodeEmail ?? ''),
   };
 
   // ESTADO DE VALIDACIONES EN TODO EL FORMULARIO ==> INICIALIZA CON ==> initialFormState QUE CONSUME DEL DATASTEP
-  const [formState, setFormState] = useState<iFormStateValidation>(initialFormState);
+  const [formState, setFormState] = useState<iFormStateValidationPro>(initialFormState);
 
   // VALIDAR  CAMPOS POR PASOS
   const [isStepValid, setIsStepValid] = useState<boolean>(validateCurrentStep);
+  
   // -------------------------------------------------------------useEffects-------------------------------------------------------------------------//
-
-  // ----------------------------------------------------EFECTOS PARA ESTADOS GENERALES----------------------------------------------------------------------//
-
-  // // EFECTO PARA ALMACENAR EN STORAGE SI HAY INTERACCION, LOS DATOS QUE INGRESA EL PROFESIONAL Y REVALIDAR CAMPOS AL MONTARSE
+  // EFECTO PARA ALMACENAR EN STORAGE SI HAY INTERACCION, LOS DATOS QUE INGRESA EL PROFESIONAL Y REVALIDAR CAMPOS AL MONTARSE
   useEffect(() => {
-    //SI NO INTERACTUO 
+    //SI NO INTERACTUO
     if (!hasInteracted) return;
     localStorage.setItem(ENamesOfKeyLocalStorage.STEP_DATA, JSON.stringify(stepData));
   }, [stepData]); //HAY AL MENOS UN ESTADO EXTERNO

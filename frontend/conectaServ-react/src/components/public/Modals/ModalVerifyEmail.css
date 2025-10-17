@@ -1,0 +1,11 @@
+.ReactModal__Overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background-color: var(--bg-form);
+  color: var(--text-color-primary);
+}
+

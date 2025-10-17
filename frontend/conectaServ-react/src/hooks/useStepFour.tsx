@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import type { TTypeContextBasic } from '../types/types';
+import type { TTypeContextBasic } from '../types/typeContextBasic';
 import { StepFourContext } from '../context/register/registerPro/StepFourContext';
 
 const useStepFour= () => {

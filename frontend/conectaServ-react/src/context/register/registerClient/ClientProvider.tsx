@@ -4,17 +4,17 @@ import EmailValidator from '../../../modules/validators/EmailValidator';
 import FullNameValidator from '../../../modules/validators/FullNameValidator';
 import PasswordValidator from '../../../modules/validators/PasswordValidator';
 import UserNameValidator from '../../../modules/validators/UserNameValidator';
-import type { TAplanarCliente, TDataClient, TRegisterClient } from '../../../types/types';
 import { ClientContext } from './ClientContext';
 import { useEffect, useState, type FormEvent } from 'react';
-import { clearPersistence, readExistingData } from '../../../utils/storageUtils';
+import { readExistingData } from '../../../utils/storageUtils';
 import { EDataClient, ENamesOfKeyLocalStorage } from '../../../types/enums';
 import { emptyDataClient } from '../../../config/constant';
-import type { iFormStateValidationClient } from '../../../interfaces/interfaces';
 import SelectedValidator from '../../../modules/validators/SelectedValidator';
 import useRegister from '../../../hooks/useRegister';
 import useMain from '../../../hooks/useMain';
-import apiRequest from '../../../utils/apiRequestUtils';
+import type { TDataClient } from '../../../types/typeDataClient';
+import type { iFormStateValidationClient } from '../../../interfaces/iFormStateValidationClient';
+import type { TRegisterClient } from '../../../types/typeRegisterClient';
 
 // PROVIDER ES QUIEN NOS PROVEE LOS ESTADOS Y FUNCIONES DE COMPONENTES
 const ClientProvider = ({ children }: { children: React.ReactNode }) => {
@@ -29,11 +29,10 @@ const ClientProvider = ({ children }: { children: React.ReactNode }) => {
   //--------------------------------------------------------------------HOOKS DE REACT--------------------------------------------------------------------//
   const location = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
-  const { terms, confirmPassword, password, storedEmail, storedFullName, storedLocation, storedUserName } = useRegister(); 
+  const { terms, confirmPassword, password } = useRegister();
   const { setLoading, setIsModalClosed } = useMain();
 
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
-  // ---------------------------------------------------------------------ESTADO GENERALES------------------------------------------------------------------//
 
   const stored = readExistingData(ENamesOfKeyLocalStorage.CLIENT_DATA) ?? {}; //LEEO Y PARSEO OBJETO GENERAL DE PASOS
 
@@ -42,7 +41,7 @@ const ClientProvider = ({ children }: { children: React.ReactNode }) => {
     return {
       [EDataClient.DATA]: {
         ...emptyDataClient[EDataClient.DATA], //VALOR POR DEFECTO
-        ...stored?.[EDataClient.DATA], // PISADO PODR EL VALOR EN STORAGE
+        ...stored[EDataClient.DATA], // PISADO PODR EL VALOR EN STORAGE
       },
     };
   });
@@ -50,10 +49,10 @@ const ClientProvider = ({ children }: { children: React.ReactNode }) => {
   // OBJETO INICIAL DE VALIDACIONES QUE LEERA LOS DATOS EN ALMACEN LOCAL Y VALIDARA O DEJAR VALORES POR DEFECTO
   const initialFormState: iFormStateValidationClient = {
     //DATOS INICIALES
-    fullName: fullNameValidator.validate(storedFullName ?? ''),
-    userName: userNameValidator.validate(storedUserName ?? ''),
-    email: emailValidator.validate(storedEmail ?? ''),
-    location: selectedCategoryValidator.validate(storedLocation ?? ''),
+    fullName: fullNameValidator.validate(dataClient[EDataClient.DATA].fullName ?? ''),
+    userName: userNameValidator.validate(dataClient[EDataClient.DATA].userName ?? ''),
+    email: emailValidator.validate(dataClient[EDataClient.DATA].email ?? ''),
+    location: selectedCategoryValidator.validate(dataClient[EDataClient.DATA].location ?? ''),
     password: passwordValidator.validate(password ?? ''),
     confirmPassword: confirmPasswordValidator.validate(confirmPassword ?? ''),
   };
@@ -66,7 +65,6 @@ const ClientProvider = ({ children }: { children: React.ReactNode }) => {
   // -------------------------------------------------------------useEffects-------------------------------------------------------------------------//
 
   // ----------------------------------------------------EFECTOS PARA ESTADOS GENERALES----------------------------------------------------------------------//
-
 
   // EFECTO PARA FORZAR A RENDERIZAR HOME
   useEffect(() => {
@@ -89,15 +87,13 @@ const ClientProvider = ({ children }: { children: React.ReactNode }) => {
 
   // ------------------------------------------------------- EVENTOS --------------------------------------------------------------------//
 
-  // if (!stored) return;
+  // const { ...res } = (stored[EDataClient.DATA] as TAplanarCliente) ?? {};
 
-  const { ...res } = (stored[EDataClient.DATA] as TAplanarCliente) ?? {};
-
-  const aplanarObjeto = {
-    // SE PROPAGAN TODAS LAS PROPIEDADES DE CADA PASO
-    ...res,
-    password, //SE AGREGA EL PASSWORD
-  } as TAplanarCliente;
+  // const dataSendClient = {
+  //   // SE PROPAGAN TODAS LAS PROPIEDADES DE CADA PASO
+  //   ...res,
+  //   password, //SE AGREGA EL PASSWORD
+  // } as TAplanarCliente;
 
   // ------------------------------EVENTO GENERAL DE PSOS DEL FORMULARIO------------------------------------//
 
@@ -110,13 +106,13 @@ const ClientProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       setLoading(true);
       setIsModalClosed(true);
-      await apiRequest('http://localhost:3000/client', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(aplanarObjeto),
-      });
+      // await apiRequest('http://localhost:3000/client', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(dataSendClient),
+      // });
 
-      await clearPersistence(); //RESTEAR STORAGE
+      // await clearPersistence(); //RESTEAR STORAGE
       // navigate('/'); // NAVEGAR AL HOME
     } catch (error) {
       setLoading(false);

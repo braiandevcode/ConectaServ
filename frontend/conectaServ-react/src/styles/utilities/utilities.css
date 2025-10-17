@@ -186,6 +186,25 @@
   gap: 3rem;
 }
 
+/* GAP 4REM*/
+.gap-4 {
+  gap: 4rem;
+}
+
+/* GAP 3REM*/
+.gap-5 {
+  gap: 5rem;
+}
+/* GAP 6REM*/
+.gap-12 {
+  gap: 12rem;
+}
+
+/* GAP 3REM*/
+.gap-20 {
+  gap: 20rem;
+}
+
 /* ELEMENTOS CON CURSOR POINTER */
 .cursor-pointer {
   cursor: pointer;

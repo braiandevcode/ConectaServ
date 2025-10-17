@@ -5,12 +5,15 @@ import EmailValidator from '../../../modules/validators/EmailValidator';
 import SelectedValidator from '../../../modules/validators/SelectedValidator';
 import PasswordValidator from '../../../modules/validators/PasswordValidator';
 import ConfirmPasswordValidator from '../../../modules/validators/ConfirmPasswordValidator';
-import type { TFieldState, TLocationKey, TStepBasic, TTypeContextBasic } from '../../../types/types';
 import useRegisterClient from '../../../hooks/useRegisterClient';
 import { EDataClient, ENamesOfKeyLocalStorage } from '../../../types/enums';
 import { FieldsClientContext } from './FieldsClientContext';
 import useRegister from '../../../hooks/useRegister';
 import useMain from '../../../hooks/useMain';
+import type { TStepBasic } from '../../../types/typeBasic';
+import type { TLocationKey } from '../../../types/typeLocation';
+import type { TFieldState } from '../../../types/typeStateFields';
+import type { TTypeContextBasic } from '../../../types/typeContextBasic';
 
 const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
   const fullNameValidator: FullNameValidator = new FullNameValidator();

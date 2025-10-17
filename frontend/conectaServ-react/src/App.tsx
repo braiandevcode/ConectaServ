@@ -1,16 +1,16 @@
 import { Route, Routes } from 'react-router';
-import LoginModal from './components/LoginModal';
-import Home from './pages/Home';
-import RegisterClient from './components/RegisterClient';
-import RegisterPro from './components/RegisterPro';
+import LoginModal from './components/public/Modals/ModalLogin';
+import RegisterClient from './components/public/Forms/RegisterClient/RegisterClient';
+import RegisterPro from './components/public/Forms/RegisterProfessional/RegisterPro';
 import MainLayout from './routes/MainLayout';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsAndConditions from './pages/TermsAndConditions';
+import PrivacyPolicy from './components/public/PrivacyPolicy';
+import TermsAndConditions from './components/public/TermsAndConditions';
 import RegisterProfessionalLayout from './routes/RegisterProLayout';
 import RegisterClientLayout from './routes/RegisterClientLayout';
 import { useEffect, useState } from 'react';
 import Loader from './components/Loader';
 import RegisterLayout from './routes/RegisterLayout';
+import Home from './components/public/Home';
 // COMPONENTE APP PRINCIPAL
 export default function App() {
   const [initialLoading, setInitialLoading] = useState(true);

@@ -53,28 +53,16 @@ export enum ENamesOfKeyLocalStorage {
 
 // ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES
 export enum EEndpoint {
-  REGISTER_PROFESSIONAL = '/professional',
-  REGISTER_CLIENT = '/client',
-}
-
-// ENUM PARA LOS PUERTOS ACCESIBLE DE DOMINIOS
-export enum EPortServerDomain {
-  PORT_BACK = '3000', // SRVIDOR BACKEND
-  PORT_FRONT = '5500', //FRONTEND
-}
-
-// ENUM PARA CONFIGURACION DE DOMINIOS
-export enum EPathDomain {
-  HOST_LOCAL = 'http://localhost:',
-  HOST_EXTERNAL = '',
+  PROFESSIONAL = '/register/professional',
+  CLIENT = '/register/client',
 }
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA
 export enum EPathPage {
-  PATH_FORM_CLIENT = '/register/client',
-  PATH_FORM_PROFESSIONAL = '/register/pro',
-  PATH_TERMS = '/frontend/src/pages/termsAndConditions.html',
-  PATH_PRIVACY = '/frontend/src/pages/privacyPolicy.html',
+  PATH_FORM_CLIENT= '/register/client',
+  PATH_FORM_PROFESSIONAL= '/register/pro',
+  PATH_TERMS = '/register/terms',
+  PATH_PRIVACY = '/register/privacity',
 }
 
 // ENUM PARA TIPOS DE INPUTS

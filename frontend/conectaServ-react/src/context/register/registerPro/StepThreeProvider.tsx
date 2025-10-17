@@ -2,10 +2,13 @@ import type React from 'react';
 import { useEffect } from 'react';
 import useRegisterPro from '../../../hooks/useRegisterPro';
 import { StepThreeContext } from './StepThreeContext';
-import type { TFieldState, TStepData, TTypeContextStepThree, TYesOrNo } from '../../../types/types';
 import { EKeyDataByStep } from '../../../types/enums';
 import { formatMontoWithCurrency, parseMontoToNumber } from '../../../utils/parsedAndFormatValuesUtils';
 import BudgeValidator from '../../../modules/validators/BudgeValidator';
+import type { TYesOrNo } from '../../../types/typeRadioYesOrNo';
+import type { TStepData } from '../../../types/typeStepData';
+import type { TFieldState } from '../../../types/typeStateFields';
+import type { TTypeContextStepThree } from '../../../types/typeContextStepThree';
 
 const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
   const budgeValidator: BudgeValidator = new BudgeValidator(); // INSTANCIA VALIDADOR DE MONTO

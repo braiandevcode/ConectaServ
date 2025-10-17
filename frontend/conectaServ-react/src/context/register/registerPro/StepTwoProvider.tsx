@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import type { TFieldState, TIdString, TStoredImage, TTypeContextStepTwo } from '../../../types/types';
 import { StepTwoContext } from './StepTwoContext';
 import useRegisterPro from '../../../hooks/useRegisterPro';
 import { formatTextArea } from '../../../utils/parsedAndFormatValuesUtils';
@@ -13,6 +12,10 @@ import loadImages from '../../../utils/loadImages';
 import savedProfile from '../../../utils/savedProfile';
 import { verifyMetaDataImage } from '../../../utils/validateFieldUtils';
 import savedExperiences from '../../../utils/savedExperiences';
+import type { TStoredImage } from '../../../types/typePersistanceDataImage';
+import type { TIdString } from '../../../types/typeUUID';
+import type { TFieldState } from '../../../types/typeStateFields';
+import type { TTypeContextStepTwo } from '../../../types/typeContextStepTwo';
 
 const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
   const descriptionValidator: DescriptionValidator = new DescriptionValidator();

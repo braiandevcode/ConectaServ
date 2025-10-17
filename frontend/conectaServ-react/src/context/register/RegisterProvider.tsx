@@ -1,10 +1,8 @@
 import type React from 'react';
-import type { TRegister } from '../../types/types';
 import { useState } from 'react';
 import { RegisterContext } from './RegisterContext';
 import { ENamesOfKeyLocalStorage } from '../../types/enums';
-// import { EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../types/enums';
-// import { readExistingData } from '../../utils/storageUtils';
+import type { TRegister } from '../../types/typeRegister';
 
 // CONTEXTO DE ESTADOS GENERALES A FORMULARIOS
 const RegisterProvider = ({ children }: { children: React.ReactNode }) => {
@@ -13,6 +11,7 @@ const RegisterProvider = ({ children }: { children: React.ReactNode }) => {
   //BANDERA PARA SABER SI YA INTERACTUO O NO. UTIL PARA EVITAR ESTILOS INNECESARIOS AL MONTAR COMPONENTE
   const [interactedPassword, setInteractedPassword] = useState<boolean>(false);
   const [interactedConfirmPassword, setInteractedConfirmPassword] = useState<boolean>(false);
+
   const [isSending, setIsSending] = useState<boolean>(false);
   const [codeEmail, setCodeEmail] = useState<string>(() => {
     const storedCodeEmail: string | null = localStorage.getItem('codeEmail');
@@ -22,6 +21,7 @@ const RegisterProvider = ({ children }: { children: React.ReactNode }) => {
   //--------------------------------------------------ESTADOS  CAMPOS BASICOS DE REGISTRO ------------------------------------------------------------------------------------------//
   const [password, setPassword] = useState<string>(''); //ESTADO EN TIEMPO RUNTIME PARA PASSWORD
   const [confirmPassword, setConfirmPassword] = useState<string>(''); //ESTADO EN TIEMPO RUNTIME PARA CONFIRMPASSWORD
+  const [inputCodeEmail, setInputCodeEmail] = useState<string>('');
 
   //-------ACTUALIZAR EN STORAGE CODIGO DE VERIFICACION-------------------//
   const updateCodeEmail = (newCode: string): void => {
@@ -31,11 +31,13 @@ const RegisterProvider = ({ children }: { children: React.ReactNode }) => {
 
   //ONCHANGE TERMINOS Y CONDICIONES
   const onChangeTerms = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTerms((prev) => (prev = e.target.checked));
+    setTerms(e.target.checked);
   };
 
   //VALORES DE ESTADOS QUE CONSUME EL CONTEXTO
   const contextValuesRegister: TRegister = {
+    inputCodeEmail,
+    setInputCodeEmail,
     codeEmail,
     updateCodeEmail,
     setInteractedConfirmPassword,

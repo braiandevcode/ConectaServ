@@ -1,7 +1,6 @@
 import { useContext } from 'react';
-
-import type { TRegisterPro } from '../types/types';
 import { ProfessionalContext } from '../context/register/registerPro/ProfessionalContext';
+import type { TRegisterPro } from '../types/typeRegisterProfessional';
 
 const useRegisterPro = () => {
   const context = useContext<TRegisterPro>(ProfessionalContext);

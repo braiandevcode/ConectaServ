@@ -2,7 +2,6 @@ import React, { useEffect, type ReactNode } from 'react';
 import useRegisterPro from '../../../hooks/useRegisterPro';
 import FullNameValidator from '../../../modules/validators/FullNameValidator';
 import UserNameValidator from '../../../modules/validators/UserNameValidator';
-import type { TFieldState, TLocationKey, TTypeContextBasic } from '../../../types/types';
 import EmailValidator from '../../../modules/validators/EmailValidator';
 import PasswordValidator from '../../../modules/validators/PasswordValidator';
 import ConfirmPasswordValidator from '../../../modules/validators/ConfirmPasswordValidator';
@@ -10,6 +9,9 @@ import { EKeyDataByStep } from '../../../types/enums';
 import SelectedValidator from '../../../modules/validators/SelectedValidator';
 import { StepFourContext } from './StepFourContext';
 import useRegister from '../../../hooks/useRegister';
+import type { TFieldState } from '../../../types/typeStateFields';
+import type { TLocationKey } from '../../../types/typeLocation';
+import type { TTypeContextBasic } from '../../../types/typeContextBasic';
 
 const StepFourProvider = ({ children }: { children: ReactNode }) => {
   const fullNameValidator: FullNameValidator = new FullNameValidator();

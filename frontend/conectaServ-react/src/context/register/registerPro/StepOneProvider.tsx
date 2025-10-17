@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, type ChangeEvent } from 'react';
 import { ECategoryKey, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../../types/enums';
-import type { TCategoryKey, TFieldState, TOptionWork, TTypeContextStepOne } from '../../../types/types';
 import { StepOneContext } from './StepOneContext';
 import useRegisterPro from '../../../hooks/useRegisterPro';
 import SelectedValidator from '../../../modules/validators/SelectedValidator';
 import { useVerifyGroup } from '../../../hooks/useVerifyGroup';
+import type { TCategoryKey } from '../../../types/typeCategory';
+import type { TFieldState } from '../../../types/typeStateFields';
+import type { TOptionWork } from '../../../types/typeOptionsWork';
+import type { TTypeContextStepOne } from '../../../types/typeContextStepOne';
 
 // PROVIDER PARA EL PASO  ==> 1
 const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
@@ -100,7 +103,6 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
   const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>, group: TOptionWork) => {
     setIsResetDetailsWork(false); //NO RESETEAR
     verifyGroup({ e, group }); //==> INVOCAR FUNCION DE HOOK PARA VERFICAR CHECKSBOXES
-    // setIsStepValid(validateCurrentStep()); //==> VALIDAR SEGUN FUNCION PRINCIPAL DE PASOS
   };
 
   const contextStepOneValue: TTypeContextStepOne = {

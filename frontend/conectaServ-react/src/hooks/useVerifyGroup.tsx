@@ -1,8 +1,9 @@
 import type React from 'react';
 import { EKeyDataByStep } from '../types/enums';
-import type { TOptionWork, TStepOne } from '../types/types';
 import useRegisterPro from './useRegisterPro';
 import { useEffect } from 'react';
+import type { TOptionWork } from '../types/typeOptionsWork';
+import type { TStepOne } from '../types/typeStepOne';
 
 export const useVerifyGroup = () => {
   const { stepData, step, formState, setFormState, setStepData, isResetDetailsWork } = useRegisterPro();

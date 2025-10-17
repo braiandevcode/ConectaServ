@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router';
 import MainProvider from '../context/main/MainProvider';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Footer from '../components/public/Footer';
 import useMain from '../hooks/useMain';
 import Loader from '../components/Loader';
+import Header from '../components/public/Header';
 
 // LAYOUT PRINCIPAL DE LA APLICACION
 // ESTE LAYOUT ESTA A UNA RUTA O GRUPOS DE RUTAS Y SE USA COMO CONTENEDOR PARA ESAS RUTAS.

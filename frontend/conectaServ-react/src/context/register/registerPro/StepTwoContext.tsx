@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { TTypeContextStepTwo } from '../../../types/types';
+import type { TTypeContextStepTwo } from '../../../types/typeContextStepTwo';
 
 // DEFINIR VALORES POR DEFECTO DE LOS ESTADOS
 const defaultStepTwoContext: TTypeContextStepTwo = {

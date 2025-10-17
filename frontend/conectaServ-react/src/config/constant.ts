@@ -1,5 +1,5 @@
-import type { iAbreviationURL, iDomainUrlPath, iFormStateValidation, iNamesGroupsChecks, iPhatPages } from '../interfaces/interfaces.js';
-import { ECategoryKey, EDataClient, EEndpoint, EGroupCheckBox, EKeyDataByStep, ELocationKey, EPathDomain, EPathPage, EPortServerDomain } from '../types/enums.js';
+import type { iEndPointRegister, iFormStateValidation, iNamesGroupsChecks, iPhatPages } from '../interfaces/interfaces.js';
+import { ECategoryKey, EDataClient, EEndpoint, EGroupCheckBox, EKeyDataByStep, ELocationKey, EPathPage } from '../types/enums.js';
 import { type TBasicFieldNames, type TCategoryConfig, type TCategoryKey, type TDataClient, type TOptionItem, type TStepData } from '../types/types'; //IMPORTO  LOS MODULOS NECESARIOS DE TIPOS
 
 // REPARACIÓN Y MANTENIMIENTO
@@ -109,25 +109,13 @@ export const namesCheckBoxes: iNamesGroupsChecks = {
   hour: EGroupCheckBox.HOUR,
 };
 
-// VALIDAMOS SI ESTAMOS EN PRODUCCION O EN DESARROLLO
-const isProduction = EPathDomain.HOST_EXTERNAL !== '';
-const HOST: string = isProduction ? EPathDomain.HOST_EXTERNAL : EPathDomain.HOST_LOCAL;
-
-// DEFINIMOS LA URL BASE PARA BACKEND Y FRONTEND
-const BASE_BACK_URL = `${HOST}${EPortServerDomain.PORT_BACK}`;
-const BASE_FRONT_URL = `${HOST}${EPortServerDomain.PORT_FRONT}`;
-
-// ABREVIACIONES PARA ENDPOINTS ESPECIFICOS DEL BACKEND
-const configurationAbreviationURL: iAbreviationURL = {
-  BACK_ABREVIATION_CLIENT: `${BASE_BACK_URL}${EEndpoint.REGISTER_CLIENT}`,
-  BACK_ABREVIATION_PRO: `${BASE_BACK_URL}${EEndpoint.REGISTER_PROFESSIONAL}`,
-};
+// DEFINIMOS LA URL BASE PARA BACKEND
+const BASE_BACK_URL = `${import.meta.env.VITE_HOST}${import.meta.env.VITE_PORT}`;
 
 // OBJETO FINAL QUE EXPORTAMOS CON LAS URLS COMPLETAS
-export const domainURLPath: iDomainUrlPath = {
-  URL_SERVER_CLIENT: configurationAbreviationURL.BACK_ABREVIATION_CLIENT,
-  URL_SERVER_PROFESSIONAL: configurationAbreviationURL.BACK_ABREVIATION_PRO,
-  URL_LOCAL_FRONT: BASE_FRONT_URL,
+export const endPointRegister: iEndPointRegister = {
+  ENDPOINT_REGISTER_CLIENT: `${BASE_BACK_URL}${EEndpoint.CLIENT}`,
+  ENDPOINT_REGISTER_PROFESSIONAL: `${BASE_BACK_URL}${EEndpoint.PROFESSIONAL}`,
 };
 
 // RUTAS RELATIVAS DEL PROYECTO
@@ -180,7 +168,7 @@ export const formStateValidField: iFormStateValidation = {
   emailCode: { value: '', error: '', isValid: false },
 };
 
-export const emptyDataClient:TDataClient= {
+export const emptyDataClient: TDataClient = {
   [EDataClient.DATA]: {
     fullName: '',
     userName: '',
