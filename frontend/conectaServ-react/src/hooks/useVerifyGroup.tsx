@@ -5,6 +5,19 @@ import { useEffect } from 'react';
 import type { TOptionWork } from '../types/typeOptionsWork';
 import type { TStepOne } from '../types/typeStepOne';
 
+// ESTE HOOK SE ENCARGA DE DOS COSAS PRINCIPALES:
+//
+// 1️- RESETEAR LOS GRUPOS DE CHECKBOXES CUANDO CAMBIA LA CATEGORIA (EFECTO useEffect)
+//     - VACIA LOS ARRAYS DE 'service[]', 'context[]', 'day[]' Y 'hour[]'.
+//     - RESETEA TAMBIEN EL ESTADO GLOBAL (stepData) PARA REFLEJAR LOS NUEVOS VALORES VACIOS.
+//
+// 2- ACTUALIZAR UN GRUPO DE CHECKBOXES CUANDO SE MARCA O DESMARCA UNO (FUNCION verifyGroup)
+//     - AGREGA O ELIMINA EL VALOR SEGUN EL CHECK ESTE ACTIVADO O NO.
+//     - ACTUALIZA EL formState LOCAL (VALIDACION Y ERRORES).
+//     - ACTUALIZA EL stepData GLOBAL CON LOS NUEVOS VALORES DEL GRUPO.
+//     - NO VALIDA EL PASO COMPLETO, SOLO EL GRUPO MODIFICADO.
+//
+
 export const useVerifyGroup = () => {
   const { stepData, step, formState, setFormState, setStepData, isResetDetailsWork } = useRegisterPro();
 
@@ -44,15 +57,15 @@ export const useVerifyGroup = () => {
   const updater = (prev: string[], checked: boolean, value: string): string[] => (checked ? [...prev, value] : prev.filter((v) => v !== value));
 
   // FUNCION PRINCIPAL DE VERIFICACION DE GRUPOS
-  const verifyGroup = ({ e, group }: { e: React.ChangeEvent<HTMLInputElement>; group: TOptionWork }): void => {
+  const verifyGroup = ({ e, group }: { e: React.ChangeEvent<HTMLInputElement>; group: TOptionWork }): string[] => {
     const value: string = e.target.value; // ALMACENO EN MEMORIA VALOR DEL CHECK
     const checked: boolean = e.target.checked; // ALMACENO EN MEMORIA BANDERA DEL CHECK
 
-    // OBTENER ARRAY ACTUAL DEL GRUPO DESDE stepData
-    const currentValues: string[] = stepData[EKeyDataByStep.ONE]?.[`${group}[]`] || [];
+    // OBTENER ARRAY ACTUAL DEL GRUPO DESDE stepData EN LOCALSTORAGE
+    const currentStoredValues: string[] = stepData[EKeyDataByStep.ONE]?.[`${group}[]`] || [];
 
-    // GENERAR NUEVO ARRAY ACTUALIZADO
-    const updatedValues: string[] = updater(currentValues, checked, value);
+    // GENERAR NUEVO ARRAY ACTUALIZADO Y REPOBLAR EN UI
+    const updatedValues: string[] = updater(currentStoredValues, checked, value);
 
     // FUNCION DE ACTUALIZACION DE DATOS GLOBALES Y VALIDACIONES
     const updateCommon = (next: string[]) => {
@@ -80,6 +93,8 @@ export const useVerifyGroup = () => {
 
     // ACTUALIZAR CON NUEVOS VALORES
     updateCommon(updatedValues);
+
+     return updatedValues; // <-- NUEVO: DEVOLVEMOS EL ARRAY ACTUALIZADO
   };
 
   return { verifyGroup };

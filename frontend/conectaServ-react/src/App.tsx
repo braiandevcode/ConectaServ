@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router';
-import LoginModal from './components/public/Modals/ModalLogin';
+// import LoginModal from './components/public/Modals/ModalLogin';
 import RegisterClient from './components/public/Forms/RegisterClient/RegisterClient';
 import RegisterPro from './components/public/Forms/RegisterProfessional/RegisterPro';
 import MainLayout from './routes/MainLayout';
@@ -20,7 +20,9 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  if (initialLoading) return <Loader />;
+
+  // SI ES CARGA INICIAL
+  if (initialLoading) return <Loader />; // ==> MOSTRAR LOADER
 
   // --------RENDER APP + RUTAS---------------------//
   return (
@@ -28,7 +30,7 @@ export default function App() {
       <Routes>
         <Route path='/' element={<MainLayout />}>
           <Route path='/' element={<Home />} />
-          <Route path='login' element={<LoginModal />} />
+          {/* <Route path='login' element={<LoginModal />} /> */}
           <Route path='register' element={<RegisterLayout />}>
             <Route path='privacity' element={<PrivacyPolicy />} />
             <Route path='terms' element={<TermsAndConditions />} />

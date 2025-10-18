@@ -1,6 +1,5 @@
-import { type FormEvent, type ReactNode } from 'react';
-import Modal from 'react-modal';
-import useMain from '../../../hooks/useMain';
+import {type FormEvent, type ReactNode } from 'react';
+// import useMain from '../../../hooks/useMain';
 import useRegisterPro from '../../../hooks/useRegisterPro';
 import useRegister from '../../../hooks/useRegister';
 import { renderFieldError, styleBorderFieldError } from '../../../utils/formUtils';
@@ -11,15 +10,12 @@ import BtnClose from './Buttons/BtnClose';
 import type { TFieldState } from '../../../types/typeStateFields';
 
 // IMPORTACION DEL CSS DE MODAL
-import './VerifyEmailModal.css';
-import ButtonBase from '../../ButtonBase';
-
-Modal.setAppElement('#root'); // SOLO UNA VEZ EN TODO EL PROYECTO
+import './ModalVerifyEmail.css';
+import BtnSubmit from '../../BtnSubmit';
 
 // MODAL PARA VERIFICAR EMAIL ANTES DE REGISTRARSE
 const ModalVerifyEmail = (): ReactNode => {
   const codeValidator: CodeValidator = new CodeValidator();
-  const { closeModal, isModalOpen } = useMain(); //HOOK A NIVEL MAIN
   const { inputCodeEmail, setInputCodeEmail, codeEmail } = useRegister(); // HOOK A NIVEL REGISTRO GENERAL
   const { formState, setFormState } = useRegisterPro(); // HOOK A NIVEL REGISTRO PROFESIONAL
   const { submitNewData } = useVerifyCodeEmail(); // HOOK PARA VERIFICACION DE CODIGO Y ENVIO DE LOS DATOS
@@ -46,36 +42,28 @@ const ModalVerifyEmail = (): ReactNode => {
       // setSuccess('');
     }
   };
+
   //RENDERIZA MODAL DE VERIFICACION
   return (
     <>
-      {isModalOpen && (
-        <Modal className='modal' isOpen={isModalOpen} onRequestClose={closeModal}>
-          <form className='c-flex c-flex-column c-flex-items-center c-flex-justify-center gap-2' onSubmit={handleSubmit}>
-            <div className='c-flex c-flex-column gap-1/2 form-basic__field'>
-              <label htmlFor='emailCode' className='c-flex c-flex-column c-flex-items-center gap-1/2 form-basic__label'>
-                <span className='c-flex c-flex-items-center gap-1/2'>
-                  <span>
-                    <MdOutlineMailLock /> Verificación de Email
-                  </span>
-                </span>
-                <span className='span-required'>Ingresa el código que te enviamos por correo.</span>
-              </label>
-              <input name='emailCode' type='text' placeholder='Código de verificación' value={inputCodeEmail} onInput={handleInputCodeVerify} className={styleBorderFieldError(formState, 'emailCode')} />
-              {renderFieldError(formState, 'emailCode')}
-            </div>
-            <div className='c-flex c-flex-items-center gap-1'>
-              <ButtonBase variant='btn container-btn__next' type='submit'>
-                Verificar
-              </ButtonBase>
-              {/* <Button onClick={closeModal} variant='btn container-btn__next' type='button'>
-                Cerrar
-              </Button> */}
-              <BtnClose />
-            </div>
-          </form>
-        </Modal>
-      )}
+      <form className='c-flex c-flex-column c-flex-items-center c-flex-justify-center gap-2' onSubmit={handleSubmit}>
+        <div className='c-flex c-flex-column gap-1/2 form-basic__field'>
+          <label htmlFor='emailCode' className='c-flex c-flex-column c-flex-items-center gap-1/2 form-basic__label'>
+            <span className='c-flex c-flex-items-center gap-1/2'>
+              <span>
+                <MdOutlineMailLock /> Verificación de Email
+              </span>
+            </span>
+            <span className='span-required'>Ingresa el código que te enviamos por correo.</span>
+          </label>
+          <input name='emailCode' type='text' placeholder='Código de verificación' value={inputCodeEmail} onInput={handleInputCodeVerify} className={styleBorderFieldError(formState, 'emailCode')} />
+          {renderFieldError(formState, 'emailCode')}
+        </div>
+        <div className='c-flex c-flex-items-center gap-1'>
+          <BtnSubmit text='Verificar' />
+          <BtnClose />
+        </div>
+      </form>
     </>
   );
 };

@@ -3,7 +3,7 @@ import StepOneProvider from '../../../../../context/register/registerPro/StepOne
 import StepThreeProvider from '../../../../../context/register/registerPro/StepThreeProvider';
 import StepTwoProvider from '../../../../../context/register/registerPro/StepTwoProvider';
 import useRegisterPro from '../../../../../hooks/useRegisterPro';
-import FooterConditionsTerm from '../../../../FooterConditionsTerm';
+import FooterConditionsTerm from '../../../FooterConditionsTerm';
 import StepFour from './StepFour';
 import StepOne from './StepOne';
 import StepThree from './StepThree';

@@ -2,18 +2,17 @@ import { createContext } from 'react';
 import type { TMain } from '../../types/typeMain';
 
 const defaultMainContext: TMain = {
-  setIsModalOpen: () =>{},
-  closeModal:() => {},
-  setIsModalClosed: () => true,
+  setCurrentModal: () => {},
+  setIsModalOpen: () => {},
+  openModal: () => {},
+  closeModal: () => {},
   setLoading: () => false,
-  handleToggleModal: () => {},
   handleClientClick: () => {},
   handleProClick: () => {},
+  currentModal: null,
   loading: false,
-  isShow: '',
   client: false,
-  isModalClosed: true,
-  isModalOpen:false, 
+  isModalOpen: false,
 };
 
 const MainContext = createContext(defaultMainContext);

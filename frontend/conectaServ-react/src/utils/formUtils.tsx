@@ -1,10 +1,13 @@
 import type React from 'react';
-import type { iFormStateValidation, iFormStateValidationClient } from '../interfaces/interfaces';
 import { ECategoryKey, ELocationKey } from '../types/enums';
-import type { TFieldState } from '../types/types';
+import type { iFormStateValidationPro } from '../interfaces/iFormStateValidationPro';
+import type { iFormStateValidationClient } from '../interfaces/iFormStateValidationClient';
+import type { TFieldState } from '../types/typeStateFields';
+import type { iFormStateLogin } from '../interfaces/iFormStateLogin';
+
 
 // FUNCION QUE, DADO EL NOMBRE DE UN CAMPO, DEVUELVE LA CLASE CSS DEL BORDE DEL INPUT
-export const styleBorderFieldError = <T extends iFormStateValidation | iFormStateValidationClient>(formState: T, fieldName: keyof T): string => {
+export const styleBorderFieldError = <T extends iFormStateLogin | iFormStateValidationPro | iFormStateValidationClient>(formState: T, fieldName: keyof T): string => {
   // OBTIENE EL ESTADO DEL CAMPO DESDE FORMSTATE (CASTEA EL NOMBRE PARA QUE TYPESCRIPT ACEPTE LA INDEXACIÓN)
 
   // FUERZO A  TS A ENTENDER QUE CADA VALOR DEL formState SIGUE LA FORMA BASE
@@ -28,7 +31,7 @@ export const styleBorderFieldError = <T extends iFormStateValidation | iFormStat
 };
 
 // FUNCION QUE, DADO EL NOMBRE DE UN CAMPO, DEVUELVE EL MENSAJE DE ERROR SI EL CAMPO ES INVALIDO
-export const renderFieldError = <T extends iFormStateValidation | iFormStateValidationClient>(formState: T, fieldName: keyof T): React.ReactNode | null => {
+export const renderFieldError = <T extends iFormStateLogin | iFormStateValidationPro | iFormStateValidationClient>(formState: T, fieldName: keyof T): React.ReactNode | null => {
   // OBTIENE EL ESTADO DEL CAMPO DESDE FORMSTATE
 
   // FUERZO A  TS A ENTENDER QUE CADA VALOR DEL formState SIGUE LA FORMA BASE

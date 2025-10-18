@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import useRegister from '../hooks/useRegister';
+import useRegister from '../../hooks/useRegister';
 
 // COMPONENTE FOOTER DE FORMULARIO TERMINOS Y CONDICIONES
 const FooterConditionsTerm = () => {

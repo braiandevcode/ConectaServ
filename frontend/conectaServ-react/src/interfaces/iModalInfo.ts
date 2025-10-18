@@ -1,7 +1,7 @@
 import type { IconType } from "react-icons";
 
-// INTERFACE PARA MODAL DE SUCCESS
-export interface iModal {
+// INTERFACE PARA MODAL DE INFORMACION AL USUARIO
+export interface iModalInfo {
   title: string;
   subTitle?: string;
   message?: string;

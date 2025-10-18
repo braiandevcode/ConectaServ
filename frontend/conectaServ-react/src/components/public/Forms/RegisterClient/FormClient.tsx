@@ -1,6 +1,7 @@
 import FieldsClientProvider from "../../../../context/register/registerClient/FieldsClientProvider";
 import useRegisterClient from "../../../../hooks/useRegisterClient";
-import FooterConditionsTerm from "../../../FooterConditionsTerm";
+import BtnSubmit from "../../../BtnSubmit";
+import FooterConditionsTerm from "../../FooterConditionsTerm";
 import FieldsClient from "./FieldsClient";
 
 // FORMULARIO DE CLIENTE
@@ -42,10 +43,7 @@ const FormClient = () => {
             <FooterConditionsTerm />
           </div>
           <div className='c-flex c-flex-justify-end'>
-            <button type='submit' disabled={!isValid} className='c-flex-justify-center gap-1/2 cursor-pointer btn container-btn__next' data-step='0'>
-              <span>Enviar</span>
-              <i className='fa-solid fa-user-plus'></i>
-            </button>
+            <BtnSubmit text="Enviar" disabled={!isValid} />
           </div>
         </div>
       </form>

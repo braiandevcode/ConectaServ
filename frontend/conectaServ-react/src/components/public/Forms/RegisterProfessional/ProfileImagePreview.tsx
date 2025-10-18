@@ -3,6 +3,7 @@ import useStepTwo from '../../../../hooks/useStepTwo';
 import { EKeyDataByStep } from '../../../../types/enums';
 import type { TStoredImage } from '../../../../types/typePersistanceDataImage';
 import type { TIdString } from '../../../../types/typeUUID';
+import BtnDeleteImage from '../Buttons/BtnDeleteImage';
 
 const ProfileImagePreview = () => {
   const { stepData } = useRegisterPro(); //HOOK PERSONALIZADO PARA QUE EL CONTEXTO CONSUMA DATOS
@@ -14,9 +15,7 @@ const ProfileImagePreview = () => {
   return (
     <div className='form-professional-groupProfile__previewImage position-relative'>
       <img src={src} alt='Vista previa del perfil' data-image={idImage} className='profile-image-preview' />
-      <button type='button' aria-label='Eliminar imagen' className='cursor-pointer btn btn-trash position-absolute form-professional-groupProfile__btn-trash' data-image={idImage} onClick={() => onDeleteProfile(idImage)}>
-        <i className='fa-solid fa-trash'></i>
-      </button>
+      <BtnDeleteImage variant='btn btn__close' id={idImage} onDelete={onDeleteProfile}/>
     </div>
   );
 };

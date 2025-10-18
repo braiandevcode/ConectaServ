@@ -8,20 +8,21 @@ import type { TCategoryKey } from '../../../types/typeCategory';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TOptionWork } from '../../../types/typeOptionsWork';
 import type { TTypeContextStepOne } from '../../../types/typeContextStepOne';
+// import type { TStepData } from '../../../types/typeStepData';
 
 // PROVIDER PARA EL PASO  ==> 1
 const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
   const selectedCategoryValidator: SelectedValidator = new SelectedValidator(); //==> INSTANCIAR VALIDADOR DE SELECT
 
   // CONTEXTO PADRE GENERAL DEL FORMULARIO
-  const { setStepData, hasBudge, setIsStepValid, setFormState, setHasInteracted, setValueSelected, setHasBudge, setHasContext, setIsResetDetailsWork, validateCurrentStep, formState, hasContext } = useRegisterPro();
+  const { setStepData, hasBudge, stepData, setIsStepValid, setFormState, setHasInteracted, setValueSelected, setHasBudge, setHasContext, setIsResetDetailsWork, validateCurrentStep, hasContext } = useRegisterPro();
   const { verifyGroup } = useVerifyGroup(); //HOOK PARA MANEJAR LOGICA DE ELECCION DE DETALLES DE TRABAJO
 
   const titleRef = useRef<HTMLSelectElement>(null); // ==> REF PARA ACCEDER AL VALOR ACTUAL DE ELEMENTOS SELECT DEL DOM
 
   // EFECTO SOLO PARA ELIMINAR DEL STORAGE EL PASO PRESUPUESTO
   useEffect(() => {
-    console.log('ME LLAMARON DE : StepOneProvider');
+    console.log('DEPENDO DE hasBudge y ME LLAMARON DE : StepOneProvider');
 
     //SI LA BANDERA DE QUE PRESUPUESTO ES FALSE
     if (!hasBudge) {
@@ -44,7 +45,7 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
 
   // EFECTO PARA OBSERVAR SI CONTIENE O NO GRUPO CONTEXT Y REVALIDAR
   useEffect(() => {
-    console.log('ME LLAMARON DE : StepOneProvider');
+    console.log('DEPENDO DE hasContext y ME LLAMARON DE : StepOneProvider');
 
     // SI NO HAY GRUO DE CHECKS DE CONTEXTO (HABITOS)
     if (!hasContext) {
@@ -56,7 +57,7 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
       });
     }
     setIsStepValid(validateCurrentStep()); //REVALIDAR
-  }, [hasContext, formState]); //==> OBSERVAR ESTADO "hasContext" EXTERNO EN "professionalProvider" Y EJECUTAR
+  }, [hasContext]); //==> OBSERVAR ESTADO "hasContext" EXTERNO EN "professionalProvider" Y EJECUTAR
 
   // ACTUALIZAR STORAGE DE INTERACCION
   const updateHasInteracted = (newValue: boolean) => {
@@ -101,8 +102,23 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
   // MANEJA EL CAMBIO DE LOS CHECKBOXES EN LOS DIFERENTES GRUPOS (service, context, day, hour)
   // ACTUALIZA EL ESTADO CORRESPONDIENTE AGREGANDO O REMOVIENDO EL VALOR SEGUN SI ESTA CHECKEADO O NO
   const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>, group: TOptionWork) => {
+    console.log('Entre');
+
     setIsResetDetailsWork(false); //NO RESETEAR
-    verifyGroup({ e, group }); //==> INVOCAR FUNCION DE HOOK PARA VERFICAR CHECKSBOXES
+    const updatedValues: string[] = verifyGroup({ e, group }); //==> INVOCAR FUNCION DE HOOK PARA VERFICAR CHECKSBOXES
+
+    // ----------------------VALIDACION INSTANTANEA-----------------------//
+    // ARMAR LISTA DE GRUPOS A VALIDAR
+    const groups = [group === 'service' ? updatedValues : (stepData[EKeyDataByStep.ONE]['service[]'] ?? []), group === 'day' ? updatedValues : (stepData[EKeyDataByStep.ONE]['day[]'] ?? []), group === 'hour' ? updatedValues : (stepData[EKeyDataByStep.ONE]['hour[]'] ?? [])];
+
+    // AGREGAR context[] SOLO SI EXISTE
+    if (hasContext) {
+      groups.push(group === 'context' ? updatedValues : (stepData[EKeyDataByStep.ONE]['context[]'] ?? []));
+    }
+
+    // VALIDAR QUE TODOS LOS GRUPOS TENGAN AL MENOS UN CHECK
+    const isValidGroups = groups.every((arr) => arr.length > 0);
+    setIsStepValid(isValidGroups); // ACTUALIZA VALIDACION DEL PASO INSTANTANEAMENTE
   };
 
   const contextStepOneValue: TTypeContextStepOne = {

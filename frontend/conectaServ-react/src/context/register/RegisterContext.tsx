@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { TRegister } from '../../types/types';
+import type { TRegister } from '../../types/typeRegister';
 
 // DEFINIR VALORES POR DEFECTO DE LOS ESTADOS
 const defaultRegisterContext: TRegister = {

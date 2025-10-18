@@ -1,20 +1,17 @@
-/* ========== HEADER ========== */
-.modal-role__close-btn {
-  background: none;
-  border: none;
-  font-size: 1.1rem;
-  right: 0.5rem;
-  top: 0;
-  color: var(--text-color-primary);
+/* PISO ESTILO DE BTN SOLO PARA EL MODAL */
+.btn__role {
+  padding: 0.3rem;
+  right: 0.7rem;
+  top: 0.8rem;
+  opacity: 0.8;
+  transition:
+    0.3s ease,
+    transform 0.3s ease-in-out, backgroun-color 0.3s ease-in-out;
 }
-
-.modal-role__close-icon {
-  pointer-events: none;
-}
-
-/* DESCRIPTION */
-.modal-role__description {
-  margin-bottom: 1.5rem;
+.btn__role:hover {
+  opacity: 1;
+  transform: rotate(45deg);
+  background-color: var(--btn-info);
 }
 
 /* TARJETA PRINCIPAL DE MODAL  */
@@ -30,25 +27,6 @@
 .modal-role__card:hover {
   border-color: var(--link-hover-primary);
   background-color: var(--link-hover-secondary);
-}
-
-.modal-role {
-  display: flex;
-  min-height: 100dvh;
-  inset: 0;
-  backdrop-filter: blur(5px) brightness(0.7);
-  background: rgba(0, 0, 0, 0.3);
-}
-
-/* ESCONDER MODAL ROLES */
-.modal-role--hide{
-  display: none;
-}
-
-.modal-role__container {
-  background-color: var(--bg-primary);
-  padding: 2rem;
-  border-radius: 10px;
 }
 
 .modal-role__icon-container {
@@ -69,15 +47,6 @@
   color: var(--text-color-primary);
 }
 
-/* ========== MODIFICADORES ========== */
-.modal-role__card--cliente .modal-role__icon-container {
-  color: #28a745;
-}
-
-.modal-role__card--profesional .modal-role__icon-container {
-  color: #17a2b8;
-}
-
 /************************MEDIAQUERYES ***************************************/
 /* 768px */
 @media (min-width: 768px) {
@@ -88,7 +57,7 @@
 
 /* 1024px */
 @media (min-width: 1024px) {
-  .modal-role__close-btn {
+  .btn {
     font-size: 1.2rem;
   }
 

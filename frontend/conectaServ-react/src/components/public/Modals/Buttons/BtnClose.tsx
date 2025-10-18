@@ -1,18 +1,18 @@
 import { MdClose } from 'react-icons/md';
 import './BtnClose.css';
 import type { JSX } from 'react';
+import Button from '../../../Button';
+import type { iBtns } from '../../../../interfaces/iBtns';
 import useMain from '../../../../hooks/useMain';
-import ButtonBase from '../../../ButtonBase';
 
 // BOTON PARA CERRAR CUALQUIER MODAL
-const BtnClose = (): JSX.Element => {
-  const { closeModal} = useMain();
-
+const BtnClose = ({ variant= 'btn btn__close', className }: iBtns): JSX.Element => {
+  const { closeModal } = useMain() // HOOK NIVEL MAIN
   return (
     <>
-      <ButtonBase type='button' onClick={closeModal} variant='btn btn__close'>
+      <Button type='button' aria-label='Cerrar Modal' title='Cerrar' className={className ? `${className} ${variant}` : variant} onClick={closeModal}>
         <MdClose size={20} />
-      </ButtonBase>
+      </Button>
     </>
   );
 };

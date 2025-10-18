@@ -1,6 +1,19 @@
-import type { iEndPointRegister, iFormStateValidation, iNamesGroupsChecks, iPhatPages } from '../interfaces/interfaces.js';
+import type { iFormStateValidationClient } from '../interfaces/iFormStateValidationClient.js';
+import type { iFormStateValidationPro } from '../interfaces/iFormStateValidationPro.js';
+import type { iEndPointRegister, iNamesGroupsChecks, iPhatPages } from '../interfaces/interfaces.js';
 import { ECategoryKey, EDataClient, EEndpoint, EGroupCheckBox, EKeyDataByStep, ELocationKey, EPathPage } from '../types/enums.js';
-import { type TBasicFieldNames, type TCategoryConfig, type TCategoryKey, type TDataClient, type TOptionItem, type TStepData } from '../types/types'; //IMPORTO  LOS MODULOS NECESARIOS DE TIPOS
+import type { TCategoryKey } from '../types/typeCategory.js';
+import type { TCategoryConfig } from '../types/typeConfigCategory.js';
+import type { TDataClient } from '../types/typeDataClient.js';
+import type { TOptionItem } from '../types/typeOptionItem.js';
+import { type TBasicFieldNames } from '../types/types'; //IMPORTO  LOS MODULOS NECESARIOS DE TIPOS
+import type { TStepData } from '../types/typeStepData.js';
+
+// ICONOS DE REACT
+import { FaTools } from 'react-icons/fa';
+import { FaBuilding } from 'react-icons/fa';
+import { FaCalendarDays } from 'react-icons/fa6';
+import { IoMdClock } from 'react-icons/io';
 
 // REPARACIÓN Y MANTENIMIENTO
 export const REPAIR_AND_MAINTENANCE: TOptionItem[] = [
@@ -76,27 +89,27 @@ export const TITLES_GROUP_CHECKS_MAP: Record<string, string> = {
 export const categoryConfigs: Record<Exclude<TCategoryKey, 'none'>, TCategoryConfig> = {
   'reparacion-mantenimiento': {
     options: [
-      { options: REPAIR_AND_MAINTENANCE, type: 'service', icon: 'fas fa-tools', title: 'Servicios' },
-      { options: CONTEXTS, type: 'context', icon: 'fas fa-building', title: 'Habitos' },
-      { options: DATE_DAYS, type: 'day', icon: 'fas fa-calendar-day', title: 'Días' },
-      { options: DATE_HOUR, type: 'hour', icon: 'fas fa-clock', title: 'Horarios' },
+      { options: REPAIR_AND_MAINTENANCE, type: 'service', icon: FaTools, title: 'Servicios' },
+      { options: CONTEXTS, type: 'context', icon: FaBuilding, title: 'Habitos' },
+      { options: DATE_DAYS, type: 'day', icon: FaCalendarDays, title: 'Días' },
+      { options: DATE_HOUR, type: 'hour', icon: IoMdClock, title: 'Horarios' },
     ],
   },
 
   jardineria: {
     options: [
-      { options: GARDENNING_AND_OUTDOOR_MAINTENANCE, type: 'service', icon: 'fas fa-tools', title: 'Servicios' },
-      { options: CONTEXTS, type: 'context', icon: 'fas fa-building', title: 'Habitos' },
-      { options: DATE_DAYS, type: 'day', icon: 'fas fa-calendar-day', title: 'Días' },
-      { options: DATE_HOUR, type: 'hour', icon: 'fas fa-clock', title: 'Horarios' },
+      { options: GARDENNING_AND_OUTDOOR_MAINTENANCE, type: 'service', icon: FaTools, title: 'Servicios' },
+      { options: CONTEXTS, type: 'context', icon: FaBuilding, title: 'Habitos' },
+      { options: DATE_DAYS, type: 'day', icon: FaCalendarDays, title: 'Días' },
+      { options: DATE_HOUR, type: 'hour', icon: IoMdClock, title: 'Horarios' },
     ],
   },
 
   'mudanza-transporte': {
     options: [
-      { options: MOVING_AND_TRANSPORT, type: 'service', icon: 'fas fa-tools', title: 'Servicios' },
-      { options: DATE_DAYS, type: 'day', icon: 'fas fa-calendar-day', title: 'Días' },
-      { options: DATE_HOUR, type: 'hour', icon: 'fas fa-clock', title: 'Horarios' },
+      { options: MOVING_AND_TRANSPORT, type: 'service', icon: FaTools, title: 'Servicios' },
+      { options: DATE_DAYS, type: 'day', icon: FaCalendarDays, title: 'Días' },
+      { options: DATE_HOUR, type: 'hour', icon: IoMdClock, title: 'Horarios' },
     ],
   },
 };
@@ -129,7 +142,7 @@ export const pathPages: iPhatPages = {
 export const fieldsBasic: TBasicFieldNames[] = ['fullName', 'userName', 'email', 'password', 'confirmPassword'];
 
 // CONFIGURACION INICIAL VALIDACION DE CAMPOS EN REGISTRO CLIENTE
-export const formStateValidFieldClient = {
+export const formStateValidFieldClient: iFormStateValidationClient = {
   fullName: { value: '', error: '', isValid: false },
   userName: { value: '', error: '', isValid: false },
   email: { value: '', error: '', isValid: false },
@@ -139,7 +152,7 @@ export const formStateValidFieldClient = {
 };
 
 // CONFIGURACION INICIAL PARA MENSAJES DE ERROR EN CAMPOS REGISTRO PROFESIONAL
-export const formStateValidField: iFormStateValidation = {
+export const formStateValidField: iFormStateValidationPro = {
   // PASO 4
   fullName: { value: '', error: '', isValid: false },
   userName: { value: '', error: '', isValid: false },
@@ -168,6 +181,7 @@ export const formStateValidField: iFormStateValidation = {
   emailCode: { value: '', error: '', isValid: false },
 };
 
+// VALORES POR DEFECTO DE DATOS DE CLIENTE
 export const emptyDataClient: TDataClient = {
   [EDataClient.DATA]: {
     fullName: '',
@@ -177,6 +191,7 @@ export const emptyDataClient: TDataClient = {
   },
 };
 
+// VALORES POR DEFECTO DE DATOS DE PROFESIONAL
 export const emptyStepData: TStepData = {
   [EKeyDataByStep.ONE]: {
     category: ECategoryKey.NONE,

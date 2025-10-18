@@ -1,11 +1,11 @@
 import { useEffect, type ReactNode } from 'react';
-import Modal from 'react-modal';
 import useMain from '../../../hooks/useMain';
-import type { iModal } from '../../../interfaces/iModals';
+import type { iModalInfo } from '../../../interfaces/iModalInfo';
+import BtnClose from './Buttons/BtnClose';
 
 // MODAL PARA VERIFICAR EMAIL ANTES DE REGISTRARSE
-const ModalMessage = ({ title, iconReact, message, subTitle, sizeIconReact, icon }: iModal): ReactNode => {
-  const { setIsModalOpen, closeModal, isModalOpen } = useMain(); //HOOK A NIVEL MAIN
+const ModalMessage = ({ title, iconReact, message, subTitle, sizeIconReact, icon }: iModalInfo): ReactNode => {
+  const { setIsModalOpen } = useMain(); //HOOK A NIVEL MAIN
 
   // SOLO POR EL MOMENTO PARA VER ESTILOS
   useEffect(() => {
@@ -35,13 +35,13 @@ const ModalMessage = ({ title, iconReact, message, subTitle, sizeIconReact, icon
 
   //SINO NO RENDERIZA NADA DE LOS ICONOS
   return (
-    <Modal className='modal' isOpen={isModalOpen} onRequestClose={closeModal}>
-      {/* <BtnClose /> */}
+    <>
+      <BtnClose />
       {iconElement}
       <h2 className='modal-title'>{title}</h2>
       {subTitle && <h3 className='modal-subtitle'>{subTitle}</h3>}
       {message && <p className='modal-message'>{message}</p>}
-    </Modal>
+    </>
   );
 };
 

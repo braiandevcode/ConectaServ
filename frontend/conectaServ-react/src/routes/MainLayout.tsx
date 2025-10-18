@@ -4,6 +4,7 @@ import Footer from '../components/public/Footer';
 import useMain from '../hooks/useMain';
 import Loader from '../components/Loader';
 import Header from '../components/public/Header';
+import ModalRenderer from '../components/public/Modals/ModalRenderer';
 
 // LAYOUT PRINCIPAL DE LA APLICACION
 // ESTE LAYOUT ESTA A UNA RUTA O GRUPOS DE RUTAS Y SE USA COMO CONTENEDOR PARA ESAS RUTAS.
@@ -12,6 +13,7 @@ const MainLayout = () => {
   return (
     // ENVOLVEMOS TODO CON EL PROVIDER PRINCIPAL PARA COMPARTIR DATOS GLOBALES ENTRE COMPONENTES
     <MainProvider>
+      <ModalRenderer />
       {loading ? (
         <Loader />
       ) : (

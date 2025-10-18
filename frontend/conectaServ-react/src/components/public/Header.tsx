@@ -1,9 +1,18 @@
-import { Link } from 'react-router';
-import useMain from '../hooks/useMain';
+import { Link, useLocation } from 'react-router';
+import useMain from '../../hooks/useMain';
+import { FaArrowAltCircleRight } from 'react-icons/fa';
+import Button from '../Button';
+import { EModalType } from '../../types/enumModalTypes';
 
 // <!-- CABECERA -->
 export default function Header() {
-  const { handleToggleModal } = useMain()
+  const { openModal } = useMain();
+  const { pathname } = useLocation();
+  // const openLogin = () => openModal(EModalType.MODAL_LOGIN);
+  const openRole = () => {
+    openModal(EModalType.MODAL_ROLE);
+  };
+
   return (
     <>
       <header className='header mb-3'>
@@ -110,14 +119,16 @@ export default function Header() {
             </div>
           </nav>
           <div className='c-flex c-flex-items-center gap-1 auth-wrapper'>
-            <Link to={'/login'} className='w-full auth-wrapper__login'>
+            {/* <div className='w-full auth-wrapper__login cursor-pointer' onClick={openLogin}>
               Iniciar sesión
-            </Link>
+            </div> */}
 
-            <button type='button' className='btn color btnRegister c-flex c-flex-items-center gap-1/2 auth-wrapper__register' onClick={handleToggleModal}>
-              <i className='fas fa-arrow-circle-right'></i>
-              <span>Registrarse</span>
-            </button>
+            {pathname === '/' && (
+              <Button type='button' className='btn color btnRegister c-flex c-flex-items-center gap-1/2 auth-wrapper__register' onClick={openRole}>
+                <span>Registrarse</span>
+                <FaArrowAltCircleRight size={20} />
+              </Button>
+            )}
           </div>
         </div>
       </header>
