@@ -50,7 +50,7 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   //--------------------------------------------------------------------HOOKS DE REACT--------------------------------------------------------------------//
   const location = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
-  const { setIsModalOpen, setIsModalClosed } = useMain();
+  const { setIsModalOpen } = useMain();
   const { setIsSending, isSending, terms, password, confirmPassword, setTerms, inputCodeEmail, updateCodeEmail } = useRegister();
 
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
@@ -253,8 +253,7 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
     await sendCodeToUser(stepData[EKeyDataByStep.FOUR].email); // ==> TOMO REFERENCIA EL EMAIL ALMACENADO EN STORAGE
 
     setIsSending(true); //SI SE ESTA ENVIANDO MOSTRAR MODAL DE VERIFICACION DE CODIGO
-    setIsModalClosed(true); //SETEAR A TRUE => MODAL CERRADO
-    setIsModalOpen(true);
+    setIsModalOpen(true); // ABRIR MODAL
   };
 
   //------------------------------------------FUNCIONES MODULARES------------------------------------------------------//

@@ -6,7 +6,6 @@ import type { TCategoryKey } from '../types/typeCategory.js';
 import type { TCategoryConfig } from '../types/typeConfigCategory.js';
 import type { TDataClient } from '../types/typeDataClient.js';
 import type { TOptionItem } from '../types/typeOptionItem.js';
-import { type TBasicFieldNames } from '../types/types'; //IMPORTO  LOS MODULOS NECESARIOS DE TIPOS
 import type { TStepData } from '../types/typeStepData.js';
 
 // ICONOS DE REACT
@@ -138,8 +137,6 @@ export const pathPages: iPhatPages = {
   PATH_TERMS: EPathPage.PATH_TERMS,
   PATH_PRIVACY: EPathPage.PATH_PRIVACY,
 };
-
-export const fieldsBasic: TBasicFieldNames[] = ['fullName', 'userName', 'email', 'password', 'confirmPassword'];
 
 // CONFIGURACION INICIAL VALIDACION DE CAMPOS EN REGISTRO CLIENTE
 export const formStateValidFieldClient: iFormStateValidationClient = {

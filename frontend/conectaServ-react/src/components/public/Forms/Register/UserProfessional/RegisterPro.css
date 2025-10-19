@@ -1,0 +1,39 @@
+/*----------------- REGISTRO PROFESIONAL ----------------------*/
+
+/* BOTON PARA VOLVER ATRAS */
+.register__arrow-left {
+  padding: 0.2rem;
+  user-select: none;
+  color: var(--bg-secondary);
+  border-radius: 50%;
+  font-size: 2rem;
+  order: -1;
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* PARA BOTON SIGUIENTE */
+.container-btn__next:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* ASEGURAR QUE LOS EVENTOS DE HOVER SEAN PRECISOS SOLO PARA TABLET Y ESCRITORIO (INVESTIGADO) */
+@media (hover: hover) and (pointer: fine) {
+  .register__arrow-left:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/*-------------------------------------RESPONSIVE-------------------------------------------------------------/
+
+/* ESCRITORIO 1024PX */
+@media (min-width: 1024px) {
+  .register__arrow-left {
+    opacity: 0.8;
+    transform: scale(0.9);
+    transition: opacity 0.3s ease-in-out, transform 0.3s linear;
+  }
+}

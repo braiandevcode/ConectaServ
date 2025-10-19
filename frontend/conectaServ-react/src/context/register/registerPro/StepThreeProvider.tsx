@@ -22,56 +22,49 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
 
   // FORMATEAR VISUALMENTE EL CAMPO DEL MONTO Y REVALIDAR EL PASO
   useEffect(() => {
-    console.log('ME LLAMARON DE : StepThreeProvider ');
     // REVALIDAR EL PASO EN CADA RENDER RELEVANTE
     setIsStepValid(validateCurrentStep());
 
     // SI EL USUARIO NO COBRA PRESUPUESTO Y ESTÁ EN FOCO => NO CONTINUAR
     if (storedBudgeSelected === 'no' && isFocus) return;
 
-    // SI NO HAY MONTO ALMACENADO => SALIR (NO HAY NADA QUE FORMATEAR)
-    if (storedBudgeSelected === 'yes' && storedAmount === 0) return;
-
+    // SI EL USUARIO DIJO "YES" => ASEGURAR CAMPO HABILITADO Y REINTEGRO HABILITADO
+    if (storedBudgeSelected === 'yes') {
+      setIsBudgeMountDisabled(false);
+      setIsReinsertDisabled(false);
+    }
     // OBTENER VALOR NUMÉRICO ACTUAL DEL FORMSTATE (FUENTE DE VERDAD PARA CÁLCULOS)
     const currentAmount: number = (formState.amountBudge.value as string).trim() !== '' ? parseMontoToNumber(formState.amountBudge.value as string) : parseMontoToNumber('0');
 
-    console.log('Valor del Monto actual: ', currentAmount);
-
-    // CASO: EL USUARIO DIJO "NO" Y EL MONTO ACTUAL ES 0 => DESHABILITAR CAMPO Y MARCAR PASO VÁLIDO
-    if (storedBudgeSelected === 'no' && currentAmount === 0) {
-      console.log('Entre aqui...');
-
+    // SI EN PERSISTENCIA DICE "NO" Y EL  PERSISTIDO ACTUAL ES 0 => DESHABILITAR CAMPO Y MARCAR PASO VÁLIDO
+    if (storedBudgeSelected === 'no' && storedAmount === 0) {
       setIsBudgeMountDisabled(true); // MONTO DESHABILITADO
       setAmountFieldFormat(''); // LIMPIAR CAMPO VISUAL
       setIsStepValid(true); // MARCAR PASO COMO VÁLIDO
       return;
     }
 
-    // CASO: EL USUARIO DIJO "NO" PERO HAY MONTO => PASO NO VÁLIDO
-    if (storedBudgeSelected === 'no' && currentAmount > 0) {
-      setIsStepValid(false);
-      return;
-    }
+    // SI NO HAY MONTO ALMACENADO => SALIR (NO HAY NADA QUE FORMATEAR)
+    if (storedAmount === 0) return;
 
-    // SI EL USUARIO DIJO "YES" => ASEGURAR CAMPO HABILITADO Y REINTEGRO HABILITADO
-    if (storedBudgeSelected === 'yes') {
-      setIsBudgeMountDisabled(false);
-      setIsReinsertDisabled(false);
+    // SI EN PERSISTENCIA DICE "NO" PERO EN PERSISTENCIA HAY MONTO => PASO NO VALIDO
+    if (storedBudgeSelected === 'no' && currentAmount > 0) {
+      setIsStepValid(false); // PASO NO VALIDO
+      return;
     }
 
     // FUENTE DE LA VERDAD PARA UI: STRING DEL MONTO ACTUAL
     const storedAmountString: string = currentAmount.toString();
 
-    // SI EXISTE EL STRING, SETEAR FORMATO EN EL INPUT SEGÚN FOCO (SOLO DÍGITOS EN FOCO, SINO FORMATO MONEDA)
+    // SI EXISTE VALOR EN LA CADENA, SETEAR FORMATO EN EL INPUT SEGÚN FOCO (SOLO DÍGITOS EN FOCO, SINO FORMATO MONEDA)
     if (storedAmountString) {
       const amount: string = isFocus ? storedAmountString : formatMontoWithCurrency(storedAmountString);
       setAmountFieldFormat(amount); // SETEAR VALOR FORMATEADO EN EL INPUT
       return;
     }
 
-    // SI LLEGA HASTA ACÁ, DESHABILITAR BANDERA Y DEJAR CAMPO VACÍO
-    setIsBudgeMountDisabled(false);
-    setAmountFieldFormat(''); // DEJAR CAMPO VACÍO
+    setIsBudgeMountDisabled(false); // DESHABILITAR CAMPO DE MONTO
+    setAmountFieldFormat(''); // DEJAR CAMPO VISUALMENTE VACIO
   }, [step, isFocus, storedBudgeSelected]); // DEPENDENCIAS: PASO, FOCO Y SELECCIÓN DE PRESUPUESTO
 
   //-----------------------------------------------EVENTOS -------------------------------------//
@@ -92,7 +85,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
         }) as TStepData,
     );
 
-    // DETERMINAR SI EL PASO ES VÁLIDO SEGÚN SELECCIÓN Y MONTO
+    // DETERMINAR SI EL PASO ES VALIDO SEGUN SELECCION Y MONTO
     const isValid = (value === 'no' && storedAmount === 0) || (value === 'yes' && amountFieldFormat !== '' && storedAmount > 0);
 
     // ACTUALIZAR ESTADO LOCAL DE VALIDACIÓN DEL RADIO
@@ -101,46 +94,44 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
       budgeSelected: { error: '', value, isValid },
     }));
 
-    // CASO: EL USUARIO SELECCIONA "NO"
+    // SI EL USUARIO SELECCIONA "NO"
     if (value === 'no') {
       // RESETEAR MONTO Y REINTEGRO EN EL STORAGE
       setStepData(
         (prev) =>
           ({
-            ...prev,
+            ...prev, //COPIO TODOS LOS DATOS DEL OBJETO COMPLETO
             [EKeyDataByStep.THREE]: {
-              ...prev[EKeyDataByStep.THREE],
-              amountBudge: 0,
-              reinsert: 'no',
+              // ESPECIFICO EL PASO 3
+              ...prev[EKeyDataByStep.THREE], // COPIO TODO LO PREVIO AL PASO 3
+              amountBudge: 0, //PISO CON VALOR NUEVO EL PRESUPUESTO
+              reinsert: 'no', //PISO CON VALOR NUEVO EL REINTEGRO
             },
           }) as TStepData,
       );
 
-      // RESETEAR VALIDACIÓN LOCAL DEL CAMPO MONTO
+      // RESETEAR VALIDACION LOCAL DEL CAMPO MONTO
       setFormState((prev) => ({
         ...prev,
         amountBudge: { error: '', value: '', isValid: true },
       }));
 
-      // DESHABILITAR CAMPOS Y LIMPIAR INPUT VISUAL
-      setAmountFieldFormat('');
-      setIsReinsertDisabled(true);
-      setIsBudgeMountDisabled(true);
-
-      // MARCAR PASO COMO VÁLIDO PORQUE NO COBRA PRESUPUESTO
-      setIsStepValid(true);
-      return;
+      setAmountFieldFormat(''); // LIMPIAR INPUT VISUAL
+      setIsBudgeMountDisabled(true); // DESHABILITAR CAMPO MONTO
+      setIsReinsertDisabled(true); //DESHABILITAR RADIO REINTEGRO
+      setIsStepValid(true); //MARCAR COMO VALIDO
+      return; //==> RETORNAR Y NO SEGUIR
     }
 
-    // CASO: EL USUARIO SELECCIONA "YES" => VALIDAR MONTO INGRESADO
+    // SI EL USUARIO SELECCIONA "YES" => VALIDAR MONTO INGRESADO
     const result: TFieldState = budgeValidator.validate(amountFieldFormat);
 
     // ACTUALIZAR FORMSTATE LOCAL CON RESULTADO DE VALIDACIÓN
     setFormState((prevState) => ({ ...prevState, amountBudge: result }));
 
-    // SI EL MONTO ES VÁLIDO => ACTUALIZAR STORAGE CON EL VALOR NUMÉRICO
+    // SI EL MONTO ES VALIDO => ACTUALIZAR STORAGE CON EL VALOR NUMERICO
     if (result.isValid) {
-      setIsFocus(false);
+      setIsFocus(false); //FOCO EN FALSE
       setStepData(
         (prev) =>
           ({
@@ -153,12 +144,11 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
       );
     }
 
-    // HABILITAR CAMPO DE MONTO Y MARCAR VALIDACIÓN DE PASO
-    setIsBudgeMountDisabled(false);
-    setIsStepValid(isValid);
+    setIsBudgeMountDisabled(false); // HABILITAR CAMPO DE MONTO
+    setIsStepValid(isValid); // VALIDAR EN RUNTIME
   };
 
-  // EVENTO ONINPUT DEL CAMPO MONTO EN EL PASO 3
+  // EVENTO ONINPUT DEL CAMPO MONTO
   const handleBudgeAmount = (e: React.FormEvent<HTMLInputElement>) => {
     const val: string = e.currentTarget.value; // VALOR INGRESADO POR EL USUARIO
 
@@ -169,16 +159,17 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
     setAmountFieldFormat(val);
     setIsFocus(true); // MARCAR FOCUS PORQUE EL USUARIO ESTÁ ESCRIBIENDO
 
-    // CASO: EL USUARIO COBRA PRESUPUESTO ("yes")
+    // SI EL USUARIO COBRA PRESUPUESTO ("yes")
     if (storedBudgeSelected === 'yes') {
       const result: TFieldState = budgeValidator.validate(val); // VALIDAR MONTO
 
-      // ACTUALIZAR ESTADO LOCAL DE VALIDACIÓN
+      // ACTUALIZAR ESTADO LOCAL DE VALIDACION
       setFormState((prevState) => ({ ...prevState, amountBudge: result }));
 
-      // MARCAR PASO COMO VÁLIDO O NO SEGÚN RESULTADO
+      // MARCAR PASO COMO VALIDO O NO SEGUN RESULTADO
       setIsStepValid(result.isValid);
 
+      // ES VALIDO
       if (result.isValid) {
         // ACTUALIZAR STORAGE CON MONTO NUMÉRICO
         setStepData(
@@ -193,6 +184,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
         );
         setIsReinsertDisabled(false); // HABILITAR REINTEGRO
       } else {
+        // SINO
         // RESETEAR STORAGE SI EL MONTO NO ES VÁLIDO
         setStepData(
           (prev) =>
@@ -207,30 +199,29 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
         setIsStepValid(false);
         setIsReinsertDisabled(true); // DESHABILITAR REINTEGRO
       }
-
-      return;
+      return; // => RETORNAR
     }
 
-    // CASO: EL USUARIO NO COBRA PRESUPUESTO ("no")
+    // SI EL USUARIO NO COBRA PRESUPUESTO ("no")
     if (storedBudgeSelected === 'no') {
-      const numericVal = parseMontoToNumber(val);
+      const numericVal: number = parseMontoToNumber(val); // ALMACENAR MONTO PARSEADO
 
-      // SI EL MONTO ES 0 => PASO VÁLIDO
+      // SI EL MONTO ES 0 => PASO VALIDO
       if (numericVal === 0) {
         setIsStepValid(true);
       }
 
-      // SI EL MONTO ES MAYOR QUE 0 => PASO NO VÁLIDO Y ERROR
+      // SI EL MONTO ES MAYOR QUE 0 => PASO NO VALIDO Y ERROR
       if (numericVal > 0) {
         setFormState((prev) => ({
           ...prev,
           amountBudge: {
-            error: 'Confirma que cobra presupuesto',
-            value: val,
-            isValid: false,
+            error: 'Confirma que cobra presupuesto', // MENSAJE DE ERROR
+            value: val, // VALOR ACTUAL
+            isValid: false, // FALSE
           },
         }));
-        setIsStepValid(false);
+        setIsStepValid(true); // ASEGURAR A FALSE
       }
     }
   };

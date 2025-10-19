@@ -11,6 +11,9 @@
   --text-color-primary: #4e4c4c;
   --text-color-secondary: #f2f2f2;
   --text-color-info: #1e5da3;
+  --text-color-danger:#d42f2f;
+  --text-color-warn:#d3d614e5;
+  --text-color-success:#0f800fcb;
 
   /* ENLACES */
   --link-color-primary: #fdfdfd;
@@ -30,6 +33,8 @@
 
   /* VARIABLE PARA ANCHOS */
   --w-container: 100%;
+  --w-min-container: 100dvw;
+  --h-min-container: 100dvh;
 }
 
 /* BASE BODY Y TIPOGRAFÍA */
@@ -40,9 +45,8 @@ body {
 }
 
 body,
-.root__sub-root,
 main {
-  min-height: 100dvh;
+  min-height: var(--h-min-container);
 }
 
 a {
@@ -114,15 +118,6 @@ h4 {
   background-color: var(--btn-warning);
 }
 
-/* ANIMACION DEL LOADER TIPICO */
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 
 /* MEDIA QUERIES */
 @media (min-width: 768px) {

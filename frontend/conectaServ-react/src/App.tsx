@@ -1,7 +1,5 @@
 import { Route, Routes } from 'react-router';
 // import LoginModal from './components/public/Modals/ModalLogin';
-import RegisterClient from './components/public/Forms/RegisterClient/RegisterClient';
-import RegisterPro from './components/public/Forms/RegisterProfessional/RegisterPro';
 import MainLayout from './routes/MainLayout';
 import PrivacyPolicy from './components/public/PrivacyPolicy';
 import TermsAndConditions from './components/public/TermsAndConditions';
@@ -11,6 +9,8 @@ import { useEffect, useState } from 'react';
 import Loader from './components/Loader';
 import RegisterLayout from './routes/RegisterLayout';
 import Home from './components/public/Home';
+import RegisterPro from './components/public/Forms/Register/UserProfessional/RegisterPro';
+import RegisterClient from './components/public/Forms/Register/UserClient/RegisterClient';
 // COMPONENTE APP PRINCIPAL
 export default function App() {
   const [initialLoading, setInitialLoading] = useState(true);

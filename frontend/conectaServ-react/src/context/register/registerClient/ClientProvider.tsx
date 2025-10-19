@@ -30,7 +30,7 @@ const ClientProvider = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
   const { terms, confirmPassword, password } = useRegister();
-  const { setLoading, setIsModalClosed } = useMain();
+  const { setLoading } = useMain();
 
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
 
@@ -105,7 +105,6 @@ const ClientProvider = ({ children }: { children: React.ReactNode }) => {
     // INTENTAR ENVIAR
     try {
       setLoading(true);
-      setIsModalClosed(true);
       // await apiRequest('http://localhost:3000/client', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },

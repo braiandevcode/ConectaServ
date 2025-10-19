@@ -5,10 +5,12 @@ import { ENamesOfKeyLocalStorage, EPathPage } from '../../types/enums';
 import { clearPersistence } from '../../utils/storageUtils';
 import type { TMain } from '../../types/typeMain';
 import { EModalType } from '../../types/enumModalTypes';
+import type { TFormRole } from '../../types/typeFormRole';
+
 
 // PROVEEMOS LOGICA Y ESTADOS AL CONTEXTO PRINCIPAL
 const MainProvider = ({ children }: { children: ReactNode }) => {
-  const stored = localStorage.getItem('role');
+  const stored = localStorage.getItem('role') as TFormRole | null;
   // -------------------HOOKS DE REACT-------------------------//
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -35,7 +37,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     // SI EL ROL GUARDADO ES CLIENTE Y ESTAMOS EN LA RUTA CORRECTA
     if (pathname === EPathPage.PATH_FORM_CLIENT && stored === 'client') {
       setClient(true);
-    } else if (pathname === EPathPage.PATH_FORM_PROFESSIONAL && stored === 'pro') {
+    } else if (pathname === EPathPage.PATH_FORM_PROFESSIONAL && stored === 'professional') {
       // SI EL ROL GUARDADO ES PRO Y ESTAMOS EN LA RUTA CORRECTA
       setClient(false);
     } else {
@@ -60,7 +62,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     setCurrentModal(null); // ==> SETEAR EL NUEVO MODAL QUE SE OCULTARA
   };
 
-  // MOSTRAR MODAL
+  // MOSTRAR MODAL GLOBAL
   const openModal = <T extends EModalType>(modalType: T): void => {
     setIsModalOpen(true);
     setCurrentModal(modalType); // ==> SETEAR EL NUEVO MODAL QUE SE MOSTRARA
@@ -70,7 +72,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   const handleClientClick = () => {
     setClient(true); //ROL CLIENTE EN TRUE
     setIsModalOpen(false); // MODAL CERRADO
-    localStorage.setItem('role', 'client');
+    localStorage.setItem(('role' as TFormRole), 'client');
   };
 
   // FUNCION QUE SE EJECUTA CUANDO EL USUARIO ELIGE PROFESIONAL

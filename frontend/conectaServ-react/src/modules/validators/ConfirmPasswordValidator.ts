@@ -1,5 +1,5 @@
-import type { IValidator } from "../../interfaces/interfaces";
-import type { TFieldState } from "../../types/types";
+import type { IValidator } from "../../interfaces/iValidator";
+import type { TFieldState } from "../../types/typeStateFields";
 import { isValueField } from "../../utils/validateFieldUtils";
 
 // VALIDAR CONFIRMACION

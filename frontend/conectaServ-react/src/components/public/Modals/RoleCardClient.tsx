@@ -8,7 +8,7 @@ const RoleCardClient = () => {
   const { handleClientClick } = useMain(); // HOOK NIVEL MAIN
   return (
     <>
-      <Link to={EPathPage.PATH_FORM_PROFESSIONAL} onClick={handleClientClick} data-role='client' className='cursor-pointer modal-role__card modal-rol__card--cliente'>
+      <Link to={EPathPage.PATH_FORM_CLIENT} onClick={handleClientClick} data-role='client' className='cursor-pointer modal-role__card modal-rol__card--cliente'>
         <div className='c-flex c-flex-items-center gap-1 modal-role__card-inner'>
           <div className='modal-role__icon-container'>
             <FaUser color='#28a745' size={20} />

@@ -22,8 +22,6 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
 
   // EFECTO SOLO PARA ELIMINAR DEL STORAGE EL PASO PRESUPUESTO
   useEffect(() => {
-    console.log('DEPENDO DE hasBudge y ME LLAMARON DE : StepOneProvider');
-
     //SI LA BANDERA DE QUE PRESUPUESTO ES FALSE
     if (!hasBudge) {
       // LIMIAR TODO ANTES
@@ -45,8 +43,6 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
 
   // EFECTO PARA OBSERVAR SI CONTIENE O NO GRUPO CONTEXT Y REVALIDAR
   useEffect(() => {
-    console.log('DEPENDO DE hasContext y ME LLAMARON DE : StepOneProvider');
-
     // SI NO HAY GRUO DE CHECKS DE CONTEXTO (HABITOS)
     if (!hasContext) {
       // SETEAR DATA GLOBAL EN STORAGE
@@ -95,15 +91,13 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
         valueSelected: selectedOptionText,
       },
     }));
-    setIsStepValid(result.isValid); //SETEAR SI ES VALIDO O NO
+    setIsStepValid(false); //SETEAR SI ES VALIDO O NO
   };
 
   //HANDLER DE EVENTO CHANGE CHECKBOXES
   // MANEJA EL CAMBIO DE LOS CHECKBOXES EN LOS DIFERENTES GRUPOS (service, context, day, hour)
   // ACTUALIZA EL ESTADO CORRESPONDIENTE AGREGANDO O REMOVIENDO EL VALOR SEGUN SI ESTA CHECKEADO O NO
   const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>, group: TOptionWork) => {
-    console.log('Entre');
-
     setIsResetDetailsWork(false); //NO RESETEAR
     const updatedValues: string[] = verifyGroup({ e, group }); //==> INVOCAR FUNCION DE HOOK PARA VERFICAR CHECKSBOXES
 

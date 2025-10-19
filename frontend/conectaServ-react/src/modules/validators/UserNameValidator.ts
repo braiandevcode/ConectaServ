@@ -1,5 +1,5 @@
-import type { IValidator } from '../../interfaces/interfaces';
-import type { TFieldState } from '../../types/types';
+import type { IValidator } from '../../interfaces/iValidator.js';
+import type { TFieldState } from '../../types/typeStateFields.js';
 import { isLengthValid, isValueField, validateWithRegex } from '../../utils/validateFieldUtils';
 
 // VALIDACION PARA NOMBRE DE USUARIO
