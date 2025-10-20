@@ -4,6 +4,7 @@ import useRegisterPro from './useRegisterPro';
 import { useEffect } from 'react';
 import type { TOptionWork } from '../types/typeOptionsWork';
 import type { TStepOne } from '../types/typeStepOne';
+import useRegister from './useRegister';
 
 // ESTE HOOK SE ENCARGA DE DOS COSAS PRINCIPALES:
 //
@@ -19,7 +20,8 @@ import type { TStepOne } from '../types/typeStepOne';
 //
 
 export const useVerifyGroup = () => {
-  const { stepData, step, formState, setFormState, setStepData, isResetDetailsWork } = useRegisterPro();
+  const { stepData, setStepData } = useRegister();
+  const { step, formState, setFormState, isResetDetailsWork } = useRegisterPro();
 
   // EFECTO PARA RESETEAR DETALLES DE TRABAJO CUANDO CAMBIA CATEGORÍA
   useEffect(() => {

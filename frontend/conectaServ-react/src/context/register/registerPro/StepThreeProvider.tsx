@@ -9,11 +9,13 @@ import type { TYesOrNo } from '../../../types/typeRadioYesOrNo';
 import type { TStepData } from '../../../types/typeStepData';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TTypeContextStepThree } from '../../../types/typeContextStepThree';
+import useRegister from '../../../hooks/useRegister';
 
 const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
   const budgeValidator: BudgeValidator = new BudgeValidator(); // INSTANCIA VALIDADOR DE MONTO
+    const {  stepData, setStepData } = useRegister();
   // HOOK REGISTER PROFESIONAL
-  const { formState, stepData, isFocus, amountFieldFormat, step, validateCurrentStep, setIsFocus, setIsBudgeMountDisabled, setIsReinsertDisabled, setAmountFieldFormat, setFormState, setStepData, setIsStepValid } = useRegisterPro();
+  const { formState, isFocus, amountFieldFormat, step, validateCurrentStep, setIsFocus, setIsBudgeMountDisabled, setIsReinsertDisabled, setAmountFieldFormat, setFormState, setIsStepValid } = useRegisterPro();
 
   const storedAmount: number = stepData[EKeyDataByStep.THREE]?.amountBudge ?? 0;
   const storedBudgeSelected: TYesOrNo = stepData[EKeyDataByStep.THREE]?.budgeSelected ?? 'no';

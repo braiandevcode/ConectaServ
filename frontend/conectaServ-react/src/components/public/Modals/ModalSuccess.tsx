@@ -1,11 +1,12 @@
+import type { JSX } from 'react';
 import ModalMessage from './ModalMessage';
-import { MdOutlineMailLock } from 'react-icons/md';
+import { FaCheckDouble } from 'react-icons/fa';
 
 // MODAL SATISFACTORIO
-const ModalSuccess = () => {
+const ModalSuccess = (): JSX.Element => {
   return (
     <>
-      <ModalMessage title='Registro con Exito!' subTitle='Se ha registrado satisfactoriamente' message='Este es un mensaje de exito de ejemplo, puedes cerrar.' iconReact={MdOutlineMailLock} />
+      <ModalMessage iconBaseProps={{ color: 'green', size:20 }} iconReact={FaCheckDouble} />
     </>
   );
 };

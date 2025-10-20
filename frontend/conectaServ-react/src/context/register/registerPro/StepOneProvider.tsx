@@ -8,6 +8,7 @@ import type { TCategoryKey } from '../../../types/typeCategory';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TOptionWork } from '../../../types/typeOptionsWork';
 import type { TTypeContextStepOne } from '../../../types/typeContextStepOne';
+import useRegister from '../../../hooks/useRegister';
 // import type { TStepData } from '../../../types/typeStepData';
 
 // PROVIDER PARA EL PASO  ==> 1
@@ -15,7 +16,8 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
   const selectedCategoryValidator: SelectedValidator = new SelectedValidator(); //==> INSTANCIAR VALIDADOR DE SELECT
 
   // CONTEXTO PADRE GENERAL DEL FORMULARIO
-  const { setStepData, hasBudge, stepData, setIsStepValid, setFormState, setHasInteracted, setValueSelected, setHasBudge, setHasContext, setIsResetDetailsWork, validateCurrentStep, hasContext } = useRegisterPro();
+  const { setStepData, stepData } = useRegister();
+  const { hasBudge, setIsStepValid, setFormState, setHasInteracted, setValueSelected, setHasBudge, setHasContext, setIsResetDetailsWork, validateCurrentStep, hasContext } = useRegisterPro();
   const { verifyGroup } = useVerifyGroup(); //HOOK PARA MANEJAR LOGICA DE ELECCION DE DETALLES DE TRABAJO
 
   const titleRef = useRef<HTMLSelectElement>(null); // ==> REF PARA ACCEDER AL VALOR ACTUAL DE ELEMENTOS SELECT DEL DOM

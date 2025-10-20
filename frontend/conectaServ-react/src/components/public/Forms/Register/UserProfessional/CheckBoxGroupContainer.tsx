@@ -1,5 +1,5 @@
 import { categoryConfigs } from '../../../../../config/constant'; //DE LA CONSTANTE CONFIGURATIVA
-import useRegisterPro from '../../../../../hooks/useRegisterPro';
+import useRegister from '../../../../../hooks/useRegister';
 import { EKeyDataByStep, type ECategoryKey } from '../../../../../types/enums';
 import type { TCategoryKey } from '../../../../../types/typeCategory';
 import type { TCategoryConfig } from '../../../../../types/typeConfigCategory';
@@ -7,7 +7,7 @@ import CheckboxGroup from './CheckBoxGroup';
 
 // COMPONENTE CONTENEDOR QUE CONTIENE TODOS LOS GRUPOS SEGUN CATEGORIA
 const CheckboxGroupsContainer = () => {
-  const { stepData } = useRegisterPro(); // ==> HOOK REGISTRO PROFESIONAL
+  const { stepData } = useRegister(); // ==> HOOK REGISTRO PROFESIONAL
 
   // EXCLUYO AL NONE EN TIPADO
   const config: TCategoryConfig = categoryConfigs[stepData[EKeyDataByStep.ONE].category as Exclude<TCategoryKey, ECategoryKey.NONE>];

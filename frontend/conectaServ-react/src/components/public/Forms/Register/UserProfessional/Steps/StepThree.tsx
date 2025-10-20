@@ -10,12 +10,11 @@ import { FaCircleDollarToSlot } from 'react-icons/fa6';
 import { BsFillInfoSquareFill } from 'react-icons/bs';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri';
 import { IoArrowUndoCircle } from 'react-icons/io5';
-
-// CSS
-import './StepThree.css'
+import useRegister from '../../../../../../hooks/useRegister';
 
 export default function StepThree() {
-  const { amountFieldFormat, stepData, formState, isBudgeMountDisabled, isReinsertDisabled } = useRegisterPro();
+  const { stepData } = useRegister();
+  const { amountFieldFormat, formState, isBudgeMountDisabled, isReinsertDisabled } = useRegisterPro();
   const { onFocusAmount, onBlurAmount, onChangeIsReinsert, onChangeIsBudge, handleBudgeAmount } = useStepThree();
 
   const storedBudgeSelected: TYesOrNo = stepData[EKeyDataByStep.THREE]?.budgeSelected ?? 'no';
@@ -67,7 +66,7 @@ export default function StepThree() {
             </h4>
 
             <div className='c-flex c-flex-column gap-1/2'>
-              <input type='text' name='amountBudge' placeholder='$15000' className={`w-1/2 form-groupBudget__field ${amountFieldFormat !== '' && styleBorderFieldError(formState, 'amountBudge')}`} disabled={isBudgeMountDisabled} value={amountFieldFormat} onFocus={onFocusAmount} onInput={handleBudgeAmount} onBlur={onBlurAmount} />
+              <input type='text' name='amountBudge' placeholder='$15000' className={`w-1/2 form-groupBudget__field ${amountFieldFormat !== '' && styleBorderFieldError(formState, 'amountBudge')}`} disabled={isBudgeMountDisabled} value={amountFieldFormat} onFocus={onFocusAmount} onChange={handleBudgeAmount} onBlur={onBlurAmount} />
               {amountFieldFormat !== '' && renderFieldError(formState, 'amountBudge')}
             </div>
           </div>

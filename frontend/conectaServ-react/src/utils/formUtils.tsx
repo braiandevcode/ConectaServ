@@ -12,14 +12,11 @@ export const styleBorderFieldError = <T extends iFormStateLogin | iFormStateVali
 
   // FUERZO A  TS A ENTENDER QUE CADA VALOR DEL formState SIGUE LA FORMA BASE
   const fieldState = formState[fieldName] as TFieldState;
-
+  
   // SI NO EXISTE EL ESTADO DEL CAMPO, DEVUELVE CADENA VACÍA
   if (!fieldState) return '';
   /*
-  - SI EL CAMPO ES  password o confirmPassword Y SU VALOR ESTA VACIO retorna VACIO.
   - O SIE EL VALOR DEL CAMPO ES ECategoryKey.NONE O ELocationKey.NONE, retorna VACIO.
-
-  ((fieldName === 'password' || fieldName === 'confirmPassword') && !(fieldState.value as string)?.trim())
   */
   if (fieldState.value === ECategoryKey.NONE || fieldState.value === ELocationKey.NONE) return '';
 

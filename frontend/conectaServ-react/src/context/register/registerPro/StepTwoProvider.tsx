@@ -16,13 +16,16 @@ import type { TStoredImage } from '../../../types/typePersistanceDataImage';
 import type { TIdString } from '../../../types/typeUUID';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TTypeContextStepTwo } from '../../../types/typeContextStepTwo';
+import useRegister from '../../../hooks/useRegister';
 
 const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
   const descriptionValidator: DescriptionValidator = new DescriptionValidator();
   const imageProfileValidator: ImageProfileValidator = new ImageProfileValidator();
   const imageExperiencesValidator: ImageExperiencesValidator = new ImageExperiencesValidator();
+  
+  const { setStepData, stepData } = useRegister(); // HOOK NIVEL REGISTER  GENERAL
   // HOOK REGISTER PROFESIONAL
-  const { validateCurrentStep, formState, stepData, setFormState, setStepData, setIsStepValid, step, setIsParsed } = useRegisterPro();
+  const { validateCurrentStep, formState, setFormState, setIsStepValid, step, setIsParsed } = useRegisterPro();
 
   // -----------------------------------------------useRef------------------------------------------------------//
   const countImagesExp = useRef<number>(0); // ==> REF PARA ALMACENAR CANTIDAD DE IMAGENES ALMACENADA

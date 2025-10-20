@@ -1,4 +1,4 @@
-import React, { useEffect, type ReactNode } from 'react';
+import { useEffect, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
 import useRegisterPro from '../../../hooks/useRegisterPro';
 import FullNameValidator from '../../../modules/validators/FullNameValidator';
 import UserNameValidator from '../../../modules/validators/UserNameValidator';
@@ -12,6 +12,7 @@ import useRegister from '../../../hooks/useRegister';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TLocationKey } from '../../../types/typeLocation';
 import type { TTypeContextBasic } from '../../../types/typeContextBasic';
+import useVerifyEmailCode from '../../../hooks/useVerifyEmailCode';
 
 const StepFourProvider = ({ children }: { children: ReactNode }) => {
   const fullNameValidator: FullNameValidator = new FullNameValidator();
@@ -20,10 +21,11 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
   const selectedCategoryValidator: SelectedValidator = new SelectedValidator();
   const passwordValidator: PasswordValidator = new PasswordValidator();
   const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordValidator();
-  // HOOK REGISTRO PROFESIONAL
-  const { validateCurrentStep, setIsStepValid, step, setStepData, setFormState } = useRegisterPro();
+  
+  const { setStepData } = useRegister();
+  const { validateCurrentStep, setIsStepValid, step, setFormState } = useRegisterPro(); // HOOK REGISTRO PROFESIONAL
   const { password, terms, confirmPassword, setPassword, setConfirmPassword, setInteractedPassword, setInteractedConfirmPassword } = useRegister();
-
+  const { inputCodeEmail } = useVerifyEmailCode();
   //--------------------------------------------------------------EFECTOS PASO 4 -----------------------------------------------------------------------//
 
   // --------------------------------------------------- EFECTO VALIDACION DE PASO 4 --------------------------------------------------- //
@@ -33,11 +35,11 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
     const isValid: boolean = validateCurrentStep();
     // GUARDO EL RESULTADO FINAL DE LA VALIDACION DEL PASO
     setIsStepValid(isValid);
-  }, [step, terms, password, confirmPassword]);
+  }, [step, inputCodeEmail, terms, password, confirmPassword]);
 
   //-----------------------------EVENTOS PASO 4-------------------------------------------------------//
   // FULL NAME
-  const handleFullName = (e: React.FormEvent<HTMLInputElement>) => {
+  const handleFullName = (e: FormEvent<HTMLInputElement>) => {
     const value: string = e.currentTarget.value;
     const result: TFieldState = fullNameValidator.validate(value);
     setFormState((prev) => ({ ...prev, fullName: result }));
@@ -53,7 +55,7 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // USERNAME
-  const handleUserName = (e: React.FormEvent<HTMLInputElement>) => {
+  const handleUserName = (e: FormEvent<HTMLInputElement>) => {
     const value: string = e.currentTarget.value;
     const result: TFieldState = userNameValidator.validate(value);
     setFormState((prev) => ({ ...prev, userName: result }));
@@ -69,7 +71,7 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // EMAIL
-  const handleEmail = (e: React.FormEvent<HTMLInputElement>) => {
+  const handleEmail = (e: FormEvent<HTMLInputElement>) => {
     const value: string = e.currentTarget.value;
     const result: TFieldState = emailValidator.validate(value);
     setFormState((prev) => ({ ...prev, email: result }));
@@ -85,7 +87,7 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // LOCATION (select)
-  const handleChangeLocation = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChangeLocation = (e: ChangeEvent<HTMLSelectElement>) => {
     const value: TLocationKey = e.target.value as TLocationKey;
     const result: TFieldState = selectedCategoryValidator.validate(value);
     setFormState((prev) => ({ ...prev, location: result }));
@@ -101,7 +103,7 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // PASSWORD
-  const handlePassword = (e: React.FormEvent<HTMLInputElement>) => {
+  const handlePassword = (e: FormEvent<HTMLInputElement>) => {
     setInteractedPassword(true);
     const value: string = e.currentTarget.value.trim();
     const result: TFieldState = passwordValidator.validate(value);
@@ -110,7 +112,7 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // CONFIRM PASSWORD
-  const handleConfirmPassword = (e: React.FormEvent<HTMLInputElement>) => {
+  const handleConfirmPassword = (e: FormEvent<HTMLInputElement>) => {
     setInteractedConfirmPassword(true);
     const value: string = e.currentTarget.value.trim();
     const result: TFieldState = confirmPasswordValidator.validate(value);

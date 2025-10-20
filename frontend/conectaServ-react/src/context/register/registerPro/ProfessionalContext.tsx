@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { emptyStepData, formStateValidField } from '../../../config/constant';
+import { formStateValidField } from '../../../config/constant';
 import type { TRegisterPro } from '../../../types/typeRegisterProfessional';
 
 // DEFINIR VALORES POR DEFECTO DE LOS ESTADOS
@@ -7,7 +7,6 @@ const defaultContextProfessional: TRegisterPro = {
   valueSelected: '',
   setValueSelected: () => {},
   setIsParsed: () => {},
-  setStepData: () => {},
   handleClickNext: () => {},
   handleClickPrev: () => {},
   setHasContext: () => {},
@@ -34,7 +33,6 @@ const defaultContextProfessional: TRegisterPro = {
   hasContext: true,
   hasBudge: false,
   isParsed: false,
-  stepData: emptyStepData,
   validateCurrentStep: () => false,
 };
 

@@ -7,12 +7,10 @@ import { clearPersistence } from '../utils/storageUtils';
 import useMain from './useMain';
 import useRegister from './useRegister';
 import useRegisterClient from './useRegisterClient';
-import useRegisterPro from './useRegisterPro';
 
-const useVerifyCodeEmail = () => {
+const useSendData = () => {
   const { setLoading, client, setIsModalOpen } = useMain(); // HOOK A NIVEL MAIN => CASOS INTERACTIVOS DESDE EL INICIO
-  const { password, setIsSending } = useRegister(); // HOOK A NIVEL DE REGISTROS GENERALES
-  const { stepData } = useRegisterPro(); // HOOK A NIVEL REGISTROS Profesional
+  const { password, setIsSending, stepData} = useRegister(); // HOOK A NIVEL DE REGISTROS GENERALES
   const { dataClient } = useRegisterClient(); // HOOK A NIVEL REGISTROS Cliente
 
   //-------------------OBJETO APLANADO PARA ENVIO DATOS DEL PROFESIONAL--------------------------------//
@@ -68,4 +66,4 @@ const useVerifyCodeEmail = () => {
   return { submitNewData };
 };
 
-export default useVerifyCodeEmail;
+export default useSendData;

@@ -305,6 +305,22 @@
   position: sticky;
 }
 
+/* INSET */
 .inset-0{
   inset: 0;
+}
+
+/* TEXTO CENTRADO */
+.text-center{
+  text-align: center;
+}
+
+/* TEXTO AL INICIO */
+.text-start{
+  text-align:start;
+}
+
+/* TEXTO AL FINAL*/
+.text-end{
+  text-align:end;
 }

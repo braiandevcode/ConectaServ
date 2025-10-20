@@ -9,7 +9,7 @@ const BtnsRegisterPro = () => {
   const isLastStep: boolean = (step === 3 && !hasBudge) || (hasBudge && step === 4); //EL ULTIMO PASO;
   return (
     <>
-      <div className='mb-2 c-flex c-flex-justify-end'>{isLastStep ? <BtnSubmit variant='btn btn-submit' disabled={!isStepValid} text='Enviar' /> : <BtnNext variant='btn container-btn__next' disabled={!isStepValid}  text='Siguiente'/>}</div>
+      <div className='mb-2 c-flex c-flex-justify-end'>{isLastStep ? <BtnSubmit variant='btn btn__submit' disabled={!isStepValid} text='Enviar' /> : <BtnNext variant='btn container-btn__next' disabled={!isStepValid}  text='Siguiente'/>}</div>
     </>
   );
 };

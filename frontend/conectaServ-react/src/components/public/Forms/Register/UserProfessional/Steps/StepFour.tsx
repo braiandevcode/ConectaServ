@@ -1,7 +1,7 @@
 import useRegister from '../../../../../../hooks/useRegister';
 import useRegisterPro from '../../../../../../hooks/useRegisterPro';
 import useStepFour from '../../../../../../hooks/useStepFour';
-import { ELocationKey } from '../../../../../../types/enums';
+import { EKeyDataByStep, ELocationKey } from '../../../../../../types/enums';
 import { renderFieldError, styleBorderFieldError } from '../../../../../../utils/formUtils';
 
 // ICONOS DE REACT
@@ -12,12 +12,16 @@ import { FaEnvelope } from 'react-icons/fa6';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { FaLock } from 'react-icons/fa6';
 import { TbPasswordUser } from 'react-icons/tb';
+import BtnSendCode from '../Buttons/BtnSendCode';
+import useVerifyEmailCode from '../../../../../../hooks/useVerifyEmailCode';
 
 // COMPONENTE PASO 4
-const  StepFour = () => {
-  const {  formState } = useRegisterPro(); //HOOK REGISTRO PROFESIONAL
-  const { password, interactedPassword, interactedConfirmPassword, confirmPassword } = useRegister() //HOOK DE ESTADOS DE REGISTROS EN COMUN
-  const {handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useStepFour(); // HOOK PASO 4
+const StepFour = () => {
+  const { formState } = useRegisterPro(); //HOOK REGISTRO PROFESIONAL
+  const { sendCode } = useVerifyEmailCode();
+  const { stepData, password, interactedPassword, interactedConfirmPassword, confirmPassword} = useRegister(); //HOOK DE ESTADOS DE REGISTROS EN COMUN
+  const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useStepFour(); // HOOK PASO 4
+
   return (
     <>
       <div className='c-flex c-flex-column gap-3/2'>
@@ -39,7 +43,7 @@ const  StepFour = () => {
               </span>
               <span className='span-required'>*</span>
             </label>
-            <input type='text' id='fullName' className={`form__input ${styleBorderFieldError(formState, 'fullName')}`} aria-label='Nombre completo' placeholder='Roberto Bustos' value={formState.fullName.value as string} onInput={handleFullName} required autoFocus />
+            <input type='text' id='fullName' className={`form__input ${styleBorderFieldError(formState, 'fullName')}`} aria-label='Nombre completo' placeholder='Roberto Bustos' value={formState.fullName.value as string} onChange={handleFullName} required autoFocus />
             {renderFieldError(formState, 'fullName')}
           </div>
 
@@ -51,7 +55,7 @@ const  StepFour = () => {
               </span>
               <span className='span-required'>*</span>
             </label>
-            <input type='text' id='userName' className={`form__input ${styleBorderFieldError(formState, 'userName')}`} aria-label='Nombre de usuario' placeholder='Roberto_Bustos.45' value={formState.userName.value as string} onInput={handleUserName} required />
+            <input type='text' id='userName' className={`form__input ${styleBorderFieldError(formState, 'userName')}`} aria-label='Nombre de usuario' placeholder='Roberto_Bustos.45' value={formState.userName.value as string} onChange={handleUserName} required />
             {renderFieldError(formState, 'userName')}
           </div>
 
@@ -63,11 +67,14 @@ const  StepFour = () => {
               </span>
               <span className='span-required'>*</span>
             </label>
-            <input type='text' id='email' className={`form__input ${styleBorderFieldError(formState, 'email')}`} aria-label='Correo electronico' placeholder='test@example.com' value={formState.email.value as string} onInput={handleEmail} required />
+
+            <div className='c-flex c-flex-items-center gap-1'>
+              <input type='text' id='email' className={`form__input ${styleBorderFieldError(formState, 'email')}`} aria-label='Correo electronico' placeholder='test@example.com' value={formState.email.value as string} onChange={handleEmail} required />
+              <BtnSendCode formState={formState} sendCode={sendCode} emailUser={stepData[EKeyDataByStep.FOUR].email} text='Enviar Código' />
+            </div>
             {renderFieldError(formState, 'email')}
           </div>
 
-  
           <div className='c-flex c-flex-column gap-1/2 form__field form__location'>
             <label htmlFor='location' className='c-flex c-flex-items-center gap-1/2 form-basic__label'>
               <span className='c-flex c-flex-items-center gap-1/2'>
@@ -87,7 +94,6 @@ const  StepFour = () => {
             {renderFieldError(formState, 'location')}
           </div>
 
-      
           <div className='c-flex c-flex-column gap-1/2 form__field'>
             <label htmlFor='password' className='c-flex c-flex-items-center gap-1/2 form__label'>
               <span className='c-flex c-flex-items-center gap-1/2'>
@@ -96,7 +102,7 @@ const  StepFour = () => {
               </span>
               <span className='span-required'>*</span>
             </label>
-            <input type='password' id='password' autoComplete='password' aria-label='password' className={`form__input ${interactedPassword && styleBorderFieldError(formState, 'password')}`} placeholder='***********' value={password} onInput={handlePassword} required />
+            <input type='password' id='password' aria-label='password' className={`form__input ${interactedPassword && styleBorderFieldError(formState, 'password')}`} placeholder='***********' value={password} onChange={handlePassword} required />
             {interactedPassword && renderFieldError(formState, 'password')}
           </div>
 
@@ -108,13 +114,13 @@ const  StepFour = () => {
               </span>
               <span className='span-required'>*</span>
             </label>
-            <input type='password' id='confirmPassword' autoComplete='confirmPassword' className={`form__input ${interactedConfirmPassword && styleBorderFieldError(formState, 'confirmPassword')}`} aria-label='confirmPassword' placeholder='***********' value={confirmPassword} onInput={handleConfirmPassword} required />
+            <input type='password' id='confirmPassword' className={`form__input ${interactedConfirmPassword && styleBorderFieldError(formState, 'confirmPassword')}`} aria-label='confirmPassword' placeholder='***********' value={confirmPassword} onChange={handleConfirmPassword} required />
             {interactedConfirmPassword && renderFieldError(formState, 'confirmPassword')}
           </div>
         </div>
       </div>
     </>
   );
-}
+};
 
 export default StepFour;

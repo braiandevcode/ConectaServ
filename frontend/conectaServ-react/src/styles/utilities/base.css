@@ -22,8 +22,12 @@
   --link-hover-secondary: #fdfdfd;
 
   /* BOTONES */
+  
   --btn-text-primary: #fdfdfd;
   --btn-text-secondary: #1e5da3;
+  --btn-text-gray:#7a7878;
+
+  --btn-gray:#7a7878;
   --btn-hover: #1d4ed8;
   --btn-danger: #d42f2f;
   --btn-success: #0f800fcb;

@@ -1,4 +1,4 @@
-import useRegisterPro from '../../../../../hooks/useRegisterPro';
+import useRegister from '../../../../../hooks/useRegister';
 import useStepTwo from '../../../../../hooks/useStepTwo';
 import { EKeyDataByStep } from '../../../../../types/enums';
 import type { TStoredImage } from '../../../../../types/typePersistanceDataImage';
@@ -8,7 +8,7 @@ import BtnDeleteImage from './Buttons/BtnDeleteImage';
 import './ExperienceImagePreview.css';
 
 const ExperienceImagesPreview = () => {
-  const { stepData } = useRegisterPro();
+  const { stepData } = useRegister();
   const { srcVector, onDeleteExperience } = useStepTwo();
 
   // SI NO HAY IMAGENES PROCESADAS, NO RENDERIZAR

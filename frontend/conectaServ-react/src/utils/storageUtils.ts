@@ -1,6 +1,7 @@
 // IMPORTACIONES
 import { ENamesOfKeyLocalStorage } from '../types/enums';
-import type { TIdString, TStoredImage } from '../types/types';
+import type { TStoredImage } from '../types/typePersistanceDataImage';
+import type { TIdString } from '../types/typeUUID';
 
 //------------------------ALMACENAMIENTO EN INDEXEDDB---------------------------------------------------//
 

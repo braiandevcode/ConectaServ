@@ -1,45 +1,54 @@
-import type React from 'react';
-import { useState } from 'react';
+import { useState, type ChangeEvent, type ReactNode } from 'react';
 import { RegisterContext } from './RegisterContext';
-import { ENamesOfKeyLocalStorage } from '../../types/enums';
+import { EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../types/enums';
 import type { TRegister } from '../../types/typeRegister';
+import type { TStepData } from '../../types/typeStepData';
+import { emptyStepData } from '../../config/constant';
+import { readExistingData } from '../../utils/storageUtils';
 
 // CONTEXTO DE ESTADOS GENERALES A FORMULARIOS
-const RegisterProvider = ({ children }: { children: React.ReactNode }) => {
-  // const stored = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA); //LEEO Y PARSEO OBJETO GENERAL DE PASOS
-  const [terms, setTerms] = useState<boolean>(false); //ESTADO DE TERMINOS Y CONDICIONES EN FALSE SIEMPRE
-  //BANDERA PARA SABER SI YA INTERACTUO O NO. UTIL PARA EVITAR ESTILOS INNECESARIOS AL MONTAR COMPONENTE
-  const [interactedPassword, setInteractedPassword] = useState<boolean>(false);
-  const [interactedConfirmPassword, setInteractedConfirmPassword] = useState<boolean>(false);
+const RegisterProvider = ({ children }: { children: ReactNode }) => {
+  const stored = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA); //LEEO Y PARSEO OBJETO GENERAL DE PASOS
 
-  const [isSending, setIsSending] = useState<boolean>(false);
-  const [codeEmail, setCodeEmail] = useState<string>(() => {
-    const storedCodeEmail: string | null = localStorage.getItem('codeEmail');
-    return storedCodeEmail ?? '';
+  // OBJETO GENERAL DE PASOS CON VALORES POR DEFECTO Y PARA ALMACENAR EN STROAGE
+  const [stepData, setStepData] = useState<TStepData>(() => {
+    return {
+      [EKeyDataByStep.ONE]: {
+        ...emptyStepData[EKeyDataByStep.ONE], //VALOR POR DEFECTO
+        ...stored?.[EKeyDataByStep.ONE], // PISADO PODR EL VALOR EN STORAGE
+      },
+      [EKeyDataByStep.TWO]: {
+        ...emptyStepData[EKeyDataByStep.TWO],
+        ...stored?.[EKeyDataByStep.TWO],
+      },
+      [EKeyDataByStep.THREE]: {
+        ...emptyStepData[EKeyDataByStep.THREE],
+        ...stored?.[EKeyDataByStep.THREE],
+      },
+      [EKeyDataByStep.FOUR]: {
+        ...emptyStepData[EKeyDataByStep.FOUR],
+        ...stored?.[EKeyDataByStep.FOUR],
+      },
+    };
   });
 
-  //--------------------------------------------------ESTADOS  CAMPOS BASICOS DE REGISTRO ------------------------------------------------------------------------------------------//
+  //ESTADO DE TERMINOS Y CONDICIONES EN FALSE SIEMPRE
+  const [terms, setTerms] = useState<boolean>(false); 
+  //BANDERA PARA SABER SI YA INTERACTUO O NO EN PASSWORD Y CONFIRMAR PASSWORD. UTIL PARA EVITAR ESTILOS INNECESARIOS AL MONTAR COMPONENTE
+  const [interactedPassword, setInteractedPassword] = useState<boolean>(false);
+  const [interactedConfirmPassword, setInteractedConfirmPassword] = useState<boolean>(false);
+  const [isSending, setIsSending] = useState<boolean>(false);// ESTADO PARA BANDERA DE SI SE ESTA ENVIANDO
   const [password, setPassword] = useState<string>(''); //ESTADO EN TIEMPO RUNTIME PARA PASSWORD
   const [confirmPassword, setConfirmPassword] = useState<string>(''); //ESTADO EN TIEMPO RUNTIME PARA CONFIRMPASSWORD
-  const [inputCodeEmail, setInputCodeEmail] = useState<string>('');
-
-  //-------ACTUALIZAR EN STORAGE CODIGO DE VERIFICACION-------------------//
-  const updateCodeEmail = (newCode: string): void => {
-    localStorage.setItem(ENamesOfKeyLocalStorage.CODE, String(newCode));
-    setCodeEmail(newCode);
-  };
-
+  
   //ONCHANGE TERMINOS Y CONDICIONES
-  const onChangeTerms = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeTerms = (e: ChangeEvent<HTMLInputElement>) => {
     setTerms(e.target.checked);
   };
 
   //VALORES DE ESTADOS QUE CONSUME EL CONTEXTO
   const contextValuesRegister: TRegister = {
-    inputCodeEmail,
-    setInputCodeEmail,
-    codeEmail,
-    updateCodeEmail,
+    setStepData,
     setInteractedConfirmPassword,
     setInteractedPassword,
     onChangeTerms,
@@ -47,6 +56,7 @@ const RegisterProvider = ({ children }: { children: React.ReactNode }) => {
     setConfirmPassword,
     setPassword,
     setIsSending,
+    stepData,
     isSending,
     confirmPassword,
     interactedConfirmPassword,

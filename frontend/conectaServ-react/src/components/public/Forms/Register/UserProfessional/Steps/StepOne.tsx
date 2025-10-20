@@ -1,3 +1,4 @@
+import useRegister from "../../../../../../hooks/useRegister";
 import useRegisterPro from "../../../../../../hooks/useRegisterPro";
 import useStepOne from "../../../../../../hooks/useStepOne";
 import { ECategoryKey, EKeyDataByStep } from "../../../../../../types/enums";
@@ -10,7 +11,8 @@ import './StepOne.css'; // CSS
 import { GiIdCard } from 'react-icons/gi';
 import { IoLayers } from 'react-icons/io5';
 export default function StepOne() {
-  const { formState, stepData, hasInteracted } = useRegisterPro();
+  const { stepData } = useRegister();
+  const { formState, hasInteracted } = useRegisterPro();
   const { handleChangeSelected, titleRef } = useStepOne();
   return (
     <>

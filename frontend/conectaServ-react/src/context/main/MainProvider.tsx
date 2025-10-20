@@ -6,7 +6,7 @@ import { clearPersistence } from '../../utils/storageUtils';
 import type { TMain } from '../../types/typeMain';
 import { EModalType } from '../../types/enumModalTypes';
 import type { TFormRole } from '../../types/typeFormRole';
-
+import type { iMessageState } from '../../interfaces/iMessageState';
 
 // PROVEEMOS LOGICA Y ESTADOS AL CONTEXTO PRINCIPAL
 const MainProvider = ({ children }: { children: ReactNode }) => {
@@ -19,9 +19,10 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   // ESTADO PARA SABER SI EL USUARIO ES CLIENTE (TRUE), PRO (FALSE), O NULO SI NO HAY ROL
   const [client, setClient] = useState<boolean | null>(null);
 
-  // ESTADO PARA MODAL ==> UTILIZANDO HERRAMIENTA DE MODALES DE REACT
+  // ESTADO PARA MODAL ==> UTILIZANDO HERRAMIENTA DE MODAL DE REACT
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [currentModal, setCurrentModal] = useState<EModalType | null>(null);
+  const [messageState, setMessageState] = useState<iMessageState>({ type: null, text: null, title: null });
 
   // ----------------------useEffects----------------------------------//
   useEffect(() => {
@@ -54,12 +55,21 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     setIsModalOpen(false);
   }, [pathname, navigate]); // DEPENDE SOLO DE PATH Y NAVIGATE
 
-  // ------------------EVENTOS--------------------------------------------------//
-
+  // ----------------------EVENTOS--------------------------------------------------//
   // EVENTO PARA CERRAR MODAL
   const closeModal = (): void => {
     setIsModalOpen(false);
     setCurrentModal(null); // ==> SETEAR EL NUEVO MODAL QUE SE OCULTARA
+  };
+
+  // FUNCION PARA USAR EN CUALQUIER CONTEXTO DE APP
+  const showSuccess = (text: string, title: string) => {
+    setMessageState({ type: 'success', text, title });
+  };
+
+  // FUNCION PARA MENSAJE DE ERROR EN CUALQUIER CONTEXTO DE APP
+  const showError = (text: string, title: string) => {
+    setMessageState({ type: 'error', text, title });
   };
 
   // MOSTRAR MODAL GLOBAL
@@ -71,19 +81,21 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   // FUNCION QUE SE EJECUTA CUANDO EL USUARIO ELIGE CLIENTE
   const handleClientClick = () => {
     setClient(true); //ROL CLIENTE EN TRUE
-    setIsModalOpen(false); // MODAL CERRADO
-    localStorage.setItem(('role' as TFormRole), 'client');
+    closeModal();
+    localStorage.setItem('role' as TFormRole, 'client');
   };
 
   // FUNCION QUE SE EJECUTA CUANDO EL USUARIO ELIGE PROFESIONAL
   const handleProClick = () => {
     setClient(false); //ROL CLIENTE EN FALSE
-    setIsModalOpen(false); //MODAL CERRADO
-    localStorage.setItem('role', 'pro');
+    closeModal();
+    localStorage.setItem('role' as TFormRole, 'professional');
   };
 
   const contextMainValue: TMain = {
-    currentModal,
+    setMessageState,
+    showError,
+    showSuccess,
     setCurrentModal,
     closeModal,
     openModal,
@@ -91,6 +103,8 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     setLoading,
     handleClientClick, // FUNCION PARA ELEGIR CLIENTE
     handleProClick, // FUNCION PARA ELEGIR PROFESIONAL
+    messageState,
+    currentModal,
     isModalOpen,
     client, // TRUE = CLIENTE, FALSE = PRO, NULL = NO DEFINIDO
     loading,

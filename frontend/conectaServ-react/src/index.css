@@ -3,5 +3,3 @@
 @import url('./styles/home.css'); /*HOME*/
 @import url('./styles/services.css'); /*SERVICIOS*/
 @import url('./styles/infoProvider.css'); /*INFO PRESTADOR*/
-/* SE AGREGA EL PODER DE TAILWINDCSS */
-@import "tailwindcss";

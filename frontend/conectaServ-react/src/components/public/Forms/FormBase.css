@@ -50,7 +50,12 @@ input:not([type='radio']):not([type='checkbox']).is-invalid:focus {
 }
 
 /* ESTILOS DE SUMBIT CUANDO ESTEN DESHABILITADOS */
-.btn-submit:disabled {
+.btn__submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn__info:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

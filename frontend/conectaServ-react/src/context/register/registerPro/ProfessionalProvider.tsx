@@ -2,27 +2,21 @@ import { useLocation, useNavigate } from 'react-router';
 import { ProfessionalContext } from './ProfessionalContext';
 import { useEffect, useState, type FormEvent } from 'react';
 import { ECategoryKey, EDefaultSelected, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../../types/enums';
-import { readExistingData } from '../../../utils/storageUtils';
 import DescriptionValidator from '../../../modules/validators/DescriptionValidator';
 import ImageProfileValidator from '../../../modules/validators/ImageProfileValidator';
 import ImageExperiencesValidator from '../../../modules/validators/ImageExperiencesValidator';
 import SelectedValidator from '../../../modules/validators/SelectedValidator';
-import { emptyStepData } from '../../../config/constant';
 import BudgeValidator from '../../../modules/validators/BudgeValidator';
 import ConfirmPasswordValidator from '../../../modules/validators/ConfirmPasswordValidator';
 import PasswordValidator from '../../../modules/validators/PasswordValidator';
 import EmailValidator from '../../../modules/validators/EmailValidator';
 import UserNameValidator from '../../../modules/validators/UserNameValidator';
 import FullNameValidator from '../../../modules/validators/FullNameValidator';
-import useMain from '../../../hooks/useMain';
 import useRegister from '../../../hooks/useRegister';
-import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
-import generateRandomNumber from '../../../utils/generateRandomNumber';
-import type { TVerifyCode } from '../../../types/typeVerifyCode';
 import CodeValidator from '../../../modules/validators/CodeValidator';
-import type { TStepData } from '../../../types/typeStepData';
 import type { iFormStateValidationPro } from '../../../interfaces/iFormStateValidationPro';
 import type { TRegisterPro } from '../../../types/typeRegisterProfessional';
+import useVerifyEmailCode from '../../../hooks/useVerifyEmailCode';
 
 /*
 ****EXPLICACION DEL FLUJO ENTRE VALIDAR Y ALMACENAR EN STRORAGE:*****
@@ -50,8 +44,8 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   //--------------------------------------------------------------------HOOKS DE REACT--------------------------------------------------------------------//
   const location = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
-  const { setIsModalOpen } = useMain();
-  const { setIsSending, isSending, terms, password, confirmPassword, setTerms, inputCodeEmail, updateCodeEmail } = useRegister();
+  const { isSendingCode, inputCodeEmail } = useVerifyEmailCode();
+  const { terms, password, confirmPassword, setTerms, stepData } = useRegister();
 
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
   // ESTADO PARA EL PASO ACTUAL DEL FORMULARIO
@@ -60,64 +54,6 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
     return storedStep ? parseInt(storedStep, 10) : 1; //SI NO ES NULL PARSEA A NUMERO SI ES NULO , SINO POR DEFECTO ES 1
   });
 
-  // ------------------------FRAGMENTO CODIGO DE VERIFICACION---------------------------//
-  // CARGAR LA PUBLIC_KEY DESDE VARIABLE DE ENTORNO
-  const PUBLIC_KEY = import.meta.env.VITE_PUBLIC_KEY; // ==> CLAVE PUBLICA
-  const SERVICE_ID = import.meta.env.VITE_SERVICE_ID; // ==> ID SERVICIO
-  const TEMPLATE_VERIFICATION_ID = import.meta.env.VITE_TEMPLATE_ID; // ==> ID PLANTILLA
-
-  // INICIALIZAR LIBRERIA
-  emailjs.init({
-    publicKey: PUBLIC_KEY, //==> CLAVE
-  });
-
-  // FUNCION PARA ENVIAR CODIGO
-  async function sendCodeToUser(emailUser: string) {
-    const generatedCode: number = generateRandomNumber(); //GENERAR RANDOM
-
-    updateCodeEmail(generatedCode.toString()); //SETEO NUMERO RANDOM Y PARSEO A STRING
-
-    // OBJETO DE CONFIGURACION PARA ENVIO
-    const templateParams: TVerifyCode = {
-      to_email: emailUser, // ==> CORREO DE DESTINO
-      verification_code: generatedCode, //==> CODIGO GENERADO A LA PLANTILLA
-    };
-
-    // INTENTAR ENVIO
-    try {
-      const response: EmailJSResponseStatus = await emailjs.send(SERVICE_ID, TEMPLATE_VERIFICATION_ID, templateParams);
-      console.log('Correo con código enviado con éxito!', response.status);
-      return { success: true, code: generatedCode };
-    } catch (err) {
-      console.error('Fallo al enviar el código:', err);
-      return { success: false, error: err };
-    }
-  }
-
-  //--------------------------FIN FRAGMENTO VERIFICACION-------------------------------------//
-  const stored = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA); //LEEO Y PARSEO OBJETO GENERAL DE PASOS
-
-  // OBJETO GENERAL DE PASOS CON VALORES POR DEFECTO Y PARA ALMACENAR EN STROAGE
-  const [stepData, setStepData] = useState<TStepData>(() => {
-    return {
-      [EKeyDataByStep.ONE]: {
-        ...emptyStepData[EKeyDataByStep.ONE], //VALOR POR DEFECTO
-        ...stored?.[EKeyDataByStep.ONE], // PISADO PODR EL VALOR EN STORAGE
-      },
-      [EKeyDataByStep.TWO]: {
-        ...emptyStepData[EKeyDataByStep.TWO],
-        ...stored?.[EKeyDataByStep.TWO],
-      },
-      [EKeyDataByStep.THREE]: {
-        ...emptyStepData[EKeyDataByStep.THREE],
-        ...stored?.[EKeyDataByStep.THREE],
-      },
-      [EKeyDataByStep.FOUR]: {
-        ...emptyStepData[EKeyDataByStep.FOUR],
-        ...stored?.[EKeyDataByStep.FOUR],
-      },
-    };
-  });
 
   //ESTADO DE INTERACCION DEL USUARIO EN UN CAMPO
   const [hasInteracted, setHasInteracted] = useState<boolean>(() => {
@@ -130,7 +66,7 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
 
   // -----------------------------------------------------------ESTADOS PASO 1--------------------------------------------------------------------------//
   const [valueSelected, setValueSelected] = useState<string>(() => {
-    return stored[EKeyDataByStep.ONE]?.valueSelected ?? EDefaultSelected.SELECT_CATEGORY; // ==> DATO DE CATEGORIA O DEFAULT "none"
+    return stepData[EKeyDataByStep.ONE]?.valueSelected ?? EDefaultSelected.SELECT_CATEGORY; // ==> DATO DE CATEGORIA O DEFAULT "none"
   });
 
   // ESTADO DE SI SE RESETA O NO LOS DEALLES DE TRABAJO
@@ -183,7 +119,7 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
 
   // VALIDAR  CAMPOS POR PASOS
   const [isStepValid, setIsStepValid] = useState<boolean>(validateCurrentStep);
-  
+
   // -------------------------------------------------------------useEffects-------------------------------------------------------------------------//
   // EFECTO PARA ALMACENAR EN STORAGE SI HAY INTERACCION, LOS DATOS QUE INGRESA EL PROFESIONAL Y REVALIDAR CAMPOS AL MONTARSE
   useEffect(() => {
@@ -243,17 +179,14 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   // EVENTO SUBMIT FORM
   const onSubmitForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault(); //PREVENIR
-
+    // SI NO ES VALIDO O NO CORRESPONDE AL PASO FINAL
     const isNotValidAndStepNotValid: boolean = !isStepValid || (hasBudge && step !== 4) || (!hasBudge && step !== 3);
 
-    if (isNotValidAndStepNotValid) return; //SI NO ES VALIDO ASEGURA NO SEGUIR
+    //SI ES VERDAD QUE NO CORRESPONDE ==> NO SEGUIR
+    //O SI YA SE ESTA ENVIANDO, ==> NO HACER NADA
+    if (isNotValidAndStepNotValid || isSendingCode) return; 
 
-    if (isSending) return; // SI YA SE ESTA ENVIANDO, NO HACER NADA
-
-    await sendCodeToUser(stepData[EKeyDataByStep.FOUR].email); // ==> TOMO REFERENCIA EL EMAIL ALMACENADO EN STORAGE
-
-    setIsSending(true); //SI SE ESTA ENVIANDO MOSTRAR MODAL DE VERIFICACION DE CODIGO
-    setIsModalOpen(true); // ABRIR MODAL
+    // setIsSending(true); //SI SE ESTA ENVIANDO MOSTRAR MODAL DE VERIFICACION DE CODIGO
   };
 
   //------------------------------------------FUNCIONES MODULARES------------------------------------------------------//
@@ -307,7 +240,7 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
           }
         } else {
           const { fullName, userName, email, location, password, confirmPassword } = formState;
-          const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms;
+          const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid &&  terms && isSendingCode;
           isValid = isValidStep;
           return isValid;
         }
@@ -315,7 +248,7 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
       }
       case 4: {
         const { fullName, userName, email, location, password, confirmPassword } = formState;
-        const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms;
+        const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isSendingCode;
         isValid = isValidStep;
         return isValid;
       }
@@ -341,7 +274,6 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
     validateCurrentStep,
     setIsFocus,
     setIsParsed,
-    setStepData,
     setAmountFieldFormat,
     setIsBudgeMountDisabled,
     setFormState,
@@ -360,7 +292,6 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
     hasInteracted,
     isBudgeMountDisabled,
     amountFieldFormat,
-    stepData,
     isParsed,
     isResetDetailsWork,
     valueSelected,

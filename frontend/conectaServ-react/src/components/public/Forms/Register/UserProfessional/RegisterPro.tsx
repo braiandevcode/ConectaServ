@@ -1,5 +1,5 @@
-import useRegister from '../../../../../hooks/useRegister';
-import VerifyEmailModal from '../../../Modals/ModalVerifyEmail';
+// import useRegister from '../../../../../hooks/useRegister';
+// import VerifyEmailModal from '../../../Modals/ModalVerifyEmail';
 import Form from './Form';
 import BtnBack from './Buttons/BtnBack';
 
@@ -18,7 +18,7 @@ import './RegisterPro.css' // ESTILOS ESPECIFICOS
 
 // REGISTRO PROFESIONAL
 export default function RegisterPro() {
-  const { isSending } = useRegister();
+  // const { isSending } = useRegister(); //HOOK A NIVEL REGISTRO GENERAL
 
   return (
     <>
@@ -35,7 +35,7 @@ export default function RegisterPro() {
           </div>
         </div>
       </div>
-      {isSending && <VerifyEmailModal />}
+      {/* {isSending && <VerifyEmailModal />} */}
     </>
   );
 }

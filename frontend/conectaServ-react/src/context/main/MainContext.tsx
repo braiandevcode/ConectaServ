@@ -2,6 +2,9 @@ import { createContext } from 'react';
 import type { TMain } from '../../types/typeMain';
 
 const defaultMainContext: TMain = {
+  setMessageState: () => {},
+  showError: () => {},
+  showSuccess: () => {},
   setCurrentModal: () => {},
   setIsModalOpen: () => {},
   openModal: () => {},
@@ -9,6 +12,7 @@ const defaultMainContext: TMain = {
   setLoading: () => false,
   handleClientClick: () => {},
   handleProClick: () => {},
+  messageState: { type: null, text: null, title:null },
   currentModal: null,
   loading: false,
   client: false,
