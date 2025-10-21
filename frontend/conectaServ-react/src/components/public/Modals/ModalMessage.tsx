@@ -1,16 +1,11 @@
 import { type JSX, type ReactNode } from 'react';
-import useMain from '../../../hooks/useMain';
 import type { iModalInfo } from '../../../interfaces/iModalInfo';
 import BtnClose from './Buttons/BtnClose';
+import useModal from '../../../hooks/useModal';
 
 // MODAL PARA VERIFICAR EMAIL ANTES DE REGISTRARSE
 const ModalMessage = ({ iconReact, iconBaseProps }: iModalInfo): ReactNode => {
-  const { messageState } = useMain(); //HOOK A NIVEL MAIN
-
-  // SOLO POR EL MOMENTO PARA VER ESTILOS
-  // useEffect(() => {
-  //   setIsModalOpen(true);
-  // }, []);
+  const { messageState } = useModal(); //HOOK A NIVEL MAIN
 
   const IconComponent = iconReact; // ==> GUARDAR EL VALOR DEL COMPONENTE DE ICONO DE REACT
 

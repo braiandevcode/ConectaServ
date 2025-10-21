@@ -23,8 +23,8 @@ export enum EKeyDataByStep {
   FOUR = '4',
 }
 
-export enum EDataClient{
-  DATA= 'data-client'
+export enum EDataClient {
+  DATA = 'data-client',
 }
 
 // NOMBRE DE CAMPOS DE LOS GRUPOS DE CHECKXBOXES (DETALLES DE PROFESION)
@@ -44,11 +44,12 @@ export enum EDefaultSelected {
 // NOMBRE DE CLAVES PARA LOCALSTORAGE
 export enum ENamesOfKeyLocalStorage {
   STEP_DATA = 'stepData',
-  CLIENT_DATA= 'data-client',
+  CLIENT_DATA = 'data-client',
+  ROLE = 'role',
   CURRENT_STEP = 'currentStep',
-  IMAGE_INDEXED_DB = 'my-image-db',
+  IMAGE_INDEXED_DB = 'images',
   INTERACTED = 'interacted',
-  CODE='codeEmail'
+  CODE = 'codeEmail',
 }
 
 // ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES
@@ -59,8 +60,8 @@ export enum EEndpoint {
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA
 export enum EPathPage {
-  PATH_FORM_CLIENT= '/register/client',
-  PATH_FORM_PROFESSIONAL= '/register/pro',
+  PATH_FORM_CLIENT = '/register/client',
+  PATH_FORM_PROFESSIONAL = '/register/pro',
   PATH_TERMS = '/register/terms',
   PATH_PRIVACY = '/register/privacity',
 }

@@ -1,20 +1,20 @@
-import { useEffect, type FC, type ReactNode } from 'react';
-import Modal from 'react-modal';
+import { type FC, type ReactNode } from 'react';
 import type { iModalWrapperProps } from '../../../interfaces/iModalWrapperProps';
+import useModal from '../../../hooks/useModal';
 
-Modal.setAppElement('#root'); // SOLO UNA VEZ EN TODO EL PROYECTO
+// CSS
+import './ModalWrapper.css';
 
 // ES LA PLANTILLA BASE PATRA TODOS LOS MODALES
-const ModalWrapper: FC<iModalWrapperProps> = ({ isOpen, children, className }): ReactNode => {
-
-  useEffect(() => {
-    console.log('Me Monte');
-  }, [])
+const ModalWrapper: FC<iModalWrapperProps> = ({ children, className }): ReactNode => {
+  const { isModalOpen } = useModal(); //HOOK NIVEL MAIN
   return (
     <>
-      <Modal className={className} isOpen={isOpen}>
-        {children}
-      </Modal>
+      <div className='container-modal c-flex c-flex-items-center c-flex-justify-center position-fixed inset-0'>
+        <div className={className} aria-hidden={!isModalOpen}>
+          {children}
+        </div>
+      </div>
     </>
   );
 };

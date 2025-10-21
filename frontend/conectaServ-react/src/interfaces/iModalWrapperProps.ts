@@ -2,7 +2,6 @@ import type { CSSProperties, ReactNode } from "react";
 
 // INTERFACE PARA MODAL PLANTILLA
 export interface iModalWrapperProps {
-  isOpen: boolean;
   className?:string;
   onClose: () => void;
   children: ReactNode;

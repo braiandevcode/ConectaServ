@@ -1,12 +1,12 @@
 import { Link, useLocation } from 'react-router';
-import useMain from '../../hooks/useMain';
 import { FaArrowAltCircleRight } from 'react-icons/fa';
 import Button from '../Button';
 import { EModalType } from '../../types/enumModalTypes';
+import useModal from '../../hooks/useModal';
 
 // <!-- CABECERA -->
 export default function Header() {
-  const { openModal } = useMain();
+  const { openModal } = useModal();
   const { pathname } = useLocation();
   // const openLogin = () => openModal(EModalType.MODAL_LOGIN);
   const openRole = () => {

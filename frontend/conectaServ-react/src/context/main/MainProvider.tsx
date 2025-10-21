@@ -4,13 +4,14 @@ import MainContext from './MainContext';
 import { ENamesOfKeyLocalStorage, EPathPage } from '../../types/enums';
 import { clearPersistence } from '../../utils/storageUtils';
 import type { TMain } from '../../types/typeMain';
-import { EModalType } from '../../types/enumModalTypes';
 import type { TFormRole } from '../../types/typeFormRole';
-import type { iMessageState } from '../../interfaces/iMessageState';
+import useModal from '../../hooks/useModal';
 
 // PROVEEMOS LOGICA Y ESTADOS AL CONTEXTO PRINCIPAL
 const MainProvider = ({ children }: { children: ReactNode }) => {
-  const stored = localStorage.getItem('role') as TFormRole | null;
+  const { closeModal, setIsModalOpen } = useModal();
+  const stored = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE) as TFormRole | null;
+
   // -------------------HOOKS DE REACT-------------------------//
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -19,21 +20,21 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   // ESTADO PARA SABER SI EL USUARIO ES CLIENTE (TRUE), PRO (FALSE), O NULO SI NO HAY ROL
   const [client, setClient] = useState<boolean | null>(null);
 
-  // ESTADO PARA MODAL ==> UTILIZANDO HERRAMIENTA DE MODAL DE REACT
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [currentModal, setCurrentModal] = useState<EModalType | null>(null);
-  const [messageState, setMessageState] = useState<iMessageState>({ type: null, text: null, title: null });
-
   // ----------------------useEffects----------------------------------//
   useEffect(() => {
     // FUNCION INTERNA ASiNCRONA PARA LIMPIAR DATOS
-    const runClear = async () => {
+    const clear = async () => {
       try {
         await clearPersistence(); // LIMPIA INDEXEDDB + STORAGE
+        
       } catch (error) {
         console.error('ERROR AL ELIMINAR DATOS DEL STORAGE E INDEXEDDB:', error);
       }
     };
+
+    console.log(stored);
+
+    console.log(pathname);
 
     // SI EL ROL GUARDADO ES CLIENTE Y ESTAMOS EN LA RUTA CORRECTA
     if (pathname === EPathPage.PATH_FORM_CLIENT && stored === 'client') {
@@ -43,69 +44,36 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
       setClient(false);
     } else {
       // SI NO HAY ROL VALIDO O NO ESTAMOS EN UNA RUTA DE REGISTRO
-      localStorage.removeItem('role');
-      localStorage.removeItem(ENamesOfKeyLocalStorage.CLIENT_DATA);
+
       // LIMPIAR DATOS ASÍNCRONAMENTE
-      runClear();
+      clear();
       // REDIRECCIONAR AL HOME
       navigate('/', { replace: true });
     }
 
     //ASEGURAR QUE EL MODAL SE CIERRE AL CAMBIAR DE RUTA
+    // closeModal();
     setIsModalOpen(false);
   }, [pathname, navigate]); // DEPENDE SOLO DE PATH Y NAVIGATE
 
-  // ----------------------EVENTOS--------------------------------------------------//
-  // EVENTO PARA CERRAR MODAL
-  const closeModal = (): void => {
-    setIsModalOpen(false);
-    setCurrentModal(null); // ==> SETEAR EL NUEVO MODAL QUE SE OCULTARA
-  };
-
-  // FUNCION PARA USAR EN CUALQUIER CONTEXTO DE APP
-  const showSuccess = (text: string, title: string) => {
-    setMessageState({ type: 'success', text, title });
-  };
-
-  // FUNCION PARA MENSAJE DE ERROR EN CUALQUIER CONTEXTO DE APP
-  const showError = (text: string, title: string) => {
-    setMessageState({ type: 'error', text, title });
-  };
-
-  // MOSTRAR MODAL GLOBAL
-  const openModal = <T extends EModalType>(modalType: T): void => {
-    setIsModalOpen(true);
-    setCurrentModal(modalType); // ==> SETEAR EL NUEVO MODAL QUE SE MOSTRARA
-  };
-
   // FUNCION QUE SE EJECUTA CUANDO EL USUARIO ELIGE CLIENTE
   const handleClientClick = () => {
+    localStorage.setItem(ENamesOfKeyLocalStorage.ROLE, 'client');
     setClient(true); //ROL CLIENTE EN TRUE
     closeModal();
-    localStorage.setItem('role' as TFormRole, 'client');
   };
 
   // FUNCION QUE SE EJECUTA CUANDO EL USUARIO ELIGE PROFESIONAL
   const handleProClick = () => {
+    localStorage.setItem(ENamesOfKeyLocalStorage.ROLE, 'professional');
     setClient(false); //ROL CLIENTE EN FALSE
     closeModal();
-    localStorage.setItem('role' as TFormRole, 'professional');
   };
 
   const contextMainValue: TMain = {
-    setMessageState,
-    showError,
-    showSuccess,
-    setCurrentModal,
-    closeModal,
-    openModal,
-    setIsModalOpen,
     setLoading,
     handleClientClick, // FUNCION PARA ELEGIR CLIENTE
     handleProClick, // FUNCION PARA ELEGIR PROFESIONAL
-    messageState,
-    currentModal,
-    isModalOpen,
     client, // TRUE = CLIENTE, FALSE = PRO, NULL = NO DEFINIDO
     loading,
   };

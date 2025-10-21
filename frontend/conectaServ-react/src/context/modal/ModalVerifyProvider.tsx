@@ -1,17 +1,17 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
-import { ENamesOfKeyLocalStorage } from '../../../types/enums';
-import type { iEmailUser } from '../../../interfaces/iEmailUser';
-import sendCodeToUser from '../../../utils/sendCode';
-import useMain from '../../../hooks/useMain';
+import { ENamesOfKeyLocalStorage } from '../../types/enums';
+import type { iEmailUser } from '../../interfaces/iEmailUser';
+import sendCodeToUser from '../../utils/sendCode';
 import { ModalVerifyContext } from './ModalVerifyContext';
-import type { TModalVerifyCode } from '../../../types/typeModalVerifyCode';
-import { EModalType } from '../../../types/enumModalTypes';
-// import useSendData from '../../../hooks/useSendData';
+import type { TModalVerifyCode } from '../../types/typeModalVerifyCode';
+import { EModalType } from '../../types/enumModalTypes';
+import useModal from '../../hooks/useModal';
+import useMain from '../../hooks/useMain';
 
 // PROVIDER DE MODAL DE VERIFICACION DE CODIGO DE EMAIL
 const ModalVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
-  const { showError, showSuccess, openModal } = useMain(); // ==> HOOK NIVEL MAIN
-  //   const { submitNewData } = useSendData(); // HOOK PARA VERIFICACION DE CODIGO Y ENVIO DE LOS DATOS
+  const { showError, showSuccess, openModal } = useModal(); // ==> HOOK NIVEL MODAL GENERAL
+  const { setLoading } = useMain(); //HOOK NIVEL MAIN
 
   // ESTADO DE VERIFICACION DE CODIGO LEYENDO EN STORAGE
   const [codeStoredEmail, setCodeStoredEmail] = useState<string>(() => {
@@ -36,6 +36,9 @@ const ModalVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
 
   // FUNCION QUE SE ENCARGA DE MANDAR EL CODIGO AL USUARIO
   const sendCode = async ({ emailUser }: iEmailUser): Promise<void> => {
+     updatedIsSendingCode(true);
+     console.log(isSendingCode);
+     
     // INVOCO FUNCION DE ENVIO
     await sendCodeToUser({
       updatedIsSendingCode,
@@ -44,6 +47,7 @@ const ModalVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
       showError,
       showSuccess,
       openModal,
+      setLoading,
     });
   };
 
@@ -54,21 +58,23 @@ const ModalVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
     e.preventDefault();
     // VERIFICAR LUEGO DEL SUBMIT QUE SEA ESTRICTAMENTE EL MISMO CODIGO
     if (inputCodeEmail.trim() === codeStoredEmail.trim()) {
-      showSuccess('Código verificado correctamente', '¡Exito!');
+      showSuccess('¡Exito!', 'Código verificado correctamente');
       openModal(EModalType.MODAL_SUCCESS);
-      // await submitNewData(); // ==> SI EL CODIGO ES CORRECTO COMPLETAR REGISTRO
+      updatedIsSendingCode(true); //EL CODIGO YA FUE ENVIADO
     } else {
-      showError('El código ingresado no es valido, Intente nuevamente.', 'Código incorrecto');
+      updatedIsSendingCode(false);
+      showError('Código incorrecto', 'El código ingresado no es valido, Intente nuevamente.');
+      localStorage.removeItem(ENamesOfKeyLocalStorage.CODE);
       openModal(EModalType.MODAL_ERROR);
     }
   };
 
   const valuesModalVerifyContext: TModalVerifyCode = {
-    handleSubmit,
     codeStoredEmail,
     inputCodeEmail,
     isSendingCode,
     sendCode,
+    handleSubmit,
     setInputCodeEmail,
     setIsSendingCode,
     updateCodeEmail,

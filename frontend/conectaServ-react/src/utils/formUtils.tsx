@@ -1,9 +1,9 @@
-import type React from 'react';
 import { ECategoryKey, ELocationKey } from '../types/enums';
 import type { iFormStateValidationPro } from '../interfaces/iFormStateValidationPro';
 import type { iFormStateValidationClient } from '../interfaces/iFormStateValidationClient';
 import type { TFieldState } from '../types/typeStateFields';
 import type { iFormStateLogin } from '../interfaces/iFormStateLogin';
+import type { ReactNode } from 'react';
 
 
 // FUNCION QUE, DADO EL NOMBRE DE UN CAMPO, DEVUELVE LA CLASE CSS DEL BORDE DEL INPUT
@@ -28,7 +28,7 @@ export const styleBorderFieldError = <T extends iFormStateLogin | iFormStateVali
 };
 
 // FUNCION QUE, DADO EL NOMBRE DE UN CAMPO, DEVUELVE EL MENSAJE DE ERROR SI EL CAMPO ES INVALIDO
-export const renderFieldError = <T extends iFormStateLogin | iFormStateValidationPro | iFormStateValidationClient>(formState: T, fieldName: keyof T): React.ReactNode | null => {
+export const renderFieldError = <T extends iFormStateLogin | iFormStateValidationPro | iFormStateValidationClient>(formState: T, fieldName: keyof T): ReactNode | null => {
   // OBTIENE EL ESTADO DEL CAMPO DESDE FORMSTATE
 
   // FUERZO A  TS A ENTENDER QUE CADA VALOR DEL formState SIGUE LA FORMA BASE

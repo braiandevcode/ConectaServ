@@ -9,7 +9,7 @@ import useRegister from './useRegister';
 import useRegisterClient from './useRegisterClient';
 
 const useSendData = () => {
-  const { setLoading, client, setIsModalOpen } = useMain(); // HOOK A NIVEL MAIN => CASOS INTERACTIVOS DESDE EL INICIO
+  const { setLoading, client} = useMain(); // HOOK A NIVEL MAIN => CASOS INTERACTIVOS DESDE EL INICIO
   const { password, setIsSending, stepData} = useRegister(); // HOOK A NIVEL DE REGISTROS GENERALES
   const { dataClient } = useRegisterClient(); // HOOK A NIVEL REGISTROS Cliente
 
@@ -39,7 +39,7 @@ const useSendData = () => {
   // ENVIAR DATOS AL BACKEND DE CUALQUIER REGISTRO LUEGO DE VERIFICAR CODIGO
   const submitNewData = async () => {
     if (client === null) return; // ==> SI NO HAY ROL NO SEGUIR
-
+    
     const { ENDPOINT_REGISTER_CLIENT, ENDPOINT_REGISTER_PROFESSIONAL } = endPointRegister;
 
     // SI CLIENTE ES TRUE  NEVO DATO DE CLIENTE, SINO PROFESIONAL
@@ -58,7 +58,6 @@ const useSendData = () => {
       console.error(error);
     } finally {
       setLoading(false); // DESACTIVAR LOADER
-      setIsModalOpen(false); // CERRAR MODAL
       setIsSending(false); // PERMITIR NUEVO ENVIO
     }
   };

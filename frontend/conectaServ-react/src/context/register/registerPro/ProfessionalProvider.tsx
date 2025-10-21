@@ -17,6 +17,7 @@ import CodeValidator from '../../../modules/validators/CodeValidator';
 import type { iFormStateValidationPro } from '../../../interfaces/iFormStateValidationPro';
 import type { TRegisterPro } from '../../../types/typeRegisterProfessional';
 import useVerifyEmailCode from '../../../hooks/useVerifyEmailCode';
+import useSendData from '../../../hooks/useSendData';
 
 /*
 ****EXPLICACION DEL FLUJO ENTRE VALIDAR Y ALMACENAR EN STRORAGE:*****
@@ -45,7 +46,8 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
   const { isSendingCode, inputCodeEmail } = useVerifyEmailCode();
-  const { terms, password, confirmPassword, setTerms, stepData } = useRegister();
+  const { terms, password, confirmPassword, setTerms, stepData, setIsSending } = useRegister();
+  const { submitNewData } = useSendData(); // HOOK PARA VERIFICACION DE CODIGO Y ENVIO DE LOS DATOS
 
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
   // ESTADO PARA EL PASO ACTUAL DEL FORMULARIO
@@ -53,7 +55,6 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
     const storedStep = localStorage.getItem(ENamesOfKeyLocalStorage.CURRENT_STEP); // LEO CURRENT_STEP UNA SOLA VEZ
     return storedStep ? parseInt(storedStep, 10) : 1; //SI NO ES NULL PARSEA A NUMERO SI ES NULO , SINO POR DEFECTO ES 1
   });
-
 
   //ESTADO DE INTERACCION DEL USUARIO EN UN CAMPO
   const [hasInteracted, setHasInteracted] = useState<boolean>(() => {
@@ -184,9 +185,10 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
 
     //SI ES VERDAD QUE NO CORRESPONDE ==> NO SEGUIR
     //O SI YA SE ESTA ENVIANDO, ==> NO HACER NADA
-    if (isNotValidAndStepNotValid || isSendingCode) return; 
-
-    // setIsSending(true); //SI SE ESTA ENVIANDO MOSTRAR MODAL DE VERIFICACION DE CODIGO
+    if (isNotValidAndStepNotValid || isSendingCode) return;
+    
+    setIsSending(true); //SI SE ESTA ENVIANDO MOSTRAR MODAL DE VERIFICACION DE CODIGO
+    await submitNewData(); // ==> SI EL CODIGO ES CORRECTO COMPLETAR REGISTRO
   };
 
   //------------------------------------------FUNCIONES MODULARES------------------------------------------------------//
@@ -240,7 +242,7 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
           }
         } else {
           const { fullName, userName, email, location, password, confirmPassword } = formState;
-          const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid &&  terms && isSendingCode;
+          const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isSendingCode;
           isValid = isValidStep;
           return isValid;
         }

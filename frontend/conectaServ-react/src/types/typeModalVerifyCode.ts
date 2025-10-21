@@ -7,7 +7,6 @@ export type TModalVerifyCode = {
   sendCode: ({ emailUser }: iEmailUser) => Promise<void>;
   setIsSendingCode: Dispatch<SetStateAction<boolean>>;
   setInputCodeEmail: Dispatch<SetStateAction<string>>;
-//   handleInputCodeVerify: (e: FormEvent<HTMLInputElement>) => void;
   handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
   isSendingCode: boolean;
   inputCodeEmail: string;

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import type { TModalVerifyCode } from '../types/typeModalVerifyCode';
-import { ModalVerifyContext } from '../context/register/modal/ModalVerifyContext';
+import { ModalVerifyContext } from '../context/modal/ModalVerifyContext';
 
 const useVerifyEmailCode = () => {
   const context = useContext<TModalVerifyCode>(ModalVerifyContext);

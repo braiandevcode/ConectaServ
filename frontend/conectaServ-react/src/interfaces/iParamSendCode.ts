@@ -8,4 +8,5 @@ export interface iParamSendCode {
   openModal: <T extends EModalType>(modalType: T) => void;
   updateCodeEmail: (newCode: string) => void;
   updatedIsSendingCode: (isSendingCode:boolean)=> void
+  setLoading: (loading: boolean) => void;
 }

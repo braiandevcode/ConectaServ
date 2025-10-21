@@ -3,11 +3,11 @@ import './BtnClose.css';
 import type { JSX } from 'react';
 import Button from '../../../Button';
 import type { iBtns } from '../../../../interfaces/iBtns';
-import useMain from '../../../../hooks/useMain';
+import useModal from '../../../../hooks/useModal';
 
 // BOTON PARA CERRAR CUALQUIER MODAL
 const BtnClose = ({ variant= 'btn btn__close', className }: iBtns): JSX.Element => {
-  const { closeModal } = useMain() // HOOK NIVEL MAIN
+  const { closeModal } = useModal() // HOOK NIVEL MAIN
   return (
     <>
       <Button type='button' aria-label='Cerrar Modal' title='Cerrar' className={className ? `${className} ${variant}` : variant} onClick={closeModal}>

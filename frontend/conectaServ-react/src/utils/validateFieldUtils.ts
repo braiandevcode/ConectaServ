@@ -1,6 +1,5 @@
 // IMPORTACIONES
-import { EFieldType } from '../types/enums.js';
-import type { TFieldType, TStoredImage } from '../types/types';
+import type { TStoredImage } from '../types/typePersistanceDataImage.js';
 
 // ----------------METODOS AUXILIARES PARA FOMULARIOS--------------------//
 // SI UN CAMPO TIENE CONTENIDO
@@ -11,11 +10,6 @@ export const isLengthValid = ({ text, num }: { text: string; num: number }): boo
 // FUNCION PARA VALIDAR UNA EXPRESION REGULAR DINAMICAMENTE
 export const validateWithRegex = ({ pattern, text }: { pattern: RegExp; text: string }): boolean => {
   return pattern.test(text);
-};
-
-// METODO PARA VALIDAR EL TIPO DE INPUT
-export const isValidInputType = (type: string): type is TFieldType => {
-  return Object.values(EFieldType).includes(type as EFieldType); //SI EN LOS PARES CLAVE VALOR INCLUYE EL STRING QUE SE LE PASA => TRUE
 };
 
 //ASEGURO DE QUE SI EXISTE EL OBJETO Y NO ESTA VACIO ES TRUE ==> SINO FALSE

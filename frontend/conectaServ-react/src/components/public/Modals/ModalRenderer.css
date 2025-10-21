@@ -13,8 +13,6 @@
   z-index: 10;
 }
 
-.ReactModal__Overlay {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.modal--hide{
+  display: none;
 }
