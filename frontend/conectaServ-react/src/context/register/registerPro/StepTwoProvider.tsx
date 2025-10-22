@@ -37,7 +37,6 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
 
   // EFECTO PARA CARGAR IMAGEN DE PERFIL
   useEffect(() => {
-     console.log('ME LLAMARON DE : StepTwoProvider');
     if (stepData[EKeyDataByStep.TWO].imageProfile) {
       // CARGAR EL SOURCE DE IMAGEN MEDIANTE FUNCION INVOCADA
       loadImage({ setSrc, storedImage: stepData[EKeyDataByStep.TWO].imageProfile });
@@ -121,10 +120,10 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
     if (formState.descriptionUser.isValid) {
       setIsParsed(true); // ==> INDICAR PARSEO
 
+      // SETEAR ESTADO GLOBAL EN STORAGE
       setStepData((prev) => ({
         ...prev, //==> COPIAR TODO LO PREVIO DEL OBJETO GLOBAL
-        [EKeyDataByStep.TWO]: {
-          // ==>  EN ATRIBUTO 2
+        [EKeyDataByStep.TWO]: { // ==>  EN SUBOBJETO DEL PASO 2
           ...prev[EKeyDataByStep.TWO], // MANTENER EL RESTO DE LOS VALORES EXISTENTES EN SUBOBJETO PASO 2
           descriptionUser: formatTextArea(formState.descriptionUser.value as string), // ACTUALIZAR CON FORMATO
         },

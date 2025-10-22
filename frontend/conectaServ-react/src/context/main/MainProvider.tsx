@@ -5,11 +5,11 @@ import { ENamesOfKeyLocalStorage, EPathPage } from '../../types/enums';
 import { clearPersistence } from '../../utils/storageUtils';
 import type { TMain } from '../../types/typeMain';
 import type { TFormRole } from '../../types/typeFormRole';
-import useModal from '../../hooks/useModal';
+import useGlobalModal from '../../hooks/useGlobalModal';
 
 // PROVEEMOS LOGICA Y ESTADOS AL CONTEXTO PRINCIPAL
 const MainProvider = ({ children }: { children: ReactNode }) => {
-  const { closeModal, setIsModalOpen } = useModal();
+  const { closeGlobalModal, setIsGlobalModalOpen } = useGlobalModal();
   const stored = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE) as TFormRole | null;
 
   // -------------------HOOKS DE REACT-------------------------//
@@ -31,11 +31,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
         console.error('ERROR AL ELIMINAR DATOS DEL STORAGE E INDEXEDDB:', error);
       }
     };
-
-    console.log(stored);
-
-    console.log(pathname);
-
+    
     // SI EL ROL GUARDADO ES CLIENTE Y ESTAMOS EN LA RUTA CORRECTA
     if (pathname === EPathPage.PATH_FORM_CLIENT && stored === 'client') {
       setClient(true);
@@ -53,21 +49,21 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
 
     //ASEGURAR QUE EL MODAL SE CIERRE AL CAMBIAR DE RUTA
     // closeModal();
-    setIsModalOpen(false);
+    setIsGlobalModalOpen(false);
   }, [pathname, navigate]); // DEPENDE SOLO DE PATH Y NAVIGATE
 
   // FUNCION QUE SE EJECUTA CUANDO EL USUARIO ELIGE CLIENTE
   const handleClientClick = () => {
     localStorage.setItem(ENamesOfKeyLocalStorage.ROLE, 'client');
     setClient(true); //ROL CLIENTE EN TRUE
-    closeModal();
+    closeGlobalModal();
   };
 
   // FUNCION QUE SE EJECUTA CUANDO EL USUARIO ELIGE PROFESIONAL
   const handleProClick = () => {
     localStorage.setItem(ENamesOfKeyLocalStorage.ROLE, 'professional');
     setClient(false); //ROL CLIENTE EN FALSE
-    closeModal();
+    closeGlobalModal();
   };
 
   const contextMainValue: TMain = {

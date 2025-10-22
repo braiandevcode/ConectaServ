@@ -6,7 +6,7 @@ import { FaCheckDouble } from 'react-icons/fa';
 const ModalSuccess = (): JSX.Element => {
   return (
     <>
-      <ModalMessage iconBaseProps={{ color: 'green', size:20 }} iconReact={FaCheckDouble} />
+      <ModalMessage iconBaseProps={{ color: 'green', size:120 }} iconReact={FaCheckDouble} />
     </>
   );
 };

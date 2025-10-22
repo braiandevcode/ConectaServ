@@ -3,14 +3,14 @@ import './BtnClose.css';
 import type { JSX } from 'react';
 import Button from '../../../Button';
 import type { iBtns } from '../../../../interfaces/iBtns';
-import useModal from '../../../../hooks/useModal';
+import useGlobalModal from '../../../../hooks/useGlobalModal';
 
 // BOTON PARA CERRAR CUALQUIER MODAL
 const BtnClose = ({ variant= 'btn btn__close', className }: iBtns): JSX.Element => {
-  const { closeModal } = useModal() // HOOK NIVEL MAIN
+  const { closeGlobalModal } = useGlobalModal() // HOOK NIVEL MAIN
   return (
     <>
-      <Button type='button' aria-label='Cerrar Modal' title='Cerrar' className={className ? `${className} ${variant}` : variant} onClick={closeModal}>
+      <Button type='button' aria-label='Cerrar Modal' title='Cerrar' className={className ? `${className} ${variant}` : variant} onClick={closeGlobalModal}>
         <MdClose size={20} />
       </Button>
     </>

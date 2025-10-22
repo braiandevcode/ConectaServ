@@ -1,11 +1,13 @@
-import type { EModalType } from '../types/enumModalTypes';
+import type { EModalGlobalType } from "../types/enumGlobalModalType";
+import type { EModalRegistersType } from "../types/enumModalRegistersTypes";
 
 // INTERFACE PARA PARAMETRO DE FUNCION DE ENVIO DE CODIGO
 export interface iParamSendCode {
   emailUser: string;
   showSuccess: (text: string, title: string) => void;
   showError: (text: string, title: string) => void;
-  openModal: <T extends EModalType>(modalType: T) => void;
+  openGlobalModal: <T extends EModalGlobalType>(modalType: T) => void;
+  openVerifyEmailModal: <T extends EModalRegistersType>(modalType: T) => void;
   updateCodeEmail: (newCode: string) => void;
   updatedIsSendingCode: (isSendingCode:boolean)=> void
   setLoading: (loading: boolean) => void;

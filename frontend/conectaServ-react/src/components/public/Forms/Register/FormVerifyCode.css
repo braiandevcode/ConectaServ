@@ -1,3 +1,16 @@
 .btn__success{
     padding: .8rem;
 }
+
+.container-fields{
+    max-width: 100%;
+}
+
+.otp-container{
+    max-width: 100%;
+}
+
+.otp-container input {
+    width: 50px;
+    text-align: center;
+}

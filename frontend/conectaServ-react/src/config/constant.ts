@@ -1,5 +1,6 @@
 import type { iFormStateValidationClient } from '../interfaces/iFormStateValidationClient.js';
 import type { iFormStateValidationPro } from '../interfaces/iFormStateValidationPro.js';
+import type { iFomrValidationVerifyEmail } from '../interfaces/iFormValidationVerifyEmail.js';
 import type { iEndPointRegister, iNamesGroupsChecks, iPhatPages } from '../interfaces/interfaces.js';
 import { ECategoryKey, EDataClient, EEndpoint, EGroupCheckBox, EKeyDataByStep, ELocationKey, EPathPage } from '../types/enums.js';
 import type { TCategoryKey } from '../types/typeCategory.js';
@@ -173,8 +174,10 @@ export const formStateValidField: iFormStateValidationPro = {
   amountBudge: { value: '', error: '', isValid: false },
   budgeSelected: { value: 'no', error: '', isValid: false },
   reinsert: { value: 'no', error: '', isValid: false },
+};
 
-  // PASO EXTRA
+// ESTADO POR DEFAULT DE VERIFICACION DE CODIGO
+export const formStateVerifyCodeEmail: iFomrValidationVerifyEmail = {
   emailCode: { value: '', error: '', isValid: false },
 };
 

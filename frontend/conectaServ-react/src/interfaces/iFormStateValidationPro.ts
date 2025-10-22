@@ -25,5 +25,5 @@ export interface iFormStateValidationPro {
   amountBudge: TFieldState;
   budgeSelected: TFieldState;
   reinsert: TFieldState;
-  emailCode: TFieldState;
 }
+

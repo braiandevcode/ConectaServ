@@ -4,8 +4,8 @@ import Footer from '../components/public/Footer';
 import useMain from '../hooks/useMain';
 import Loader from '../components/Loader';
 import Header from '../components/public/Header';
-import ModalProvider from '../context/modal/ModalProvider';
-import ModalRenderer from '../components/public/Modals/ModalRenderer';
+import ModalGlobalRenderer from '../components/public/Modals/ModalGlobalRenderer';
+// import GlobalModalProvider from '../context/modal/GlobalModalProvider';
 
 // LAYOUT PRINCIPAL DE LA APLICACION
 // ESTE LAYOUT ESTA A UNA RUTA O GRUPOS DE RUTAS Y SE USA COMO CONTENEDOR PARA ESAS RUTAS.
@@ -14,23 +14,22 @@ const MainLayout = () => {
   return (
     // ENVOLVEMOS TODO CON EL PROVIDER PRINCIPAL PARA COMPARTIR DATOS GLOBALES ENTRE COMPONENTES
     // CONTEXTO PARA MODALES
-    <ModalProvider>
-      <MainProvider>
-        {loading ? (
-          <Loader />
-        ) : (
-          <>
-            <ModalRenderer /> {/* REDERIZAR MODAL EN CONTEXTO  MAIN */}
-            <Header /> {/* HEADER FIJO QUE SE MUESTRA EN TODAS LAS PAGINAS */}
-            {/* CONTENEDOR PRINCIPAL DONDE SE CARGA EL CONTENIDO SEGUN LA RUTA ACTUAL */}
-            <main className='c-flex c-flex-column c-flex-items-center'>
-              <Outlet /> {/* OUTLET ES EL ESPACIO DONDE REACT ROUTER RENDERIZA LA PAGINA ACTUAL */}
-            </main>
-            <Footer /> {/* FOOTER FIJO QUE SE MUESTRA EN TODAS LAS PAGINAS */}
-          </>
-        )}
-      </MainProvider>
-    </ModalProvider>
+
+    <MainProvider>
+      <ModalGlobalRenderer />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Header /> {/* HEADER FIJO QUE SE MUESTRA EN TODAS LAS PAGINAS */}
+          {/* CONTENEDOR PRINCIPAL DONDE SE CARGA EL CONTENIDO SEGUN LA RUTA ACTUAL */}
+          <main className='c-flex c-flex-column c-flex-items-center'>
+            <Outlet /> {/* OUTLET ES EL ESPACIO DONDE REACT ROUTER RENDERIZA LA PAGINA ACTUAL */}
+          </main>
+          <Footer /> {/* FOOTER FIJO QUE SE MUESTRA EN TODAS LAS PAGINAS */}
+        </>
+      )}
+    </MainProvider>
   );
 };
 

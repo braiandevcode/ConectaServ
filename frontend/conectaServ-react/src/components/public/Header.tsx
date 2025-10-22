@@ -1,16 +1,19 @@
 import { Link, useLocation } from 'react-router';
 import { FaArrowAltCircleRight } from 'react-icons/fa';
 import Button from '../Button';
-import { EModalType } from '../../types/enumModalTypes';
-import useModal from '../../hooks/useModal';
+import useGlobalModal from '../../hooks/useGlobalModal';
+import { EModalGlobalType } from '../../types/enumGlobalModalType';
 
 // <!-- CABECERA -->
 export default function Header() {
-  const { openModal } = useModal();
+  const { openGlobalModal} = useGlobalModal();
   const { pathname } = useLocation();
   // const openLogin = () => openModal(EModalType.MODAL_LOGIN);
+
+  
+  // FUNCION QUE SOLO INDICA ABRIR MODAL DE ROL A ELEGUIR
   const openRole = () => {
-    openModal(EModalType.MODAL_ROLE);
+    openGlobalModal(EModalGlobalType.MODAL_ROLE); // ==> PASO EL TIPO DE MODAL A ABRIR
   };
 
   return (

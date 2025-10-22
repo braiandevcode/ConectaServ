@@ -12,7 +12,7 @@ import useRegister from '../../../hooks/useRegister';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TLocationKey } from '../../../types/typeLocation';
 import type { TTypeContextBasic } from '../../../types/typeContextBasic';
-import useVerifyEmailCode from '../../../hooks/useVerifyEmailCode';
+import useVerifyEmailCode from '../../../hooks/useFormVerifyEmailCode';
 
 const StepFourProvider = ({ children }: { children: ReactNode }) => {
   const fullNameValidator: FullNameValidator = new FullNameValidator();

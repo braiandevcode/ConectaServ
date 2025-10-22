@@ -4,10 +4,11 @@ import './ModalVerifyEmail.css';
 
 import { FaCheckCircle } from 'react-icons/fa';
 import FormVerifyCode from '../Forms/Register/FormVerifyCode';
-import useModal from '../../../hooks/useModal';
+import useGlobalModal from '../../../hooks/useGlobalModal';
+
 // MODAL PARA VERIFICAR EMAIL ANTES DE REGISTRARSE
 const ModalVerifyEmail = (): JSX.Element => {
-  const { messageState } = useModal();
+  const { messageState } = useGlobalModal();
   //RENDERIZA MODAL DE VERIFICACION
   return (
     <>

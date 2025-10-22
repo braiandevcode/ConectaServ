@@ -13,10 +13,9 @@ import EmailValidator from '../../../modules/validators/EmailValidator';
 import UserNameValidator from '../../../modules/validators/UserNameValidator';
 import FullNameValidator from '../../../modules/validators/FullNameValidator';
 import useRegister from '../../../hooks/useRegister';
-import CodeValidator from '../../../modules/validators/CodeValidator';
 import type { iFormStateValidationPro } from '../../../interfaces/iFormStateValidationPro';
 import type { TRegisterPro } from '../../../types/typeRegisterProfessional';
-import useVerifyEmailCode from '../../../hooks/useVerifyEmailCode';
+import useVerifyEmailCode from '../../../hooks/useFormVerifyEmailCode';
 import useSendData from '../../../hooks/useSendData';
 
 /*
@@ -40,12 +39,12 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   const emailValidator: EmailValidator = new EmailValidator();
   const passwordValidator: PasswordValidator = new PasswordValidator();
   const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordValidator();
-  const codeValidator: CodeValidator = new CodeValidator();
+
 
   //--------------------------------------------------------------------HOOKS DE REACT--------------------------------------------------------------------//
   const location = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
-  const { isSendingCode, inputCodeEmail } = useVerifyEmailCode();
+  const { isSendingCode } = useVerifyEmailCode(); //HOOK DE VERIFICACION DE CODIGO
   const { terms, password, confirmPassword, setTerms, stepData, setIsSending } = useRegister();
   const { submitNewData } = useSendData(); // HOOK PARA VERIFICACION DE CODIGO Y ENVIO DE LOS DATOS
 
@@ -110,9 +109,6 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
     location: selectedCategoryValidator.validate(stepData[EKeyDataByStep.FOUR].location ?? ''),
     password: passwordValidator.validate(password ?? ''),
     confirmPassword: confirmPasswordValidator.validate(confirmPassword ?? ''),
-
-    // ESTADOS DE ENTRADA EN VERIFICACION DE CODIGO
-    emailCode: codeValidator.validate(inputCodeEmail ?? ''),
   };
 
   // ESTADO DE VALIDACIONES EN TODO EL FORMULARIO ==> INICIALIZA CON ==> initialFormState QUE CONSUME DEL DATASTEP

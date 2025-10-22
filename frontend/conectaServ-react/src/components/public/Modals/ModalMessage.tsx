@@ -1,7 +1,10 @@
 import { type JSX, type ReactNode } from 'react';
 import type { iModalInfo } from '../../../interfaces/iModalInfo';
 import BtnClose from './Buttons/BtnClose';
-import useModal from '../../../hooks/useModal';
+import useModal from '../../../hooks/useGlobalModal';
+
+// CSS
+import './ModalMessage.css';
 
 // MODAL PARA VERIFICAR EMAIL ANTES DE REGISTRARSE
 const ModalMessage = ({ iconReact, iconBaseProps }: iModalInfo): ReactNode => {
@@ -19,15 +22,17 @@ const ModalMessage = ({ iconReact, iconBaseProps }: iModalInfo): ReactNode => {
         <IconComponent {...iconBaseProps} />
       </div>
     );
-  } 
+  }
 
   //SINO NO RENDERIZA NADA DE LOS ICONOS
   return (
     <>
-      <BtnClose />
-      {iconElement}
-      <h2 className='modal-title'>{messageState.title}</h2>
-      {messageState.text && <p className='modal-message'>{messageState.text}</p>}
+      <BtnClose className='btn__closeMessage position-absolute to-right cursor-pointer' />
+      <div className='w-full c-flex c-flex-column c-flex-items-center gap-1'>
+        <h2 className='modal-title'>{messageState.title}</h2>
+        {iconElement}
+        {messageState.text && <p className='modal-message text-center'>{messageState.text}</p>}
+      </div>
     </>
   );
 };

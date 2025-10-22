@@ -5,7 +5,7 @@ import type { TRegisterPro } from '../types/typeRegisterProfessional';
 const useRegisterPro = () => {
   const context = useContext<TRegisterPro>(ProfessionalContext);
   if (!context) {
-    throw new Error('useRegisterPro debe usarse dentro de un ProfessionalContext');
+    throw new Error('useRegisterPro debe usarse dentro de un ProfessionalProvider');
   }
   return context;
 };

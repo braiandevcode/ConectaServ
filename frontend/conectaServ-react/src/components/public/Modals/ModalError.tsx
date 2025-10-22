@@ -1,11 +1,11 @@
 import ModalMessage from './ModalMessage';
-import { BiSolidErrorAlt } from 'react-icons/bi';
+import { RiAlertFill } from 'react-icons/ri';
 
 // MODAL SATISFACTORIO
 const ModalError = () => {
   return (
     <>
-      <ModalMessage  iconBaseProps={{ color: 'red', size:20 }} iconReact={BiSolidErrorAlt} />
+      <ModalMessage iconBaseProps={{ color: '#d49f0dff', size:120 }} iconReact={RiAlertFill} />
     </>
   );
 };
