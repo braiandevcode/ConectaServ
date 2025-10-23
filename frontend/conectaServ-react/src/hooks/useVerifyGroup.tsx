@@ -4,24 +4,21 @@ import useRegisterPro from './useRegisterPro';
 import { useEffect } from 'react';
 import type { TOptionWork } from '../types/typeOptionsWork';
 import type { TStepOne } from '../types/typeStepOne';
-import useRegister from './useRegister';
 
 // ESTE HOOK SE ENCARGA DE DOS COSAS PRINCIPALES:
 //
 // 1️- RESETEAR LOS GRUPOS DE CHECKBOXES CUANDO CAMBIA LA CATEGORIA (EFECTO useEffect)
 //     - VACIA LOS ARRAYS DE 'service[]', 'context[]', 'day[]' Y 'hour[]'.
-//     - RESETEA TAMBIEN EL ESTADO GLOBAL (stepData) PARA REFLEJAR LOS NUEVOS VALORES VACIOS.
+//     - RESETEA TAMBIEN EL ESTADO DE CONTEXTO DE REGISTRO DE PROFESIONAL (stepData) PARA REFLEJAR LOS NUEVOS VALORES VACIOS.
 //
 // 2- ACTUALIZAR UN GRUPO DE CHECKBOXES CUANDO SE MARCA O DESMARCA UNO (FUNCION verifyGroup)
 //     - AGREGA O ELIMINA EL VALOR SEGUN EL CHECK ESTE ACTIVADO O NO.
 //     - ACTUALIZA EL formState LOCAL (VALIDACION Y ERRORES).
-//     - ACTUALIZA EL stepData GLOBAL CON LOS NUEVOS VALORES DEL GRUPO.
+//     - ACTUALIZA EL stepData DE CONTEXTO DE REGISTRO DE PROFESIONAL CON LOS NUEVOS VALORES DEL GRUPO.
 //     - NO VALIDA EL PASO COMPLETO, SOLO EL GRUPO MODIFICADO.
 //
-
 export const useVerifyGroup = () => {
-  const { stepData, setStepData } = useRegister();
-  const { step, formState, setFormState, isResetDetailsWork } = useRegisterPro();
+  const { stepData, setStepData, step, formState, setFormState, isResetDetailsWork } = useRegisterPro(); //HOOK PERSONALIZADO QUE USA CONTEXTO REGISTRO PROFESIONAL
 
   // EFECTO PARA RESETEAR DETALLES DE TRABAJO CUANDO CAMBIA CATEGORÍA
   useEffect(() => {
@@ -56,7 +53,9 @@ export const useVerifyGroup = () => {
   // SI EL CHECK ESTA MARCADO ==> AGREGO EL VALUE AL ARRAY
   // SI EL CHECK NO ESTA MARCADO ==> QUITO EL VALUE DEL ARRAY
   //RETORNA UN ARRAY DE STRINGS
-  const updater = (prev: string[], checked: boolean, value: string): string[] => (checked ? [...prev, value] : prev.filter((v) => v !== value));
+  const updater = (prev: string[], checked: boolean, value: string): string[] => {
+    return checked ? [...prev, value] : prev.filter((v) => v !== value);
+  };
 
   // FUNCION PRINCIPAL DE VERIFICACION DE GRUPOS
   const verifyGroup = ({ e, group }: { e: React.ChangeEvent<HTMLInputElement>; group: TOptionWork }): string[] => {
@@ -69,7 +68,7 @@ export const useVerifyGroup = () => {
     // GENERAR NUEVO ARRAY ACTUALIZADO Y REPOBLAR EN UI
     const updatedValues: string[] = updater(currentStoredValues, checked, value);
 
-    // FUNCION DE ACTUALIZACION DE DATOS GLOBALES Y VALIDACIONES
+    // FUNCION DE ACTUALIZACION DE DATOS Y VALIDACIONES
     const updateCommon = (next: string[]) => {
       const isValid = next.length > 0;
 
@@ -96,7 +95,7 @@ export const useVerifyGroup = () => {
     // ACTUALIZAR CON NUEVOS VALORES
     updateCommon(updatedValues);
 
-     return updatedValues; // <-- NUEVO: DEVOLVEMOS EL ARRAY ACTUALIZADO
+    return updatedValues; // <-- NUEVO: DEVOLVEMOS EL ARRAY ACTUALIZADO
   };
 
   return { verifyGroup };

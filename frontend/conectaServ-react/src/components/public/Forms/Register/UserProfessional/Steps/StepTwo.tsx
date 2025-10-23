@@ -15,13 +15,11 @@ import { IoMdImages } from 'react-icons/io';
 
 // CSS
 import './StepTwo.css';
-import useRegister from "../../../../../../hooks/useRegister";
 
 // COMPONENTE PASO 2
 const StepTwo = () =>{
   //DEL FORMSTATE TOMO EL VALOR ACTUAL QUE CONSUME DEL  ==> STEPDATA POR LO CUAL ES MOTIVO DE LA PERSISTENCIA
-  const { stepData } = useRegister();
-  const { formState } = useRegisterPro();
+  const { formState, stepData } = useRegisterPro();
   const { handleImageProfileChange, handleImageExperiencesChange, handleDescriptionInput, handleDescriptionBlur } = useStepTwo();
 
   const profile:TStoredImage | null = stepData[EKeyDataByStep.TWO].imageProfile;

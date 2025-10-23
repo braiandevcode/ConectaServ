@@ -1,6 +1,4 @@
 import { type JSX } from 'react';
-// CSS
-import './ModalVerifyEmail.css';
 
 import { FaCheckCircle } from 'react-icons/fa';
 import FormVerifyCode from '../Forms/Register/FormVerifyCode';

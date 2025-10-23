@@ -5,32 +5,39 @@ import FullNameValidator from '../../../modules/validators/FullNameValidator';
 import PasswordValidator from '../../../modules/validators/PasswordValidator';
 import UserNameValidator from '../../../modules/validators/UserNameValidator';
 import { ClientContext } from './ClientContext';
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { readExistingData } from '../../../utils/storageUtils';
 import { EDataClient, ENamesOfKeyLocalStorage } from '../../../types/enums';
 import { emptyDataClient } from '../../../config/constant';
 import SelectedValidator from '../../../modules/validators/SelectedValidator';
 import useRegister from '../../../hooks/useRegister';
-import useMain from '../../../hooks/useMain';
 import type { TDataClient } from '../../../types/typeDataClient';
 import type { iFormStateValidationClient } from '../../../interfaces/iFormStateValidationClient';
 import type { TRegisterClient } from '../../../types/typeRegisterClient';
+import useFormVerifyEmailCode from '../../../hooks/useFormVerifyEmailCode';
+import Loader from '../../../components/Loader';
+
+// INSTANCIO VALIDACIONES NECESARIAS
+const fullNameValidator: FullNameValidator = new FullNameValidator();
+const userNameValidator: UserNameValidator = new UserNameValidator();
+const emailValidator: EmailValidator = new EmailValidator();
+const passwordValidator: PasswordValidator = new PasswordValidator();
+const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordValidator();
+const selectedCategoryValidator: SelectedValidator = new SelectedValidator();
 
 // PROVIDER ES QUIEN NOS PROVEE LOS ESTADOS Y FUNCIONES DE COMPONENTES
-const ClientProvider = ({ children }: { children: React.ReactNode }) => {
-  // INSTANCIO VALIDACIONES NECESARIAS
-  const fullNameValidator: FullNameValidator = new FullNameValidator();
-  const userNameValidator: UserNameValidator = new UserNameValidator();
-  const emailValidator: EmailValidator = new EmailValidator();
-  const passwordValidator: PasswordValidator = new PasswordValidator();
-  const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordValidator();
-  const selectedCategoryValidator: SelectedValidator = new SelectedValidator();
-
+const ClientProvider = ({ children }: { children: ReactNode }) => {
   //--------------------------------------------------------------------HOOKS DE REACT--------------------------------------------------------------------//
   const location = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
   const { terms, confirmPassword, password } = useRegister();
-  const { setLoading } = useMain();
+  const { isCodeSent, isCodeVerified, isSuccefullyVerified } = useFormVerifyEmailCode(); //HOOK DE VERIFICACION DE CODIGO
+
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
 
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
 
@@ -87,67 +94,37 @@ const ClientProvider = ({ children }: { children: React.ReactNode }) => {
 
   // ------------------------------------------------------- EVENTOS --------------------------------------------------------------------//
 
-  // const { ...res } = (stored[EDataClient.DATA] as TAplanarCliente) ?? {};
-
-  // const dataSendClient = {
-  //   // SE PROPAGAN TODAS LAS PROPIEDADES DE CADA PASO
-  //   ...res,
-  //   password, //SE AGREGA EL PASSWORD
-  // } as TAplanarCliente;
-
-  // ------------------------------EVENTO GENERAL DE PSOS DEL FORMULARIO------------------------------------//
-
-  // EVENTO SUBMIT FORM
-  const onSubmitForm = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); //PREVENIR
-
-    if (!isValid) return; //SI NO ES VALIDO ASEGURA NO SEGUIR
-    // INTENTAR ENVIAR
-    try {
-      setLoading(true);
-      // await apiRequest('http://localhost:3000/client', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(dataSendClient),
-      // });
-
-      // await clearPersistence(); //RESTEAR STORAGE
-      // navigate('/'); // NAVEGAR AL HOME
-    } catch (error) {
-      setLoading(false);
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   //------------------------------------------FUNCIONES MODULARES------------------------------------------------------//
-
   // ------------------------VALIDAR REGISTRO----------------------------------------//
   function validateClient(): boolean {
     let isValid: boolean = false;
     // ASEGURO QUE SEA ROL CLIENTE
     const { fullName, userName, email, location, password, confirmPassword } = formState;
-    const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms;
+    const isVerified: boolean = isCodeVerified && isCodeSent && isSuccefullyVerified; // SI ENVIO CODIGO Y SI SE VERIFICO Y SI LA VERIFICACION DE CODIGO FUE SATISFACTORIA
+    
+    console.log(isVerified);
+    
+    
+    const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isVerified;
     isValid = isValidStep;
-
     return isValid;
   }
 
   //-----------------------------OBJETO DE CONTEXTO---------------------------------//
   const contextClientValue: TRegisterClient = {
+    isLoaded,
+    setIsLoaded,
     isValid,
-    setIsValid,
     dataClient,
+    formState,
+    setIsValid,
     setDataClient,
     setFormState,
-    formState,
-    onSubmitForm,
     validateClient,
   };
 
   //RETORNO PROVEEDOR
-  return <ClientContext.Provider value={contextClientValue}>{children}</ClientContext.Provider>;
+  return <ClientContext.Provider value={contextClientValue}>{isLoaded ? children : <Loader />}</ClientContext.Provider>;
 };
 
 export default ClientProvider;

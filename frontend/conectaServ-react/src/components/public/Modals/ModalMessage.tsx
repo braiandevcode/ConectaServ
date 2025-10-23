@@ -28,7 +28,7 @@ const ModalMessage = ({ iconReact, iconBaseProps }: iModalInfo): ReactNode => {
   return (
     <>
       <BtnClose className='btn__closeMessage position-absolute to-right cursor-pointer' />
-      <div className='w-full c-flex c-flex-column c-flex-items-center gap-1'>
+      <div className='w-full c-flex c-flex-column c-flex-items-center gap-1/2'>
         <h2 className='modal-title'>{messageState.title}</h2>
         {iconElement}
         {messageState.text && <p className='modal-message text-center'>{messageState.text}</p>}

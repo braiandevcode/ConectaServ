@@ -12,7 +12,7 @@ import useRegister from '../../../hooks/useRegister';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TLocationKey } from '../../../types/typeLocation';
 import type { TTypeContextBasic } from '../../../types/typeContextBasic';
-import useVerifyEmailCode from '../../../hooks/useFormVerifyEmailCode';
+import useFormVerifyEmailCode from '../../../hooks/useFormVerifyEmailCode';
 
 const StepFourProvider = ({ children }: { children: ReactNode }) => {
   const fullNameValidator: FullNameValidator = new FullNameValidator();
@@ -22,10 +22,9 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
   const passwordValidator: PasswordValidator = new PasswordValidator();
   const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordValidator();
   
-  const { setStepData } = useRegister();
-  const { validateCurrentStep, setIsStepValid, step, setFormState } = useRegisterPro(); // HOOK REGISTRO PROFESIONAL
-  const { password, terms, confirmPassword, setPassword, setConfirmPassword, setInteractedPassword, setInteractedConfirmPassword } = useRegister();
-  const { inputCodeEmail } = useVerifyEmailCode();
+  const { password, terms,  confirmPassword, setPassword, setConfirmPassword, setInteractedPassword, setInteractedConfirmPassword } = useRegister(); //HOOK QUE USA CONTEXTO  A NIVEL REGISTRO GENERALES
+  const { validateCurrentStep, setStepData, setIsStepValid, step, setFormState } = useRegisterPro(); // //HOOK QUE USA CONTEXTO A NIVEL REGISTRO PROFESIONAL
+  const { isSuccefullyVerified } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO A NIVEL DE VERIFICACIONDE EMAILS PARA REGISTROS
   //--------------------------------------------------------------EFECTOS PASO 4 -----------------------------------------------------------------------//
 
   // --------------------------------------------------- EFECTO VALIDACION DE PASO 4 --------------------------------------------------- //
@@ -35,10 +34,10 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
     const isValid: boolean = validateCurrentStep();
     // GUARDO EL RESULTADO FINAL DE LA VALIDACION DEL PASO
     setIsStepValid(isValid);
-  }, [step, inputCodeEmail, terms, password, confirmPassword]);
+  }, [step, terms, isSuccefullyVerified, password, confirmPassword]);
 
   //-----------------------------EVENTOS PASO 4-------------------------------------------------------//
-  // FULL NAME
+  // NOMBRE COMPLETO
   const handleFullName = (e: FormEvent<HTMLInputElement>) => {
     const value: string = e.currentTarget.value;
     const result: TFieldState = fullNameValidator.validate(value);
@@ -54,7 +53,7 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
-  // USERNAME
+  // NOMBRE DE USUARIO
   const handleUserName = (e: FormEvent<HTMLInputElement>) => {
     const value: string = e.currentTarget.value;
     const result: TFieldState = userNameValidator.validate(value);
@@ -70,7 +69,7 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
-  // EMAIL
+  // CORREO ELECTRONICO
   const handleEmail = (e: FormEvent<HTMLInputElement>) => {
     const value: string = e.currentTarget.value;
     const result: TFieldState = emailValidator.validate(value);
@@ -86,7 +85,7 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
-  // LOCATION (select)
+  // SELECT DE LOCALIDAD
   const handleChangeLocation = (e: ChangeEvent<HTMLSelectElement>) => {
     const value: TLocationKey = e.target.value as TLocationKey;
     const result: TFieldState = selectedCategoryValidator.validate(value);
@@ -102,7 +101,7 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
-  // PASSWORD
+  // CONTRASEÑA
   const handlePassword = (e: FormEvent<HTMLInputElement>) => {
     setInteractedPassword(true);
     const value: string = e.currentTarget.value.trim();
@@ -111,7 +110,7 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
     setPassword(value);
   };
 
-  // CONFIRM PASSWORD
+  // CONFIRMAR CONTRASEÑA
   const handleConfirmPassword = (e: FormEvent<HTMLInputElement>) => {
     setInteractedConfirmPassword(true);
     const value: string = e.currentTarget.value.trim();
@@ -137,6 +136,8 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
     setConfirmPassword(value);
   };
 
+  // VALORES PARA QUE CONSUME EL CONTEXTO EN PASO BASICO
+  // SE NOMBRA COMO BASICO PORQUE SON EVENTOS DE LOS CAMPOS EN COMUN DE REGISTRO DE TASKERS Y REGISTRO DE CLIENTE COMUN Y ME PERMITE REUTILIDAD AL USAR TIPADO
   const contextValueStepBasic: TTypeContextBasic = {
     handleChangeLocation,
     handleConfirmPassword,

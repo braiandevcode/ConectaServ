@@ -4,11 +4,12 @@ import useStepOne from '../../../../../hooks/useStepOne';
 import type { TWorkGroupOption } from '../../../../../types/typeWorkGoupOptions';
 import type { TOptionWork } from '../../../../../types/typeOptionsWork';
 import { EKeyDataByStep } from '../../../../../types/enums';
-import useRegister from '../../../../../hooks/useRegister';
+import useRegisterPro from '../../../../../hooks/useRegisterPro';
 
+// COMPONENTE DE CHECKS
 const CheckBox = ({ opt, i, type }: { opt: TOptionItem; i: number } & Pick<TWorkGroupOption, 'type'>): ReactNode => {
-  const { handleCheckboxChange } = useStepOne(); // EVENTO DE CAMBIO
-  const { stepData } = useRegister(); // LEER DIRECTO DEL ESTADO GLOBAL
+  const { handleCheckboxChange } = useStepOne();//HOOK PERSONALIZADO QUE USA CONTEXTO  NIVEL PASO UNO
+  const { stepData } = useRegisterPro(); // //HOOK PERSONALIZADO QUE USA CONTEXTO  NIVEL REGISTRO PROFESIONAL
   // OBTENER LOS VALORES SELECCIONADOS DESDE STEPDATA
   const getSelectedValues = (type: TOptionWork): string[] => { 
     return stepData[EKeyDataByStep.ONE][`${type}[]`] ?? [];

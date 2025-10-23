@@ -1,4 +1,4 @@
-import useRegister from '../../../../../hooks/useRegister';
+import useRegisterPro from '../../../../../hooks/useRegisterPro';
 import useStepTwo from '../../../../../hooks/useStepTwo';
 import { EKeyDataByStep } from '../../../../../types/enums';
 import type { TStoredImage } from '../../../../../types/typePersistanceDataImage';
@@ -10,7 +10,7 @@ import './ProfileImagePreview.css';
 
 // COMPONENTE DE VISTA PREVIA PERFIL
 const ProfileImagePreview = () => {
-  const { stepData } = useRegister(); //HOOK PERSONALIZADO PARA QUE EL CONTEXTO CONSUMA DATOS
+  const { stepData } = useRegisterPro(); //HOOK PERSONALIZADO QUE USA CONTEXTO NIVEL PASO DOS
   const { src, onDeleteProfile } = useStepTwo();
   if (!src) return; //SI NO HAY SRC NO SEGUIR
   const profile: TStoredImage | null = stepData[EKeyDataByStep.TWO].imageProfile;

@@ -10,13 +10,10 @@ import { FaCircleDollarToSlot } from 'react-icons/fa6';
 import { BsFillInfoSquareFill } from 'react-icons/bs';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri';
 import { IoArrowUndoCircle } from 'react-icons/io5';
-import useRegister from '../../../../../../hooks/useRegister';
 
 export default function StepThree() {
-  const { stepData } = useRegister();
-  const { amountFieldFormat, formState, isBudgeMountDisabled, isReinsertDisabled } = useRegisterPro();
-  const { onFocusAmount, onBlurAmount, onChangeIsReinsert, onChangeIsBudge, handleBudgeAmount } = useStepThree();
-
+  const { amountFieldFormat, formState, isBudgeMountDisabled, isReinsertDisabled, stepData } = useRegisterPro(); //HOOK QUE USA CONTEXTO NIVEL REGISTRO PROFESIONAL
+  const { onFocusAmount, onBlurAmount, onChangeIsReinsert, onChangeIsBudge, handleBudgeAmount } = useStepThree(); //HOOK QUE USA CONTEXTO NIVEL PASO 3 DEL FORMULARIO
   const storedBudgeSelected: TYesOrNo = stepData[EKeyDataByStep.THREE]?.budgeSelected ?? 'no';
   const storedReinsertSelected: TYesOrNo = stepData[EKeyDataByStep.THREE]?.reinsert ?? 'no';
   return (

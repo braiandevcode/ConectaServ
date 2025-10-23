@@ -12,14 +12,15 @@ import { FaEnvelope } from 'react-icons/fa6';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { FaLock } from 'react-icons/fa6';
 import { TbPasswordUser } from 'react-icons/tb';
-import BtnSendCode from '../Buttons/BtnSendCode';
+import BtnSendCode from '../../Buttons/BtnSendCode';
 import useVerifyEmailCode from '../../../../../../hooks/useFormVerifyEmailCode';
+import LoaderBtn from '../../../../../LoaderBtn';
 
 // COMPONENTE PASO 4
 const StepFour = () => {
-  const { formState } = useRegisterPro(); //HOOK REGISTRO PROFESIONAL
-  const { sendCode } = useVerifyEmailCode();
-  const { stepData, password, interactedPassword, interactedConfirmPassword, confirmPassword} = useRegister(); //HOOK DE ESTADOS DE REGISTROS EN COMUN
+  const { formState, stepData } = useRegisterPro(); //HOOK REGISTRO PROFESIONAL
+  const { sendCode, isSendingCode } = useVerifyEmailCode();
+  const { password, interactedPassword, interactedConfirmPassword, confirmPassword} = useRegister(); //HOOK DE ESTADOS DE REGISTROS EN COMUN
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useStepFour(); // HOOK PASO 4
 
   return (
@@ -70,7 +71,11 @@ const StepFour = () => {
 
             <div className='c-flex c-flex-items-center gap-1'>
               <input type='text' id='email' className={`form__input ${styleBorderFieldError(formState, 'email')}`} aria-label='Correo electronico' autoComplete='email' placeholder='test@example.com' value={formState.email.value as string} onChange={handleEmail} required />
-              <BtnSendCode formState={formState} sendCode={sendCode} emailUser={stepData[EKeyDataByStep.FOUR].email} text='Enviar Código' />
+              {
+                isSendingCode ? <LoaderBtn /> :
+                <BtnSendCode formState={formState} sendCode={sendCode} emailUser={stepData[EKeyDataByStep.FOUR].email} text='Código' />
+              }
+              
             </div>
             {renderFieldError(formState, 'email')}
           </div>

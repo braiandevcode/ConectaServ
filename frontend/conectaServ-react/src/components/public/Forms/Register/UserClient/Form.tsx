@@ -1,17 +1,23 @@
-import FieldsClientProvider from "../../../../../context/register/registerClient/FieldsClientProvider";
-import useRegisterClient from "../../../../../hooks/useRegisterClient";
-import BtnSubmit from "../../../../BtnSubmit";
-import FooterConditionsTerm from "../FooterConditionsTerm";
-import FieldsClient from "./FieldsClient";
+import FieldsClientProvider from '../../../../../context/register/registerClient/FieldsClientProvider';
+import useRegisterClient from '../../../../../hooks/useRegisterClient';
+import BtnSubmit from '../../../../BtnSubmit';
+import FooterConditionsTerm from '../FooterConditionsTerm';
+import FieldsClient from './FieldsClient';
+import useSendData from '../../../../../hooks/useSendData';
+import LoaderBtn from '../../../../LoaderBtn';
+import useRegister from '../../../../../hooks/useRegister';
 
-import '../../FormBase.css'
+// CSS
+import '../../FormBase.css';
 
 // FORMULARIO DE CLIENTE
 const Form = () => {
-  const { isValid, onSubmitForm } = useRegisterClient(); //HOOK PARA ESTADOS DE REGISTRO CLIENTE
+  const { isSending } = useRegister(); //HOOK QUE USA EL CONTEXTO DE REGISTRO GENERAL
+  const { isValid } = useRegisterClient(); //HOOK QUE USA EL CONTEXTO DE REGISTRO CLIENTE
+  const { submitNewData, isReady } = useSendData(); //HOOK QUE SE ENCARGA DE ENVIAR LOS DATOS
   return (
     <>
-      <form className='form' onSubmit={onSubmitForm}>
+      <form className='form' onSubmit={submitNewData}>
         <div className='c-flex c-flex-column c-flex-justify-center form__header'>
           <h2 className='c-flex c-flex-wrap c-flex-items-center gap-1/2 form__subtitle'>
             <div className='c-flex w-full c-flex-items-center gap-1/2'>
@@ -35,9 +41,7 @@ const Form = () => {
             </FieldsClientProvider>
             <FooterConditionsTerm />
           </div>
-          <div className='c-flex c-flex-justify-end'>
-            <BtnSubmit variant="btn btn-submit" text="Enviar" disabled={!isValid} />
-          </div>
+          {isSending ? <LoaderBtn /> : <BtnSubmit variant='btn btn__submit' disabled={!isValid || !isReady} text={isReady ? 'Enviar' : 'Cargando datos...'} />}
         </div>
       </form>
     </>

@@ -1,16 +1,22 @@
-import useFieldsClient from "../../../../../hooks/useFieldsClient";
-import useRegister from "../../../../../hooks/useRegister";
-import useRegisterClient from "../../../../../hooks/useRegisterClient";
-import { ELocationKey } from "../../../../../types/enums";
-import { renderFieldError, styleBorderFieldError } from "../../../../../utils/formUtils";
+import useFieldsClient from '../../../../../hooks/useFieldsClient';
+import useFormVerifyEmailCode from '../../../../../hooks/useFormVerifyEmailCode';
+import useRegister from '../../../../../hooks/useRegister';
+import useRegisterClient from '../../../../../hooks/useRegisterClient';
+import { EDataClient, ELocationKey } from '../../../../../types/enums';
+import { renderFieldError, styleBorderFieldError } from '../../../../../utils/formUtils';
+import LoaderBtn from '../../../../LoaderBtn';
+import BtnSendCode from '../Buttons/BtnSendCode';
 
+// CSS
 import './FieldsClient.css';
 
-// COMPONENTE PASO 4
+// COMPONENTE PASO CUATRO
 const FieldsClient = () => {
-  const { formState } = useRegisterClient(); //HOOK REGISTRO PROFESIONAL
-  const { password, confirmPassword, interactedPassword, interactedConfirmPassword } = useRegister();
-  const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useFieldsClient(); // HOOK PASO 4
+  const { password, confirmPassword, interactedPassword, interactedConfirmPassword } = useRegister(); //HOOK QUE USA CONTEXTO REGISTRO GENERALES
+  const { sendCode, isSendingCode } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO FORULARIO DE VERIFICAION DE EMAIL(ENGLOBA PARA AMBOS REGISTROS)
+  const { formState, dataClient } = useRegisterClient(); //HOOK  QUE USA CONTEXTO REGISTRO CLIENTE
+  const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useFieldsClient(); // HOOK QUE USA CONTEXTO DE LOS CAMPOS DEL FORMULARIO DE CLIENTE
+
   return (
     <>
       <div className='c-flex c-flex-column gap-1 form__fields'>
@@ -22,7 +28,7 @@ const FieldsClient = () => {
             </span>
             <span className='span-required'>*</span>
           </label>
-          <input type='text' id='fullName' className={`form__input ${styleBorderFieldError(formState, 'fullName')}`} aria-label='Nombre completo' placeholder='Roberto Bustos' value={formState.fullName.value as string} onInput={handleFullName} required autoFocus />
+          <input type='text' id='fullName' className={`form__input ${styleBorderFieldError(formState, 'fullName')}`} autoComplete='name' placeholder='Roberto Bustos' value={formState.fullName.value as string} onInput={handleFullName} required autoFocus />
           {renderFieldError(formState, 'fullName')}
         </div>
 
@@ -34,7 +40,7 @@ const FieldsClient = () => {
             </span>
             <span className='span-required'>*</span>
           </label>
-          <input type='text' id='userName' className={`form__input ${styleBorderFieldError(formState, 'userName')}`} aria-label='Nombre de usuario' placeholder='Roberto_Bustos.45' value={formState.userName.value as string} onInput={handleUserName} required />
+          <input type='text' id='userName' className={`form__input ${styleBorderFieldError(formState, 'userName')}`} autoComplete='username' placeholder='Roberto_Bustos.45' value={formState.userName.value as string} onInput={handleUserName} required />
           {renderFieldError(formState, 'userName')}
         </div>
 
@@ -46,7 +52,10 @@ const FieldsClient = () => {
             </span>
             <span className='span-required'>*</span>
           </label>
-          <input type='text' id='email' className={`form__input ${styleBorderFieldError(formState, 'email')}`} aria-label='Correo electronico' placeholder='test@example.com' value={formState.email.value as string} onInput={handleEmail} required />
+          <div className='c-flex c-flex-items-center gap-1'>
+            <input type='text' id='email' className={`form__input ${styleBorderFieldError(formState, 'email')}`} autoComplete='email' placeholder='test@example.com' value={formState.email.value as string} onInput={handleEmail} required />
+            {isSendingCode ? <LoaderBtn /> : <BtnSendCode formState={formState} sendCode={sendCode} emailUser={dataClient[EDataClient.DATA].email} text='Código' />}
+          </div>
           {renderFieldError(formState, 'email')}
         </div>
 
@@ -77,7 +86,7 @@ const FieldsClient = () => {
             </span>
             <span className='span-required'>*</span>
           </label>
-          <input type='password' id='password' autoComplete='password' className={`form__input ${interactedPassword && styleBorderFieldError(formState, 'password')}`} aria-label='Contrasena' placeholder='***********' value={password} onInput={handlePassword} required />
+          <input type='password' id='password' autoComplete='new-password' className={`form__input ${interactedPassword && styleBorderFieldError(formState, 'password')}`} placeholder='***********' value={password} onInput={handlePassword} required />
           {interactedPassword && renderFieldError(formState, 'password')}
         </div>
 
@@ -89,7 +98,7 @@ const FieldsClient = () => {
             </span>
             <span className='span-required'>*</span>
           </label>
-          <input type='password' id='confirmPassword' autoComplete='confirmPassword' className={`form__input ${interactedConfirmPassword && styleBorderFieldError(formState, 'confirmPassword')}`} aria-label='Confirmar contrasena' placeholder='***********' value={confirmPassword} onInput={handleConfirmPassword} required />
+          <input type='password' id='confirmPassword' autoComplete='new-password' className={`form__input ${interactedConfirmPassword && styleBorderFieldError(formState, 'confirmPassword')}`} aria-label='Confirmar contrasena' placeholder='***********' value={confirmPassword} onInput={handleConfirmPassword} required />
           {interactedConfirmPassword && renderFieldError(formState, 'confirmPassword')}
         </div>
       </div>

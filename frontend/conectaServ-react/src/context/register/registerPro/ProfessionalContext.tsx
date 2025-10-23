@@ -1,10 +1,10 @@
 import { createContext } from 'react';
-import { formStateValidField } from '../../../config/constant';
+import { emptyStepData, formStateValidField } from '../../../config/constant';
 import type { TRegisterPro } from '../../../types/typeRegisterProfessional';
 
 // DEFINIR VALORES POR DEFECTO DE LOS ESTADOS
 const defaultContextProfessional: TRegisterPro = {
-  valueSelected: '',
+  setStepData: () => {},
   setValueSelected: () => {},
   setIsParsed: () => {},
   handleClickNext: () => {},
@@ -15,13 +15,16 @@ const defaultContextProfessional: TRegisterPro = {
   setHasInteracted: () => {},
   setStep: () => {},
   setIsResetDetailsWork: () => {},
-  onSubmitForm: () => {},
   setFormState: () => {},
   setIsBudgeMountDisabled: () => {},
   setIsReinsertDisabled: () => {},
   setIsFocus: () => {},
   setAmountFieldFormat: () => {},
+  setIsLoaded: () => {},
+  isLoaded:false,
   amountFieldFormat: '',
+  stepData: emptyStepData,
+  valueSelected: '',
   isFocus: false,
   isReinsertDisabled: false,
   isBudgeMountDisabled: true,

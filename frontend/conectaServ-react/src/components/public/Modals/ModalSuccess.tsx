@@ -1,12 +1,12 @@
 import type { JSX } from 'react';
 import ModalMessage from './ModalMessage';
-import { FaCheckDouble } from 'react-icons/fa';
+import { FaCheckCircle } from 'react-icons/fa';
 
 // MODAL SATISFACTORIO
 const ModalSuccess = (): JSX.Element => {
   return (
     <>
-      <ModalMessage iconBaseProps={{ color: 'green', size:120 }} iconReact={FaCheckDouble} />
+      <ModalMessage iconBaseProps={{ color: 'green', size:80 }} iconReact={FaCheckCircle} />
     </>
   );
 };

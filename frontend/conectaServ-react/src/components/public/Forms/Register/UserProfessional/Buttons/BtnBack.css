@@ -2,7 +2,7 @@
 
 /* BOTON PARA VOLVER ATRAS */
 .register__arrow-left {
-  padding: 0.2rem;
+  /* padding: 0.2rem; */
   user-select: none;
   color: var(--bg-secondary);
   border-radius: 50%;
@@ -11,13 +11,6 @@
   opacity: 1;
   transform: scale(1.1);
 }
-
-/* PARA BOTON SIGUIENTE */
-.container-btn__next:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 
 /* ASEGURAR QUE LOS EVENTOS DE HOVER SEAN PRECISOS SOLO PARA TABLET Y ESCRITORIO (INVESTIGADO) */
 @media (hover: hover) and (pointer: fine) {

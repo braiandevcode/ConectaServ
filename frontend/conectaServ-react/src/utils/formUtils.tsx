@@ -43,7 +43,7 @@ export const renderFieldError = <T extends iFormStateLogin | iFomrValidationVeri
 
   // SI EL CAMPO ES INVALIDO, DEVUELVE EL CONTENEDOR CON EL MENSAJE DE ERROR
   return (
-    <div>
+    <div className={fieldName === 'emailCode' ? 'text-center' : ''}>
       <span className='has-error'>{fieldState.error}</span>
     </div>
   );

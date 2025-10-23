@@ -54,8 +54,8 @@ export enum ENamesOfKeyLocalStorage {
 
 // ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES
 export enum EEndpoint {
-  PROFESSIONAL = '/register/professional',
-  CLIENT = '/register/client',
+  PROFESSIONAL = '/professional',
+  CLIENT = '/client',
 }
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA

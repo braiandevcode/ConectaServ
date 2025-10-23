@@ -16,16 +16,14 @@ import type { TStoredImage } from '../../../types/typePersistanceDataImage';
 import type { TIdString } from '../../../types/typeUUID';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TTypeContextStepTwo } from '../../../types/typeContextStepTwo';
-import useRegister from '../../../hooks/useRegister';
 
 const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
   const descriptionValidator: DescriptionValidator = new DescriptionValidator();
   const imageProfileValidator: ImageProfileValidator = new ImageProfileValidator();
   const imageExperiencesValidator: ImageExperiencesValidator = new ImageExperiencesValidator();
-  
-  const { setStepData, stepData } = useRegister(); // HOOK NIVEL REGISTER  GENERAL
+
   // HOOK REGISTER PROFESIONAL
-  const { validateCurrentStep, formState, setFormState, setIsStepValid, step, setIsParsed } = useRegisterPro();
+  const { validateCurrentStep, setStepData, stepData, formState, setFormState, setIsStepValid, step, setIsParsed } = useRegisterPro();
 
   // -----------------------------------------------useRef------------------------------------------------------//
   const countImagesExp = useRef<number>(0); // ==> REF PARA ALMACENAR CANTIDAD DE IMAGENES ALMACENADA
@@ -123,7 +121,8 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
       // SETEAR ESTADO GLOBAL EN STORAGE
       setStepData((prev) => ({
         ...prev, //==> COPIAR TODO LO PREVIO DEL OBJETO GLOBAL
-        [EKeyDataByStep.TWO]: { // ==>  EN SUBOBJETO DEL PASO 2
+        [EKeyDataByStep.TWO]: {
+          // ==>  EN SUBOBJETO DEL PASO 2
           ...prev[EKeyDataByStep.TWO], // MANTENER EL RESTO DE LOS VALORES EXISTENTES EN SUBOBJETO PASO 2
           descriptionUser: formatTextArea(formState.descriptionUser.value as string), // ACTUALIZAR CON FORMATO
         },

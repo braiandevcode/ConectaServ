@@ -14,6 +14,7 @@ import type { TStepBasic } from '../../../types/typeBasic';
 import type { TLocationKey } from '../../../types/typeLocation';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TTypeContextBasic } from '../../../types/typeContextBasic';
+import useFormVerifyEmailCode from '../../../hooks/useFormVerifyEmailCode';
 
 const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
   const fullNameValidator: FullNameValidator = new FullNameValidator();
@@ -26,6 +27,7 @@ const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
   const { formState, setIsValid, isValid, validateClient, setDataClient, setFormState, dataClient } = useRegisterClient(); //HOOK CONTEXTO REGISTRO DE CLIENTE
   const { terms, password, confirmPassword, setInteractedConfirmPassword, setInteractedPassword, setPassword, setConfirmPassword } = useRegister(); //HOOK CONTEXTO DE REGISTRO GENERA
   const { client } = useMain(); //HOOK CONTEXTO MAIN
+  const { isSuccefullyVerified } = useFormVerifyEmailCode();
   
   // EFECTO PARA ALMACENAR DATOS DEL FORMULARIO EN STORAGE
   useEffect(() => {
@@ -53,7 +55,9 @@ const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
     const isValid: boolean = validateClient();
     // GUARDO EL RESULTADO FINAL DE LA VALIDACION DEL PASO
     setIsValid(isValid);
-  }, [terms, isValid, formState.fullName, password, confirmPassword, formState.userName.value, formState.email.value, formState.location.value]);
+
+    // DEPENDENCIAS SON EXTERAS AL COMPONENTE
+  }, [terms, isValid, isSuccefullyVerified, formState.fullName, password, confirmPassword, formState.userName.value, formState.email.value, formState.location.value]);
 
   // FULL NAME
   const handleFullName = (e: React.FormEvent<HTMLInputElement>) => {

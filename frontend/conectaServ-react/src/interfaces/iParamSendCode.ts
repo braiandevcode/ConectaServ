@@ -11,4 +11,5 @@ export interface iParamSendCode {
   updateCodeEmail: (newCode: string) => void;
   updatedIsSendingCode: (isSendingCode:boolean)=> void
   setLoading: (loading: boolean) => void;
+  updatedIsSentCode: (isSentCode: boolean) => void;
 }

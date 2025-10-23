@@ -2,7 +2,6 @@
   font-size: 0.9rem;
   padding: 0.6rem;
   opacity: 0.9;
-  border: 6px solid currentColor;
   transition: opacity 0.4s ease-in-out;
 }
 

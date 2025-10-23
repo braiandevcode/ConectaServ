@@ -5,7 +5,6 @@ import BtnBack from './Buttons/BtnBack';
 
 // IMPORTAR ESTILOS
 import '../RegisterBase.css'; // ==> BASE PARA AMBOS RESGISTROS CON ESTILOS EN COMUN Y EVITAR REPETIR ESTILOS
-import './RegisterPro.css' // ESTILOS ESPECIFICOS
 
 // **MACHETE PARA RESPETAR Y ENTENDER REACT EN PROCESO DE DESARROLLO**//
 
@@ -16,10 +15,8 @@ import './RegisterPro.css' // ESTILOS ESPECIFICOS
   - Hook personalizado (useX) ==> ENVUELVE useContext PARA ABSTRAER LOGICA DE CONSUMO Y MEJORAR REUSO Y LIMPIEZA DEL CODIGO
 */
 
-// REGISTRO PROFESIONAL
+// COMPONENTE QUE CONTIENE REGISTRO PROFESIONAL
 export default function RegisterPro() {
-  // const { isSending } = useRegister(); //HOOK A NIVEL REGISTRO GENERAL
-
   return (
     <>
       <div className='w-full c-flex c-flex-justify-center centered register'>
@@ -35,7 +32,6 @@ export default function RegisterPro() {
           </div>
         </div>
       </div>
-      {/* {isSending && <VerifyEmailModal />} */}
     </>
   );
 }

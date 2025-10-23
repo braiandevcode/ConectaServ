@@ -34,7 +34,7 @@ export default class UserNameValidator implements IValidator {
       };
     }
 
-    // SOLO LETRAS mayusculas/minusculas, NUMEROS, PUNTOS(.),Y GUIONES BAJOS (_), SI NO SE CUMPLE
+    // SOLO LETRAS mayusculas/minusculas, NUMEROS, PUNTOS(.),Y GUIONES BAJOS (_), 
     if (!validateWithRegex({ pattern: /^[a-zA-Z0-9._]+$/, text: valueNoSpaces })) {
       return {
         error: 'Solo letras, números, puntos y guiones bajos permitidos.',
@@ -55,7 +55,7 @@ export default class UserNameValidator implements IValidator {
     // QUE NO CONTENGA DOS PUNTOS CONSECUTIVOS(..)
     if (validateWithRegex({ pattern: /(\.\.)/, text: valueNoSpaces })) {
       return {
-        error: 'No puede contener puntos".." consecutivos',
+        error: 'No puede contener puntos ".." consecutivos',
         value: valueNoSpaces,
         isValid: false,
       };

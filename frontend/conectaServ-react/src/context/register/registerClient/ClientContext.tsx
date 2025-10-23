@@ -5,10 +5,11 @@ import type { TRegisterClient } from '../../../types/typeRegisterClient';
 const defaultRegisterClientContext: TRegisterClient = {
   setDataClient: () => {},
   validateClient: () => false,
-  onSubmitForm: () => {},
+  setIsLoaded: () => {},
   setFormState: () => {},
   setIsValid: () => {},
-  isValid:false,
+  isLoaded: false,
+  isValid: false,
   formState: formStateValidFieldClient,
   dataClient: emptyDataClient,
 };

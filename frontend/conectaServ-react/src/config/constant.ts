@@ -125,6 +125,7 @@ export const namesCheckBoxes: iNamesGroupsChecks = {
 // DEFINIMOS LA URL BASE PARA BACKEND
 const BASE_BACK_URL = `${import.meta.env.VITE_HOST}${import.meta.env.VITE_PORT}`;
 
+
 // OBJETO FINAL QUE EXPORTAMOS CON LAS URLS COMPLETAS
 export const endPointRegister: iEndPointRegister = {
   ENDPOINT_REGISTER_CLIENT: `${BASE_BACK_URL}${EEndpoint.CLIENT}`,

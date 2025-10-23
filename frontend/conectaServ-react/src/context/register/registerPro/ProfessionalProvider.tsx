@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router';
 import { ProfessionalContext } from './ProfessionalContext';
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { ECategoryKey, EDefaultSelected, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../../types/enums';
 import DescriptionValidator from '../../../modules/validators/DescriptionValidator';
 import ImageProfileValidator from '../../../modules/validators/ImageProfileValidator';
@@ -16,7 +16,22 @@ import useRegister from '../../../hooks/useRegister';
 import type { iFormStateValidationPro } from '../../../interfaces/iFormStateValidationPro';
 import type { TRegisterPro } from '../../../types/typeRegisterProfessional';
 import useVerifyEmailCode from '../../../hooks/useFormVerifyEmailCode';
-import useSendData from '../../../hooks/useSendData';
+import type { TStepData } from '../../../types/typeStepData';
+import { readExistingData } from '../../../utils/storageUtils';
+import { emptyStepData } from '../../../config/constant';
+import Loader from '../../../components/Loader';
+
+// INSTANCIO VALIDACIONES NECESARIAS
+const descriptionValidator: DescriptionValidator = new DescriptionValidator();
+const imageProfileValidator: ImageProfileValidator = new ImageProfileValidator();
+const imageExperiencesValidator: ImageExperiencesValidator = new ImageExperiencesValidator();
+const selectedCategoryValidator: SelectedValidator = new SelectedValidator();
+const budgeValidator: BudgeValidator = new BudgeValidator();
+const fullNameValidator: FullNameValidator = new FullNameValidator();
+const userNameValidator: UserNameValidator = new UserNameValidator();
+const emailValidator: EmailValidator = new EmailValidator();
+const passwordValidator: PasswordValidator = new PasswordValidator();
+const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordValidator();
 
 /*
 ****EXPLICACION DEL FLUJO ENTRE VALIDAR Y ALMACENAR EN STRORAGE:*****
@@ -28,25 +43,36 @@ import useSendData from '../../../hooks/useSendData';
 
 // PROVIDER ES QUIEN NOS PROVEE LOS ESTADOS Y FUNCIONES DE COMPONENTES
 const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
-  // INSTANCIO VALIDACIONES NECESARIAS
-  const descriptionValidator: DescriptionValidator = new DescriptionValidator();
-  const imageProfileValidator: ImageProfileValidator = new ImageProfileValidator();
-  const imageExperiencesValidator: ImageExperiencesValidator = new ImageExperiencesValidator();
-  const selectedCategoryValidator: SelectedValidator = new SelectedValidator();
-  const budgeValidator: BudgeValidator = new BudgeValidator();
-  const fullNameValidator: FullNameValidator = new FullNameValidator();
-  const userNameValidator: UserNameValidator = new UserNameValidator();
-  const emailValidator: EmailValidator = new EmailValidator();
-  const passwordValidator: PasswordValidator = new PasswordValidator();
-  const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordValidator();
+  const stored = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA); //LEEO Y PARSEO OBJETO GENERAL DE PASOS
 
+  // OBJETO GENERAL DE PASOS CON VALORES POR DEFECTO Y PARA ALMACENAR EN STROAGE
+  const [stepData, setStepData] = useState<TStepData>(() => {
+    return {
+      [EKeyDataByStep.ONE]: {
+        ...emptyStepData[EKeyDataByStep.ONE], //VALOR POR DEFECTO
+        ...stored?.[EKeyDataByStep.ONE], // PISADO PODR EL VALOR EN STORAGE
+      },
+      [EKeyDataByStep.TWO]: {
+        ...emptyStepData[EKeyDataByStep.TWO],
+        ...stored?.[EKeyDataByStep.TWO],
+      },
+      [EKeyDataByStep.THREE]: {
+        ...emptyStepData[EKeyDataByStep.THREE],
+        ...stored?.[EKeyDataByStep.THREE],
+      },
+      [EKeyDataByStep.FOUR]: {
+        ...emptyStepData[EKeyDataByStep.FOUR],
+        ...stored?.[EKeyDataByStep.FOUR],
+      },
+    };
+  });
 
   //--------------------------------------------------------------------HOOKS DE REACT--------------------------------------------------------------------//
   const location = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
-  const { isSendingCode } = useVerifyEmailCode(); //HOOK DE VERIFICACION DE CODIGO
-  const { terms, password, confirmPassword, setTerms, stepData, setIsSending } = useRegister();
-  const { submitNewData } = useSendData(); // HOOK PARA VERIFICACION DE CODIGO Y ENVIO DE LOS DATOS
+  const { isCodeSent, isCodeVerified, isSuccefullyVerified } = useVerifyEmailCode(); //HOOK DE VERIFICACION DE CODIGO
+  // const { submitNewData } = useSendData(); // HOOK PARA VERIFICACION DE CODIGO Y ENVIO DE LOS DATOS
+  const { terms, password, confirmPassword, setTerms } = useRegister(); //HOOK QUE USA CONTEXTO NIVEL REGISTRO
 
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
   // ESTADO PARA EL PASO ACTUAL DEL FORMULARIO
@@ -117,6 +143,12 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   // VALIDAR  CAMPOS POR PASOS
   const [isStepValid, setIsStepValid] = useState<boolean>(validateCurrentStep);
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
   // -------------------------------------------------------------useEffects-------------------------------------------------------------------------//
   // EFECTO PARA ALMACENAR EN STORAGE SI HAY INTERACCION, LOS DATOS QUE INGRESA EL PROFESIONAL Y REVALIDAR CAMPOS AL MONTARSE
   useEffect(() => {
@@ -173,26 +205,13 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
     scrolledTop();
   };
 
-  // EVENTO SUBMIT FORM
-  const onSubmitForm = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); //PREVENIR
-    // SI NO ES VALIDO O NO CORRESPONDE AL PASO FINAL
-    const isNotValidAndStepNotValid: boolean = !isStepValid || (hasBudge && step !== 4) || (!hasBudge && step !== 3);
-
-    //SI ES VERDAD QUE NO CORRESPONDE ==> NO SEGUIR
-    //O SI YA SE ESTA ENVIANDO, ==> NO HACER NADA
-    if (isNotValidAndStepNotValid || isSendingCode) return;
-    
-    setIsSending(true); //SI SE ESTA ENVIANDO MOSTRAR MODAL DE VERIFICACION DE CODIGO
-    await submitNewData(); // ==> SI EL CODIGO ES CORRECTO COMPLETAR REGISTRO
-  };
-
   //------------------------------------------FUNCIONES MODULARES------------------------------------------------------//
 
   // ------------------------FUNCION PARA VALIDAR SEGUN EL PASO----------------------------------------//
   function validateCurrentStep(): boolean {
     let isValid: boolean = false;
 
+    // VERIFICAR EL PASO
     switch (step) {
       case 1: {
         // VERIFICAR QUE HAYA AL MENOS UN CHECK EN CADA GRUPO
@@ -238,7 +257,11 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
           }
         } else {
           const { fullName, userName, email, location, password, confirmPassword } = formState;
-          const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isSendingCode;
+
+          const isVerified: boolean = isCodeVerified && isCodeSent && isSuccefullyVerified;
+
+          const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isVerified;
+
           isValid = isValidStep;
           return isValid;
         }
@@ -246,7 +269,10 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
       }
       case 4: {
         const { fullName, userName, email, location, password, confirmPassword } = formState;
-        const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isSendingCode;
+
+        const isVerified: boolean = isCodeVerified && isCodeSent && isSuccefullyVerified;
+
+        const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isVerified;
         isValid = isValidStep;
         return isValid;
       }
@@ -268,6 +294,9 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
 
   //-----------------------------OBJETO DE CONTEXTO---------------------------------//
   const contextRegisterValue: TRegisterPro = {
+    isLoaded,
+    setIsLoaded,
+    setStepData,
     setValueSelected,
     validateCurrentStep,
     setIsFocus,
@@ -276,7 +305,7 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
     setIsBudgeMountDisabled,
     setFormState,
     setHasInteracted,
-    onSubmitForm,
+    // onSubmitForm,
     handleClickNext,
     handleClickPrev,
     setHasContext,
@@ -285,6 +314,7 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
     setStep,
     setIsResetDetailsWork,
     setIsReinsertDisabled,
+    stepData,
     isReinsertDisabled,
     formState,
     hasInteracted,
@@ -301,7 +331,7 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   //RETORNO PROVEEDOR
-  return <ProfessionalContext.Provider value={contextRegisterValue}>{children}</ProfessionalContext.Provider>;
+  return <ProfessionalContext.Provider value={contextRegisterValue}>{isLoaded ? children : <Loader />}</ProfessionalContext.Provider>;
 };
 
 export default ProfessionalProvider;

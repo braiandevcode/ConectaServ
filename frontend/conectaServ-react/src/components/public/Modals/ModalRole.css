@@ -10,8 +10,10 @@
     backgroun-color 0.3s ease-in-out;
 }
 
+
 /* TARJETA PRINCIPAL DE MODAL  */
 .modal-role__card {
+  text-decoration: none;
   flex: 1;
   border: 2px solid #ddd;
   border-radius: 8px;

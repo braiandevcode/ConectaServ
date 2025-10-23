@@ -12,7 +12,7 @@ import { EModalGlobalType } from '../types/enumGlobalModalType';
 emailjs.init(configEmail.options); //==> PASO CONFIGURACION
 
 // FUNCION PARA ENVIAR CODIGO
-const sendCodeToUserEmail = async ({ emailUser, updateCodeEmail, showError, showSuccess, openGlobalModal, openVerifyEmailModal, updatedIsSendingCode, setLoading }: iParamSendCode): Promise<void> => {
+const sendCodeToUserEmail = async ({ emailUser, updateCodeEmail, showError, showSuccess, openGlobalModal, openVerifyEmailModal, updatedIsSentCode, updatedIsSendingCode, setLoading }: iParamSendCode): Promise<void> => {
   const generatedCode: number = generateRandomNumber(); //GENERAR NUMERO RANDOM
 
   updateCodeEmail(generatedCode.toString()); //ACTUALIZO EN STORAGE Y ESTADO INTERNO DE REACT
@@ -28,19 +28,21 @@ const sendCodeToUserEmail = async ({ emailUser, updateCodeEmail, showError, show
   // INTENTAR ENVIO
   try {
     setLoading(true); // ACTIVAR LOADER MIENTRAS SE ENVÍA AL BACKEND
+    updatedIsSendingCode(true); //EL CODIGO ENVIADO AL USUARIO ESTA EN PROGRESO
     const response: EmailJSResponseStatus = await emailjs.send(SERVICE_ID, TEMPLATE_VERIFICATION_ID, templateParams);
     if (response.status === 200) {
-      updatedIsSendingCode(true); //ACTUALIZAR A FALSE
+      updatedIsSentCode(true); // ESTADO DE CODIGO ENVIADO A DESTINO
       showSuccess('¡Codigo enviado!', '¡Codigo de verificacion enviado con exito!, Ingrese el codigo enviado aquí.');
       openVerifyEmailModal(EModalRegistersType.MODAL_VERIFY);
     }
   } catch (err) {
-    updatedIsSendingCode(false); //ACTUALIZAR A FALSE
+    updatedIsSentCode(false); // EL CODIGO NO FUE ENVIADO
     let userMessage: string = 'Fallo al enviar el código de verificación. Por favor, revisa tu conexión o el correo ingresado.';
     let title: string = 'Ups algo fallo!';
     showError(title, userMessage);
     openGlobalModal(EModalGlobalType.MODAL_ERROR);
   } finally {
+    updatedIsSendingCode(false); //EL ESTADO DE ENVIANDO EL CODIGO AL USUARIO TERMINO
     setLoading(false);
   }
 };
