@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { StepOneContext } from '../context/register/registerPro/StepOneContext';
+import { StepOneContext } from '../context/register/registerTasker/StepOneContext';
 import type { TTypeContextStepOne } from '../types/typeContextStepOne';
 
 const useStepOne = () => {

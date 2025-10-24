@@ -5,7 +5,7 @@ import type { TRegister } from '../types/typeRegister';
 const useRegister = () => {
   const context = useContext<TRegister>(RegisterContext);
   if (!context) {
-    throw new Error('useRegisterPro debe usarse dentro de un RegisterProvider');
+    throw new Error('useRegister debe usarse dentro de un RegisterProvider');
   }
   return context;
 };

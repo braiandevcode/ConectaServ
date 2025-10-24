@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { StepTwoContext } from '../context/register/registerPro/StepTwoContext';
+import { StepTwoContext } from '../context/register/registerTasker/StepTwoContext';
 import type { TTypeContextStepTwo } from '../types/typeContextStepTwo';
 
 const useStepTwo = () => {

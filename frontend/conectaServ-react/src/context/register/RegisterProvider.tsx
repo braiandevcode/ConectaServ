@@ -12,7 +12,7 @@ const RegisterProvider = ({ children }: { children: ReactNode }) => {
   const [isSending, setIsSending] = useState<boolean>(false);// ESTADO PARA BANDERA DE SI SE ESTA ENVIANDO
   const [password, setPassword] = useState<string>(''); //ESTADO EN TIEMPO RUNTIME PARA PASSWORD
   const [confirmPassword, setConfirmPassword] = useState<string>(''); //ESTADO EN TIEMPO RUNTIME PARA CONFIRMPASSWORD
-  
+
   //ONCHANGE TERMINOS Y CONDICIONES
   const onChangeTerms = (e: ChangeEvent<HTMLInputElement>) => {
     setTerms(e.target.checked);

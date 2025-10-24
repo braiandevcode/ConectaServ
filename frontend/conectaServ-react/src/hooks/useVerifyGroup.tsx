@@ -1,9 +1,9 @@
 import type React from 'react';
 import { EKeyDataByStep } from '../types/enums';
-import useRegisterPro from './useRegisterPro';
 import { useEffect } from 'react';
 import type { TOptionWork } from '../types/typeOptionsWork';
 import type { TStepOne } from '../types/typeStepOne';
+import useRegisterTasker from './useRegisterTasker';
 
 // ESTE HOOK SE ENCARGA DE DOS COSAS PRINCIPALES:
 //
@@ -18,7 +18,7 @@ import type { TStepOne } from '../types/typeStepOne';
 //     - NO VALIDA EL PASO COMPLETO, SOLO EL GRUPO MODIFICADO.
 //
 export const useVerifyGroup = () => {
-  const { stepData, setStepData, step, formState, setFormState, isResetDetailsWork } = useRegisterPro(); //HOOK PERSONALIZADO QUE USA CONTEXTO REGISTRO PROFESIONAL
+  const { stepData, setStepData, step, formState, setFormState, isResetDetailsWork } = useRegisterTasker(); //HOOK PERSONALIZADO QUE USA CONTEXTO REGISTRO PROFESIONAL
 
   // EFECTO PARA RESETEAR DETALLES DE TRABAJO CUANDO CAMBIA CATEGORÍA
   useEffect(() => {

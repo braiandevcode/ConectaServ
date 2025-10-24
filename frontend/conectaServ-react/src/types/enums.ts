@@ -54,15 +54,15 @@ export enum ENamesOfKeyLocalStorage {
 
 // ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES
 export enum EEndpoint {
-  PROFESSIONAL = '/professional',
+  TASKER = '/tasker',
   CLIENT = '/client',
-  REGISTER = '/:newRole' // REGISTRO SEGUN ROLE
+  REGISTER = '/users' // REGISTRO SEGUN ROLE
 }
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA
 export enum EPathPage {
   PATH_FORM_CLIENT = '/register/client',
-  PATH_FORM_PROFESSIONAL = '/register/pro',
+  PATH_FORM_TASKER = '/register/tasker',
   PATH_TERMS = '/register/terms',
   PATH_PRIVACY = '/register/privacity',
 }

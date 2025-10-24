@@ -1,1 +1,1 @@
-export type TFormRole = 'professional' | 'client';
+export type TFormRole = 'tasker' | 'client';

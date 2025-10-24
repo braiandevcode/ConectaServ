@@ -1,7 +1,7 @@
 import { fileToStoredImage } from './storageUtils';
 import type { TSavedImage } from '../types/typeSavedImages';
 import { EKeyDataByStep } from '../types/enums';
-import type { TRegisterPro } from '../types/typeRegisterProfessional';
+import type { TRegisterPro } from '../types/typeRegisterTasker';
 
 // TIPADO ENCADENANDO PROPIEDADES DE OTROS TIPOS EXISTENTES
 type TSavedProfile = Pick<TRegisterPro, 'setStepData'> & TSavedImage;

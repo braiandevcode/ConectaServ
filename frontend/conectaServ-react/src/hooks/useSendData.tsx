@@ -1,15 +1,16 @@
 import type { FormEvent } from 'react';
 import { EDataClient, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../types/enums';
 import type { TPlainClient } from '../types/typePlainClient';
-import type { TPlaintProfessional } from '../types/typePlainDataProfesional';
+import type { TPlaintTasker } from '../types/typePlainDataTasker';
 import apiRequest from '../utils/apiRequestUtils';
 // import { clearPersistence } from '../utils/storageUtils';
 import useMain from './useMain';
 import useRegister from './useRegister';
 import useRegisterClient from './useRegisterClient';
-import useRegisterPro from './useRegisterPro';
+import useRegisterTasker from './useRegisterTasker';
 import useGlobalModal from './useGlobalModal';
 import { endPointRegister } from '../config/configEndpointRegister';
+import useValidateStep from './useValidateStep';
 // import { useNavigate } from 'react-router';
 
 // HOOK QUE SE ENCARGA DEL PROCESO DE ENVIO DE DATOS AL BACKEND
@@ -17,9 +18,10 @@ const useSendData = () => {
   const { setLoading, client } = useMain(); // HOOK QUE USA EL CONTEXTO A NIVEL MAIN
   const { password, setIsSending } = useRegister(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO GENERALES
   const { dataClient, isLoaded: isLoadedClient, isValid } = useRegisterClient(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO CLIENTE
-  const { stepData, isLoaded: isLoadedProfessional, isStepValid, hasBudge, step } = useRegisterPro(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO PROFESIONAL
+  const { stepData, isLoaded: isLoadedProfessional, isStepValid } = useRegisterTasker(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO PROFESIONAL
   const { showError, showSuccess } = useGlobalModal(); //HOOK QUE USA CONTEXTO DE MODALES GLOBAL
 
+  const { isLastStep } = useValidateStep() // HOOK PARA VALIDAR PASO
   // const navigate = useNavigate();
 
   // SI SE CARGO TODO EN CONTEXTO DE CLIENTE Y EN PROFESIONAL
@@ -27,32 +29,40 @@ const useSendData = () => {
 
   // ENVIAR DATOS AL BACKEND DE CUALQUIERA DE LOS DOS REGISTROS
   const submitNewData = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (client === null) return; // ==> SI NO HAY ROL NO SEGUIR
+    e.preventDefault(); // ==> PREVENIR
 
-    const storedRole = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE);
+    // LEER ITEM DE ROLE
+    const storedRole: string | null = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE);
 
+    // CONDICIONAL PARA ASEGURAR QUE UN ROLE EXISTA
     if (!storedRole && client === null) {
       showError('Error de Registro', 'No se ha seleccionado un rol para el registro.');
       return;
     }
 
     // SI NO ES VALIDO O NO CORRESPONDE AL PASO FINAL
-    const isNotValidAndStepNotValid: boolean = !isStepValid || (hasBudge && step !== 4) || (!hasBudge && step !== 3);
+    const isNotValidAndStepNotValid: boolean = !isStepValid || !isLastStep;
     if (isNotValidAndStepNotValid && !isValid) return; //SI AMBOS NO SON VALIDO NO SEGUIR
 
     //-------------------OBJETO APLANADO PARA ENVIO DATOS DEL PROFESIONAL--------------------------------//
     // CON ALIAS PARA NO CHOCAR CON VARIABLE DE ESTADO
     const { valueSelected: valueSelectedAlias, ...res } = stepData[EKeyDataByStep.ONE];
 
+    // VERIFICAR EL ROLE QUE EL USUARIO ELIGUIO PARA EL REGISTRO Y GUARDARLO
+    const newRole:string = client ? 'client' : 'tasker';
+
+    // INICIO Y DECLARO VECTOR DE ROLE EN MEMORIA
+    const roleVector:string[] =[newRole];
+
     // CREA NUEVO OBJETO APLANADO
-    const dataSendProfessional = {
+    const dataSendTasker = {
       ...res, // SE PROPAGAN TODAS LAS PROPIEDADES DE CADA PASO
       ...stepData[EKeyDataByStep.TWO],
       ...(stepData[EKeyDataByStep.THREE] ?? {}), //PUEDE NO ESTAR
       ...stepData[EKeyDataByStep.FOUR],
       password, //SE AGREGA EL PASSWORD
-    } as TPlaintProfessional;
+      roles:roleVector,
+    } as TPlaintTasker;
 
     //-------------------OBJETO APLANADO PARA ENVIO DATOS DEL CLIENTE--------------------------------//
     const { ...copy } = (dataClient[EDataClient.DATA] as TPlainClient) ?? {};
@@ -61,20 +71,21 @@ const useSendData = () => {
     const dataSendClient = {
       ...copy,
       password, //SE AGREGA EL PASSWORD
+      roles:roleVector //AGREGAR ROLE
     } as TPlainClient;
 
-    const { ENDPOINT_REGISTER_CLIENT, ENDPOINT_REGISTER_PROFESSIONAL } = endPointRegister;
+    const {  ENDPOINT_REGISTER } = endPointRegister;
 
     // SI CLIENTE ES TRUE  NEVO DATO DE CLIENTE, SINO PROFESIONAL
-    const newData: TPlainClient | TPlaintProfessional = client ? dataSendClient : dataSendProfessional;
+    const newData: TPlainClient | TPlaintTasker = client ? dataSendClient : dataSendTasker;
 
-    const urlEndPointRegister: string = client ? ENDPOINT_REGISTER_CLIENT : ENDPOINT_REGISTER_PROFESSIONAL;
+    // const urlEndPointRegister: string = client ? ENDPOINT_REGISTER_CLIENT : ENDPOINT_REGISTER_TASKER;
 
     // TRY/CATCH
     try {
       setIsSending(true); //ENVIANDO DATOS
       setLoading(true); // ACTIVAR LOADER MIENTRAS SE ENVÍA AL BACKEND
-      await apiRequest(`${urlEndPointRegister}`, {
+      await apiRequest(`${ENDPOINT_REGISTER}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newData),

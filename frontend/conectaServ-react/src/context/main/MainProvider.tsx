@@ -9,7 +9,7 @@ import useGlobalModal from '../../hooks/useGlobalModal';
 
 // PROVEEMOS LOGICA Y ESTADOS AL CONTEXTO PRINCIPAL
 const MainProvider = ({ children }: { children: ReactNode }) => {
-  const { closeGlobalModal, setIsGlobalModalOpen } = useGlobalModal();
+  const { closeGlobalModal } = useGlobalModal();
   const stored = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE) as TFormRole | null;
 
   // -------------------HOOKS DE REACT-------------------------//
@@ -26,7 +26,6 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     const clear = async () => {
       try {
         await clearPersistence(); // LIMPIA INDEXEDDB + STORAGE
-        
       } catch (error) {
         console.error('ERROR AL ELIMINAR DATOS DEL STORAGE E INDEXEDDB:', error);
       }
@@ -35,7 +34,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     // SI EL ROL GUARDADO ES CLIENTE Y ESTAMOS EN LA RUTA CORRECTA
     if (pathname === EPathPage.PATH_FORM_CLIENT && stored === 'client') {
       setClient(true);
-    } else if (pathname === EPathPage.PATH_FORM_PROFESSIONAL && stored === 'professional') {
+    } else if (pathname === EPathPage.PATH_FORM_TASKER && stored === 'tasker') {
       // SI EL ROL GUARDADO ES PRO Y ESTAMOS EN LA RUTA CORRECTA
       setClient(false);
     } else {
@@ -48,8 +47,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     }
 
     //ASEGURAR QUE EL MODAL SE CIERRE AL CAMBIAR DE RUTA
-    // closeModal();
-    setIsGlobalModalOpen(false);
+    closeGlobalModal();
   }, [pathname, navigate]); // DEPENDE SOLO DE PATH Y NAVIGATE
 
   // FUNCION QUE SE EJECUTA CUANDO EL USUARIO ELIGE CLIENTE
@@ -61,7 +59,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
 
   // FUNCION QUE SE EJECUTA CUANDO EL USUARIO ELIGE PROFESIONAL
   const handleProClick = () => {
-    localStorage.setItem(ENamesOfKeyLocalStorage.ROLE, 'professional');
+    localStorage.setItem(ENamesOfKeyLocalStorage.ROLE, 'tasker');
     setClient(false); //ROL CLIENTE EN FALSE
     closeGlobalModal();
   };

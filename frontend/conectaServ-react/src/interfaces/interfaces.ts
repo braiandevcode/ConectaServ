@@ -8,7 +8,7 @@ export interface iNamesGroupsChecks {
 // INTERFACES PARA RUTAS DE LAS PAGINAS
 export interface iEndPointRegister {
   ENDPOINT_REGISTER_CLIENT: string;
-  ENDPOINT_REGISTER_PROFESSIONAL: string;
+  ENDPOINT_REGISTER_TASKER: string;
   ENDPOINT_REGISTER:string;
 }
 
