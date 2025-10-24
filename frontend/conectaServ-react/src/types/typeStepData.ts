@@ -4,7 +4,7 @@ import type { TStepOne } from "./typeStepOne";
 import type { TStepThree } from "./typeStepThree";
 import type { TStepTwo } from "./typeStepTwo";
 
-export type TStepData = {
+export type TStepDataPro = {
   [EKeyDataByStep.ONE]: TStepOne;
   [EKeyDataByStep.TWO]: TStepTwo;
   [EKeyDataByStep.THREE]?: TStepThree;

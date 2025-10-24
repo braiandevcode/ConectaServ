@@ -161,7 +161,7 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
     setIsVerifyingCode(true); //PROCESO DE VERIFICACION DE CODIGO EN PROGRESO
     // ACA DEBERIA IR EL FETCH AN ENDPOINT DL BACKEND PARA GENERAR EL CODIGO Y QUE EL BACKEND SE ENCARGE DE GENERAR
     // Y VERIFICAR GUARDANDO SESSION TEMPORL DE USUARIO EN DB/CACHE
-    
+
     // SIMULACION DE DELAY DE ENVIO
     setOtp(Array(NUM_DIGITS).fill('')); //LIMPIAR CAMPOS
 
@@ -171,7 +171,7 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
       setIsCodeVerified(true); // INDICA QUE TERMINO LA VERIFICACION
       setIsSuccefullyVerified(fullCode.trim() === codeStoredEmail.trim());
       if (fullCode.trim() === codeStoredEmail.trim()) {
-        showSuccess('¡Exito!', 'Código verificado correctamente');
+        showSuccess('¡Correo Verificado!', 'Confirmado. Cierra (X) para continuar con tu registro.');
         openGlobalModal(EModalGlobalType.MODAL_SUCCESS);
       } else {
         setIsCodeSent(false); //== REINICIAR A FALSO SI EL ERROR ES INVALIDO

@@ -1,4 +1,4 @@
-import { categoryConfigs } from '../../../../../config/constant'; //DE LA CONSTANTE CONFIGURATIVA
+import { categoryConfigs } from '../../../../../config/configCategoryProfessional'; //DE LA CONSTANTE CONFIGURATIVA
 import useRegisterPro from '../../../../../hooks/useRegisterPro';
 import { EKeyDataByStep, type ECategoryKey } from '../../../../../types/enums';
 import type { TCategoryKey } from '../../../../../types/typeCategory';

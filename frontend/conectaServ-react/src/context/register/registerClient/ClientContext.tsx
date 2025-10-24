@@ -1,6 +1,7 @@
 import { createContext } from 'react';
-import { emptyDataClient, formStateValidFieldClient } from '../../../config/constant';
 import type { TRegisterClient } from '../../../types/typeRegisterClient';
+import { defaultDataClient } from '../../../config/defaultDataClient';
+import { formStateValidFieldClient } from '../../../config/formStateValidationFieldClient';
 // DEFINIR VALORES POR DEFECTO DE LOS ESTADOS
 const defaultRegisterClientContext: TRegisterClient = {
   setDataClient: () => {},
@@ -11,7 +12,7 @@ const defaultRegisterClientContext: TRegisterClient = {
   isLoaded: false,
   isValid: false,
   formState: formStateValidFieldClient,
-  dataClient: emptyDataClient,
+  dataClient: defaultDataClient,
 };
 
 export const ClientContext = createContext<TRegisterClient>(defaultRegisterClientContext);

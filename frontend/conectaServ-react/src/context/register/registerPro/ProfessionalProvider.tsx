@@ -16,10 +16,10 @@ import useRegister from '../../../hooks/useRegister';
 import type { iFormStateValidationPro } from '../../../interfaces/iFormStateValidationPro';
 import type { TRegisterPro } from '../../../types/typeRegisterProfessional';
 import useVerifyEmailCode from '../../../hooks/useFormVerifyEmailCode';
-import type { TStepData } from '../../../types/typeStepData';
 import { readExistingData } from '../../../utils/storageUtils';
-import { emptyStepData } from '../../../config/constant';
 import Loader from '../../../components/Loader';
+import { defaultDataPro } from '../../../config/defaultDataPro';
+import type { TStepDataPro } from '../../../types/typeStepData';
 
 // INSTANCIO VALIDACIONES NECESARIAS
 const descriptionValidator: DescriptionValidator = new DescriptionValidator();
@@ -46,22 +46,22 @@ const ProfessionalProvider = ({ children }: { children: React.ReactNode }) => {
   const stored = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA); //LEEO Y PARSEO OBJETO GENERAL DE PASOS
 
   // OBJETO GENERAL DE PASOS CON VALORES POR DEFECTO Y PARA ALMACENAR EN STROAGE
-  const [stepData, setStepData] = useState<TStepData>(() => {
+  const [stepData, setStepData] = useState<TStepDataPro>(() => {
     return {
       [EKeyDataByStep.ONE]: {
-        ...emptyStepData[EKeyDataByStep.ONE], //VALOR POR DEFECTO
+        ...defaultDataPro[EKeyDataByStep.ONE], //VALOR POR DEFECTO
         ...stored?.[EKeyDataByStep.ONE], // PISADO PODR EL VALOR EN STORAGE
       },
       [EKeyDataByStep.TWO]: {
-        ...emptyStepData[EKeyDataByStep.TWO],
+        ...defaultDataPro[EKeyDataByStep.TWO],
         ...stored?.[EKeyDataByStep.TWO],
       },
       [EKeyDataByStep.THREE]: {
-        ...emptyStepData[EKeyDataByStep.THREE],
+        ...defaultDataPro[EKeyDataByStep.THREE],
         ...stored?.[EKeyDataByStep.THREE],
       },
       [EKeyDataByStep.FOUR]: {
-        ...emptyStepData[EKeyDataByStep.FOUR],
+        ...defaultDataPro[EKeyDataByStep.FOUR],
         ...stored?.[EKeyDataByStep.FOUR],
       },
     };

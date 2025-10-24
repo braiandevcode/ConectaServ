@@ -1,6 +1,5 @@
 import type { iConfigDataEmailJs } from "../interfaces/iConfigDataEmailJs";
 
-
 // CONFIGURAION PARA LOS DATOS PASADOS A EMAILJS
 export const DATA_EMAILJS: iConfigDataEmailJs = {
   // CARGAR LA PUBLIC_KEY DESDE VARIABLE DE ENTORNO

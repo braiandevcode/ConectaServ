@@ -56,6 +56,7 @@ export enum ENamesOfKeyLocalStorage {
 export enum EEndpoint {
   PROFESSIONAL = '/professional',
   CLIENT = '/client',
+  REGISTER = '/:newRole' // REGISTRO SEGUN ROLE
 }
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA

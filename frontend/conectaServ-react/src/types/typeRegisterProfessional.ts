@@ -3,7 +3,7 @@ import type { TStepOneProps } from './typePropsStepOne';
 import type { TStepThreeProps } from './typePropsStepThree';
 import type { TStepTwoProps } from './typePropsStepTwo';
 import type { iFormStateValidationPro } from '../interfaces/iFormStateValidationPro';
-import type { TStepData } from './typeStepData';
+import type { TStepDataPro } from './typeStepData';
 
 // TIPOS DE ESTRUCTURA GENERAL DEL REGISTRO DEL PROFESIONAL
 export type TRegisterPro = Omit<TStepOneProps, 'handleChangeSelected' | 'handleCheckboxChange' | 'titleRef'> &
@@ -14,13 +14,12 @@ export type TRegisterPro = Omit<TStepOneProps, 'handleChangeSelected' | 'handleC
     setStep: (step: number) => void;
     handleClickNext: (e: MouseEvent<HTMLButtonElement>) => void;
     handleClickPrev: (e: MouseEvent<HTMLButtonElement>) => void;
-    // onSubmitForm: (e: FormEvent<HTMLFormElement>) => void;
     setIsStepValid: (isStepValid: boolean) => void;
     setFormState: Dispatch<SetStateAction<iFormStateValidationPro>>;
     setIsParsed: Dispatch<SetStateAction<boolean>>;
     setIsFocus: Dispatch<SetStateAction<boolean>>;
-    setStepData: Dispatch<SetStateAction<TStepData>>;
-    stepData: TStepData;
+    setStepData: Dispatch<SetStateAction<TStepDataPro>>;
+    stepData: TStepDataPro;
     isParsed: boolean;
     isFocus: boolean;
     formState: iFormStateValidationPro;

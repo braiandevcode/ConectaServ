@@ -1,0 +1,32 @@
+.btn__ghost {
+  background-color: var(--btn-gosth);
+  color: #ffffff;
+  font-weight: bold;
+
+  /* Importante: Aplica la transición al background-color, no a opacity */
+  transition: background-color 0.3s ease-in;
+}
+
+.btn__ghost:hover {
+  /* CAMBIAR COLOR DE FONDO */
+  background-color: var(--btn-gosth-hover);
+}
+
+/* ESTILO AL ICONO DENTRO DEL BOTON */
+.btn__ghost svg {
+  color: var(--icon-color); 
+  /*AGREGAR TRANSICION SOLO AL ICONO*/
+  transition: color 0.3s ease-in;
+}
+
+/* 2. ESTILO DEL ICONO AL HACER HOVER EN EL BOTON PADRE */  
+/* CUANDO AL ELEMENTO  CON LA CLASE btn__ghost TENGA EL HOVER SELECCIONAR AL SVG DENTRO */
+.btn__ghost:hover svg {
+  color: var(--icon-color-hover); /* Cambia el color del icono sin usar !important */
+}
+/* OTROS ESTILOS */
+.btn__closeMessage {
+  padding: 0.2rem;
+  top: 0.4rem;
+  right: 0.8rem;
+}

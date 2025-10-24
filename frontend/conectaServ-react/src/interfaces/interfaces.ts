@@ -9,6 +9,7 @@ export interface iNamesGroupsChecks {
 export interface iEndPointRegister {
   ENDPOINT_REGISTER_CLIENT: string;
   ENDPOINT_REGISTER_PROFESSIONAL: string;
+  ENDPOINT_REGISTER:string;
 }
 
 // INTERFACES PARA URL DE PETICIONES

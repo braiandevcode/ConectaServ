@@ -8,7 +8,7 @@ import { ClientContext } from './ClientContext';
 import { useEffect, useState, type ReactNode } from 'react';
 import { readExistingData } from '../../../utils/storageUtils';
 import { EDataClient, ENamesOfKeyLocalStorage } from '../../../types/enums';
-import { emptyDataClient } from '../../../config/constant';
+
 import SelectedValidator from '../../../modules/validators/SelectedValidator';
 import useRegister from '../../../hooks/useRegister';
 import type { TDataClient } from '../../../types/typeDataClient';
@@ -16,6 +16,7 @@ import type { iFormStateValidationClient } from '../../../interfaces/iFormStateV
 import type { TRegisterClient } from '../../../types/typeRegisterClient';
 import useFormVerifyEmailCode from '../../../hooks/useFormVerifyEmailCode';
 import Loader from '../../../components/Loader';
+import { defaultDataClient } from '../../../config/defaultDataClient';
 
 // INSTANCIO VALIDACIONES NECESARIAS
 const fullNameValidator: FullNameValidator = new FullNameValidator();
@@ -47,7 +48,7 @@ const ClientProvider = ({ children }: { children: ReactNode }) => {
   const [dataClient, setDataClient] = useState<TDataClient>(() => {
     return {
       [EDataClient.DATA]: {
-        ...emptyDataClient[EDataClient.DATA], //VALOR POR DEFECTO
+        ...defaultDataClient[EDataClient.DATA], //VALOR POR DEFECTO
         ...stored[EDataClient.DATA], // PISADO PODR EL VALOR EN STORAGE
       },
     };

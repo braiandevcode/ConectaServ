@@ -1,5 +1,3 @@
-// import useRegister from '../../../../../hooks/useRegister';
-// import VerifyEmailModal from '../../../Modals/ModalVerifyEmail';
 import Form from './Form';
 import BtnBack from './Buttons/BtnBack';
 

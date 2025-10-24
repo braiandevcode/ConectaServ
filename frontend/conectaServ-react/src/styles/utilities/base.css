@@ -21,21 +21,30 @@
   --link-hover-primary: #1e5ca3b2;
   --link-hover-secondary: #fdfdfd;
 
-  /* BOTONES */
-
+  /* VARIABLES COLOR DE TEXTO PARA BOTONES */
   --btn-text-primary: #fdfdfd;
   --btn-text-secondary: #1e5da3;
   --btn-text-gray: #7a7878;
 
+  /* VARIABLES COLOR DE FONDO PARA BOTONES */
   --btn-gray: #7a7878;
   --btn-hover: #1d4ed8;
   --btn-danger: #d42f2f;
   --btn-success: #0f800fcb;
   --btn-warning: #d3d614e5;
-  --btn-ghost: transparent;
+  --btn-ghost: #dddcdc8f;
   --btn-info: #1e5da3;
 
-  /* VARIABLE PARA ANCHOS */
+  /* PARA ESTILOS HOVER EN BOTON FANTASMA*/
+  --btn-gosth-hover: #beb6b63d; /* UN COLOR LIGERAMENTE DIFERENTE */
+
+
+  /* VARIABLE ESTILOS A ICONOS */
+  --icon-color: gray;
+  /* PARA ESTILOS HOVER EN ICONO */
+  --icon-color-hover: #333; /* COLOR DE CONTRASTE */
+
+  /* VARIABLE PARA ANCHOS  Y ALTURA*/
   --w-container: 100%;
   --w-min-container: 100dvw;
   --h-min-container: 100dvh;

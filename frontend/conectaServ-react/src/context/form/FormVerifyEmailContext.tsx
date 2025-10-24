@@ -1,6 +1,7 @@
 import { createContext, type RefObject } from 'react';
 import type { TFormVerifyCode } from '../../types/typeFormlVerifyCode';
-import { formStateVerifyCodeEmail } from '../../config/constant';
+import { formStateVerifyCodeEmail } from '../../config/formStateVerifyCodeEmail';
+
 
 const arrayRefInitialValue: RefObject<(HTMLInputElement | null)[]> = { current: [] }; //ESTADO INICIAL PARA ARRAY DE REFERENCIAS
 // ESTADOS INICIALES

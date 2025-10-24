@@ -1,6 +1,5 @@
 import type { FormEvent } from 'react';
-import { endPointRegister } from '../config/constant';
-import { EDataClient, EKeyDataByStep } from '../types/enums';
+import { EDataClient, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../types/enums';
 import type { TPlainClient } from '../types/typePlainClient';
 import type { TPlaintProfessional } from '../types/typePlainDataProfesional';
 import apiRequest from '../utils/apiRequestUtils';
@@ -10,6 +9,7 @@ import useRegister from './useRegister';
 import useRegisterClient from './useRegisterClient';
 import useRegisterPro from './useRegisterPro';
 import useGlobalModal from './useGlobalModal';
+import { endPointRegister } from '../config/configEndpointRegister';
 // import { useNavigate } from 'react-router';
 
 // HOOK QUE SE ENCARGA DEL PROCESO DE ENVIO DE DATOS AL BACKEND
@@ -21,7 +21,7 @@ const useSendData = () => {
   const { showError, showSuccess } = useGlobalModal(); //HOOK QUE USA CONTEXTO DE MODALES GLOBAL
 
   // const navigate = useNavigate();
-  
+
   // SI SE CARGO TODO EN CONTEXTO DE CLIENTE Y EN PROFESIONAL
   const isReady: boolean = isLoadedClient || isLoadedProfessional;
 
@@ -29,6 +29,13 @@ const useSendData = () => {
   const submitNewData = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (client === null) return; // ==> SI NO HAY ROL NO SEGUIR
+
+    const storedRole = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE);
+
+    if (!storedRole && client === null) {
+      showError('Error de Registro', 'No se ha seleccionado un rol para el registro.');
+      return;
+    }
 
     // SI NO ES VALIDO O NO CORRESPONDE AL PASO FINAL
     const isNotValidAndStepNotValid: boolean = !isStepValid || (hasBudge && step !== 4) || (!hasBudge && step !== 3);
