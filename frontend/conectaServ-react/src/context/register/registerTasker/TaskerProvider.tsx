@@ -70,7 +70,7 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
   //--------------------------------------------------------------------HOOKS DE REACT--------------------------------------------------------------------//
   const { pathname } = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
-  const { isCodeSent, isCodeVerified, isSuccefullyVerified } = useVerifyEmailCode(); //HOOK DE VERIFICACION DE CODIGO
+  const { isSuccefullyVerified } = useVerifyEmailCode(); //HOOK DE VERIFICACION DE CODIGO
   const { terms, password, confirmPassword, setTerms } = useRegister(); //HOOK QUE USA CONTEXTO NIVEL REGISTRO
 
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
@@ -259,10 +259,7 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
           }
         } else {
           const { fullName, userName, email, location, password, confirmPassword } = formState;
-
-          const isVerified: boolean = isCodeVerified && isCodeSent && isSuccefullyVerified;
-
-          const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isVerified;
+          const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isSuccefullyVerified;
 
           isValid = isValidStep;
           return isValid;
@@ -272,9 +269,7 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
       case 4: {
         const { fullName, userName, email, location, password, confirmPassword } = formState;
 
-        const isVerified: boolean = isCodeVerified && isCodeSent && isSuccefullyVerified;
-
-        const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isVerified;
+        const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isSuccefullyVerified;
         isValid = isValidStep;
         return isValid;
       }

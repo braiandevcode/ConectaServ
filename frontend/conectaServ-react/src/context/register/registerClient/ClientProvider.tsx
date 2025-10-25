@@ -32,7 +32,7 @@ const ClientProvider = ({ children }: { children: ReactNode }) => {
   const location = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
   const { terms, confirmPassword, password } = useRegister();
-  const { isCodeSent, isCodeVerified, isSuccefullyVerified } = useFormVerifyEmailCode(); //HOOK DE VERIFICACION DE CODIGO
+  const { isSuccefullyVerified } = useFormVerifyEmailCode(); //HOOK DE VERIFICACION DE CODIGO
 
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -101,12 +101,8 @@ const ClientProvider = ({ children }: { children: ReactNode }) => {
     let isValid: boolean = false;
     // ASEGURO QUE SEA ROL CLIENTE
     const { fullName, userName, email, location, password, confirmPassword } = formState;
-    const isVerified: boolean = isCodeVerified && isCodeSent && isSuccefullyVerified; // SI ENVIO CODIGO Y SI SE VERIFICO Y SI LA VERIFICACION DE CODIGO FUE SATISFACTORIA
-    
-    console.log(isVerified);
-    
-    
-    const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isVerified;
+
+    const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isSuccefullyVerified;
     isValid = isValidStep;
     return isValid;
   }

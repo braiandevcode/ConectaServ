@@ -11,7 +11,7 @@ import useRegisterTasker from './useRegisterTasker';
 import useGlobalModal from './useGlobalModal';
 import { endPointRegister } from '../config/configEndpointRegister';
 import useValidateStep from './useValidateStep';
-// import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 
 // HOOK QUE SE ENCARGA DEL PROCESO DE ENVIO DE DATOS AL BACKEND
 const useSendData = () => {
@@ -21,8 +21,8 @@ const useSendData = () => {
   const { stepData, isLoaded: isLoadedProfessional, isStepValid } = useRegisterTasker(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO PROFESIONAL
   const { showError, showSuccess } = useGlobalModal(); //HOOK QUE USA CONTEXTO DE MODALES GLOBAL
 
-  const { isLastStep } = useValidateStep() // HOOK PARA VALIDAR PASO
-  // const navigate = useNavigate();
+  const { isLastStep } = useValidateStep(); // HOOK PARA VALIDAR PASO
+  const navigate = useNavigate();
 
   // SI SE CARGO TODO EN CONTEXTO DE CLIENTE Y EN PROFESIONAL
   const isReady: boolean = isLoadedClient || isLoadedProfessional;
@@ -49,10 +49,10 @@ const useSendData = () => {
     const { valueSelected: valueSelectedAlias, ...res } = stepData[EKeyDataByStep.ONE];
 
     // VERIFICAR EL ROLE QUE EL USUARIO ELIGUIO PARA EL REGISTRO Y GUARDARLO
-    const newRole:string = client ? 'client' : 'tasker';
+    const newRole: string = client ? 'client' : 'tasker';
 
     // INICIO Y DECLARO VECTOR DE ROLE EN MEMORIA
-    const roleVector:string[] =[newRole];
+    const roleVector: string[] = [newRole];
 
     // CREA NUEVO OBJETO APLANADO
     const dataSendTasker = {
@@ -61,7 +61,7 @@ const useSendData = () => {
       ...(stepData[EKeyDataByStep.THREE] ?? {}), //PUEDE NO ESTAR
       ...stepData[EKeyDataByStep.FOUR],
       password, //SE AGREGA EL PASSWORD
-      roles:roleVector,
+      roles: roleVector,
     } as TPlaintTasker;
 
     //-------------------OBJETO APLANADO PARA ENVIO DATOS DEL CLIENTE--------------------------------//
@@ -71,15 +71,13 @@ const useSendData = () => {
     const dataSendClient = {
       ...copy,
       password, //SE AGREGA EL PASSWORD
-      roles:roleVector //AGREGAR ROLE
+      roles: roleVector, //AGREGAR ROLE
     } as TPlainClient;
 
-    const {  ENDPOINT_REGISTER } = endPointRegister;
+    const { ENDPOINT_REGISTER } = endPointRegister;
 
     // SI CLIENTE ES TRUE  NEVO DATO DE CLIENTE, SINO PROFESIONAL
     const newData: TPlainClient | TPlaintTasker = client ? dataSendClient : dataSendTasker;
-
-    // const urlEndPointRegister: string = client ? ENDPOINT_REGISTER_CLIENT : ENDPOINT_REGISTER_TASKER;
 
     // TRY/CATCH
     try {
@@ -91,6 +89,9 @@ const useSendData = () => {
         body: JSON.stringify(newData),
       });
       showSuccess('Registro Exitoso', 'Tus datos se han enviado y registrado correctamente.');
+      setInterval(() => {
+        navigate('/'); //LLEVAR LUEGO DEL REGISTRO AL HOME
+      }, 8500);
     } catch (error: unknown) {
       // CONVERTIR EL TIPO A UN ERROR CONOCIDO O EXTRAER LOS DATOS
       const apiError = error as { status?: number };
@@ -99,7 +100,7 @@ const useSendData = () => {
       // SI HAY VALOR Y SI ENTRE 400 Y 499
       if (statusCode && statusCode >= 400 && statusCode < 500) {
         // 4xx: PROBLEMAS DE DATOS DEL USUARIO
-        showError('Error al Registrar', 'Verifica tus datos (ej. email ya registrado) e inténtalo de nuevo.');
+        showError('Error al Registrar', 'Verifica tus datos e inténtalo de nuevo.');
       } else {
         // SINO SON DE 500 EN ADELANTE
         // 5xx o ERROR DE RED O DESCONOCIDO

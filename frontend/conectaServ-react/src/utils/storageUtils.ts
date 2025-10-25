@@ -166,4 +166,5 @@ export const clearPersistence = async () => {
   localStorage.removeItem(ENamesOfKeyLocalStorage.CODE);
   localStorage.removeItem(ENamesOfKeyLocalStorage.CLIENT_DATA);
   localStorage.removeItem(ENamesOfKeyLocalStorage.ROLE);
+  localStorage.removeItem(ENamesOfKeyLocalStorage.IS_VERIFY_CODE);
 };

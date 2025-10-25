@@ -17,6 +17,7 @@ const FieldsClient = () => {
   const { formState, dataClient } = useRegisterClient(); //HOOK  QUE USA CONTEXTO REGISTRO CLIENTE
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useFieldsClient(); // HOOK QUE USA CONTEXTO DE LOS CAMPOS DEL FORMULARIO DE CLIENTE
 
+
   return (
     <>
       <div className='c-flex c-flex-column gap-1 form__fields'>

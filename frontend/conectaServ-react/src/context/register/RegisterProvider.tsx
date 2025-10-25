@@ -1,6 +1,8 @@
-import { useState, type ChangeEvent, type ReactNode } from 'react';
+import { useEffect, useState, type ChangeEvent, type ReactNode } from 'react';
 import { RegisterContext } from './RegisterContext';
 import type { TRegister } from '../../types/typeRegister';
+import useFormVerifyEmailCode from '../../hooks/useFormVerifyEmailCode';
+import { ENamesOfKeyLocalStorage } from '../../types/enums';
 
 // CONTEXTO DE ESTADOS GENERALES A FORMULARIOS
 const RegisterProvider = ({ children }: { children: ReactNode }) => {
@@ -13,10 +15,18 @@ const RegisterProvider = ({ children }: { children: ReactNode }) => {
   const [password, setPassword] = useState<string>(''); //ESTADO EN TIEMPO RUNTIME PARA PASSWORD
   const [confirmPassword, setConfirmPassword] = useState<string>(''); //ESTADO EN TIEMPO RUNTIME PARA CONFIRMPASSWORD
 
+  // HOOK QUE USA CONTEXTO DE VERIFICACION DE EMAIL
+  const { isSuccefullyVerified } = useFormVerifyEmailCode();
+
   //ONCHANGE TERMINOS Y CONDICIONES
   const onChangeTerms = (e: ChangeEvent<HTMLInputElement>) => {
     setTerms(e.target.checked);
   };
+
+  // EFECTO PARA ALMACENAR BANDERA DE SI ESTA VERIFICADO O NO
+  useEffect(() => {
+    localStorage.setItem(ENamesOfKeyLocalStorage.IS_VERIFY_CODE, String(isSuccefullyVerified));
+  }, [isSuccefullyVerified]); //==> DEPENDENCIA EXTERNA
 
   //VALORES DE ESTADOS QUE CONSUME EL CONTEXTO
   const contextValuesRegister: TRegister = {

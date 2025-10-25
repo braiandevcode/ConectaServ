@@ -1,12 +1,12 @@
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import ModalContext from './GlobalModalContext';
 import type { iMessageState } from '../../interfaces/iMessageState';
 import type { TGlobalModal } from '../../types/typeGlobalModal';
-import type { EModalGlobalType } from '../../types/enumGlobalModalType';
+import { EModalGlobalType } from '../../types/enumGlobalModalType';
 
 // PROVIDER DE MODAL GLOBAL
 const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
-  // ESTADO PARA MODAL 
+  // ESTADO PARA MODAL
   const [isGlobalModalOpen, setIsGlobalModalOpen] = useState<boolean>(false);
   const [currentGlobalModal, setCurrentGlobalModal] = useState<EModalGlobalType | null>(null);
   const [messageState, setMessageState] = useState<iMessageState>({ type: null, text: null, title: null });
@@ -20,16 +20,11 @@ const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
 
   // FUNCION PARA USAR EN CUALQUIER CONTEXTO DE APP
   const showSuccess = (title: string, text: string) => {
-    console.log('Llege hasta el nuevo mensaje de satisfactorio');
-    
     setMessageState({ type: 'success', text, title });
   };
 
   // FUNCION PARA MENSAJE DE ERROR EN CUALQUIER CONTEXTO DE APP
   const showError = (title: string, text: string) => {
-
-    console.log('Llege hasta el nuevo mensaje de error');
-
     setMessageState({ type: 'error', text, title });
   };
 
@@ -38,6 +33,20 @@ const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
     setIsGlobalModalOpen(true);
     setCurrentGlobalModal(modalType); // ==> SETEAR EL NUEVO MODAL QUE SE MOSTRARA
   };
+
+  // EFECTO PARA  MOSTRAR MODAL DE MESNAJE EN HOME QUE SON DE CONTEXTOS EXTERNOS
+  useEffect(() => {
+    // SI HAY UN MENSAJE DE SUCCESS NUEVO, ABRIR EL MODAL GLOBAL AUTOMÁTICAMENTE
+    if (messageState.type === 'success' && !isGlobalModalOpen) {
+      setIsGlobalModalOpen(true);
+      setCurrentGlobalModal(EModalGlobalType.MODAL_SUCCESS);
+    }
+    // SI HAY UN MENSAJE DE ERROR NUEVO, ABRIR EL MODAL GLOBAL AUTOMÁTICAMENTE
+    if (messageState.type === 'error' && !isGlobalModalOpen) {
+      setIsGlobalModalOpen(true);
+      setCurrentGlobalModal(EModalGlobalType.MODAL_ERROR);
+    }
+  }, [messageState]); // DEPENDENCIA LOCAL ==> SE INTENTO EVITAR PERO POR EL MOMENTO SE HIZO ASI
 
   const valueGlobalModalContext: TGlobalModal = {
     closeGlobalModal,

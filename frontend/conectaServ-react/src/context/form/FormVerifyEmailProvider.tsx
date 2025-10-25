@@ -32,7 +32,10 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
   const [isVerifyingCode, setIsVerifyingCode] = useState<boolean>(false);
   const [isCodeVerified, setIsCodeVerified] = useState<boolean>(false);
 
-  const [isSuccefullyVerified, setIsSuccefullyVerified] = useState<boolean>(false);
+  // ESTADO LOCAL DE SI YA SE VERIFICO CORRECTAMENTE
+  const [isSuccefullyVerified, setIsSuccefullyVerified] = useState<boolean>(() => {
+    return localStorage.getItem(ENamesOfKeyLocalStorage.IS_VERIFY_CODE) === 'true';
+  });
 
   const NUM_DIGITS: number = 6;
 
