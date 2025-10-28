@@ -6,9 +6,9 @@ import { EKeyDataByStep } from '../../../types/enums';
 import { formatMontoWithCurrency, parseMontoToNumber } from '../../../utils/parsedAndFormatValuesUtils';
 import BudgeValidator from '../../../modules/validators/BudgeValidator';
 import type { TYesOrNo } from '../../../types/typeRadioYesOrNo';
-import type { TStepData } from '../../../types/typeStepData';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TTypeContextStepThree } from '../../../types/typeContextStepThree';
+import type { TStepDataTasker } from '../../../types/typeStepData';
 
 // PROVIDER PASO TRES
 const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
@@ -83,7 +83,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
             ...prev[EKeyDataByStep.THREE],
             budgeSelected: value,
           },
-        }) as TStepData,
+        }) as TStepDataTasker,
     );
 
     // DETERMINAR SI EL PASO ES VALIDO SEGUN SELECCION Y MONTO
@@ -108,7 +108,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
               amountBudge: 0, //PISO CON VALOR NUEVO EL PRESUPUESTO
               reinsert: 'no', //PISO CON VALOR NUEVO EL REINTEGRO
             },
-          }) as TStepData,
+          }) as TStepDataTasker,
       );
 
       // RESETEAR VALIDACION LOCAL DEL CAMPO MONTO
@@ -141,7 +141,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
               ...prev[EKeyDataByStep.THREE],
               amountBudge: parseMontoToNumber(result.value as string),
             },
-          }) as TStepData,
+          }) as TStepDataTasker,
       );
     }
 
@@ -181,7 +181,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
                 ...prev[EKeyDataByStep.THREE],
                 amountBudge: parseMontoToNumber(result.value as string),
               },
-            }) as TStepData,
+            }) as TStepDataTasker,
         );
         setIsReinsertDisabled(false); // HABILITAR REINTEGRO
       } else {
@@ -195,7 +195,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
                 ...prev[EKeyDataByStep.THREE],
                 amountBudge: 0,
               },
-            }) as TStepData,
+            }) as TStepDataTasker,
         );
         setIsStepValid(false);
         setIsReinsertDisabled(true); // DESHABILITAR REINTEGRO
@@ -289,7 +289,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
             ...prev[EKeyDataByStep.THREE],
             reinsert: value,
           },
-        }) as TStepData,
+        }) as TStepDataTasker,
     );
   };
 

@@ -22,9 +22,9 @@ const RegisterModalProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const valueRegisterModalContext: TRegisterModal = {
+    currentRegisterModal,
+    isRegisterModalOpen,
    closeRegisterModal,
-   currentRegisterModal,
-   isRegisterModalOpen,
    openRegisterModal,
    setIsRegisterModalOpen,
    setCurrentRegisterModal

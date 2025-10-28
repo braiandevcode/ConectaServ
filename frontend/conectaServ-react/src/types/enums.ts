@@ -1,4 +1,3 @@
-//---------------------------------ENUMS PARA EVITAR ERRORES Y PORQUE SE REUTILIZAN VARIA VECES-----------------------------------------
 // TIPO DE CATEGORIAS VALIDAS
 export enum ECategoryKey {
   REPAIR = 'reparacion-mantenimiento',
@@ -53,7 +52,7 @@ export enum ENamesOfKeyLocalStorage {
   IS_VERIFY_CODE= 'isVerified'
 }
 
-// ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES
+// ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES ENDPOINTS
 export enum EEndpoint {
   USER_ROLE = '/user:role', 
   USER = '/user'

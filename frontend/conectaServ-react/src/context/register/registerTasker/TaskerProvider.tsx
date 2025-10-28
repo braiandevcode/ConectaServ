@@ -1,4 +1,3 @@
-import { useLocation, useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 import { ECategoryKey, EDefaultSelected, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../../types/enums';
 import DescriptionValidator from '../../../modules/validators/DescriptionValidator';
@@ -13,13 +12,14 @@ import UserNameValidator from '../../../modules/validators/UserNameValidator';
 import FullNameValidator from '../../../modules/validators/FullNameValidator';
 import useRegister from '../../../hooks/useRegister';
 import type { TRegisterTasker } from '../../../types/typeRegisterTasker';
-import useVerifyEmailCode from '../../../hooks/useFormVerifyEmailCode';
 import { readExistingData } from '../../../utils/storageUtils';
 import Loader from '../../../components/Loader';
 import { defaultDataPro } from '../../../config/defaultDataPro';
-import type { TStepDataPro } from '../../../types/typeStepData';
 import { TaskerContext } from './TaskerContext';
 import type { iFormStateValidationTask } from '../../../interfaces/iFormStateValidationTask';
+import useValidateTasker from '../../../hooks/useValidateTasker';
+import scrolledTop from '../../../utils/scrollTop';
+import type { TStepDataTasker } from '../../../types/typeStepData';
 
 // INSTANCIO VALIDACIONES NECESARIAS
 const descriptionValidator: DescriptionValidator = new DescriptionValidator();
@@ -46,7 +46,7 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
   const stored = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA); //LEEO Y PARSEO OBJETO GENERAL DE PASOS
 
   // OBJETO GENERAL DE PASOS CON VALORES POR DEFECTO Y PARA ALMACENAR EN STROAGE
-  const [stepData, setStepData] = useState<TStepDataPro>(() => {
+  const [stepData, setStepData] = useState<TStepDataTasker>(() => {
     return {
       [EKeyDataByStep.ONE]: {
         ...defaultDataPro[EKeyDataByStep.ONE], //VALOR POR DEFECTO
@@ -68,10 +68,7 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   //--------------------------------------------------------------------HOOKS DE REACT--------------------------------------------------------------------//
-  const { pathname } = useLocation(); //HOOK DE REACT LOCATION
-  const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
-  const { isSuccefullyVerified } = useVerifyEmailCode(); //HOOK DE VERIFICACION DE CODIGO
-  const { terms, password, confirmPassword, setTerms } = useRegister(); //HOOK QUE USA CONTEXTO NIVEL REGISTRO
+  const { password, confirmPassword, setTerms } = useRegister(); //HOOK QUE USA CONTEXTO NIVEL REGISTRO
 
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
   // ESTADO PARA EL PASO ACTUAL DEL FORMULARIO
@@ -89,7 +86,7 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
   //UTIL PARA EVITAR PROBLEMAS EN PARSEOS EN CAMPOS EN TIEMPO
   const [isParsed, setIsParsed] = useState(false);
 
-  // -----------------------------------------------------------ESTADOS PASO 1--------------------------------------------------------------------------//
+  // -----------------------------------------------------------ESTADOS--------------------------------------------------------------------------//
   const [valueSelected, setValueSelected] = useState<string>(() => {
     return stepData[EKeyDataByStep.ONE]?.valueSelected ?? EDefaultSelected.SELECT_CATEGORY; // ==> DATO DE CATEGORIA O DEFAULT "none"
   });
@@ -99,9 +96,9 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [hasBudge, setHasBudge] = useState<boolean>(stepData[EKeyDataByStep.ONE].category === ECategoryKey.REPAIR); // ESTADO INICIAL DE SI TIENE PASO DEL PRESUPUESTO O NO
   const [hasContext, setHasContext] = useState<boolean>(stepData[EKeyDataByStep.ONE].category !== ECategoryKey.MOVE); // ESTADO DE SI TIENE O NO GRUPO DE CHECKS DE CONTEXTOS(HABITO)
-  
+
   // ESTADO DE BANDER PARA SABER SI RENDERIZA O NO ULTIMO PASO
-  const [isFieldsBasic, setIsFieldsBasic] =useState<boolean>(true);
+  const [isFieldsBasic, setIsFieldsBasic] = useState<boolean>(true);
 
   const [isBudgeMountDisabled, setIsBudgeMountDisabled] = useState<boolean>(true);
   const [isReinsertDisabled, setIsReinsertDisabled] = useState<boolean>(true);
@@ -141,42 +138,26 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
   // ESTADO DE VALIDACIONES EN TODO EL FORMULARIO ==> INICIALIZA CON ==> initialFormState QUE CONSUME DEL DATASTEP
   const [formState, setFormState] = useState<iFormStateValidationTask>(initialFormState);
 
+  //GANCHO PAR VALIDAR PASOS
+  const { validateCurrentStep } = useValidateTasker({ step, formState, hasBudge, hasContext, hasInteracted });
+
   // VALIDAR  CAMPOS POR PASOS
   const [isStepValid, setIsStepValid] = useState<boolean>(validateCurrentStep);
 
   const [isLoaded, setIsLoaded] = useState(false);
 
+  // -------------------------------------------------------------useEffects-------------------------------------------------------------------------//
   // EFECTO QUE INDICA QUE TODO FUE CARGADO
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
-  // -------------------------------------------------------------useEffects-------------------------------------------------------------------------//
   // EFECTO PARA ALMACENAR EN STORAGE SI HAY INTERACCION, LOS DATOS QUE INGRESA EL PROFESIONAL Y REVALIDAR CAMPOS AL MONTARSE
   useEffect(() => {
     //SI NO INTERACTUO
     if (!hasInteracted) return;
     localStorage.setItem(ENamesOfKeyLocalStorage.STEP_DATA, JSON.stringify(stepData));
   }, [stepData]); //HAY AL MENOS UN ESTADO EXTERNO
-
-  // EFECTO PARA FORZAR A RENDERIZAR HOME
-  useEffect(() => {
-    // CUANDO PRESIONO ATRAS O ADELANTE EN FLECHAS DEL NAVEGADOR Y ESTA EN EL HOME,
-    // QUE IGNORE EL HISTORIAL DEL NAVEGADOR
-    // Y LO REDIRIGA A SI MISMA AL HOME '/'
-    const handlePopState = () => navigate('/', { replace: true });
-
-    // SI LA RUTA DEL PATH ES EL HOME
-    if (location.pathname === '/') {
-      const wrappedHandler = () => handlePopState(); // GUARDAR REFERENCIA PARA PODER REMOVERLA DESPUES
-      window.addEventListener('popstate', wrappedHandler); //SUSCRIPCION DE EVENTO EN FLECHAS ATRAS/ADELANTE DEL NAVEGADOR
-
-      //LIMPIAR Y EVITAR FUGAS DE MEMORIA.
-      return () => {
-        window.removeEventListener('popstate', handlePopState);
-      };
-    }
-  }, [pathname, navigate]); //==> DEPENDE DE CAMBIOS EN LOCATION Y NAVIGATE, HOOKS DE REACT
 
   // -------------------------------------------------------- EVENTOS --------------------------------------------------------------------//
   // EVENTO DE CLICK PARA EL SIGUIENTE PASO
@@ -207,88 +188,6 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
     scrolledTop();
   };
 
-  //------------------------------------------FUNCIONES MODULARES------------------------------------------------------//
-
-  // ------------------------FUNCION PARA VALIDAR SEGUN EL PASO----------------------------------------//
-  function validateCurrentStep(): boolean {
-    let isValid: boolean = false;
-
-    // VERIFICAR EL PASO
-    switch (step) {
-      case 1: {
-        // VERIFICAR QUE HAYA AL MENOS UN CHECK EN CADA GRUPO
-        const hasServices: boolean = (formState['service[]'].value as string[]).length > 0;
-        const hasDays: boolean = (formState['day[]'].value as string[]).length > 0;
-        const hasHours: boolean = (formState['hour[]'].value as string[]).length > 0;
-        const hasContexts: boolean = !hasContext || (formState['context[]'].value as string[]).length > 0; //TRUE SI hasContext ES FALSO O HAY LONGITUD
-
-        // SI TODO ESTA COMPLETO EN PASO 1, SE CONSIDERA VALIDO
-        isValid = hasInteracted && formState.category.value !== ECategoryKey.NONE && hasServices && hasDays && hasHours && hasContexts;
-        return isValid;
-      }
-      case 2: {
-        // REVISO SI EL USUARIO INTERACTUO EN ALGUNO DE LOS CAMPOS OPCIONALES
-        // CONSIDERO INTERACTUACION SI:
-        // - ESCRIBIO ALGO EN DESCRIPTIONUSER
-        // - SUBIO UNA IMAGEN DE PERFIL
-        // - SUBIO ALGUNA IMAGEN DE EXPERIENCIAS
-        const interacted: boolean = Boolean(formState.descriptionUser.value) || Boolean(formState.imageProfile.value) || Boolean(formState.imageExperiences);
-
-        // REVISO SI ALGUNO DE LOS CAMPOS OPCIONALES ES VALIDO
-        const descriptionIsValid: boolean = formState.descriptionUser.isValid;
-
-        // DEFINO LA LOGICA DE VALIDACION DEL PASO:
-        // SI NO HUBO INTERACCION, EL PASO ES VALIDO
-        // SI HUBO INTERACCION, AL MENOS UNO DEBE SER VALIDO
-        isValid = !interacted || (interacted && descriptionIsValid);
-
-        return isValid;
-      }
-      case 3: {
-        // ASEGURAR QUE SIEMPRE TENGA EL "hasBudge" EN TRUE
-        if (hasBudge) {
-          const currentAmount: number = (formState.amountBudge.value as string).trim() !== '' ? parseInt(formState.amountBudge.value as string) : 0;
-          if (formState.budgeSelected.value === 'yes') {
-            // SI ELIGE "SÍ", DEBE SER UN MONTO VÁLIDO
-            isValid = formState.amountBudge.isValid;
-          } else if (formState.budgeSelected.value === 'no') {
-            const hasNotAmount: boolean = currentAmount === 0;
-            isValid = hasNotAmount;
-          } else {
-            isValid = false;
-          }
-        } else {
-          const { fullName, userName, email, location, password, confirmPassword } = formState;
-          const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isSuccefullyVerified;
-
-          isValid = isValidStep;
-          return isValid;
-        }
-        return isValid;
-      }
-      case 4: {
-        const { fullName, userName, email, location, password, confirmPassword } = formState;
-
-        const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isSuccefullyVerified;
-        isValid = isValidStep;
-        return isValid;
-      }
-      default: {
-        return false;
-      }
-    }
-  }
-
-  //------------------------------- FUNCION REUTILIZABLE PARA HACER SCROLL TOP------------------------------------------------//
-
-  function scrolledTop() {
-    // SCROLLEAMOS SUAVE HACIA ARRIBA EN CADA EVENTO
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  }
-
   //-----------------------------OBJETO DE CONTEXTO---------------------------------//
   const contextRegisterValue: TRegisterTasker = {
     isLoaded,
@@ -304,7 +203,6 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
     setIsBudgeMountDisabled,
     setFormState,
     setHasInteracted,
-    // onSubmitForm,
     handleClickNext,
     handleClickPrev,
     setHasContext,

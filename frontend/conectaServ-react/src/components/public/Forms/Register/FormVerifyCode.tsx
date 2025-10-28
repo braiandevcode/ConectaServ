@@ -52,7 +52,6 @@ const FormVerifyCode: FC = () => {
         </div>
         {renderFieldError(formState, 'emailCode')}
       </div>
-
       <div className='c-flex c-flex-items-center c-flex-justify-center'>{isVerifyingCode ? <LoaderBtn /> : <BtnSubmit text={'Verificar'} variant='btn btn__submit' disabled={!formState.emailCode.isValid || isVerifyingCode} />}</div>
     </form>
   );

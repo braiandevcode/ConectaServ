@@ -9,10 +9,16 @@ import EmailValidator from '../../modules/validators/EmailValidator';
 import useMain from '../../hooks/useMain';
 import { ENamesOfKeyLocalStorage } from '../../types/enums';
 import { useNavigate } from 'react-router';
+import type { TUser } from '../../types/typeUser';
+import useUserApi from '../../hooks/useUserApi';
+
 const emailValidator: EmailValidator = new EmailValidator(); // ==> INSTANCIA DE VALIDACION DE ENTRADA DE CODIGO
+
+// PROVIDER PARA IDENTIFICACION DE EMAIL
 const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
   const { openGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
-  const { handleClientClick, handleTaskerClick, setLoading } = useMain();
+  const { handleClientClick, handleTaskerClick } = useMain(); // HOOK QUE USA EL CONTEXTO DE MAIN PRINCIPAL
+  const { getIdentifyEmail } = useUserApi(); //HOOK PARA PETICIONES A DATOS DEL USUARIO
 
   const navigate = useNavigate();
 
@@ -37,12 +43,12 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
 
   // MOSTRAR MODAL CON FORMULARIO DE IDENTIFICACION DE EMAIL
   const handleClickClientIdentifyEmail = () => {
-    handleClientClick();
+    handleClientClick(); //GUARDAR ROLE CLIENT
     openGlobalModal(EModalGlobalType.MODAL_IDENTIFY_EMAIL);
   };
 
   const handleClickTaskerIdentifyEmail = () => {
-    handleTaskerClick();
+    handleTaskerClick(); //GUARDAR ROLE TASKER
     openGlobalModal(EModalGlobalType.MODAL_IDENTIFY_EMAIL);
   };
 
@@ -51,27 +57,7 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
     const value: string = e.currentTarget.value;
     const validate: TFieldState = emailValidator.validate(value);
     setFormState((prev) => ({ ...prev, emailIdentify: validate })); //SETEAR ESTADO DE VALIDACION DE LA ENTRADA
-    setEmailIdentify(value);
-  };
-
-  // LEER TABLA USERS PARA OBTENER EL EMAIL SI EXISTE
-  const getIdentifyEmail = async () => {
-    try {
-      setLoading(true);
-      setIsSendingIdentificationEmail(true);
-      //ESTE ENDPOINT PODRIA PARAMETRIZARSE CON user/:email(para solo filtrar el email y no traer todo)
-      const getEmailUser = await fetch('http://localhost:3000/user');
-      if (!getEmailUser.ok) {
-        throw new Error('Error al hacer la solicitud');
-      }
-      const result = await getEmailUser.json();
-      return result;
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false); //LOADING
-      setIsSendingIdentificationEmail(false); //ENVIANDO
-    }
+    setEmailIdentify(value); //SETEAR EL EMAIL INGRESADO
   };
 
   //EVENTO DE SUBMIT DE IDENTIFICACION AL BACKEND
@@ -80,13 +66,16 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
     const stored = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE);
     if (!stored) return; //ASEGURAR QUE EN STORAGE ESTE ALMACENADO EL ROLE
 
-    const result: any[] = await getIdentifyEmail();
-    if (result) {
+    // LLAMO AL METODO Y PASO EL ARGUMENTO ESPERADO INTERNAMENTE
+    const result = (await getIdentifyEmail({ setIsSendingIdentificationEmail })) as TUser[];
+
+    // SI LA SOLICITUD TRAE DATOS
+    if (result && result.length > 0) {
       const findIndexEmailIdentify = result.findIndex((data) => data.email === emailIdentify);
 
       // SI ES DIFERENTE DE -1 LO ENCONTRO
       if (findIndexEmailIdentify !== -1) {
-        openGlobalModal(EModalGlobalType.MODAL_LOGIN)
+        openGlobalModal(EModalGlobalType.MODAL_LOGIN);
         setIsExistEmail(true);
       } else {
         navigate(`register/${stored}`); //SEGUN EL ROL GUARDADO NAVEGAR
@@ -96,12 +85,12 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const valueIdentifyEmail: TIdentifyEmail = {
-    submitIdentifyEmail,
     isExistEmail,
     isSendingIdentificationEmail,
     isSentIdentificationEmail,
     emailIdentify,
     formState,
+    submitIdentifyEmail,
     handleOnchangeIdentifyEmail,
     setEmailIdentify,
     setFormState,

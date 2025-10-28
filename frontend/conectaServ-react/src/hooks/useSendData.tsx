@@ -2,24 +2,25 @@ import type { FormEvent } from 'react';
 import { EDataClient, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../types/enums';
 import type { TPlainClient } from '../types/typePlainClient';
 import type { TPlaintTasker } from '../types/typePlainDataTasker';
-import apiRequest from '../utils/apiRequestUtils';
-// import { clearPersistence } from '../utils/storageUtils';
 import useMain from './useMain';
 import useRegister from './useRegister';
 import useRegisterClient from './useRegisterClient';
 import useRegisterTasker from './useRegisterTasker';
 import useGlobalModal from './useGlobalModal';
-import { endPointRegister } from '../config/configEndpointRegister';
 import useValidateStep from './useValidateStep';
 import { useNavigate } from 'react-router';
+import type { TUser } from '../types/typeUser';
+import useUserApi from './useUserApi';
 
 // HOOK QUE SE ENCARGA DEL PROCESO DE ENVIO DE DATOS AL BACKEND
 const useSendData = () => {
-  const { setLoading, client } = useMain(); // HOOK QUE USA EL CONTEXTO A NIVEL MAIN
-  const { password, setIsSending } = useRegister(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO GENERALES
+  const { client } = useMain(); // HOOK QUE USA EL CONTEXTO A NIVEL MAIN
+  const { password } = useRegister(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO GENERALES
   const { dataClient, isLoaded: isLoadedClient, isValid } = useRegisterClient(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO CLIENTE
   const { stepData, isLoaded: isLoadedProfessional, isStepValid } = useRegisterTasker(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO PROFESIONAL
   const { showError, showSuccess } = useGlobalModal(); //HOOK QUE USA CONTEXTO DE MODALES GLOBAL
+
+  const { addNewUser } = useUserApi();
 
   const { isLastStep } = useValidateStep(); // HOOK PARA VALIDAR PASO
   const navigate = useNavigate();
@@ -28,12 +29,10 @@ const useSendData = () => {
   const isReady: boolean = isLoadedClient || isLoadedProfessional;
 
   // FUNCION PARA CUANDO EL REGISTRO ES EXITOSO
-  const handleSuccessfulRegistration = () => {
+  const handleSuccessfulRegistration = (): void => {
     // DEFINIR LA ACCION DE REDIRECCION
     const redirectToHome = () => {
       navigate('/');
-      setLoading(false); 
-      setIsSending(false);
     } 
 
     // MOSTRAR EL MODAL CON EL MENSAJE
@@ -87,40 +86,11 @@ const useSendData = () => {
       roles: roleVector, //AGREGAR ROLE
     } as TPlainClient;
 
-    const { ENDPOINT_USER } = endPointRegister;
 
     // SI CLIENTE ES TRUE  NEVO DATO DE CLIENTE, SINO PROFESIONAL
-    const newData: TPlainClient | TPlaintTasker = client ? dataSendClient : dataSendTasker;
-
-    // TRY/CATCH
-    try {
-      setIsSending(true); //ENVIANDO DATOS
-      setLoading(true); // ACTIVAR LOADER MIENTRAS SE ENVÍA AL BACKEND
-      await apiRequest(`${ENDPOINT_USER}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newData),
-      });
-
-      handleSuccessfulRegistration();
-    } catch (error: unknown) {
-      // CONVERTIR EL TIPO A UN ERROR CONOCIDO O EXTRAER LOS DATOS
-      const apiError = error as { status?: number };
-      const statusCode: number | undefined = apiError.status;
-
-      // SI HAY VALOR Y SI ENTRE 400 Y 499
-      if (statusCode && statusCode >= 400 && statusCode < 500) {
-        // 4xx: PROBLEMAS DE DATOS DEL USUARIO
-        showError('Error al Registrar', 'Verifica tus datos e inténtalo de nuevo.');
-      } else {
-        // SINO SON DE 500 EN ADELANTE
-        // 5xx o ERROR DE RED O DESCONOCIDO
-        showError('Problema de Conexión', 'No se pudo contactar al servidor. Revisa tu conexión a internet o inténtalo más tarde.');
-      }
-    } finally {
-      // setLoading(false); //LOADING EN FALSE
-      // setIsSending(false); // ENVIANDO FALSE
-    }
+    const newData: TUser = client ? dataSendClient : dataSendTasker;
+ 
+    await addNewUser({ handleSuccessfulRegistration, newData}); //AGREGAR USUARIO
   };
 
   return { submitNewData, handleSuccessfulRegistration, isReady };

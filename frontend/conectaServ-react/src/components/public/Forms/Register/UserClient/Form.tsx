@@ -27,7 +27,6 @@ const Form = () => {
             </div>
           </h2>
           <div className='mb-1 c-flex c-flex-items-center gap-1/2 container-textInfo'>
-            <i className='fas fa-info-circle'></i>
             <FaInfoCircle size={20} />
             <small>
               Campos con (<span className='span-required'>*</span>) son obligatorios
