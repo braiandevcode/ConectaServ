@@ -4,4 +4,5 @@ import type { IconBaseProps, IconType } from "react-icons";
 export interface iModalInfo {
   iconBaseProps:IconBaseProps
   iconReact?:IconType
+  oncloseModal: (cb?: () => void) => void
 }

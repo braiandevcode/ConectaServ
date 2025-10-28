@@ -1,6 +1,6 @@
 // TIPO DE ESTRUCTURA PARA ROLE
 export type TRole = {
   handleClientClick: () => void;
-  handleProClick: () => void;
+  handleTaskerClick: () => void;
   client: boolean | null;
 };

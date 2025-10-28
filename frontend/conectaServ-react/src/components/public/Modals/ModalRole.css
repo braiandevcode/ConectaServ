@@ -1,15 +1,4 @@
 /* PISO ESTILO DE BTN SOLO PARA EL MODAL */
-/* .btn__role {
-  padding: 0.3rem;
-  right: 0.7rem;
-  top: 0.8rem;
-  opacity: 0.8;
-  transition:
-    0.3s ease,
-    transform 0.3s ease-in-out,
-    backgroun-color 0.3s ease-in-out;
-} */
-
 
 /* TARJETA PRINCIPAL DE MODAL  */
 .modal-role__card {
@@ -25,10 +14,6 @@
 .modal-role__icon-container {
   font-size: 1.3rem;
   color: var(--bg-secondary);
-}
-
-.modal-role__text {
-  flex: 1;
 }
 
 .modal-role__card-title {

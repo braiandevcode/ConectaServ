@@ -55,9 +55,8 @@ export enum ENamesOfKeyLocalStorage {
 
 // ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES
 export enum EEndpoint {
-  TASKER = '/tasker',
-  CLIENT = '/client',
-  REGISTER = '/users' // REGISTRO SEGUN ROLE
+  USER_ROLE = '/user:role', 
+  USER = '/user'
 }
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA

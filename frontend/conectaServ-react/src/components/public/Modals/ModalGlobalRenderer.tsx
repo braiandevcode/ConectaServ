@@ -8,17 +8,20 @@ import { type JSX } from 'react';
 import type { TGlobalModalComponents } from '../../../types/typeGlobalModalComponents';
 import { EModalGlobalType } from '../../../types/enumGlobalModalType';
 import useGlobalModal from '../../../hooks/useGlobalModal';
+import ModalIdentifyEmail from './ModalIdentifyEmail';
+import ModalLogin from './ModalLogin';
 
 
 
-// DEFINE QUE MODAL RENDERIZAR
+// DEFINE QUE MODAL RENDERIZAR EN CONTEXTO GLOBAL
 const ModalGlobalRenderer = (): JSX.Element | null => {
-  const { currentGlobalModal,isGlobalModalOpen, closeGlobalModal } = useGlobalModal(); //HOOK NIVEL MAIN
+  const { currentGlobalModal, isGlobalModalOpen, closeGlobalModal } = useGlobalModal(); //HOOK NIVEL MAIN
 
   // MAPEO DE MODALES A MOSTRAR/OCULTAR
   const MODAL_COMPONENTS:TGlobalModalComponents = {
     [EModalGlobalType.MODAL_ROLE]: ModalRole,
-    // [EModalType.MODAL_LOGIN]: ModalLogin,
+    [EModalGlobalType.MODAL_LOGIN]: ModalLogin,
+    [EModalGlobalType.MODAL_IDENTIFY_EMAIL]: ModalIdentifyEmail,
     [EModalGlobalType.MODAL_SUCCESS]: ModalSuccess,
     [EModalGlobalType.MODAL_ERROR]: ModalError
   };
@@ -29,7 +32,7 @@ const ModalGlobalRenderer = (): JSX.Element | null => {
 
   return (
     <ModalWrapper className={`${!isGlobalModalOpen ? 'modal modal--hiden' : 'modal'}`} ariaHidden={!isGlobalModalOpen} onClose={closeGlobalModal}>
-      <ModalComponent />
+      <ModalComponent oncloseModal={closeGlobalModal} />
     </ModalWrapper>
   );
 };

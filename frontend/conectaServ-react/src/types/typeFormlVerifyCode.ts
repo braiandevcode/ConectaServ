@@ -1,6 +1,6 @@
 import type { ChangeEvent, Dispatch, FormEvent, KeyboardEvent, RefObject, SetStateAction } from 'react';
 import type { iEmailUser } from '../interfaces/iEmailUser';
-import type { iFomrValidationVerifyEmail } from '../interfaces/iFormValidationVerifyEmail';
+import type { iFormValidationVerifyEmail } from '../interfaces/iFormValidationVerifyEmail';
 
 export type TFormVerifyCode = {
   inputRefs: RefObject<(HTMLInputElement | null)[]>;
@@ -17,7 +17,6 @@ export type TFormVerifyCode = {
   setIsCodeSent: Dispatch<SetStateAction<boolean>>;
   setIsVerifyingCode: Dispatch<SetStateAction<boolean>>;
   setIsCodeVerified: Dispatch<SetStateAction<boolean>>;
-  setFormState: Dispatch<SetStateAction<iFomrValidationVerifyEmail>>;
   isSuccefullyVerified: boolean; // INDICA SI LA VALIDACION DEL CODIGO FUE EXITOSA O NO
   isSendingCode: boolean; //PARA INDICAR QUE EL CODIGO SE ESTA ENVIANDO AL USUSARIO
   isCodeSent: boolean; //PARA INDICAR QUE EL CODIGO SE ENVIO AL DESTINO
@@ -25,5 +24,6 @@ export type TFormVerifyCode = {
   isCodeVerified: boolean; //PARA INDICAR QUE EL CODIGO INGRESADO POR EL USUARIO SE VERIFICO
   codeStoredEmail: string;
   otp: string[]; //ARRAY DE STRINGS PARA VALORES EN INPUTS
-  formState: iFomrValidationVerifyEmail;
+  setFormState: Dispatch<SetStateAction<iFormValidationVerifyEmail>>;
+  formState: iFormValidationVerifyEmail;
 };

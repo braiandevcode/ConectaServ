@@ -1,11 +1,36 @@
+import { useEffect } from 'react';
 import ModalMessage from './ModalMessage';
 import { RiAlertFill } from 'react-icons/ri';
+import useGlobalModal from '../../../hooks/useGlobalModal';
 
-// MODAL SATISFACTORIO
+// MODAL ERROR
 const ModalError = () => {
+  const { onCloseCallback, closeGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXT DE MODAL GLOBAL
+
+  // EFECTO CON TIMMER PARA CERRAR AUTOMATICAMENTE MODAL
+  useEffect(() => {
+    let timerId: NodeJS.Timeout | null = null;
+
+    // SI HAY UNA CALLBACK GUARDADA UNA ACCION DE REDIRECCION PENDIENTE
+    if (onCloseCallback) {
+      //ACTIVAR TIMMER
+      timerId = setTimeout(() => {
+        closeGlobalModal(); // EJECUTAR CALLBACK QUE TIENE GUARDADO AL CERRAR MODAL
+      }, 4000);
+
+      // CLEAN UP(FUNCION PARA LIMPIAR TIMMER)
+      return () => {
+        // SI HAY UN TIMMER
+        if (timerId) {
+          clearTimeout(timerId); //LIMPIAR
+        }
+      };
+    }
+  }, [onCloseCallback, closeGlobalModal]); // DEPENDENCIAS
+
   return (
     <>
-      <ModalMessage iconBaseProps={{ color: '#d49f0dff', size:120 }} iconReact={RiAlertFill} />
+      <ModalMessage oncloseModal={closeGlobalModal} iconBaseProps={{ color: '#d49f0dff', size: 120 }} iconReact={RiAlertFill} />
     </>
   );
 };

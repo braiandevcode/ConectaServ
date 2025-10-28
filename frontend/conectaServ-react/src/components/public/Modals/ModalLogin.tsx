@@ -1,20 +1,24 @@
-// import FormLogin from '../Forms/Login';
-// import BtnClose from './Buttons/BtnClose';
+import useGlobalModal from '../../../hooks/useGlobalModal';
+import Login from '../Forms/Login/Login';
+import BtnClose from './Buttons/BtnClose';
 
-// const ModalLogin = () => {
-//   return (
-//     <>
-//       <div className='bg-white flex rounded-lg w-full max-w-md mx-4'>
-//         <div className='p-6'>
-//           <div className='flex justify-between items-center mb-6'>
-//             <h3 className='text-2xl font-bold text-gray-800'>Iniciar sesión</h3>
-//             <BtnClose variant='btn btn__ghost' />
-//           </div>
-//           {<FormLogin />}
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
+// CSS
+import './ModalLogin.css';
 
-// export default ModalLogin;
+// MODAL DE LOGIN DE ACCESO
+const ModalLogin = () => {
+  const { closeGlobalModal } = useGlobalModal();
+  return (
+    <>
+      <div className='modalLogin w-full position-relative'>
+        <BtnClose onCloseModal={closeGlobalModal} variant='btn btn__ghost' className='modalLoginHeader__btnClose cursor-pointer position-absolute' />
+        <div className='modalLoginHeader w-full'>
+          <h3 className='modalLoginHeader__title text-center'>Iniciar sesión</h3>
+        </div>
+        {<Login />}
+      </div>
+    </>
+  );
+};
+
+export default ModalLogin;

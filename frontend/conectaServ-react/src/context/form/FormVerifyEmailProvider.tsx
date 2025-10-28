@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type KeyboardEvent, type ReactNode } from 'react';
 import { ENamesOfKeyLocalStorage } from '../../types/enums';
 import type { iEmailUser } from '../../interfaces/iEmailUser';
 import sendCodeToUserEmail from '../../utils/sendCodeToUserEmail';
@@ -8,7 +8,7 @@ import useGlobalModal from '../../hooks/useGlobalModal';
 import useRegisterModal from '../../hooks/useRegisterModal';
 import { EModalGlobalType } from '../../types/enumGlobalModalType';
 import type { TFormVerifyCode } from '../../types/typeFormlVerifyCode';
-import type { iFomrValidationVerifyEmail } from '../../interfaces/iFormValidationVerifyEmail';
+import type { iFormValidationVerifyEmail } from '../../interfaces/iFormValidationVerifyEmail';
 import CodeValidator from '../../modules/validators/CodeValidator';
 import type { TFieldState } from '../../types/typeStateFields';
 import { validateWithRegex } from '../../utils/validateFieldUtils';
@@ -43,19 +43,19 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
   const [otp, setOtp] = useState<string[]>(Array(NUM_DIGITS).fill(''));
 
   const fullCode: string = otp.join(''); //GUARDAR LA CADENA UNIDA
-  const initialFormVerifyEmailState: iFomrValidationVerifyEmail = {
+  const initialFormVerifyEmailState: iFormValidationVerifyEmail = {
     // ESTADOS DE ENTRADA EN VERIFICACION DE CODIGO
     emailCode: codeValidator.validate(fullCode ?? ''),
   };
 
-  const [formState, setFormState] = useState<iFomrValidationVerifyEmail>(initialFormVerifyEmailState);
+  const [formState, setFormState] = useState<iFormValidationVerifyEmail>(initialFormVerifyEmailState);
 
   // DEFINIR UN ARRAY DE REFERENCIAS DE TIPO HTMLInputElement O null
   // AEGURAR QUE ESOS ELEMENTOS TENFRAN LA FUNCION FOCUS PARA EJECUTAR
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   //HANDLER DE MANEJO DE DIGITO ==> MANEJO DE LOGICA opt
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number): void => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number): void => {
     const value: string = e.currentTarget.value; //VALOR INGRESADO
     const length: number = inputRefs.current.length - 1; //==> GUARDAR EN MEMORIA LA LONGITUD DE REF RESTANDO UNO
 
@@ -143,11 +143,11 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
 
   // FUNCION QUE SE ENCARGA DE MANDAR EL CODIGO AL USUARIO
   const sendCode = async ({ emailUser }: iEmailUser): Promise<void> => {
-    // INVOCO FUNCION DE ENVIO
+    // INVOCO HELPER FUNCION DE ENVIO
     await sendCodeToUserEmail({
+      emailUser,
       updatedIsSentCode,
       updatedIsSendingCode,
-      emailUser,
       updateCodeEmail,
       showError,
       showSuccess,
@@ -183,7 +183,7 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem(ENamesOfKeyLocalStorage.CODE);
       }
       closeRegisterModal(); //CERRAR MODAL ACTUAL AUTOMATICAMENTE LUEGO DEL EVENTO
-    }, 12000);
+    }, 8000);
   };
 
   const valuesFormVerifyEmailContext: TFormVerifyCode = {

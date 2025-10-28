@@ -1,21 +1,12 @@
 import { Link, useLocation } from 'react-router';
-import { FaArrowAltCircleRight } from 'react-icons/fa';
 import Button from '../Button';
-import useGlobalModal from '../../hooks/useGlobalModal';
-import { EModalGlobalType } from '../../types/enumGlobalModalType';
+import { FiUserPlus } from 'react-icons/fi';
+import useHeader from '../../hooks/useHeader';
 
 // <!-- CABECERA -->
 export default function Header() {
-  const { openGlobalModal} = useGlobalModal();
   const { pathname } = useLocation();
-  // const openLogin = () => openModal(EModalType.MODAL_LOGIN);
-
-  
-  // FUNCION QUE SOLO INDICA ABRIR MODAL DE ROL A ELEGUIR
-  const openRole = () => {
-    openGlobalModal(EModalGlobalType.MODAL_ROLE); // ==> PASO EL TIPO DE MODAL A ABRIR
-  };
-
+  const { openRole } = useHeader() // ==> HOOK PARA EL HEADER
   return (
     <>
       <header className='header mb-3'>
@@ -129,7 +120,7 @@ export default function Header() {
             {pathname === '/' && (
               <Button type='button' className='btn color btnRegister c-flex c-flex-items-center gap-1/2 auth-wrapper__register' onClick={openRole}>
                 <span>Registrarse</span>
-                <FaArrowAltCircleRight size={20} />
+                <FiUserPlus />
               </Button>
             )}
           </div>

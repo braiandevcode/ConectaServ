@@ -1,10 +1,9 @@
-import type { iEmailUser } from './iEmailUser';
+import type { iBtns } from './iBtns';
 import type { iFormStateValidationClient } from './iFormStateValidationClient';
-import type { iFormStateValidationPro } from './iFormStateValidationPro';
+import type { iFormStateValidationTask } from './iFormStateValidationTask';
 
 // INTERFACE PARA BOTON DE ENVIAR CODIGO
-export interface iBtnSendCode extends iEmailUser {
-  sendCode: ({ emailUser }: iEmailUser) => Promise<void>;
-  text: string;
-  formState: iFormStateValidationPro | iFormStateValidationClient
+export interface iBtnSendCode extends iBtns {
+  formState: iFormStateValidationTask | iFormStateValidationClient;
+  handleSend: () => Promise<void> 
 }

@@ -17,6 +17,8 @@ const FieldsClient = () => {
   const { formState, dataClient } = useRegisterClient(); //HOOK  QUE USA CONTEXTO REGISTRO CLIENTE
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useFieldsClient(); // HOOK QUE USA CONTEXTO DE LOS CAMPOS DEL FORMULARIO DE CLIENTE
 
+  // ACCIONAR AHORA EL ENVIO ==> FUNCION ASINCRONA
+  const send = async () => await sendCode({ emailUser: dataClient[EDataClient.DATA].email });
 
   return (
     <>
@@ -29,7 +31,7 @@ const FieldsClient = () => {
             </span>
             <span className='span-required'>*</span>
           </label>
-          <input type='text' id='fullName' className={`form__input ${styleBorderFieldError(formState, 'fullName')}`} autoComplete='name' placeholder='Roberto Bustos' value={formState.fullName.value as string} onInput={handleFullName} required autoFocus />
+          <input type='text' id='fullName' className={`form__input ${styleBorderFieldError(formState, 'fullName')}`} autoComplete='name' placeholder='Roberto Bustos' value={formState.fullName.value as string} onChange={handleFullName} required autoFocus />
           {renderFieldError(formState, 'fullName')}
         </div>
 
@@ -41,7 +43,7 @@ const FieldsClient = () => {
             </span>
             <span className='span-required'>*</span>
           </label>
-          <input type='text' id='userName' className={`form__input ${styleBorderFieldError(formState, 'userName')}`} autoComplete='username' placeholder='Roberto_Bustos.45' value={formState.userName.value as string} onInput={handleUserName} required />
+          <input type='text' id='userName' className={`form__input ${styleBorderFieldError(formState, 'userName')}`} autoComplete='username' placeholder='Roberto_Bustos.45' value={formState.userName.value as string} onChange={handleUserName} required />
           {renderFieldError(formState, 'userName')}
         </div>
 
@@ -54,8 +56,8 @@ const FieldsClient = () => {
             <span className='span-required'>*</span>
           </label>
           <div className='c-flex c-flex-items-center gap-1'>
-            <input type='text' id='email' className={`form__input ${styleBorderFieldError(formState, 'email')}`} autoComplete='email' placeholder='test@example.com' value={formState.email.value as string} onInput={handleEmail} required />
-            {isSendingCode ? <LoaderBtn /> : <BtnSendCode formState={formState} sendCode={sendCode} emailUser={dataClient[EDataClient.DATA].email} text='Código' />}
+            <input type='text' id='email' className={`form__input ${styleBorderFieldError(formState, 'email')}`} autoComplete='email' placeholder='test@example.com' value={formState.email.value as string} onChange={handleEmail} required />
+            {isSendingCode ? <LoaderBtn /> : <BtnSendCode formState={formState} handleSend={send} text='Código' />}
           </div>
           {renderFieldError(formState, 'email')}
         </div>
@@ -87,7 +89,7 @@ const FieldsClient = () => {
             </span>
             <span className='span-required'>*</span>
           </label>
-          <input type='password' id='password' autoComplete='new-password' className={`form__input ${interactedPassword && styleBorderFieldError(formState, 'password')}`} placeholder='***********' value={password} onInput={handlePassword} required />
+          <input type='password' id='password' autoComplete='new-password' className={`form__input ${interactedPassword && styleBorderFieldError(formState, 'password')}`} placeholder='***********' value={password} onChange={handlePassword} required />
           {interactedPassword && renderFieldError(formState, 'password')}
         </div>
 
@@ -99,7 +101,7 @@ const FieldsClient = () => {
             </span>
             <span className='span-required'>*</span>
           </label>
-          <input type='password' id='confirmPassword' autoComplete='new-password' className={`form__input ${interactedConfirmPassword && styleBorderFieldError(formState, 'confirmPassword')}`} aria-label='Confirmar contrasena' placeholder='***********' value={confirmPassword} onInput={handleConfirmPassword} required />
+          <input type='password' id='confirmPassword' autoComplete='new-password' className={`form__input ${interactedConfirmPassword && styleBorderFieldError(formState, 'confirmPassword')}`} aria-label='Confirmar contrasena' placeholder='***********' value={confirmPassword} onChange={handleConfirmPassword} required />
           {interactedConfirmPassword && renderFieldError(formState, 'confirmPassword')}
         </div>
       </div>

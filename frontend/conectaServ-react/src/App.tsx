@@ -30,7 +30,6 @@ export default function App() {
       <Routes>
         <Route path='/' element={<MainLayout />}>
           <Route path='/' element={<Home />} />
-          {/* <Route path='login' element={<LoginModal />} /> */}
           <Route path='register' element={<RegisterLayout />}>
             <Route path='privacity' element={<PrivacyPolicy />} />
             <Route path='terms' element={<TermsAndConditions />} />

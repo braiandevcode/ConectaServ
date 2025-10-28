@@ -9,6 +9,7 @@ import useRegister from '../../../../../hooks/useRegister';
 
 // CSS
 import '../../FormBase.css';
+import { FaInfoCircle, FaUserCircle } from 'react-icons/fa';
 
 // FORMULARIO DE CLIENTE
 const Form = () => {
@@ -21,12 +22,13 @@ const Form = () => {
         <div className='c-flex c-flex-column c-flex-justify-center form__header'>
           <h2 className='c-flex c-flex-wrap c-flex-items-center gap-1/2 form__subtitle'>
             <div className='c-flex w-full c-flex-items-center gap-1/2'>
-              <i className='fas fa-solid fa-user-circle'></i>
+              <FaUserCircle size={20} />
               <span>Crear Cuenta</span>
             </div>
           </h2>
           <div className='mb-1 c-flex c-flex-items-center gap-1/2 container-textInfo'>
             <i className='fas fa-info-circle'></i>
+            <FaInfoCircle size={20} />
             <small>
               Campos con (<span className='span-required'>*</span>) son obligatorios
             </small>
@@ -35,7 +37,6 @@ const Form = () => {
 
         <div className='c-flex c-flex-column gap-3/2'>
           <div className='c-flex c-flex-column gap-2 c-flex-justify-center'>
-            {/* LLAMO AL MISMO COMPONENTE + PROVIDER DE PASO BASICO PARA MANTENER LA LOGICA */}
             <FieldsClientProvider>
               <FieldsClient />
             </FieldsClientProvider>

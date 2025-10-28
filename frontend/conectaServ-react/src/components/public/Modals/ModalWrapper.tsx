@@ -5,7 +5,7 @@ import type { iModalWrapperProps } from '../../../interfaces/iModalWrapperProps'
 import './ModalWrapper.css';
 
 // ES LA PLANTILLA BASE PATRA TODOS LOS MODALES
-const ModalWrapper: FC<iModalWrapperProps> = ({ children, className, ariaHidden}): ReactNode => {
+const ModalWrapper: FC<iModalWrapperProps> = ({ children, className, ariaHidden }): ReactNode => {
   return (
     <>
       <div className='container-modal c-flex c-flex-items-center c-flex-justify-center position-fixed inset-0'>

@@ -27,6 +27,19 @@ const useSendData = () => {
   // SI SE CARGO TODO EN CONTEXTO DE CLIENTE Y EN PROFESIONAL
   const isReady: boolean = isLoadedClient || isLoadedProfessional;
 
+  // FUNCION PARA CUANDO EL REGISTRO ES EXITOSO
+  const handleSuccessfulRegistration = () => {
+    // DEFINIR LA ACCION DE REDIRECCION
+    const redirectToHome = () => {
+      navigate('/');
+      setLoading(false); 
+      setIsSending(false);
+    } 
+
+    // MOSTRAR EL MODAL CON EL MENSAJE
+    showSuccess('Registro Exitoso', 'Tus datos se han enviado correctamente.', redirectToHome);
+  };
+
   // ENVIAR DATOS AL BACKEND DE CUALQUIERA DE LOS DOS REGISTROS
   const submitNewData = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // ==> PREVENIR
@@ -74,7 +87,7 @@ const useSendData = () => {
       roles: roleVector, //AGREGAR ROLE
     } as TPlainClient;
 
-    const { ENDPOINT_REGISTER } = endPointRegister;
+    const { ENDPOINT_USER } = endPointRegister;
 
     // SI CLIENTE ES TRUE  NEVO DATO DE CLIENTE, SINO PROFESIONAL
     const newData: TPlainClient | TPlaintTasker = client ? dataSendClient : dataSendTasker;
@@ -83,15 +96,13 @@ const useSendData = () => {
     try {
       setIsSending(true); //ENVIANDO DATOS
       setLoading(true); // ACTIVAR LOADER MIENTRAS SE ENVÍA AL BACKEND
-      await apiRequest(`${ENDPOINT_REGISTER}`, {
+      await apiRequest(`${ENDPOINT_USER}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newData),
       });
-      showSuccess('Registro Exitoso', 'Tus datos se han enviado y registrado correctamente.');
-      setInterval(() => {
-        navigate('/'); //LLEVAR LUEGO DEL REGISTRO AL HOME
-      }, 8500);
+
+      handleSuccessfulRegistration();
     } catch (error: unknown) {
       // CONVERTIR EL TIPO A UN ERROR CONOCIDO O EXTRAER LOS DATOS
       const apiError = error as { status?: number };
@@ -107,12 +118,12 @@ const useSendData = () => {
         showError('Problema de Conexión', 'No se pudo contactar al servidor. Revisa tu conexión a internet o inténtalo más tarde.');
       }
     } finally {
-      setLoading(false); //LOADING EN FALSE
-      setIsSending(false); // ENVIANDO FALSE
+      // setLoading(false); //LOADING EN FALSE
+      // setIsSending(false); // ENVIANDO FALSE
     }
   };
 
-  return { submitNewData, isReady };
+  return { submitNewData, handleSuccessfulRegistration, isReady };
 };
 
 export default useSendData;

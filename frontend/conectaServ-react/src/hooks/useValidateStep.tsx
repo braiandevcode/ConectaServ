@@ -6,6 +6,8 @@ import useRegisterTasker from './useRegisterTasker';
 const useValidateStep = () => {
   const { step, hasBudge, isFieldsBasic } = useRegisterTasker(); // ------------------------VARIABLES Y/O CONSTANTES---------------------------------------------//
   const isStepOne: boolean = step === 1;
+
+  const IsStepOneGreaterThhanZero:boolean = step > 1;
   const isStepTwo: boolean = step === 2;
   const isStepThree: boolean = step === 3;
   const isStepFour: boolean = step === 4; 
@@ -22,6 +24,7 @@ const useValidateStep = () => {
 
   return {
     isLastStepFieldSBasic: shouldRenderStepFour,
+    IsStepOneGreaterThhanZero,
     isBudge,
     isLastStep,
     isStepOne,

@@ -9,6 +9,8 @@ const defaultGlobalModalContext: TGlobalModal = {
   setIsGlobalModalOpen: () => {},
   openGlobalModal: () => {},
   closeGlobalModal: () => {},
+  setOnCloseCallback: () => {},
+  onCloseCallback:null,
   messageState: { type: null, text: null, title: null },
   currentGlobalModal: null,
   isGlobalModalOpen: false,

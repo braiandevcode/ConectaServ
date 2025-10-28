@@ -9,16 +9,16 @@ import useGlobalModal from '../../hooks/useGlobalModal';
 
 // PROVEEMOS LOGICA Y ESTADOS AL CONTEXTO PRINCIPAL
 const MainProvider = ({ children }: { children: ReactNode }) => {
-  const { closeGlobalModal } = useGlobalModal();
+  const { closeGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
   const stored = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE) as TFormRole | null;
-
-  // -------------------HOOKS DE REACT-------------------------//
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
 
   // ESTADO PARA SABER SI EL USUARIO ES CLIENTE (TRUE), PRO (FALSE), O NULO SI NO HAY ROL
   const [client, setClient] = useState<boolean | null>(null);
+
+  // ------------------HOOKS DE REACT-------------------------//
+  const { pathname } = useLocation(); //==> LOCATION DE RACT
+  const navigate = useNavigate(); //==> NAVIGATE DE RACT
+  const [loading, setLoading] = useState(false); // ==> BANDERA DEL PROCESO DE LOADER
 
   // ----------------------useEffects----------------------------------//
   useEffect(() => {
@@ -30,7 +30,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
         console.error('ERROR AL ELIMINAR DATOS DEL STORAGE E INDEXEDDB:', error);
       }
     };
-    
+
     // SI EL ROL GUARDADO ES CLIENTE Y ESTAMOS EN LA RUTA CORRECTA
     if (pathname === EPathPage.PATH_FORM_CLIENT && stored === 'client') {
       setClient(true);
@@ -58,7 +58,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // FUNCION QUE SE EJECUTA CUANDO EL USUARIO ELIGE PROFESIONAL
-  const handleProClick = () => {
+  const handleTaskerClick = () => {
     localStorage.setItem(ENamesOfKeyLocalStorage.ROLE, 'tasker');
     setClient(false); //ROL CLIENTE EN FALSE
     closeGlobalModal();
@@ -67,7 +67,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   const contextMainValue: TMain = {
     setLoading,
     handleClientClick, // FUNCION PARA ELEGIR CLIENTE
-    handleProClick, // FUNCION PARA ELEGIR PROFESIONAL
+    handleTaskerClick, // FUNCION PARA ELEGIR PROFESIONAL
     client, // TRUE = CLIENTE, FALSE = PRO, NULL = NO DEFINIDO
     loading,
   };

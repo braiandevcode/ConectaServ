@@ -7,15 +7,13 @@ export interface iNamesGroupsChecks {
 
 // INTERFACES PARA RUTAS DE LAS PAGINAS
 export interface iEndPointRegister {
-  ENDPOINT_REGISTER_CLIENT: string;
-  ENDPOINT_REGISTER_TASKER: string;
-  ENDPOINT_REGISTER:string;
+  ENDPOINT_USER:string;
 }
 
 // INTERFACES PARA URL DE PETICIONES
 export interface iPhatPages {
   PATH_FORM_CLIENT: string;
-  PATH_FORM_PROFESSIONAL: string;
+  PATH_FORM_TASKER: string;
   PATH_TERMS: string;
   PATH_PRIVACY: string;
 }

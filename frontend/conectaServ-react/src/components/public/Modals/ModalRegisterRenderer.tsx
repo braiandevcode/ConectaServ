@@ -8,7 +8,7 @@ import ModalWrapper from "./ModalWrapper";
 import type { TRegisterModalComponents } from "../../../types/typesRegisterModalComponents";
 import ModalVerifyEmail from "./ModalVerifyEmail";
 
-// DEFINE QUE MODAL RENDERIZAR
+// DEFINE QUE MODAL RENDERIZAR EN CONTEXTO DE REGISTROS
 const ModalRegisterRenderer = (): JSX.Element | null => {
   const  { closeRegisterModal, currentRegisterModal, isRegisterModalOpen } = useRegisterModal()
 

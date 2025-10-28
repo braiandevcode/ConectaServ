@@ -1,0 +1,13 @@
+.modalLoginHeader{
+    padding: 1rem;
+}
+
+.modalLoginHeader__title{
+    font-size: larger;
+    color: var(--text-color-primary);
+}
+
+.modalLoginHeader__btnClose {
+  right: 0.3rem;
+  /* top: 0.2rem; */
+}

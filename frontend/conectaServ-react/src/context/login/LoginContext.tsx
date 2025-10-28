@@ -3,17 +3,20 @@ import type { TAuthLogin } from '../../types/typeAuthLogin';
 
 // CONTEXTO PARA LOGIN
 const defaultAuthLogin: TAuthLogin = {
-//   role: 'client',
+  role: null,
+  interactedPassword: false,
   error: '',
   isAuth: false,
   password: '',
   userName: '',
+  handlePassword: () => {},
+  handleUserName: () => {},
+  submitLogin: () => {},
+  setInteractedPassword: () => {},
   setError: () => {},
   setIsAuth: () => {},
   setPassword: () => {},
   setUserName: () => {},
-  //   role: 'client' | 'professional',
-  //   formStateLogin:
 };
 
 const LoginContext = createContext<TAuthLogin>(defaultAuthLogin);

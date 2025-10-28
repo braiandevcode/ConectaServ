@@ -1,7 +1,5 @@
-import type { TVariantBtn } from "../types/typeVariantBtn";
-
-export interface iBtnCloseModal{
-    variant:TVariantBtn;
-    className:string;
-    onCloseModal: () => void;
+import type { iBtns } from './iBtns';
+// INTERFACE SOLO PARA BOTON CERRAR
+export interface iBtnCloseModal extends iBtns {
+  onCloseModal: () => void;
 }

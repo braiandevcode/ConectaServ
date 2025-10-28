@@ -19,9 +19,12 @@ import LoaderBtn from '../../../../../LoaderBtn';
 // COMPONENTE PASO 4
 const StepFour = () => {
   const { formState, stepData } = useRegisterTasker(); //HOOK REGISTRO PROFESIONAL
-  const { sendCode, isSendingCode } = useVerifyEmailCode();
+  const { sendCode, isSendingCode } = useVerifyEmailCode(); //HOOK QUE USA CONTEXTO VERIFICACION DE EMAIL
   const { password, interactedPassword, interactedConfirmPassword, confirmPassword } = useRegister(); //HOOK DE ESTADOS DE REGISTROS EN COMUN
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useStepFour(); // HOOK PASO 4
+
+  // ACCIONAR AHORA EL ENVIO ==> FUNCION ASINCRONA
+  const send= async () => await sendCode({ emailUser: stepData[EKeyDataByStep.FOUR].email});
 
   return (
     <>
@@ -71,7 +74,7 @@ const StepFour = () => {
 
             <div className='c-flex c-flex-items-center gap-1'>
               <input type='text' id='email' className={`form__input ${styleBorderFieldError(formState, 'email')}`} aria-label='Correo electronico' autoComplete='email' placeholder='test@example.com' value={formState.email.value as string} onChange={handleEmail} required />
-              {isSendingCode ? <LoaderBtn /> : <BtnSendCode formState={formState} sendCode={sendCode} emailUser={stepData[EKeyDataByStep.FOUR].email} text='Código' />}
+              {isSendingCode ? <LoaderBtn /> : <BtnSendCode formState={formState} handleSend={send} text='Código' />}
             </div>
             {renderFieldError(formState, 'email')}
           </div>

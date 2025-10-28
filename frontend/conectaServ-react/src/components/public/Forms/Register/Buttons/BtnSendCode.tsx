@@ -7,14 +7,8 @@ import useFormVerifyEmailCode from '../../../../../hooks/useFormVerifyEmailCode'
 import { RiMailSendLine } from 'react-icons/ri';
 
 // BOTON PARA ENVIAR CODIGO DE VERIFICACION ==> BOTON DENOMINADO INTELIGENTE
-const BtnSendCode = ({ sendCode, emailUser, text, formState }: iBtnSendCode) => {
+const BtnSendCode = ({ handleSend, text, formState, ...props }: iBtnSendCode) => {
   const { isCodeSent, isSendingCode, isSuccefullyVerified } = useFormVerifyEmailCode();
-
-  // CREO FUNCION ASINCRONA PARA ENVIAR CODIGO AL USUARIO
-  const send = async (): Promise<void> => {
-    await sendCode({ emailUser });
-  };
-
   // ESTA DESHABILITADO SI:
   /*
     - NO ES VALIDO EL CAMPO DEL EMAIL O
@@ -23,10 +17,9 @@ const BtnSendCode = ({ sendCode, emailUser, text, formState }: iBtnSendCode) => 
     - SI LA VERIFICACION FUE SATISFACTORIA
   */
   const isDisabled: boolean = !formState.email.isValid || isSendingCode || isCodeSent || isSuccefullyVerified;
-
   return (
     <>
-      <Button type='button' variant='btn btn__info' onClick={send} disabled={isDisabled}>
+      <Button type='button' variant='btn btn__info' onClick={handleSend} disabled={isDisabled} {...props}>
         <RiMailSendLine size={20} />
         <span>{text}</span>
       </Button>

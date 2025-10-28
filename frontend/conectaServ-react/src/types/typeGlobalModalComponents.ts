@@ -1,7 +1,8 @@
 import { type JSX } from 'react';
 export type TGlobalModalComponents = {
-  ModalRole: () => JSX.Element;
-  // ModalVerifyEmail: () =>JSX.Element;
+  ModalRole: ({ oncloseModal}: { oncloseModal: (cb?: () => void) => void }) => JSX.Element;
+  ModalLogin: () => JSX.Element;
+  ModalIdentifyEmail: () => JSX.Element;
   ModalSuccess: () => JSX.Element;
-  ModalError: () => JSX.Element;
+  ModalError: ({ oncloseModal }: { oncloseModal: (cb?: () => void) => void }) => JSX.Element;
 };

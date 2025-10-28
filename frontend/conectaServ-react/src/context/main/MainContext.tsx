@@ -1,10 +1,11 @@
 import { createContext } from 'react';
 import type { TMain } from '../../types/typeMain';
 
+// CONTEXT MAIN
 const defaultMainContext: TMain = {
   setLoading: () => false,
   handleClientClick: () => {},
-  handleProClick: () => {},
+  handleTaskerClick: () => {},
   loading: false,
   client: false,
 };

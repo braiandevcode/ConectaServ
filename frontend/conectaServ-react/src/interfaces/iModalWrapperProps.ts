@@ -6,5 +6,5 @@ export interface iModalWrapperProps {
   ariaHidden:boolean;
   onClose: () => void;
   children: ReactNode;
-  stylesInline?: CSSProperties
+  stylesInline?: CSSProperties //PARA PASAR OPCIONALMENTE ESTILOS EN LINEA
 }
