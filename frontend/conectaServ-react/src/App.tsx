@@ -15,11 +15,10 @@ import RegisterTaskerLayout from './routes/RegisterTaskerLayout';
 export default function App() {
   const [initialLoading, setInitialLoading] = useState(true);
 
-  useEffect(() => {
+  useEffect(() => {  
     const timer = setTimeout(() => setInitialLoading(false), 1000); // SIMULA CARGA
     return () => clearTimeout(timer);
   }, []);
-
 
   // SI ES CARGA INICIAL
   if (initialLoading) return <Loader />; // ==> MOSTRAR LOADER

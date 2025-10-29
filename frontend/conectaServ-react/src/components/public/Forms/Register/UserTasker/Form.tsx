@@ -6,17 +6,17 @@ import { BsFillInfoSquareFill } from 'react-icons/bs';
 // IMPORTS DE CSS
 import '../../FormBase.css'
 import './Form.css';
-import useSendData from "../../../../../hooks/useSendData";
+import useSendData from "../../../../../hooks/useSendDataRegister";
 import BtnsRegisterTasker from "./Buttons/BtnsRegisterTasker";
 
 // FORMULARIO PROFESIONAL
 const Form = () => {
   const { hasInteracted, valueSelected } = useRegisterTasker(); //HOOK PARA ESTADOS DE REGISTRO PROFESIONAL
-  const { submitNewData } = useSendData();
+  const { submitDataRegister} = useSendData();
  
   return (
     <>
-      <form className='form' encType='multipart/form-data' onSubmit={submitNewData}>
+      <form className='form' encType='multipart/form-data' onSubmit={submitDataRegister}>
         <div className='c-flex c-flex-column c-flex-justify-center'>
           <h2 className='c-flex c-flex-wrap c-flex-items-center gap-1/2'>
             <div className='c-flex w-full c-flex-items-center gap-1/2'>

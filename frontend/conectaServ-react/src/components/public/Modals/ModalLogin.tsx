@@ -8,6 +8,7 @@ import './ModalLogin.css';
 // MODAL DE LOGIN DE ACCESO
 const ModalLogin = () => {
   const { closeGlobalModal } = useGlobalModal();
+
   return (
     <>
       <div className='modalLogin w-full position-relative'>

@@ -2,8 +2,6 @@
   background-color: var(--btn-gosth);
   color: #ffffff;
   font-weight: bold;
-
-  /* Importante: Aplica la transición al background-color, no a opacity */
   transition: background-color 0.3s ease-in;
 }
 

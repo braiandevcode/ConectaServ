@@ -73,10 +73,10 @@ const ClientProvider = ({ children }: { children: ReactNode }) => {
   //-----------------------------OBJETO DE CONTEXTO---------------------------------//
   const contextClientValue: TRegisterClient = {
     isLoaded,
-    setIsLoaded,
     isValid,
     dataClient,
     formState,
+    setIsLoaded,
     setIsValid,
     setDataClient,
     setFormState,

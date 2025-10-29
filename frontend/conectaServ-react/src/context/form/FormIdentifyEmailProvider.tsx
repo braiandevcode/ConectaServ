@@ -1,5 +1,4 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
-import FormIdentifyEmailContext from './formIdentifyEmailContext';
 import type { TIdentifyEmail } from '../../types/typeIdentifyEmail';
 import { EModalGlobalType } from '../../types/enumGlobalModalType';
 import useGlobalModal from '../../hooks/useGlobalModal';
@@ -11,6 +10,7 @@ import { ENamesOfKeyLocalStorage } from '../../types/enums';
 import { useNavigate } from 'react-router';
 import type { TUser } from '../../types/typeUser';
 import useUserApi from '../../hooks/useUserApi';
+import FormIdentifyEmailContext from './FormIdentifyEmailContext';
 
 const emailValidator: EmailValidator = new EmailValidator(); // ==> INSTANCIA DE VALIDACION DE ENTRADA DE CODIGO
 
@@ -18,7 +18,7 @@ const emailValidator: EmailValidator = new EmailValidator(); // ==> INSTANCIA DE
 const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
   const { openGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
   const { handleClientClick, handleTaskerClick } = useMain(); // HOOK QUE USA EL CONTEXTO DE MAIN PRINCIPAL
-  const { getIdentifyEmail } = useUserApi(); //HOOK PARA PETICIONES A DATOS DEL USUARIO
+  const { getUsers } = useUserApi(); //HOOK PARA PETICIONES A DATOS DEL USUARIO
 
   const navigate = useNavigate();
 
@@ -65,14 +65,11 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
     e.preventDefault();
     const stored = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE);
     if (!stored) return; //ASEGURAR QUE EN STORAGE ESTE ALMACENADO EL ROLE
-
     // LLAMO AL METODO Y PASO EL ARGUMENTO ESPERADO INTERNAMENTE
-    const result = (await getIdentifyEmail({ setIsSendingIdentificationEmail })) as TUser[];
-
+    const result = (await getUsers({ setIsSendingIdentificationEmail })) as TUser[] | [];
     // SI LA SOLICITUD TRAE DATOS
-    if (result && result.length > 0) {
-      const findIndexEmailIdentify = result.findIndex((data) => data.email === emailIdentify);
-
+    if (result) {
+      const findIndexEmailIdentify: number = result.findIndex((data) => data.email === emailIdentify);
       // SI ES DIFERENTE DE -1 LO ENCONTRO
       if (findIndexEmailIdentify !== -1) {
         openGlobalModal(EModalGlobalType.MODAL_LOGIN);
