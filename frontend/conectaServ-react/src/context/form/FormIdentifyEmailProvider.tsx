@@ -1,5 +1,5 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
-import FormIdentifyEmailContext from './formIdentifyEmailContext';
+import FormIdentifyEmailContext from './FormIdentifyEmailContext';
 import type { TIdentifyEmail } from '../../types/typeIdentifyEmail';
 import { EModalGlobalType } from '../../types/enumGlobalModalType';
 import useGlobalModal from '../../hooks/useGlobalModal';
