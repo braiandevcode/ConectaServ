@@ -1,6 +1,6 @@
 import useRegisterTasker from '../../../../../../hooks/useRegisterTasker';
 import BtnNext from './BtnNext';
-import useSendData from '../../../../../../hooks/useSendData';
+import useSendData from '../../../../../../hooks/useSendDataRegister';
 import useRegister from '../../../../../../hooks/useRegister';
 import LoaderBtn from '../../../../../LoaderBtn';
 import BtnSubmit from '../../../../../BtnSubmit';

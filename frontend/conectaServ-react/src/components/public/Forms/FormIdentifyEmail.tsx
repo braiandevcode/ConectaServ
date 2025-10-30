@@ -11,8 +11,6 @@ import './FormIdentifyEmail.css';
 const FormIdentyfyEmail = () => {
   const { formState, handleOnchangeIdentifyEmail, isSendingIdentificationEmail, submitIdentifyEmail} = useIdentifyEmail();
 
-
-
   return (
     <>
       <form className='form c-flex c-flex-column gap-1' onSubmit={submitIdentifyEmail}>

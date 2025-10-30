@@ -7,11 +7,12 @@ export type TAuthLogin = {
   userName: string;
   password: string;
   role: 'client' | 'tasker' | null;
-  interactedPassword: boolean;
+  isValid: boolean;
+  validateFieldsLogin: () => boolean;
   handlePassword: (e: FormEvent<HTMLInputElement>) => void;
   submitLogin: (e: FormEvent<HTMLFormElement>) => void;
   handleUserName: (e: FormEvent<HTMLInputElement>) => void;
-  setInteractedPassword: Dispatch<SetStateAction<boolean>>;
+  setIsValid: Dispatch<SetStateAction<boolean>>;
   setIsAuth: Dispatch<SetStateAction<boolean>>;
   setError: Dispatch<SetStateAction<string>>;
   setPassword: Dispatch<SetStateAction<string>>;

@@ -8,39 +8,27 @@ import useRegisterClient from './useRegisterClient';
 import useRegisterTasker from './useRegisterTasker';
 import useGlobalModal from './useGlobalModal';
 import useValidateStep from './useValidateStep';
-import { useNavigate } from 'react-router';
 import type { TUser } from '../types/typeUser';
 import useUserApi from './useUserApi';
 
 // HOOK QUE SE ENCARGA DEL PROCESO DE ENVIO DE DATOS AL BACKEND
-const useSendData = () => {
+const useSendDataRegister = () => {
   const { client } = useMain(); // HOOK QUE USA EL CONTEXTO A NIVEL MAIN
   const { password } = useRegister(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO GENERALES
   const { dataClient, isLoaded: isLoadedClient, isValid } = useRegisterClient(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO CLIENTE
   const { stepData, isLoaded: isLoadedProfessional, isStepValid } = useRegisterTasker(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO PROFESIONAL
-  const { showError, showSuccess } = useGlobalModal(); //HOOK QUE USA CONTEXTO DE MODALES GLOBAL
-
-  const { addNewUser } = useUserApi();
+  const { showError} = useGlobalModal(); //HOOK QUE USA CONTEXTO DE MODALES GLOBAL
+  const { addUser } = useUserApi(); //HOOK PARA PETICIONES DATOS DE USUARIOS
 
   const { isLastStep } = useValidateStep(); // HOOK PARA VALIDAR PASO
-  const navigate = useNavigate();
+
 
   // SI SE CARGO TODO EN CONTEXTO DE CLIENTE Y EN PROFESIONAL
   const isReady: boolean = isLoadedClient || isLoadedProfessional;
 
-  // FUNCION PARA CUANDO EL REGISTRO ES EXITOSO
-  const handleSuccessfulRegistration = (): void => {
-    // DEFINIR LA ACCION DE REDIRECCION
-    const redirectToHome = () => {
-      navigate('/');
-    } 
-
-    // MOSTRAR EL MODAL CON EL MENSAJE
-    showSuccess('Registro Exitoso', 'Tus datos se han enviado correctamente.', redirectToHome);
-  };
 
   // ENVIAR DATOS AL BACKEND DE CUALQUIERA DE LOS DOS REGISTROS
-  const submitNewData = async (e: FormEvent<HTMLFormElement>) => {
+  const submitDataRegister= async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // ==> PREVENIR
 
     // LEER ITEM DE ROLE
@@ -90,10 +78,10 @@ const useSendData = () => {
     // SI CLIENTE ES TRUE  NEVO DATO DE CLIENTE, SINO PROFESIONAL
     const newData: TUser = client ? dataSendClient : dataSendTasker;
  
-    await addNewUser({ handleSuccessfulRegistration, newData}); //AGREGAR USUARIO
+    await addUser({ newData}); //AGREGAR USUARIO
   };
 
-  return { submitNewData, handleSuccessfulRegistration, isReady };
+  return { submitDataRegister,  isReady };
 };
 
-export default useSendData;
+export default useSendDataRegister;

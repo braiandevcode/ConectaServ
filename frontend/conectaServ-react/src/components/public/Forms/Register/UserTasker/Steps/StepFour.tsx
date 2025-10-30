@@ -15,6 +15,7 @@ import { TbPasswordUser } from 'react-icons/tb';
 import BtnSendCode from '../../Buttons/BtnSendCode';
 import useVerifyEmailCode from '../../../../../../hooks/useFormVerifyEmailCode';
 import LoaderBtn from '../../../../../LoaderBtn';
+import useUserApi from '../../../../../../hooks/useUserApi';
 
 // COMPONENTE PASO 4
 const StepFour = () => {
@@ -22,9 +23,10 @@ const StepFour = () => {
   const { sendCode, isSendingCode } = useVerifyEmailCode(); //HOOK QUE USA CONTEXTO VERIFICACION DE EMAIL
   const { password, isSending,  interactedPassword, interactedConfirmPassword, confirmPassword } = useRegister(); //HOOK DE ESTADOS DE REGISTROS EN COMUN
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useStepFour(); // HOOK PASO 4
+  const { sendCodeUser } = useUserApi();// HOOK PARA MANEJO DE PETOCIONES DE DATOS DE USUARIOS
 
   // ACCIONAR AHORA EL ENVIO ==> FUNCION ASINCRONA
-  const send= async () => await sendCode({ emailUser: stepData[EKeyDataByStep.FOUR].email});
+  const send= async () => await sendCodeUser({ emailUser: stepData[EKeyDataByStep.FOUR].email});
 
   return (
     <>

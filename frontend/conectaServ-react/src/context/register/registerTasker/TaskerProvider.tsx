@@ -1,37 +1,14 @@
 import { useEffect, useState } from 'react';
 import { ECategoryKey, EDefaultSelected, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../../types/enums';
-import DescriptionValidator from '../../../modules/validators/DescriptionValidator';
-import ImageProfileValidator from '../../../modules/validators/ImageProfileValidator';
-import ImageExperiencesValidator from '../../../modules/validators/ImageExperiencesValidator';
-import SelectedValidator from '../../../modules/validators/SelectedValidator';
-import BudgeValidator from '../../../modules/validators/BudgeValidator';
-import ConfirmPasswordValidator from '../../../modules/validators/ConfirmPasswordValidator';
-import PasswordValidator from '../../../modules/validators/PasswordValidator';
-import EmailValidator from '../../../modules/validators/EmailValidator';
-import UserNameValidator from '../../../modules/validators/UserNameValidator';
-import FullNameValidator from '../../../modules/validators/FullNameValidator';
 import useRegister from '../../../hooks/useRegister';
 import type { TRegisterTasker } from '../../../types/typeRegisterTasker';
-import { readExistingData } from '../../../utils/storageUtils';
 import Loader from '../../../components/Loader';
-import { defaultDataPro } from '../../../config/defaultDataPro';
 import { TaskerContext } from './TaskerContext';
 import type { iFormStateValidationTask } from '../../../interfaces/iFormStateValidationTask';
 import useValidateTasker from '../../../hooks/useValidateTasker';
 import scrolledTop from '../../../utils/scrollTop';
 import type { TStepDataTasker } from '../../../types/typeStepData';
-
-// INSTANCIO VALIDACIONES NECESARIAS
-const descriptionValidator: DescriptionValidator = new DescriptionValidator();
-const imageProfileValidator: ImageProfileValidator = new ImageProfileValidator();
-const imageExperiencesValidator: ImageExperiencesValidator = new ImageExperiencesValidator();
-const selectedCategoryValidator: SelectedValidator = new SelectedValidator();
-const budgeValidator: BudgeValidator = new BudgeValidator();
-const fullNameValidator: FullNameValidator = new FullNameValidator();
-const userNameValidator: UserNameValidator = new UserNameValidator();
-const emailValidator: EmailValidator = new EmailValidator();
-const passwordValidator: PasswordValidator = new PasswordValidator();
-const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordValidator();
+import useStepDataTasker from '../../../hooks/useStepDataTasker';
 
 /*
 ****EXPLICACION DEL FLUJO ENTRE VALIDAR Y ALMACENAR EN STRORAGE:*****
@@ -43,32 +20,13 @@ const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordVa
 
 // PROVIDER ES QUIEN NOS PROVEE LOS ESTADOS Y FUNCIONES DE COMPONENTES
 const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
-  const stored = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA); //LEEO Y PARSEO OBJETO GENERAL DE PASOS
+  const { STEP_DATA_TASKER, initialFormState } = useStepDataTasker(); //GANCHO PARA TRAER EL OBJETO DE DATOS DE LOS PASOS DE REGISTRO
 
   // OBJETO GENERAL DE PASOS CON VALORES POR DEFECTO Y PARA ALMACENAR EN STROAGE
-  const [stepData, setStepData] = useState<TStepDataTasker>(() => {
-    return {
-      [EKeyDataByStep.ONE]: {
-        ...defaultDataPro[EKeyDataByStep.ONE], //VALOR POR DEFECTO
-        ...stored?.[EKeyDataByStep.ONE], // PISADO PODR EL VALOR EN STORAGE
-      },
-      [EKeyDataByStep.TWO]: {
-        ...defaultDataPro[EKeyDataByStep.TWO],
-        ...stored?.[EKeyDataByStep.TWO],
-      },
-      [EKeyDataByStep.THREE]: {
-        ...defaultDataPro[EKeyDataByStep.THREE],
-        ...stored?.[EKeyDataByStep.THREE],
-      },
-      [EKeyDataByStep.FOUR]: {
-        ...defaultDataPro[EKeyDataByStep.FOUR],
-        ...stored?.[EKeyDataByStep.FOUR],
-      },
-    };
-  });
+  const [stepData, setStepData] = useState<TStepDataTasker>(STEP_DATA_TASKER);
 
   //--------------------------------------------------------------------HOOKS DE REACT--------------------------------------------------------------------//
-  const { password, confirmPassword, setTerms } = useRegister(); //HOOK QUE USA CONTEXTO NIVEL REGISTRO
+  const { setTerms } = useRegister(); //HOOK QUE USA CONTEXTO NIVEL REGISTRO
 
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
   // ESTADO PARA EL PASO ACTUAL DEL FORMULARIO
@@ -107,36 +65,8 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
   const [amountFieldFormat, setAmountFieldFormat] = useState<string>('');
   const [isFocus, setIsFocus] = useState<boolean>(false); //PERMITE INDICAR SI SE HIZO O NO FOCO
 
-  // OBJETO INICIAL DE VALIDACIONES QUE LEERA LOS DATOS EN ALMACEN LOCAL Y VALIDARA O DEJAR VALORES POR DEFECTO
-  const initialFormState: iFormStateValidationTask = {
-    // ESTADOS DE ENTRADA EN PASO 1
-    category: selectedCategoryValidator.validate(stepData[EKeyDataByStep.ONE].category ?? ''),
-    'service[]': { value: stepData[EKeyDataByStep.ONE]['service[]'] ?? [], error: '', isValid: false },
-    'context[]': { value: stepData[EKeyDataByStep.ONE]['context[]'] ?? [], error: '', isValid: false },
-    'day[]': { value: stepData[EKeyDataByStep.ONE]['day[]'] ?? [], error: '', isValid: false },
-    'hour[]': { value: stepData[EKeyDataByStep.ONE]['hour[]'] ?? [], error: '', isValid: false },
-
-    // ESTADOS DE ENTRADA EN PASO 2
-    descriptionUser: descriptionValidator.validate(stepData[EKeyDataByStep.TWO].descriptionUser ?? ''),
-    imageProfile: imageProfileValidator.validate(stepData[EKeyDataByStep.TWO].imageProfile),
-    imageExperiences: imageExperiencesValidator.validate(stepData[EKeyDataByStep.TWO].imageExperiences),
-
-    // ESTADOS DE ENTRADA EN PASO 3
-    amountBudge: budgeValidator.validate(String(stepData[EKeyDataByStep.THREE]?.amountBudge ?? '')),
-    budgeSelected: { value: stepData[EKeyDataByStep.THREE]?.budgeSelected as string, error: '', isValid: false },
-    reinsert: { value: stepData[EKeyDataByStep.THREE]?.reinsert as string, error: '', isValid: false },
-
-    // ESTADOS DE ENTRADA EN PASO 4
-    fullName: fullNameValidator.validate(stepData[EKeyDataByStep.FOUR].fullName) ?? '',
-    userName: userNameValidator.validate(stepData[EKeyDataByStep.FOUR].userName ?? ''),
-    email: emailValidator.validate(stepData[EKeyDataByStep.FOUR].email ?? ''),
-    location: selectedCategoryValidator.validate(stepData[EKeyDataByStep.FOUR].location ?? ''),
-    password: passwordValidator.validate(password ?? ''),
-    confirmPassword: confirmPasswordValidator.validate(confirmPassword ?? ''),
-  };
-
-  // ESTADO DE VALIDACIONES EN TODO EL FORMULARIO ==> INICIALIZA CON ==> initialFormState QUE CONSUME DEL DATASTEP
-  const [formState, setFormState] = useState<iFormStateValidationTask>(initialFormState);
+  // ESTADO DE VALIDACIONES EN TODO EL FORMULARIO ==> INICIALIZA CON ==> initialFormState LEE DATOS PERSISTIDOS
+  const [formState, setFormState] = useState<iFormStateValidationTask>(() => initialFormState({ stepData }));
 
   //GANCHO PAR VALIDAR PASOS
   const { validateCurrentStep } = useValidateTasker({ step, formState, hasBudge, hasContext, hasInteracted });
@@ -190,8 +120,6 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
 
   //-----------------------------OBJETO DE CONTEXTO---------------------------------//
   const contextRegisterValue: TRegisterTasker = {
-    isLoaded,
-    isFieldsBasic,
     setIsFieldsBasic,
     setIsLoaded,
     setStepData,
@@ -211,6 +139,8 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
     setStep,
     setIsResetDetailsWork,
     setIsReinsertDisabled,
+    isLoaded,
+    isFieldsBasic,
     stepData,
     isReinsertDisabled,
     formState,

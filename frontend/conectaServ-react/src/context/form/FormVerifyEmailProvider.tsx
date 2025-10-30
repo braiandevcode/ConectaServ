@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type KeyboardEvent, type ReactNode } from 'react';
 import { ENamesOfKeyLocalStorage } from '../../types/enums';
-import type { iEmailUser } from '../../interfaces/iEmailUser';
-import sendCodeToUserEmail from '../../utils/sendCodeToUserEmail';
 import { FormVerifyEmailContext } from './FormVerifyEmailContext';
-import useMain from '../../hooks/useMain';
 import useGlobalModal from '../../hooks/useGlobalModal';
 import useRegisterModal from '../../hooks/useRegisterModal';
 import { EModalGlobalType } from '../../types/enumGlobalModalType';
@@ -17,9 +14,8 @@ import { validateWithRegex } from '../../utils/validateFieldUtils';
 const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
   const codeValidator: CodeValidator = new CodeValidator(); // ==> INSTANCIA DE VALIDACION DE ENTRADA DE CODIGO
 
-  const { setLoading } = useMain(); //HOOK NIVEL MAIN
   const { showError, showSuccess, openGlobalModal } = useGlobalModal(); // ==> HOOK NIVEL MODAL GENERAL
-  const { openRegisterModal, closeRegisterModal, isRegisterModalOpen } = useRegisterModal();
+  const { closeRegisterModal, isRegisterModalOpen } = useRegisterModal();
 
   // ESTADO DE VERIFICACION DE CODIGO LEYENDO EN STORAGE
   const [codeStoredEmail, setCodeStoredEmail] = useState<string>(() => {
@@ -141,33 +137,18 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
     setFormState((prev) => ({ ...prev, emailCode: validate }));
   };
 
-  // FUNCION QUE SE ENCARGA DE MANDAR EL CODIGO AL USUARIO
-  const sendCode = async ({ emailUser }: iEmailUser): Promise<void> => {
-    // INVOCO HELPER FUNCION DE ENVIO
-    await sendCodeToUserEmail({
-      emailUser,
-      updatedIsSentCode,
-      updatedIsSendingCode,
-      updateCodeEmail,
-      showError,
-      showSuccess,
-      openGlobalModal,
-      openVerifyEmailModal: openRegisterModal,
-      setLoading,
-    });
-  };
-
   // --------------------EVENTOS-------------------------------//
   // HANDLER PARA ENVIO DE VERIFICACION DE CODIGO POR PARTE DEL USUARIO
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault(); //PREVENIR COMPORTAMIENTO POR DEFECTO
     setIsVerifyingCode(true); //PROCESO DE VERIFICACION DE CODIGO EN PROGRESO
+
     // ACA DEBERIA IR EL FETCH AN ENDPOINT DL BACKEND PARA GENERAR EL CODIGO Y QUE EL BACKEND SE ENCARGE DE GENERAR
     // Y VERIFICAR GUARDANDO SESSION TEMPORL DE USUARIO EN DB/CACHE
-
     // SIMULACION DE DELAY DE ENVIO
     setOtp(Array(NUM_DIGITS).fill('')); //LIMPIAR CAMPOS
 
+    // SIMULACION DE ESPERA
     setTimeout(() => {
       setIsVerifyingCode(false); // ==> LA VERIFICACION DEL CODIGO YA NO ESTA EN PROGRESO
       // VERIFICAR LUEGO DEL SUBMIT QUE SEA ESTRICTAMENTE EL MISMO CODIGO
@@ -196,11 +177,11 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
     setOtp,
     updatedFormState,
     setFormState,
-    sendCode,
     handleSubmit,
     setIsSendingCode,
     updateCodeEmail,
     updatedIsSendingCode,
+    updatedIsSentCode,
     isSuccefullyVerified,
     codeStoredEmail,
     formState,

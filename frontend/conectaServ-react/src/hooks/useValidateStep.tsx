@@ -1,8 +1,7 @@
 import type { iValidateLastStep } from '../interfaces/iValidateLastStep';
 import useRegisterTasker from './useRegisterTasker';
 
-// HOOK PARA VALIDAR PASOS
-
+// HOOK PARA VALIDAR PASO ACTUAL EN REGISTRO DE TASKER
 const useValidateStep = () => {
   const { step, hasBudge, isFieldsBasic } = useRegisterTasker(); // ------------------------VARIABLES Y/O CONSTANTES---------------------------------------------//
   const isStepOne: boolean = step === 1;

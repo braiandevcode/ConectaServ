@@ -3,8 +3,9 @@ import type { TAuthLogin } from '../../types/typeAuthLogin';
 
 // CONTEXTO PARA LOGIN
 const defaultAuthLogin: TAuthLogin = {
+  validateFieldsLogin: () => false,
   role: null,
-  interactedPassword: false,
+  isValid: false,
   error: '',
   isAuth: false,
   password: '',
@@ -12,7 +13,7 @@ const defaultAuthLogin: TAuthLogin = {
   handlePassword: () => {},
   handleUserName: () => {},
   submitLogin: () => {},
-  setInteractedPassword: () => {},
+  setIsValid: () => {},
   setError: () => {},
   setIsAuth: () => {},
   setPassword: () => {},

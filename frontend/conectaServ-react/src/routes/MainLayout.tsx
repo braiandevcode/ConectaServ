@@ -5,7 +5,7 @@ import useMain from '../hooks/useMain';
 import Loader from '../components/Loader';
 import Header from '../components/public/Header';
 import ModalGlobalRenderer from '../components/public/Modals/ModalGlobalRenderer';
-import GlobalModalProvider from '../context/modal/GlobalModalProvider';
+// import GlobalModalProvider from '../context/modal/GlobalModalProvider';
 import LoginProvider from '../context/login/LoginProvider';
 import FormIdentifyEmailProvider from '../context/form/FormIdentifyEmailProvider';
 
@@ -13,30 +13,31 @@ import FormIdentifyEmailProvider from '../context/form/FormIdentifyEmailProvider
 // ESTE LAYOUT ESTA A UNA RUTA O GRUPOS DE RUTAS Y SE USA COMO CONTENEDOR PARA ESAS RUTAS.
 const MainLayout = () => {
   const { loading } = useMain();
+  
+  console.log('loading cargando? ', loading);  
+
   return (
     // ENVOLVEMOS TODO CON EL PROVIDER PRINCIPAL PARA COMPARTIR DATOS GLOBALES ENTRE COMPONENTES
     // CONTEXTO GLOBAL PARA MODALES DE MENSAJES EN TODA LA APP
-    <GlobalModalProvider>
-      <MainProvider>
-        <FormIdentifyEmailProvider>
-          <LoginProvider>
-            <ModalGlobalRenderer />
-            {loading ? (
-              <Loader />
-            ) : (
-              <>
-                <Header /> {/* HEADER FIJO QUE SE MUESTRA EN TODAS LAS PAGINAS */}
-                {/* CONTENEDOR PRINCIPAL DONDE SE CARGA EL CONTENIDO SEGUN LA RUTA ACTUAL */}
-                <main className='c-flex c-flex-column c-flex-items-center'>
-                  <Outlet /> {/* OUTLET ES EL ESPACIO DONDE REACT ROUTER RENDERIZA LA PAGINA ACTUAL */}
-                </main>
-                <Footer /> {/* FOOTER FIJO QUE SE MUESTRA EN TODAS LAS PAGINAS */}
-              </>
-            )}
-          </LoginProvider>
-        </FormIdentifyEmailProvider>
-      </MainProvider>
-    </GlobalModalProvider>
+    <MainProvider>
+      <FormIdentifyEmailProvider>
+        <LoginProvider>
+          <ModalGlobalRenderer />
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              <Header /> {/* HEADER FIJO QUE SE MUESTRA EN TODAS LAS PAGINAS */}
+              {/* CONTENEDOR PRINCIPAL DONDE SE CARGA EL CONTENIDO SEGUN LA RUTA ACTUAL */}
+              <main className='c-flex c-flex-column c-flex-items-center'>
+                <Outlet /> {/* OUTLET ES EL ESPACIO DONDE REACT ROUTER RENDERIZA LA PAGINA ACTUAL */}
+              </main>
+              <Footer /> {/* FOOTER FIJO QUE SE MUESTRA EN TODAS LAS PAGINAS */}
+            </>
+          )}
+        </LoginProvider>
+      </FormIdentifyEmailProvider>
+    </MainProvider>
   );
 };
 

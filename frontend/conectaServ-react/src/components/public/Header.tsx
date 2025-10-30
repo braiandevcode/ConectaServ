@@ -6,7 +6,7 @@ import useHeader from '../../hooks/useHeader';
 // <!-- CABECERA -->
 export default function Header() {
   const { pathname } = useLocation();
-  const { openRole } = useHeader() // ==> HOOK PARA EL HEADER
+  const { openRole, openLogin } = useHeader(); // ==> HOOK PARA EL HEADER
   return (
     <>
       <header className='header mb-3'>
@@ -113,15 +113,16 @@ export default function Header() {
             </div>
           </nav>
           <div className='c-flex c-flex-items-center gap-1 auth-wrapper'>
-            {/* <div className='w-full auth-wrapper__login cursor-pointer' onClick={openLogin}>
-              Iniciar sesión
-            </div> */}
-
             {pathname === '/' && (
-              <Button type='button' className='btn color btnRegister c-flex c-flex-items-center gap-1/2 auth-wrapper__register' onClick={openRole}>
-                <span>Registrarse</span>
-                <FiUserPlus />
-              </Button>
+              <>
+                <div className='w-full auth-wrapper__login cursor-pointer' onClick={openLogin}>
+                  Iniciar sesión
+                </div>
+                <Button type='button' className='btn color btnRegister c-flex c-flex-items-center gap-1/2 auth-wrapper__register' onClick={openRole}>
+                  <span>Registrarse</span>
+                  <FiUserPlus />
+                </Button>
+              </>
             )}
           </div>
         </div>

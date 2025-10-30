@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import LoginContext from './LoginContext';
 import type { TAuthLogin } from '../../types/typeAuthLogin';
 import useMain from '../../hooks/useMain';
+import { isLengthValid } from '../../utils/validateFieldUtils';
 
 // PROVEEDOR DE LOS ESTADOS, FUNCIONALIDAD Y LOGICA DEL LOGIN
 const LoginProvider = ({ children }: { children: ReactNode }) => {
@@ -15,17 +16,16 @@ const LoginProvider = ({ children }: { children: ReactNode }) => {
 
   const [role, setRole] = useState<'client' | 'tasker' | null>(initialRole);
 
-  const [interactedPassword, setInteractedPassword] = useState<boolean>(false);
+  const [isValid, setIsValid] = useState<boolean>(false);
 
   // OBSERVAR client
   useEffect(() => {
     setRole(initialRole);
-  }, [client]);
+  }, [client]); // ==> CLIENT ES ESTADO EXTERNO
 
   // EVENTO DE CAMBIO EN PASSWORD
   const handlePassword = (e: FormEvent<HTMLInputElement>) => {
     const value: string = e.currentTarget.value;
-    setInteractedPassword(true);
     setPassword(value);
   };
 
@@ -35,6 +35,12 @@ const LoginProvider = ({ children }: { children: ReactNode }) => {
     setUserName(value);
   };
 
+  function validateFieldsLogin() {
+    // SE CONSIDERA VALIDO SI LOS VALORES DE LOS CAMPOS TIENEN UNA LONGITUD MAYOR A 2
+    let isValid = isLengthValid({ text: password, num: 3 }) && isLengthValid({ text: userName, num: 3 });
+    return isValid;
+  }
+
   // EVENTO DE CAMBIO EN PASSWORD
   const submitLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,14 +49,15 @@ const LoginProvider = ({ children }: { children: ReactNode }) => {
 
   // OBJETO DE ESTADOS ACTUALIZADOS PARA EL CONTEXTO
   const valuesDefaultLoginAuth: TAuthLogin = {
-    interactedPassword,
+    isValid,
     role,
     error,
     isAuth,
     password,
     userName,
+    validateFieldsLogin,
     submitLogin,
-    setInteractedPassword,
+    setIsValid,
     handlePassword,
     handleUserName,
     setIsAuth,

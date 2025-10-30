@@ -14,10 +14,9 @@ const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
   //ESTADO PARA MENSAJES EN MODALES
   const [messageState, setMessageState] = useState<iMessageState>({ type: null, text: null, title: null });
 
-  //ESTADO QUE DETERMINA LA EJECUCION DE UNA CALLBACK 
-  const [onCloseCallback, setOnCloseCallback] = useState<(() => void) | null>(null); 
-  
-  
+  //ESTADO QUE DETERMINA LA EJECUCION DE UNA CALLBACK
+  const [onCloseCallback, setOnCloseCallback] = useState<(() => void) | null>(null);
+
   // ----------------------EVENTOS--------------------------------------------------//
   //FUNCION PARA CERRAR UN MODAL ==> ACEPTA UNA CALLBACK OPCIONAL PARA EJECUTAR UNA ACCION DESPUES
   const closeGlobalModal = (): void => {
@@ -33,29 +32,28 @@ const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // FUNCION PARA ABRIR UN MODAL Y SU ACCION DE CALLBACK OPCIONAL
-  const openGlobalModal = <T extends EModalGlobalType>(modalType: T, callback?: () => void): void => {
-    // AGREGAMOS EL ARGUMENTO  ==> 'callback'
+  const openGlobalModal = <T extends EModalGlobalType>(modalType: T, cb?: () => void): void => {
     setCurrentGlobalModal(modalType); // ==> CREAR EL MODAL PRIMERO
     setIsGlobalModalOpen(true); // ==> ABRIR LUEGO
 
     // SI HAY CALLBACK SETEAR EL CALLBACK EN EL ESTADO
-    if (callback) {
-      // USAMOS SETTER DE FUNCION PARA EVITAR PROBLEMAS DE CIERRE 
-      setOnCloseCallback(() => callback);
+    if (cb) {
+      // USAMOS SETTER DE FUNCION PARA EVITAR PROBLEMAS DE CIERRE
+      setOnCloseCallback(cb); //SETEAR LA CALLBACK QUE SE LE PASE
     } else {
-      setOnCloseCallback(null); //SINO LIMPIAR
+      setOnCloseCallback(null); //SINO SETEA A NULL
     }
   };
 
   // FUNCION PARA USAR EN CUALQUIER CONTEXTO DE APP
-  const showSuccess = (title: string, text: string, callback?: () => void) => {
-    setMessageState({ type: 'success', text, title });
-    openGlobalModal(EModalGlobalType.MODAL_SUCCESS, callback)
+  const showSuccess = (title: string, text: string, cb?: () => void) => {
+    setMessageState({ type: 'success', title, text });
+    openGlobalModal(EModalGlobalType.MODAL_SUCCESS, cb);
   };
 
   // FUNCION PARA MENSAJE DE ERROR EN CUALQUIER CONTEXTO DE APP
   const showError = (title: string, text: string) => {
-    setMessageState({ type: 'error', text, title });
+    setMessageState({ type: 'error', title, text });
   };
 
   const valueGlobalModalContext: TGlobalModal = {

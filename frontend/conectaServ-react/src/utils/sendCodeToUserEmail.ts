@@ -39,8 +39,8 @@ const sendCodeToUserEmail = async ({ emailUser, updateCodeEmail, showError, show
     updatedIsSentCode(false); // EL CODIGO NO FUE ENVIADO
     let userMessage: string = 'Fallo al enviar el código de verificación. Por favor, revisa tu conexión o el correo ingresado.';
     let title: string = 'Ups algo fallo!';
-    showError(title, userMessage);
     openGlobalModal(EModalGlobalType.MODAL_ERROR);
+    showError(title, userMessage);
   } finally {
     updatedIsSendingCode(false); //EL ESTADO DE ENVIANDO EL CODIGO AL USUARIO TERMINO
     setLoading(false);

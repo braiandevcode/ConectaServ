@@ -2,6 +2,7 @@ import useFieldsClient from '../../../../../hooks/useFieldsClient';
 import useFormVerifyEmailCode from '../../../../../hooks/useFormVerifyEmailCode';
 import useRegister from '../../../../../hooks/useRegister';
 import useRegisterClient from '../../../../../hooks/useRegisterClient';
+import useUserApi from '../../../../../hooks/useUserApi';
 import { EDataClient, ELocationKey } from '../../../../../types/enums';
 import { renderFieldError, styleBorderFieldError } from '../../../../../utils/formUtils';
 import LoaderBtn from '../../../../LoaderBtn';
@@ -16,9 +17,11 @@ const FieldsClient = () => {
   const { sendCode, isSendingCode } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO FORULARIO DE VERIFICAION DE EMAIL(ENGLOBA PARA AMBOS REGISTROS)
   const { formState, dataClient } = useRegisterClient(); //HOOK  QUE USA CONTEXTO REGISTRO CLIENTE
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useFieldsClient(); // HOOK QUE USA CONTEXTO DE LOS CAMPOS DEL FORMULARIO DE CLIENTE
+  const { sendCodeUser } = useUserApi();// HOOK PARA MANEJO DE PETOCIONES DE DATOS DE USUARIOS
+
 
   // ACCIONAR AHORA EL ENVIO ==> FUNCION ASINCRONA
-  const send = async () => await sendCode({ emailUser: dataClient[EDataClient.DATA].email });
+  const send = async () => await sendCodeUser({ emailUser: dataClient[EDataClient.DATA].email });
 
   return (
     <>

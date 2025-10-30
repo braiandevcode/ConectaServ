@@ -19,7 +19,7 @@ const ModalIdentifyEmail = (): JSX.Element => {
           </div>
         </h2>
         <div className='mb-1 c-flex c-flex-items-center gap-1/2 container-textInfo'>
-          <small>Ingresa tu email para verificar el estado de tu cuenta y guiarte al paso siguiente.</small>
+          <small>Ingresa tu email para verificar el estado de tu cuenta y continuar.</small>
         </div>
       </div>
       <FormIdentyfyEmail />

@@ -6,10 +6,17 @@ import useHeader from '../../../../hooks/useHeader';
 
 // CSS
 import './Login.css';
+import { useEffect } from 'react';
 
 const Login = () => {
-  const { password, userName, submitLogin, handlePassword, handleUserName } = useLogin();
+  const { password, userName, submitLogin, handlePassword, handleUserName, validateFieldsLogin, setIsValid, isValid } = useLogin();
   const { openRole } = useHeader(); // ==> HOOK PARA EL HEADER
+
+  useEffect(() => {
+    setIsValid(validateFieldsLogin) // ==> REVALIDAR EN CADA CAMBIO DE PASSWORD Y USERNAME
+  }, [password, userName]); // PASSWORD Y USERNAME ESTADOS EXTERNOS
+
+
   return (
     <>
       <form id='loginForm' className='loginForm w-full c-flex c-flex-column c-flex-items-center gap-2' onSubmit={submitLogin}>
@@ -39,7 +46,7 @@ const Login = () => {
           </Link>
         </div>
         <div className='mb-6'>
-          <BtnSubmit variant='btn btn__submit' text='Iniciar Sesión' />
+          <BtnSubmit disabled={!isValid} variant='btn btn__submit' text='Iniciar Sesión' />
         </div>
 
         <div className='w-full c-flex c-flex-justify-center c-flex-items-center gap-1'>
