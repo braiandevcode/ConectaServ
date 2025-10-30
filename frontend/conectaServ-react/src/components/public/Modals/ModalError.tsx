@@ -5,28 +5,26 @@ import useGlobalModal from '../../../hooks/useGlobalModal';
 
 // MODAL ERROR
 const ModalError = () => {
-  const { onCloseCallback, closeGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXT DE MODAL GLOBAL
+  const { closeGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXT DE MODAL GLOBAL
 
   // EFECTO CON TIMMER PARA CERRAR AUTOMATICAMENTE MODAL
   useEffect(() => {
     let timerId: NodeJS.Timeout | null = null;
 
     // SI HAY UNA CALLBACK GUARDADA UNA ACCION DE REDIRECCION PENDIENTE
-    if (onCloseCallback) {
-      //ACTIVAR TIMMER
-      timerId = setTimeout(() => {
-        closeGlobalModal(); // EJECUTAR CALLBACK QUE TIENE GUARDADO AL CERRAR MODAL
-      }, 4000);
+    //ACTIVAR TIMMER
+    timerId = setTimeout(() => {
+      closeGlobalModal(); // EJECUTAR CALLBACK QUE TIENE GUARDADO AL CERRAR MODAL
+    }, 6000);
 
-      // CLEAN UP(FUNCION PARA LIMPIAR TIMMER)
-      return () => {
-        // SI HAY UN TIMMER
-        if (timerId) {
-          clearTimeout(timerId); //LIMPIAR
-        }
-      };
-    }
-  }, [onCloseCallback, closeGlobalModal]); // DEPENDENCIAS
+    // CLEAN UP(FUNCION PARA LIMPIAR TIMMER)
+    return () => {
+      // SI HAY UN TIMMER
+      if (timerId) {
+        clearTimeout(timerId); //LIMPIAR
+      }
+    };
+  }, [closeGlobalModal]); // DEPENDENCIAS
 
   return (
     <>

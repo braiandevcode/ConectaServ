@@ -20,7 +20,7 @@ import LoaderBtn from '../../../../../LoaderBtn';
 const StepFour = () => {
   const { formState, stepData } = useRegisterTasker(); //HOOK REGISTRO PROFESIONAL
   const { sendCode, isSendingCode } = useVerifyEmailCode(); //HOOK QUE USA CONTEXTO VERIFICACION DE EMAIL
-  const { password, interactedPassword, interactedConfirmPassword, confirmPassword } = useRegister(); //HOOK DE ESTADOS DE REGISTROS EN COMUN
+  const { password, isSending,  interactedPassword, interactedConfirmPassword, confirmPassword } = useRegister(); //HOOK DE ESTADOS DE REGISTROS EN COMUN
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useStepFour(); // HOOK PASO 4
 
   // ACCIONAR AHORA EL ENVIO ==> FUNCION ASINCRONA
@@ -47,7 +47,7 @@ const StepFour = () => {
               </span>
               <span className='span-required'>*</span>
             </label>
-            <input type='text' id='fullName' className={`form__input ${styleBorderFieldError(formState, 'fullName')}`} aria-label='Nombre completo' placeholder='Roberto Bustos' autoComplete='name' value={formState.fullName.value as string} onChange={handleFullName} required autoFocus />
+            <input type='text' id='fullName' disabled={isSending} className={`form__input ${styleBorderFieldError(formState, 'fullName')}`} aria-label='Nombre completo' placeholder='Roberto Bustos' autoComplete='name' value={formState.fullName.value as string} onChange={handleFullName} required autoFocus />
             {renderFieldError(formState, 'fullName')}
           </div>
 
@@ -59,7 +59,7 @@ const StepFour = () => {
               </span>
               <span className='span-required'>*</span>
             </label>
-            <input type='text' id='userName' className={`form__input ${styleBorderFieldError(formState, 'userName')}`} aria-label='Nombre de usuario' placeholder='Roberto_Bustos.45' autoComplete='username' value={formState.userName.value as string} onChange={handleUserName} required />
+            <input type='text' id='userName' disabled={isSending} className={`form__input ${styleBorderFieldError(formState, 'userName')}`} aria-label='Nombre de usuario' placeholder='Roberto_Bustos.45' autoComplete='username' value={formState.userName.value as string} onChange={handleUserName} required />
             {renderFieldError(formState, 'userName')}
           </div>
 
@@ -73,7 +73,7 @@ const StepFour = () => {
             </label>
 
             <div className='c-flex c-flex-items-center gap-1'>
-              <input type='text' id='email' className={`form__input ${styleBorderFieldError(formState, 'email')}`} aria-label='Correo electronico' autoComplete='email' placeholder='test@example.com' value={formState.email.value as string} onChange={handleEmail} required />
+              <input type='text' id='email' disabled={isSending} className={`form__input ${styleBorderFieldError(formState, 'email')}`} aria-label='Correo electronico' autoComplete='email' placeholder='test@example.com' value={formState.email.value as string} onChange={handleEmail} required />
               {isSendingCode ? <LoaderBtn /> : <BtnSendCode formState={formState} handleSend={send} text='Código' />}
             </div>
             {renderFieldError(formState, 'email')}
@@ -87,7 +87,7 @@ const StepFour = () => {
               </span>
               <span className='span-required'>*</span>
             </label>
-            <select id='location' className={`to-left form__location-select ${styleBorderFieldError(formState, 'location')}`} value={formState.location.value as string} onChange={handleChangeLocation} required>
+            <select id='location' disabled={isSending} className={`to-left form__location-select ${styleBorderFieldError(formState, 'location')}`} value={formState.location.value as string} onChange={handleChangeLocation} required>
               <option value={ELocationKey.NONE} disabled>
                 Seleccione una ciudad
               </option>
@@ -106,7 +106,7 @@ const StepFour = () => {
               </span>
               <span className='span-required'>*</span>
             </label>
-            <input type='password' id='password' autoComplete='new-password' aria-label='password' className={`form__input ${interactedPassword && styleBorderFieldError(formState, 'password')}`} placeholder='***********' value={password} onChange={handlePassword} required />
+            <input type='password' id='password' disabled={isSending} autoComplete='new-password' aria-label='password' className={`form__input ${interactedPassword && styleBorderFieldError(formState, 'password')}`} placeholder='***********' value={password} onChange={handlePassword} required />
             {interactedPassword && renderFieldError(formState, 'password')}
           </div>
 
@@ -118,7 +118,7 @@ const StepFour = () => {
               </span>
               <span className='span-required'>*</span>
             </label>
-            <input type='password' id='confirmPassword' autoComplete='new-password' className={`form__input ${interactedConfirmPassword && styleBorderFieldError(formState, 'confirmPassword')}`} aria-label='confirmPassword' placeholder='***********' value={confirmPassword} onChange={handleConfirmPassword} required />
+            <input type='password' id='confirmPassword' disabled={isSending} autoComplete='new-password' className={`form__input ${interactedConfirmPassword && styleBorderFieldError(formState, 'confirmPassword')}`} aria-label='confirmPassword' placeholder='***********' value={confirmPassword} onChange={handleConfirmPassword} required />
             {interactedConfirmPassword && renderFieldError(formState, 'confirmPassword')}
           </div>
         </div>

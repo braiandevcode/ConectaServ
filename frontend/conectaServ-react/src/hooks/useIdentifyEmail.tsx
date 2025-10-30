@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import type { TIdentifyEmail } from '../types/typeIdentifyEmail';
-import FormIdentifyEmailContext from '../context/form/formIdentifyEmailContext';
+import FormIdentifyEmailContext from '../context/form/FormIdentifyEmailContext';
 
 // HOOK QUE USA EL CONTEXTO DE FORMULARIO DE IDENTIFICACION DE EMAIL
 const useIdentifyEmail = () => {
