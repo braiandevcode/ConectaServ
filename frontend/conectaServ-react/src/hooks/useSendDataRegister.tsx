@@ -10,6 +10,7 @@ import useGlobalModal from './useGlobalModal';
 import useValidateStep from './useValidateStep';
 import type { TUser } from '../types/typeUser';
 import useUserApi from './useUserApi';
+import useFormVerifyEmailCode from './useFormVerifyEmailCode';
 
 // HOOK QUE SE ENCARGA DEL PROCESO DE ENVIO DE DATOS AL BACKEND
 const useSendDataRegister = () => {
@@ -19,6 +20,7 @@ const useSendDataRegister = () => {
   const { stepData, isLoaded: isLoadedProfessional, isStepValid } = useRegisterTasker(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO PROFESIONAL
   const { showError} = useGlobalModal(); //HOOK QUE USA CONTEXTO DE MODALES GLOBAL
   const { addUser } = useUserApi(); //HOOK PARA PETICIONES DATOS DE USUARIOS
+  const { isCodeVerified } = useFormVerifyEmailCode();
 
   const { isLastStep } = useValidateStep(); // HOOK PARA VALIDAR PASO
 
@@ -62,6 +64,7 @@ const useSendDataRegister = () => {
       ...stepData[EKeyDataByStep.FOUR],
       password, //SE AGREGA EL PASSWORD
       roles: roleVector,
+      isVerified: isCodeVerified, //SI ESTA VERIFICADO
     } as TPlaintTasker;
 
     //-------------------OBJETO APLANADO PARA ENVIO DATOS DEL CLIENTE--------------------------------//
@@ -72,6 +75,7 @@ const useSendDataRegister = () => {
       ...copy,
       password, //SE AGREGA EL PASSWORD
       roles: roleVector, //AGREGAR ROLE
+      isVerified:isCodeVerified //SI ESTA VERIFICADO
     } as TPlainClient;
 
 

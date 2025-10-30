@@ -26,8 +26,9 @@ const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
     //EJECUTA LA ACCION CALLBACK SI SE PASA UNA CALLBACK
     // SI HAY CALLBACK
     if (onCloseCallback) {
-      onCloseCallback(); //EJECUTAR
+      const cb = onCloseCallback; //EJECUTAR
       setOnCloseCallback(null); // ==> LIMPIAR
+      cb();
     }
   };
 
@@ -53,6 +54,7 @@ const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
 
   // FUNCION PARA MENSAJE DE ERROR EN CUALQUIER CONTEXTO DE APP
   const showError = (title: string, text: string) => {
+    console.log('Me llamaron soy el error que adie quiere ver');
     setMessageState({ type: 'error', title, text });
   };
 

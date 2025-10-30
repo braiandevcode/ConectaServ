@@ -11,7 +11,7 @@ const ModalLogin = () => {
 
   return (
     <>
-      <div className='modalLogin w-full position-relative'>
+      <div className='modalLogin w-full'>
         <BtnClose onCloseModal={closeGlobalModal} variant='btn btn__ghost' className='modalLoginHeader__btnClose cursor-pointer position-absolute' />
         <div className='modalLoginHeader w-full'>
           <h3 className='modalLoginHeader__title text-center'>Iniciar sesión</h3>

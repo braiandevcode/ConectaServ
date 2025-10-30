@@ -1,8 +1,11 @@
 import useFieldsClient from '../../../../../hooks/useFieldsClient';
 import useFormVerifyEmailCode from '../../../../../hooks/useFormVerifyEmailCode';
+import useGlobalModal from '../../../../../hooks/useGlobalModal';
+import useIdentifyEmail from '../../../../../hooks/useIdentifyEmail';
 import useRegister from '../../../../../hooks/useRegister';
 import useRegisterClient from '../../../../../hooks/useRegisterClient';
 import useUserApi from '../../../../../hooks/useUserApi';
+import { EModalGlobalType } from '../../../../../types/enumGlobalModalType';
 import { EDataClient, ELocationKey } from '../../../../../types/enums';
 import { renderFieldError, styleBorderFieldError } from '../../../../../utils/formUtils';
 import LoaderBtn from '../../../../LoaderBtn';
@@ -13,15 +16,34 @@ import './FieldsClient.css';
 
 // COMPONENTE PASO CUATRO
 const FieldsClient = () => {
+  const { showError, openGlobalModal } = useGlobalModal();
   const { password, isSending, confirmPassword, interactedPassword, interactedConfirmPassword } = useRegister(); //HOOK QUE USA CONTEXTO REGISTRO GENERALES
-  const { sendCode, isSendingCode } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO FORULARIO DE VERIFICAION DE EMAIL(ENGLOBA PARA AMBOS REGISTROS)
+  const { isSendingCode } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO FORULARIO DE VERIFICAION DE EMAIL(ENGLOBA PARA AMBOS REGISTROS)
   const { formState, dataClient } = useRegisterClient(); //HOOK  QUE USA CONTEXTO REGISTRO CLIENTE
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useFieldsClient(); // HOOK QUE USA CONTEXTO DE LOS CAMPOS DEL FORMULARIO DE CLIENTE
-  const { sendCodeUser } = useUserApi();// HOOK PARA MANEJO DE PETOCIONES DE DATOS DE USUARIOS
+  const { sendCodeUser, getUsers } = useUserApi(); // HOOK PARA MANEJO DE PETOCIONES DE DATOS DE USUARIOS
+  const { setIsSendingIdentificationEmail } = useIdentifyEmail();
 
-
-  // ACCIONAR AHORA EL ENVIO ==> FUNCION ASINCRONA
-  const send = async () => await sendCodeUser({ emailUser: dataClient[EDataClient.DATA].email });
+  // ENVIAR CODIGO
+  const send = async () => {
+    try {
+      const resultVerifyUser = await getUsers({ setIsSendingIdentificationEmail });
+      const emailExist: boolean = resultVerifyUser.some((data) => data.email === dataClient[EDataClient.DATA].email);
+      // SI EL EMAIL NO EXISTE
+      if (!emailExist) {
+        await sendCodeUser({ emailUser: dataClient[EDataClient.DATA].email }); // ENVIAR CODIGO
+      } else {
+        openGlobalModal(EModalGlobalType.MODAL_ERROR);
+        // SINO MENSAJE
+        showError('Email existente', 'El Email ya existe, prueba con otro');
+      }
+    } catch (error) {
+      openGlobalModal(EModalGlobalType.MODAL_ERROR);
+      // SINO MENSAJE
+      showError('Error inesperado', 'Intente de nuevo más tarde.');
+      throw error;
+    }
+  };
 
   return (
     <>

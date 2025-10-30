@@ -8,7 +8,7 @@ import './ModalWrapper.css';
 const ModalWrapper: FC<iModalWrapperProps> = ({ children, className, ariaHidden }): ReactNode => {
   return (
     <>
-      <div className='container-modal c-flex c-flex-items-center c-flex-justify-center position-fixed inset-0'>
+      <div className='container-modal position-relative c-flex c-flex-items-center c-flex-justify-center position-fixed inset-0'>
         <div className={className} aria-hidden={ariaHidden}>
           {children}
         </div>

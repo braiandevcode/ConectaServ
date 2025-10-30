@@ -1,10 +1,10 @@
-import { useState, type ReactNode } from "react";
-import type { EModalRegistersType } from "../../types/enumModalRegistersTypes";
-import type { TRegisterModal } from "../../types/typeRegisterModal";
-import RegisterModalContext from "./RegisterModalContext";
+import { useState, type ReactNode } from 'react';
+import type { EModalRegistersType } from '../../types/enumModalRegistersTypes';
+import type { TRegisterModal } from '../../types/typeRegisterModal';
+import RegisterModalContext from './RegisterModalContext';
 
 const RegisterModalProvider = ({ children }: { children: ReactNode }) => {
-  // ESTADO PARA MODAL 
+  // ESTADO PARA MODAL
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState<boolean>(false);
   const [currentRegisterModal, setCurrentRegisterModal] = useState<EModalRegistersType | null>(null);
 
@@ -24,10 +24,10 @@ const RegisterModalProvider = ({ children }: { children: ReactNode }) => {
   const valueRegisterModalContext: TRegisterModal = {
     currentRegisterModal,
     isRegisterModalOpen,
-   closeRegisterModal,
-   openRegisterModal,
-   setIsRegisterModalOpen,
-   setCurrentRegisterModal
+    closeRegisterModal,
+    openRegisterModal,
+    setIsRegisterModalOpen,
+    setCurrentRegisterModal,
   };
 
   return <RegisterModalContext.Provider value={valueRegisterModalContext}>{children}</RegisterModalContext.Provider>;

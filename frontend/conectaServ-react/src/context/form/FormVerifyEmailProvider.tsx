@@ -155,7 +155,7 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
       setIsCodeVerified(true); // INDICA QUE TERMINO LA VERIFICACION
       setIsSuccefullyVerified(fullCode.trim() === codeStoredEmail.trim());
       if (fullCode.trim() === codeStoredEmail.trim()) {
-        showSuccess('¡Correo Verificado!', 'Confirmado. Cierra (X) para continuar con tu registro.');
+        showSuccess('¡Correo Verificado!', '¡Su correo fue verificado con exito!');
         openGlobalModal(EModalGlobalType.MODAL_SUCCESS);
       } else {
         setIsCodeSent(false); //== REINICIAR A FALSO SI EL ERROR ES INVALIDO
@@ -164,7 +164,7 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem(ENamesOfKeyLocalStorage.CODE);
       }
       closeRegisterModal(); //CERRAR MODAL ACTUAL AUTOMATICAMENTE LUEGO DEL EVENTO
-    }, 8000);
+    }, 4000);
   };
 
   const valuesFormVerifyEmailContext: TFormVerifyCode = {

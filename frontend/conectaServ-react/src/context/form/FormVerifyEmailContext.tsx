@@ -27,7 +27,6 @@ const defaultFormVerifyEmailContext: TFormVerifyCode = {
   setIsVerifyingCode: () => {},
   updateCodeEmail: () => {},
   handleSubmit: async () => {},
-  // sendCode: async () => {},
   updatedIsSendingCode: () => {},
   updatedFormState: () => {},
 };

@@ -16,17 +16,40 @@ import BtnSendCode from '../../Buttons/BtnSendCode';
 import useVerifyEmailCode from '../../../../../../hooks/useFormVerifyEmailCode';
 import LoaderBtn from '../../../../../LoaderBtn';
 import useUserApi from '../../../../../../hooks/useUserApi';
+import useIdentifyEmail from '../../../../../../hooks/useIdentifyEmail';
+import useGlobalModal from '../../../../../../hooks/useGlobalModal';
+import { EModalGlobalType } from '../../../../../../types/enumGlobalModalType';
 
 // COMPONENTE PASO 4
 const StepFour = () => {
+  const { showError, openGlobalModal } = useGlobalModal();
   const { formState, stepData } = useRegisterTasker(); //HOOK REGISTRO PROFESIONAL
-  const { sendCode, isSendingCode } = useVerifyEmailCode(); //HOOK QUE USA CONTEXTO VERIFICACION DE EMAIL
-  const { password, isSending,  interactedPassword, interactedConfirmPassword, confirmPassword } = useRegister(); //HOOK DE ESTADOS DE REGISTROS EN COMUN
+  const { isSendingCode } = useVerifyEmailCode(); //HOOK QUE USA CONTEXTO VERIFICACION DE EMAIL
+  const { password, isSending, interactedPassword, interactedConfirmPassword, confirmPassword } = useRegister(); //HOOK DE ESTADOS DE REGISTROS EN COMUN
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useStepFour(); // HOOK PASO 4
-  const { sendCodeUser } = useUserApi();// HOOK PARA MANEJO DE PETOCIONES DE DATOS DE USUARIOS
+  const { setIsSendingIdentificationEmail } = useIdentifyEmail();
+  const { sendCodeUser, getUsers } = useUserApi(); // HOOK PARA MANEJO DE PETOCIONES DE DATOS DE USUARIOS
 
   // ACCIONAR AHORA EL ENVIO ==> FUNCION ASINCRONA
-  const send= async () => await sendCodeUser({ emailUser: stepData[EKeyDataByStep.FOUR].email});
+  const send = async () => {
+    try {
+      const resultVerifyUser = await getUsers({ setIsSendingIdentificationEmail });
+      const emailExist: boolean = resultVerifyUser.some((data) => data.email === stepData[EKeyDataByStep.FOUR].email);
+      // SI EL EMAIL NO EXISTE
+      if (!emailExist) {
+        await sendCodeUser({ emailUser: stepData[EKeyDataByStep.FOUR].email }); // ENVIAR CODIGO
+      } else {
+        openGlobalModal(EModalGlobalType.MODAL_ERROR);
+        // SINO MENSAJE
+        showError('Email existente', 'El Email ya existe, prueba con otro');
+      }
+    } catch (error) {
+      openGlobalModal(EModalGlobalType.MODAL_ERROR);
+      // SINO MENSAJE
+      showError('Error inesperado', 'Intente de nuevo más tarde.');
+      throw error;
+    }
+  };
 
   return (
     <>

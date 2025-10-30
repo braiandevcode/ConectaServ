@@ -63,6 +63,7 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
   //EVENTO DE SUBMIT DE IDENTIFICACION AL BACKEND
   const submitIdentifyEmail = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setFormState((prev) => ({...prev, emailIdentify:{ error:'', value:'', isValid: false }}))
     const stored = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE);
     if (!stored) return; //ASEGURAR QUE EN STORAGE ESTE ALMACENADO EL ROLE
     // LLAMO AL METODO Y PASO EL ARGUMENTO ESPERADO INTERNAMENTE

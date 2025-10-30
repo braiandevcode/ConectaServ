@@ -3,6 +3,10 @@ import ModalMessage from './ModalMessage';
 import { FaCheckCircle } from 'react-icons/fa';
 import useGlobalModal from '../../../hooks/useGlobalModal';
 
+
+// CSS
+import './ModalSuccess.css';
+
 // MODAL SATISFACTORIO
 const ModalSuccess = (): JSX.Element => {
   const { closeGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXT DE MODAL GLOBAL
@@ -15,7 +19,7 @@ const ModalSuccess = (): JSX.Element => {
     //ACTIVAR TIMMER
     timerId = setTimeout(() => {
       closeGlobalModal(); // EJECUTAR CALLBACK QUE TIENE GUARDADO AL CERRAR MODAL
-    }, 6000);
+    }, 2500);
 
     // CLEAN UP(FUNCION PARA LIMPIAR TIMMER)
     return () => {

@@ -28,15 +28,18 @@ const useUserApi = () => {
   const showMsgSuccessRegister = (): void => {
     // DEFINIR LA ACCION DE REDIRECCION
     const redirectToHome = () => {
-      navigate('/');
+      setTimeout(() => {
+        navigate('/', { state: { showLogin: true } });
+        setIsSending(false); // ENVIANDO FALSE
+      }, 2500); // ESPERAR 6 SEGUNDOS
     };
-    
+
     // MOSTRAR EL MODAL CON EL MENSAJE ==> LUEGO EJECUTA CALLBACK
     showSuccess('Registro Exitoso', 'Tus datos se han enviado correctamente.', redirectToHome);
   };
 
   // LEER TABLA USERS PARA IDENTIFICAR EL EMAIL SI EXISTE
-  const getUsers = async ({ setIsSendingIdentificationEmail }: Pick<TIdentifyEmail, 'setIsSendingIdentificationEmail'>):Promise<TUser[]> => {
+  const getUsers = async ({ setIsSendingIdentificationEmail }: Pick<TIdentifyEmail, 'setIsSendingIdentificationEmail'>): Promise<TUser[]> => {
     try {
       setLoading(true); //LOADER EN TRUE
       setIsSendingIdentificationEmail(true); // ==> ENVIANDOSE IDENTIFICACION DE CUENTA
@@ -70,6 +73,7 @@ const useUserApi = () => {
       showMsgSuccessRegister();
     } catch (error: unknown) {
       openGlobalModal(EModalGlobalType.MODAL_ERROR); //ACTUALIZAR PARA EL NUEVO MODAL DE ERROR
+      setIsSending(false); // ENVIANDO FALSE
       // CONVERTIR EL TIPO A UN ERROR CONOCIDO O EXTRAER LOS DATOS
       const apiError = error as { status?: number };
       const statusCode: number = apiError.status ?? 0; //SI NO HAY NUMERO DE ESTADO ES CERO
@@ -88,12 +92,13 @@ const useUserApi = () => {
       }
     } finally {
       setLoading(false); //LOADING EN FALSE
-      setIsSending(false); // ENVIANDO FALSE
     }
   };
 
   // FUNCION HEPLPER DE ENVIO DEL CODIGO
-  const sendCodeUser = async ({ emailUser }: iEmailUser) => await sendCodeToUserEmail({ emailUser, updateCodeEmail, updatedIsSendingCode, updatedIsSentCode, openGlobalModal, openVerifyEmailModal: openRegisterModal, showError, showSuccess, setLoading });
+  const sendCodeUser = async ({ emailUser }: iEmailUser) => {
+    await sendCodeToUserEmail({ emailUser, updateCodeEmail, updatedIsSendingCode, updatedIsSentCode, openGlobalModal, openVerifyEmailModal: openRegisterModal, showError, showSuccess, setLoading });
+  }
 
   return { getUsers, addUser, sendCodeUser }; // ==> ACA RETORNO TODOS LOS METODOS QUE HACEN REFERNECIA A DATOS DE USUARIOS
 };

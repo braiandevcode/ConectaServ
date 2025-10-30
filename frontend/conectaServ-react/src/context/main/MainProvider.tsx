@@ -6,17 +6,18 @@ import { clearPersistence } from '../../utils/storageUtils';
 import type { TMain } from '../../types/typeMain';
 import type { TFormRole } from '../../types/typeFormRole';
 import useGlobalModal from '../../hooks/useGlobalModal';
+import { EModalGlobalType } from '../../types/enumGlobalModalType';
 
 // PROVEEMOS LOGICA Y ESTADOS AL CONTEXTO PRINCIPAL
 const MainProvider = ({ children }: { children: ReactNode }) => {
-  const { closeGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
+  const { closeGlobalModal, openGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
   const stored = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE) as TFormRole | null;
 
   // ESTADO PARA SABER SI EL USUARIO ES CLIENTE (TRUE), PRO (FALSE), O NULO SI NO HAY ROL
   const [client, setClient] = useState<boolean | null>(null);
 
   // ------------------HOOKS DE REACT-------------------------//
-  const { pathname } = useLocation(); //==> LOCATION DE RACT
+  const { pathname, state } = useLocation(); //==> LOCATION DE RACT
   const navigate = useNavigate(); //==> NAVIGATE DE RACT
   const [loading, setLoading] = useState(false); // ==> BANDERA DEL PROCESO DE LOADER
 
@@ -49,6 +50,13 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     //ASEGURAR QUE EL MODAL SE CIERRE AL CAMBIAR DE RUTA
     closeGlobalModal();
   }, [pathname, navigate]); // DEPENDE SOLO DE PATH Y NAVIGATE
+
+  useEffect(() => {
+    // const params:URLSearchParams = new URLSearchParams(location.search);
+    if (state?.showLogin) {
+      openGlobalModal(EModalGlobalType.MODAL_LOGIN);
+    }
+  }, [state, openGlobalModal]);
 
   // FUNCION QUE SE EJECUTA CUANDO EL USUARIO ELIGE CLIENTE
   const handleClientClick = () => {

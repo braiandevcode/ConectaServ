@@ -5,6 +5,7 @@ import useValidateStep from '../../../../../hooks/useValidateStep';
 // CSS
 import '../RegisterBase.css'; // ==> BASE PARA AMBOS RESGISTROS CON ESTILOS EN COMUN Y EVITAR REPETIR ESTILOS
 import useRegisterTasker from '../../../../../hooks/useRegisterTasker';
+import useRegister from '../../../../../hooks/useRegister';
 
 // **MACHETE PARA RESPETAR Y ENTENDER REACT EN PROCESO DE DESARROLLO**//
 
@@ -19,13 +20,14 @@ import useRegisterTasker from '../../../../../hooks/useRegisterTasker';
 const RegisterTasker = () => {
   const { IsStepOneGreaterThhanZero  } = useValidateStep(); //HOOK QUE PERMITE VALIDAR PASOS Y EXTRAER LA BANDERA NECESARIA
   const { handleClickPrev } = useRegisterTasker();
+  const { isSending } = useRegister();
 
   return (
     <>
       <div className='w-full c-flex c-flex-justify-center centered register'>
         <div className='w-full register__container'>
           <div className='c-flex c-flex-column gap-1/2 register__content'>
-            {IsStepOneGreaterThhanZero &&  <BtnBack handleBtnBack={handleClickPrev} />}
+            {IsStepOneGreaterThhanZero &&  <BtnBack disabled={isSending} handleBtnBack={handleClickPrev} />}
             <div className='w-full c-flex c-flex-items-center register__header'>
               <h1 className='w-full c-flex c-flex-items-center register__title'>
                 <span>Crear Cuenta</span>
