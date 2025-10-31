@@ -1,9 +1,9 @@
 import { useEffect, useState, type ChangeEvent, type ReactNode } from 'react';
 import { RegisterContext } from './RegisterContext';
 import type { TRegister } from '../../types/typeRegister';
-import useFormVerifyEmailCode from '../../hooks/useFormVerifyEmailCode';
 import { ENamesOfKeyLocalStorage } from '../../types/enums';
 import { useLocation, useNavigate } from 'react-router';
+import type { iEmailUser } from '../../interfaces/iEmailUser';
 
 // CONTEXTO DE ESTADOS GENERALES A FORMULARIOS
 const RegisterProvider = ({ children }: { children: ReactNode }) => {
@@ -18,18 +18,17 @@ const RegisterProvider = ({ children }: { children: ReactNode }) => {
   const [password, setPassword] = useState<string>(''); //ESTADO EN TIEMPO RUNTIME PARA PASSWORD
   const [confirmPassword, setConfirmPassword] = useState<string>(''); //ESTADO EN TIEMPO RUNTIME PARA CONFIRMPASSWORD
 
-  // HOOK QUE USA CONTEXTO DE VERIFICACION DE EMAIL
-  const { isSuccefullyVerified } = useFormVerifyEmailCode();
+  const [resendEmail, setResendEmail] = useState<iEmailUser>({ emailUser: '' });
 
+    // ESTADO LOCAL DE SI YA SE VERIFICO CORRECTAMENTE
+  const [isSuccefullyVerified, setIsSuccefullyVerified] = useState<boolean>(() => {
+    return localStorage.getItem(ENamesOfKeyLocalStorage.IS_VERIFY_CODE) === 'true';
+  });
+  
   //ONCHANGE TERMINOS Y CONDICIONES
   const onChangeTerms = (e: ChangeEvent<HTMLInputElement>) => {
     setTerms(e.target.checked);
   };
-
-  // EFECTO PARA ALMACENAR BANDERA DE SI ESTA VERIFICADO O NO
-  useEffect(() => {
-    localStorage.setItem(ENamesOfKeyLocalStorage.IS_VERIFY_CODE, String(isSuccefullyVerified));
-  }, [isSuccefullyVerified]); //==> DEPENDENCIA EXTERNA
 
   // EFECTO PARA FORZAR A RENDERIZAR HOME
   useEffect(() => {
@@ -52,6 +51,10 @@ const RegisterProvider = ({ children }: { children: ReactNode }) => {
 
   //VALORES DE ESTADOS QUE CONSUME EL CONTEXTO
   const contextValuesRegister: TRegister = {
+    resendEmail,
+    isSuccefullyVerified,
+    setIsSuccefullyVerified,
+    setResendEmail,
     setInteractedConfirmPassword,
     setInteractedPassword,
     onChangeTerms,

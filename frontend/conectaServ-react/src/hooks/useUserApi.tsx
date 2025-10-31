@@ -1,16 +1,22 @@
 import { useNavigate } from 'react-router';
 import { endPointUser } from '../config/configEndpointRegister';
 import type { iEmailUser } from '../interfaces/iEmailUser';
+import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 import { EModalGlobalType } from '../types/enumGlobalModalType';
 import type { TIdentifyEmail } from '../types/typeIdentifyEmail';
 import type { TUser } from '../types/typeUser';
 import apiRequest from '../utils/apiRequestUtils';
-import sendCodeToUserEmail from '../utils/sendCodeToUserEmail';
 import useFormVerifyEmailCode from './useFormVerifyEmailCode';
 import useGlobalModal from './useGlobalModal';
 import useMain from './useMain';
 import useRegister from './useRegister';
 import useRegisterModal from './useRegisterModal';
+import { configEmail } from '../config/configCodeEmail';
+import generateRandomNumber from '../utils/generateRandomNumber';
+import type { TVerifyCode } from '../types/typeVerifyCode';
+import { templateParamsEmailjs } from '../config/templateParamsEmailjs';
+import { DATA_EMAILJS } from '../config/configDataIdEmailjs';
+import { EModalRegistersType } from '../types/enumModalRegistersTypes';
 
 const { USER } = endPointUser; //DESESTRUCTURAR ENDPOINT
 
@@ -18,8 +24,8 @@ const { USER } = endPointUser; //DESESTRUCTURAR ENDPOINT
 const useUserApi = () => {
   const { setLoading } = useMain(); //HOOK QUE USA EL CONTEXTO DE MAIN PRINCIPAL
   const { showError, showSuccess, openGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
-  const { openRegisterModal } = useRegisterModal();
   const { updateCodeEmail, updatedIsSendingCode, updatedIsSentCode } = useFormVerifyEmailCode();
+  const {openRegisterModal} = useRegisterModal()
   const { setIsSending } = useRegister();
   // HOOK NAVIGATE DE REACT
   const navigate = useNavigate();
@@ -39,7 +45,7 @@ const useUserApi = () => {
   };
 
   // LEER TABLA USERS PARA IDENTIFICAR EL EMAIL SI EXISTE
-  const getUsers = async ({ setIsSendingIdentificationEmail }: Pick<TIdentifyEmail, 'setIsSendingIdentificationEmail'>): Promise<TUser[]> => {
+  const getUsers = async ({ setIsSendingIdentificationEmail }: Pick<TIdentifyEmail, 'setIsSendingIdentificationEmail'>): Promise<TUser[] | undefined> => {
     try {
       setLoading(true); //LOADER EN TRUE
       setIsSendingIdentificationEmail(true); // ==> ENVIANDOSE IDENTIFICACION DE CUENTA
@@ -50,11 +56,11 @@ const useUserApi = () => {
       // SINO DE 500 EN ADELANTE
       // 5xx o ERROR DE RED O DESCONOCIDO
       showError('Ups...', 'Tuvimos un inconveniente al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde.');
+      return undefined; //NO SEGUIR
     } finally {
       setLoading(false); //LOADING  A FALSE
       setIsSendingIdentificationEmail(false); //ENVIANDO A FALSE
     }
-    return [];
   };
 
   // ENVIAR DATOS DEL REGISTRO METODO POST
@@ -95,12 +101,46 @@ const useUserApi = () => {
     }
   };
 
-  // FUNCION HEPLPER DE ENVIO DEL CODIGO
-  const sendCodeUser = async ({ emailUser }: iEmailUser) => {
-    await sendCodeToUserEmail({ emailUser, updateCodeEmail, updatedIsSendingCode, updatedIsSentCode, openGlobalModal, openVerifyEmailModal: openRegisterModal, showError, showSuccess, setLoading });
-  }
+  // INICIALIZAR LIBRERIA
+  emailjs.init(configEmail.options); //==> PASO CONFIGURACION
 
-  return { getUsers, addUser, sendCodeUser }; // ==> ACA RETORNO TODOS LOS METODOS QUE HACEN REFERNECIA A DATOS DE USUARIOS
+  // FUNCION PARA ENVIAR CODIGO
+  const sendCodeToUserEmail = async ({ emailUser}: iEmailUser): Promise<void> => {
+    const generatedCode: number = generateRandomNumber(); //GENERAR NUMERO RANDOM
+
+    updateCodeEmail(generatedCode.toString()); //ACTUALIZO EN STORAGE Y ESTADO INTERNO DE REACT
+
+    //INVOCO FUNCION DE OBJETO DE CONFIGURACION PARA ENVIO
+    const templateParams: TVerifyCode = templateParamsEmailjs({
+      to_email: emailUser, // ==> CORREO DE DESTINO
+      verification_code: generatedCode, //==> CODIGO GENERADO A LA PLANTILLA
+    });
+
+    const { SERVICE_ID, TEMPLATE_VERIFICATION_ID } = DATA_EMAILJS; //DESESTRUCTURAR
+
+    // INTENTAR ENVIO
+    try {
+      setLoading(true); // ACTIVAR LOADER MIENTRAS SE ENVÍA AL BACKEND
+      updatedIsSendingCode(true); //EL CODIGO ENVIADO AL USUARIO ESTA EN PROGRESO
+      const response: EmailJSResponseStatus = await emailjs.send(SERVICE_ID, TEMPLATE_VERIFICATION_ID, templateParams);
+      if (response.status === 200) {
+        updatedIsSentCode(true); // ESTADO DE CODIGO ENVIADO A DESTINO
+        showSuccess('¡Codigo enviado!', '¡Codigo de verificacion enviado con exito!, Ingrese el codigo enviado aquí.');
+        openRegisterModal(EModalRegistersType.MODAL_VERIFY);
+      }
+    } catch (err) {
+      updatedIsSentCode(false); // EL CODIGO NO FUE ENVIADO
+      let userMessage: string = 'Fallo al enviar el código de verificación. Por favor, revisa tu conexión o el correo ingresado.';
+      let title: string = 'Ups algo fallo!';
+      openGlobalModal(EModalGlobalType.MODAL_ERROR);
+      showError(title, userMessage);
+    } finally {
+      updatedIsSendingCode(false); //EL ESTADO DE ENVIANDO EL CODIGO AL USUARIO TERMINO
+      setLoading(false);
+    }
+  };
+
+  return { getUsers, addUser, sendCodeToUserEmail}; // ==> ACA RETORNO TODOS LOS METODOS QUE HACEN REFERNECIA A DATOS DE USUARIOS
 };
 
 export default useUserApi;

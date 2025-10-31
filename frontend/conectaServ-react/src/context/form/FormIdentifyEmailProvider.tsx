@@ -17,7 +17,7 @@ const emailValidator: EmailValidator = new EmailValidator(); // ==> INSTANCIA DE
 // PROVIDER PARA IDENTIFICACION DE EMAIL
 const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
   const { openGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
-  const { handleClientClick, handleTaskerClick } = useMain(); // HOOK QUE USA EL CONTEXTO DE MAIN PRINCIPAL
+  const { handleClientClick, handleTaskerClick, client } = useMain(); // HOOK QUE USA EL CONTEXTO DE MAIN PRINCIPAL
   const { getUsers } = useUserApi(); //HOOK PARA PETICIONES A DATOS DEL USUARIO
 
   const navigate = useNavigate();
@@ -59,26 +59,34 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
     setFormState((prev) => ({ ...prev, emailIdentify: validate })); //SETEAR ESTADO DE VALIDACION DE LA ENTRADA
     setEmailIdentify(value); //SETEAR EL EMAIL INGRESADO
   };
+  
+
 
   //EVENTO DE SUBMIT DE IDENTIFICACION AL BACKEND
   const submitIdentifyEmail = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFormState((prev) => ({...prev, emailIdentify:{ error:'', value:'', isValid: false }}))
+    const role: 'client' | 'tasker' | null = client === null ? null : client ? 'client' :'tasker';
+    setFormState((prev) => ({ ...prev, emailIdentify: { error: '', value: '', isValid: false } }));
     const stored = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE);
     if (!stored) return; //ASEGURAR QUE EN STORAGE ESTE ALMACENADO EL ROLE
     // LLAMO AL METODO Y PASO EL ARGUMENTO ESPERADO INTERNAMENTE
     const result = (await getUsers({ setIsSendingIdentificationEmail })) as TUser[] | [];
+
+    // SI NO HAY RESULTADOS NO SEGUIR
+    if (!result) {
+      localStorage.removeItem(ENamesOfKeyLocalStorage.ROLE); //REMOVER DEL STORAGE EL ROLE
+      return; //SALIR
+    }
+
     // SI LA SOLICITUD TRAE DATOS
-    if (result) {
-      const findIndexEmailIdentify: number = result.findIndex((data) => data.email === emailIdentify);
-      // SI ES DIFERENTE DE -1 LO ENCONTRO
-      if (findIndexEmailIdentify !== -1) {
-        openGlobalModal(EModalGlobalType.MODAL_LOGIN);
-        setIsExistEmail(true);
-      } else {
-        navigate(`register/${stored}`); //SEGUN EL ROL GUARDADO NAVEGAR
-        setIsExistEmail(false);
-      }
+    const findIndexEmailIdentify: number = result.findIndex((data) => data.email === emailIdentify);
+    // SI ES DIFERENTE DE -1 LO ENCONTRO
+    if (findIndexEmailIdentify !== -1) {
+      openGlobalModal(EModalGlobalType.MODAL_LOGIN);
+      setIsExistEmail(true);
+    } else {
+      navigate(`register/${role}`); //SEGUN EL ROL
+      setIsExistEmail(false);
     }
   };
 

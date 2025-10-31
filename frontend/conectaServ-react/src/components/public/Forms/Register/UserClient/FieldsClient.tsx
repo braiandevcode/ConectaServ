@@ -1,11 +1,8 @@
+import { RiMailSendLine } from 'react-icons/ri';
 import useFieldsClient from '../../../../../hooks/useFieldsClient';
 import useFormVerifyEmailCode from '../../../../../hooks/useFormVerifyEmailCode';
-import useGlobalModal from '../../../../../hooks/useGlobalModal';
-import useIdentifyEmail from '../../../../../hooks/useIdentifyEmail';
 import useRegister from '../../../../../hooks/useRegister';
 import useRegisterClient from '../../../../../hooks/useRegisterClient';
-import useUserApi from '../../../../../hooks/useUserApi';
-import { EModalGlobalType } from '../../../../../types/enumGlobalModalType';
 import { EDataClient, ELocationKey } from '../../../../../types/enums';
 import { renderFieldError, styleBorderFieldError } from '../../../../../utils/formUtils';
 import LoaderBtn from '../../../../LoaderBtn';
@@ -13,29 +10,48 @@ import BtnSendCode from '../Buttons/BtnSendCode';
 
 // CSS
 import './FieldsClient.css';
+import useUserApi from '../../../../../hooks/useUserApi';
+import type { TUser } from '../../../../../types/typeUser';
+import useIdentifyEmail from '../../../../../hooks/useIdentifyEmail';
+import useGlobalModal from '../../../../../hooks/useGlobalModal';
+import { EModalGlobalType } from '../../../../../types/enumGlobalModalType';
 
-// COMPONENTE PASO CUATRO
+// COMPONENTE PASO CAMPO BASICO CLIENTE
 const FieldsClient = () => {
-  const { showError, openGlobalModal } = useGlobalModal();
-  const { password, isSending, confirmPassword, interactedPassword, interactedConfirmPassword } = useRegister(); //HOOK QUE USA CONTEXTO REGISTRO GENERALES
-  const { isSendingCode } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO FORULARIO DE VERIFICAION DE EMAIL(ENGLOBA PARA AMBOS REGISTROS)
+  const { password, isSending, confirmPassword, interactedPassword, interactedConfirmPassword, setResendEmail, isSuccefullyVerified } = useRegister(); //HOOK QUE USA CONTEXTO REGISTRO GENERALES
+  const { isCodeSent, isSendingCode } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO FORULARIO DE VERIFICAION DE EMAIL(ENGLOBA PARA AMBOS REGISTROS)
   const { formState, dataClient } = useRegisterClient(); //HOOK  QUE USA CONTEXTO REGISTRO CLIENTE
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useFieldsClient(); // HOOK QUE USA CONTEXTO DE LOS CAMPOS DEL FORMULARIO DE CLIENTE
-  const { sendCodeUser, getUsers } = useUserApi(); // HOOK PARA MANEJO DE PETOCIONES DE DATOS DE USUARIOS
   const { setIsSendingIdentificationEmail } = useIdentifyEmail();
+  const { sendCodeToUserEmail, getUsers } = useUserApi()
+  const { openGlobalModal, showError } = useGlobalModal();
+
+  // ESTA DESHABILITADO SI:
+  /*
+    - NO ES VALIDO EL CAMPO DEL EMAIL O
+    - SE ESTA ENVIANDO EL CODIGO O
+    - SE ENVIO EL CODIGO O
+    - SI LA VERIFICACION FUE SATISFACTORIA
+  */
+  const isDisabled: boolean = !formState.email.isValid || isSendingCode || isCodeSent || isSuccefullyVerified;
 
   // ENVIAR CODIGO
-  const send = async () => {
+  const send = async (): Promise<void> => {
     try {
-      const resultVerifyUser = await getUsers({ setIsSendingIdentificationEmail });
-      const emailExist: boolean = resultVerifyUser.some((data) => data.email === dataClient[EDataClient.DATA].email);
+      const resultVerifyUser: TUser[] | undefined = await getUsers({ setIsSendingIdentificationEmail });
+
+      if (!resultVerifyUser) return; //NO SEGUIR getUser YA MANEJA ENVIO DE LA INFO SEGUN EL PROBLEMA
+
+      // SI HAY DATOS DE USUARIOS
+      const emailExist: boolean = resultVerifyUser.some((d) => d.email === dataClient[EDataClient.DATA].email);
       // SI EL EMAIL NO EXISTE
       if (!emailExist) {
-        await sendCodeUser({ emailUser: dataClient[EDataClient.DATA].email }); // ENVIAR CODIGO
+        await sendCodeToUserEmail({ emailUser: dataClient[EDataClient.DATA].email }); // ENVIAR
+        setResendEmail({ emailUser: dataClient[EDataClient.DATA].email })
       } else {
         openGlobalModal(EModalGlobalType.MODAL_ERROR);
         // SINO MENSAJE
-        showError('Email existente', 'El Email ya existe, prueba con otro');
+        showError('Email existente', 'El correo ya existe.');
       }
     } catch (error) {
       openGlobalModal(EModalGlobalType.MODAL_ERROR);
@@ -45,6 +61,7 @@ const FieldsClient = () => {
     }
   };
 
+  // RENDER
   return (
     <>
       <div className='c-flex c-flex-column gap-1 form__fields'>
@@ -82,7 +99,7 @@ const FieldsClient = () => {
           </label>
           <div className='c-flex c-flex-items-center gap-1'>
             <input type='text' id='email' disabled={isSending} className={`form__input ${styleBorderFieldError(formState, 'email')}`} autoComplete='email' placeholder='test@example.com' value={formState.email.value as string} onChange={handleEmail} required />
-            {isSendingCode ? <LoaderBtn /> : <BtnSendCode formState={formState} handleSend={send} text='Código' />}
+            {isSendingCode ? <LoaderBtn /> : <BtnSendCode IconReact={RiMailSendLine} iconProps={{ size: 20 }} className='btn__sendCode' disabled={isDisabled} handleSend={send} text='Código' />}
           </div>
           {renderFieldError(formState, 'email')}
         </div>

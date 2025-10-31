@@ -12,7 +12,6 @@ import useRegister from '../../../hooks/useRegister';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TLocationKey } from '../../../types/typeLocation';
 import type { TTypeContextBasic } from '../../../types/typeContextBasic';
-import useFormVerifyEmailCode from '../../../hooks/useFormVerifyEmailCode';
 
 const StepFourProvider = ({ children }: { children: ReactNode }) => {
   const fullNameValidator: FullNameValidator = new FullNameValidator();
@@ -22,9 +21,9 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
   const passwordValidator: PasswordValidator = new PasswordValidator();
   const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordValidator();
   
-  const { password, terms,  confirmPassword, setPassword, setConfirmPassword, setInteractedPassword, setInteractedConfirmPassword } = useRegister(); //HOOK QUE USA CONTEXTO  A NIVEL REGISTRO GENERALES
+  const { password, terms,  confirmPassword, isSuccefullyVerified, setPassword, setConfirmPassword, setInteractedPassword, setInteractedConfirmPassword } = useRegister(); //HOOK QUE USA CONTEXTO  A NIVEL REGISTRO GENERALES
   const { validateCurrentStep, setStepData, setIsStepValid, step, setFormState } = useRegisterPro(); // //HOOK QUE USA CONTEXTO A NIVEL REGISTRO PROFESIONAL
-  const { isSuccefullyVerified } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO A NIVEL DE VERIFICACIONDE EMAILS PARA REGISTROS
+
   //--------------------------------------------------------------EFECTOS PASO 4 -----------------------------------------------------------------------//
 
   // --------------------------------------------------- EFECTO VALIDACION DE PASO 4 --------------------------------------------------- //

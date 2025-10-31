@@ -5,6 +5,7 @@ import useRegister from '../../../../../../hooks/useRegister';
 import LoaderBtn from '../../../../../LoaderBtn';
 import BtnSubmit from '../../../../../BtnSubmit';
 import useValidateStep from '../../../../../../hooks/useValidateStep';
+import { MdSend } from 'react-icons/md';
 
 // BOTONES PARA RENDERIZAR EN REGISTRO DE PROFESIONAL
 const BtnsRegisterTasker = () => {
@@ -16,24 +17,7 @@ const BtnsRegisterTasker = () => {
   return (
     <>
       <div className='c-flex c-flex-justify-end'>
-        {isLastStep ? (
-          isSending ? (
-            <LoaderBtn />
-            ) : (
-            <BtnSubmit
-              variant='btn btn__submit'
-              disabled={!isStepValid || !isReady}
-              text={isReady ? 'Enviar' : 'Cargando datos...'}
-            />
-          )
-        ) : (
-          <BtnNext
-            handleNext={handleClickNext}
-            variant='btn container-btn__next'
-            disabled={!isStepValid || !isReady}
-            text={isReady ? 'Siguiente' : 'Cargando datos...'}
-          />
-        )}
+        {isLastStep ? isSending ? <LoaderBtn /> : <BtnSubmit IconReact={MdSend} iconProps={{ size: 20 }} variant='btn btn__submit' disabled={!isStepValid || !isReady} text={isReady ? 'Enviar' : 'Cargando datos...'} /> : <BtnNext handleNext={handleClickNext} variant='btn container-btn__next' disabled={!isStepValid || !isReady} text={isReady ? 'Siguiente' : 'Cargando datos...'} />}
       </div>
     </>
   );

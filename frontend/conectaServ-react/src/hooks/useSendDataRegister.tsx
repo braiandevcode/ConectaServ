@@ -24,7 +24,6 @@ const useSendDataRegister = () => {
 
   const { isLastStep } = useValidateStep(); // HOOK PARA VALIDAR PASO
 
-
   // SI SE CARGO TODO EN CONTEXTO DE CLIENTE Y EN PROFESIONAL
   const isReady: boolean = isLoadedClient || isLoadedProfessional;
 

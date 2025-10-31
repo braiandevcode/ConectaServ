@@ -32,7 +32,7 @@
   --btn-danger: #d42f2f;
   --btn-success: #0f800fcb;
   --btn-warning: #d3d614e5;
-  --btn-ghost: #dddcdc8f;
+  --btn-ghost: transparent;
   --btn-info: #1e5da3;
 
   /* PARA ESTILOS HOVER EN BOTON FANTASMA*/

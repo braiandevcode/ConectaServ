@@ -14,7 +14,6 @@ import type { TStepBasic } from '../../../types/typeBasic';
 import type { TLocationKey } from '../../../types/typeLocation';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TTypeContextBasic } from '../../../types/typeContextBasic';
-import useFormVerifyEmailCode from '../../../hooks/useFormVerifyEmailCode';
 
 const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
   const fullNameValidator: FullNameValidator = new FullNameValidator();
@@ -25,9 +24,8 @@ const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
   const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordValidator();
   // HOOK REGISTRO CLIENTE
   const { formState, setIsValid, isValid, validateClient, setDataClient, setFormState, dataClient } = useRegisterClient(); //HOOK CONTEXTO REGISTRO DE CLIENTE
-  const { terms, password, confirmPassword, setInteractedConfirmPassword, setInteractedPassword, setPassword, setConfirmPassword } = useRegister(); //HOOK CONTEXTO DE REGISTRO GENERA
+  const { terms, password, isSuccefullyVerified, confirmPassword, setInteractedConfirmPassword, setInteractedPassword, setPassword, setConfirmPassword } = useRegister(); //HOOK CONTEXTO DE REGISTRO GENERA
   const { client } = useMain(); //HOOK CONTEXTO MAIN
-  const { isSuccefullyVerified } = useFormVerifyEmailCode();
   
   // EFECTO PARA ALMACENAR DATOS DEL FORMULARIO EN STORAGE
   useEffect(() => {

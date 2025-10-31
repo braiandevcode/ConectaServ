@@ -52,7 +52,6 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   }, [pathname, navigate]); // DEPENDE SOLO DE PATH Y NAVIGATE
 
   useEffect(() => {
-    // const params:URLSearchParams = new URLSearchParams(location.search);
     if (state?.showLogin) {
       openGlobalModal(EModalGlobalType.MODAL_LOGIN);
     }

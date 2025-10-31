@@ -1,12 +1,10 @@
 import type { ChangeEvent, Dispatch, FormEvent, KeyboardEvent, RefObject, SetStateAction } from 'react';
-// import type { iEmailUser } from '../interfaces/iEmailUser';
 import type { iFormValidationVerifyEmail } from '../interfaces/iFormValidationVerifyEmail';
+import type { iTimeExpire } from '../interfaces/iTimeExpire';
 
 export type TFormVerifyCode = {
-  inputRefs: RefObject<(HTMLInputElement | null)[]>;
   handleKeyDown: (e: KeyboardEvent<HTMLInputElement>, index: number) => void;
   handleChange: (e: ChangeEvent<HTMLInputElement>, index: number) => void;
-  setIsSuccefullyVerified: Dispatch<SetStateAction<boolean>>;
   setOtp: Dispatch<SetStateAction<string[]>>;
   updatedFormState: (value: string) => void;
   updateCodeEmail: (newCode: string) => void;
@@ -18,7 +16,13 @@ export type TFormVerifyCode = {
   setIsVerifyingCode: Dispatch<SetStateAction<boolean>>;
   setIsCodeVerified: Dispatch<SetStateAction<boolean>>;
   setFormState: Dispatch<SetStateAction<iFormValidationVerifyEmail>>;
-  isSuccefullyVerified: boolean; // INDICA SI LA VALIDACION DEL CODIGO FUE EXITOSA O NO
+  setTime: Dispatch<SetStateAction<iTimeExpire>>;
+  setExpired: Dispatch<SetStateAction<boolean>>;
+  runTimerExpiration: () => NodeJS.Timeout;
+  updatedIsSuccefullyVerified:(isVerifiedSuccess: boolean) => void;
+  timerRef: RefObject<NodeJS.Timeout | null>;
+  time: iTimeExpire;
+  expired: boolean;
   isSendingCode: boolean; //PARA INDICAR QUE EL CODIGO SE ESTA ENVIANDO AL USUSARIO
   isCodeSent: boolean; //PARA INDICAR QUE EL CODIGO SE ENVIO AL DESTINO
   isVerifyingCode: boolean; //PARA INDICAR QUE EL CODIGO INGRESADO POR EL USUARIO SE ESTA VERIFICANDO
@@ -26,4 +30,5 @@ export type TFormVerifyCode = {
   codeStoredEmail: string;
   otp: string[]; //ARRAY DE STRINGS PARA VALORES EN INPUTS
   formState: iFormValidationVerifyEmail;
+  inputRefs: RefObject<(HTMLInputElement | null)[]>;
 };

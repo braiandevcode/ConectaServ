@@ -36,6 +36,7 @@ const ClientProvider = ({ children }: { children: ReactNode }) => {
   // OBJETO GENERAL DE PASOS CON VALORES POR DEFECTO Y PARA ALMACENAR EN STROAGE
   const [dataClient, setDataClient] = useState<TDataClient>(() => {
     return {
+      type: 'client',
       [EDataClient.DATA]: {
         ...defaultDataClient[EDataClient.DATA], //VALOR POR DEFECTO
         ...stored[EDataClient.DATA], // PISADO PODR EL VALOR EN STORAGE

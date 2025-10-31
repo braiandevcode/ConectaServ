@@ -1,4 +1,5 @@
-import { defaultDataPro } from '../config/defaultDataPro';
+
+import { defaultDataTasker } from '../config/defaultDataTasker';
 import type { iFormStateValidationTask } from '../interfaces/iFormStateValidationTask';
 import BudgeValidator from '../modules/validators/BudgeValidator';
 import ConfirmPasswordValidator from '../modules/validators/ConfirmPasswordValidator';
@@ -34,20 +35,21 @@ const useStepDataTasker = () => {
 
   const stored = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA); //LEEO Y PARSEO OBJETO GENERAL DE PASOS
   const STEP_DATA_TASKER: TStepDataTasker = {
+    type: 'tasker',
     [EKeyDataByStep.ONE]: {
-      ...defaultDataPro[EKeyDataByStep.ONE], //VALOR POR DEFECTO
+      ...defaultDataTasker[EKeyDataByStep.ONE], //VALOR POR DEFECTO
       ...stored?.[EKeyDataByStep.ONE], // PISADO PODR EL VALOR EN STORAGE
     },
     [EKeyDataByStep.TWO]: {
-      ...defaultDataPro[EKeyDataByStep.TWO],
+      ...defaultDataTasker[EKeyDataByStep.TWO],
       ...stored?.[EKeyDataByStep.TWO],
     },
     [EKeyDataByStep.THREE]: {
-      ...defaultDataPro[EKeyDataByStep.THREE],
+      ...defaultDataTasker[EKeyDataByStep.THREE],
       ...stored?.[EKeyDataByStep.THREE],
     },
     [EKeyDataByStep.FOUR]: {
-      ...defaultDataPro[EKeyDataByStep.FOUR],
+      ...defaultDataTasker[EKeyDataByStep.FOUR],
       ...stored?.[EKeyDataByStep.FOUR],
     },
   };

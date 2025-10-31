@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import RegisterProvider from '../context/register/RegisterProvider';
-import FormVerifyEmailProvider from '../context/form/FormVerifyEmailProvider';
 import RegisterModalProvider from '../context/modal/RegisterModalProvider';
 import ModalRegisterRenderer from '../components/public/Modals/ModalRegisterRenderer';
+import FormVerifyEmailProvider from '../context/form/FormVerifyEmailProvider';
 
 // LAYOUT DE REGISTRO PROFESIONAL
 // ESTE LAYOUT ESTA A UNA RUTA O GRUPOS DE RUTASY SE USA COMO CONTENEDOR PARA ESAS RUTAS.
@@ -12,12 +12,12 @@ const RegisterLayout = () => {
     // ERROR BOUNDARY CAPTURA ERRORES EN CUALQUIER COMPONENTE HIJO Y EVITA QUE SE ROMPA LA APP
     <ErrorBoundary>
       <RegisterModalProvider>
-        <FormVerifyEmailProvider>
-          <ModalRegisterRenderer />
-          <RegisterProvider>
+        <RegisterProvider>
+          <FormVerifyEmailProvider>
+            <ModalRegisterRenderer />
             <Outlet />
-          </RegisterProvider>
-        </FormVerifyEmailProvider>
+          </FormVerifyEmailProvider>
+        </RegisterProvider>
       </RegisterModalProvider>
     </ErrorBoundary>
   );

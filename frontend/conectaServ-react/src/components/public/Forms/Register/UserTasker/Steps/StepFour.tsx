@@ -3,6 +3,9 @@ import useRegisterTasker from '../../../../../../hooks/useRegisterTasker';
 import useStepFour from '../../../../../../hooks/useStepFour';
 import { EKeyDataByStep, ELocationKey } from '../../../../../../types/enums';
 import { renderFieldError, styleBorderFieldError } from '../../../../../../utils/formUtils';
+import BtnSendCode from '../../Buttons/BtnSendCode';
+import useVerifyEmailCode from '../../../../../../hooks/useFormVerifyEmailCode';
+import LoaderBtn from '../../../../../LoaderBtn';
 
 // ICONOS DE REACT
 import { GiIdCard } from 'react-icons/gi';
@@ -12,36 +15,40 @@ import { FaEnvelope } from 'react-icons/fa6';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { FaLock } from 'react-icons/fa6';
 import { TbPasswordUser } from 'react-icons/tb';
-import BtnSendCode from '../../Buttons/BtnSendCode';
-import useVerifyEmailCode from '../../../../../../hooks/useFormVerifyEmailCode';
-import LoaderBtn from '../../../../../LoaderBtn';
-import useUserApi from '../../../../../../hooks/useUserApi';
+import { RiMailSendLine } from 'react-icons/ri';
 import useIdentifyEmail from '../../../../../../hooks/useIdentifyEmail';
+import useUserApi from '../../../../../../hooks/useUserApi';
 import useGlobalModal from '../../../../../../hooks/useGlobalModal';
 import { EModalGlobalType } from '../../../../../../types/enumGlobalModalType';
+import type { TUser } from '../../../../../../types/typeUser';
 
 // COMPONENTE PASO 4
 const StepFour = () => {
-  const { showError, openGlobalModal } = useGlobalModal();
   const { formState, stepData } = useRegisterTasker(); //HOOK REGISTRO PROFESIONAL
-  const { isSendingCode } = useVerifyEmailCode(); //HOOK QUE USA CONTEXTO VERIFICACION DE EMAIL
-  const { password, isSending, interactedPassword, interactedConfirmPassword, confirmPassword } = useRegister(); //HOOK DE ESTADOS DE REGISTROS EN COMUN
+  const { isSendingCode, isCodeSent} = useVerifyEmailCode(); //HOOK QUE USA CONTEXTO VERIFICACION DE EMAIL
+  const { password, isSending, isSuccefullyVerified, interactedPassword, interactedConfirmPassword, confirmPassword, setResendEmail } = useRegister(); //HOOK DE ESTADOS DE REGISTROS EN COMUN
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useStepFour(); // HOOK PASO 4
   const { setIsSendingIdentificationEmail } = useIdentifyEmail();
-  const { sendCodeUser, getUsers } = useUserApi(); // HOOK PARA MANEJO DE PETOCIONES DE DATOS DE USUARIOS
+  const { sendCodeToUserEmail, getUsers } = useUserApi();
+  const { openGlobalModal, showError } = useGlobalModal();
 
-  // ACCIONAR AHORA EL ENVIO ==> FUNCION ASINCRONA
-  const send = async () => {
+  // ENVIAR CODIGO
+  const send = async (): Promise<void> => {
     try {
-      const resultVerifyUser = await getUsers({ setIsSendingIdentificationEmail });
-      const emailExist: boolean = resultVerifyUser.some((data) => data.email === stepData[EKeyDataByStep.FOUR].email);
+      const resultVerifyUser: TUser[] | undefined = await getUsers({ setIsSendingIdentificationEmail });
+
+      if (!resultVerifyUser) return; //NO SEGUIR getUser YA MANEJA ENVIO DE LA INFO SEGUN EL PROBLEMA
+
+      // SI HAY DATOS DE USUARIOS
+      const emailExist: boolean = resultVerifyUser.some((d) => d.email === stepData[EKeyDataByStep.FOUR].email);
       // SI EL EMAIL NO EXISTE
       if (!emailExist) {
-        await sendCodeUser({ emailUser: stepData[EKeyDataByStep.FOUR].email }); // ENVIAR CODIGO
+        await sendCodeToUserEmail({ emailUser: stepData[EKeyDataByStep.FOUR].email }); // ENVIAR
+        setResendEmail({ emailUser: stepData[EKeyDataByStep.FOUR].email });
       } else {
         openGlobalModal(EModalGlobalType.MODAL_ERROR);
         // SINO MENSAJE
-        showError('Email existente', 'El Email ya existe, prueba con otro');
+        showError('Email existente', 'El correo ya existe.');
       }
     } catch (error) {
       openGlobalModal(EModalGlobalType.MODAL_ERROR);
@@ -51,6 +58,16 @@ const StepFour = () => {
     }
   };
 
+  // ESTA DESHABILITADO SI:
+  /*
+    - NO ES VALIDO EL CAMPO DEL EMAIL O
+    - SE ESTA ENVIANDO EL CODIGO O
+    - SE ENVIO EL CODIGO O
+    - SI LA VERIFICACION FUE SATISFACTORIA
+  */
+  const isDisabled: boolean = !formState.email.isValid || isSendingCode || isCodeSent || isSuccefullyVerified;
+
+  // RENDER
   return (
     <>
       <div className='c-flex c-flex-column gap-3/2'>
@@ -99,7 +116,7 @@ const StepFour = () => {
 
             <div className='c-flex c-flex-items-center gap-1'>
               <input type='text' id='email' disabled={isSending} className={`form__input ${styleBorderFieldError(formState, 'email')}`} aria-label='Correo electronico' autoComplete='email' placeholder='test@example.com' value={formState.email.value as string} onChange={handleEmail} required />
-              {isSendingCode ? <LoaderBtn /> : <BtnSendCode formState={formState} handleSend={send} text='Código' />}
+              {isSendingCode ? <LoaderBtn /> : <BtnSendCode IconReact={RiMailSendLine} className='btn__sendCode' disabled={isDisabled} iconProps={{ size: 20 }} handleSend={send} text='Código' />}
             </div>
             {renderFieldError(formState, 'email')}
           </div>

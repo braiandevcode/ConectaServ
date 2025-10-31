@@ -1,14 +1,9 @@
 import { FaHelmetSafety } from 'react-icons/fa6';
-// import { Link } from 'react-router';
-// import useMain from '../../../hooks/useMain';
-// import { EPathPage } from '../../../types/enums';
 import Button from '../../Button';
 import useIdentifyEmail from '../../../hooks/useIdentifyEmail';
 
 // TARJETA ROL PROFESIONAL
 const RoleCardTasker = () => {
-  // const { handleProClick } = useMain(); //HOOK NIVEL MAIN
-
   const { handleClickTaskerIdentifyEmail } = useIdentifyEmail(); // HOOK NQUE CONSUME CONTEXTO FORMULARIO DE IDENTIFICACION DE EMAIL
   return (
     <>

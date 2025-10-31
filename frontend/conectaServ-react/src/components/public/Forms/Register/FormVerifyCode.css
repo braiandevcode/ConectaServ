@@ -14,3 +14,7 @@
     width: 50px;
     text-align: center;
 }
+
+.form__text-expired{
+    color: var(--text-color-info);
+}

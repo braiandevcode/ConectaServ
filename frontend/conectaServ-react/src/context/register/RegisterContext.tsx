@@ -3,6 +3,10 @@ import type { TRegister } from '../../types/typeRegister';
 
 // DEFINIR VALORES POR DEFECTO DE LOS ESTADOS
 const defaultRegisterContext: TRegister = {
+  isSuccefullyVerified: false,
+  setIsSuccefullyVerified: () => {},
+  resendEmail: { emailUser: '' },
+  setResendEmail: () => {},
   setIsSending: () => {},
   setInteractedConfirmPassword: () => {},
   setInteractedPassword: () => {},

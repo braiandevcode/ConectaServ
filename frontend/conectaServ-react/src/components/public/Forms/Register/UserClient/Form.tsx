@@ -10,6 +10,7 @@ import useRegister from '../../../../../hooks/useRegister';
 // CSS
 import '../../FormBase.css';
 import { FaInfoCircle, FaUserCircle } from 'react-icons/fa';
+import { MdSend } from 'react-icons/md';
 
 // FORMULARIO DE CLIENTE
 const Form = () => {
@@ -41,7 +42,7 @@ const Form = () => {
             </FieldsClientProvider>
             <FooterConditionsTerm />
           </div>
-          {isSending ? <LoaderBtn /> : <BtnSubmit variant='btn btn__submit' disabled={!isValid || !isReady} text={isReady ? 'Enviar' : 'Cargando datos...'} />}
+          {isSending ? <LoaderBtn /> : <BtnSubmit IconReact={MdSend} iconProps={{ size: 20 }} variant='btn btn__submit' disabled={!isValid || !isReady} text={isReady ? 'Enviar' : 'Cargando datos...'} />}
         </div>
       </form>
     </>

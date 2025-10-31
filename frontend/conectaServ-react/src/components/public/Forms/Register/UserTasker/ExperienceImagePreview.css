@@ -13,12 +13,6 @@
   margin: 5px;
 }
 
-/* BOTON DE ELIMINAR FOTO EN REGISTRO */
-.form-groupProfile__btn-trash {
-  top: 0.5rem;
-  right: 0.5rem;
-}
-
 /* ASEGURAR QUE LOS EVENTOS DE HOVER SEAN PRECISOS SOLO PARA TABLET Y ESCRITORIO (INVESTIGADO) */
 @media (hover: hover) and (pointer: fine) {
   /* EFECTO HOVER EN IMAGENES */
