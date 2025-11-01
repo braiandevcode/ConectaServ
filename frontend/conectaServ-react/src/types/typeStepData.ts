@@ -5,7 +5,6 @@ import type { TStepThree } from "./typeStepThree";
 import type { TStepTwo } from "./typeStepTwo";
 
 export type TStepDataTasker = {
-  type: 'tasker';
   [EKeyDataByStep.ONE]: TStepOne;
   [EKeyDataByStep.TWO]: TStepTwo;
   [EKeyDataByStep.THREE]?: TStepThree;
