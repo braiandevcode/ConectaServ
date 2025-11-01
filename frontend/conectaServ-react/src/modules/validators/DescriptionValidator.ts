@@ -1,5 +1,5 @@
-import type { IValidator } from '../../interfaces/interfaces.js';
-import type { TFieldState } from '../../types/types';
+import type { IValidator } from '../../interfaces/iValidator.js';
+import type { TFieldState } from '../../types/typeStateFields.js';
 import { isLengthValid, isValueField} from '../../utils/validateFieldUtils.js';
 
 // VALIDACION DESCRIPCION (TEXTAREA)

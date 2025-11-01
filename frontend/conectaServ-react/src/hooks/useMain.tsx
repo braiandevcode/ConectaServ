@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import MainContext from '../context/main/MainContext';
-import type { TMain } from '../types/types';
+import type { TMain } from '../types/typeMain';
+
 
 // GANCHO DE ROL PERSONALIZADO
 const useMain = () => {

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import type { TTypeContextBasic } from '../types/types';
-import { StepFourContext } from '../context/register/registerPro/StepFourContext';
+import type { TTypeContextBasic } from '../types/typeContextBasic';
+import { StepFourContext } from '../context/register/registerTasker/StepFourContext';
 
 const useStepFour= () => {
   const context = useContext<TTypeContextBasic>(StepFourContext); // COTEXTO QUE CONSUME ESTADOS DE COMPONENTE

@@ -1,5 +1,6 @@
-import type { IValidator } from '../../interfaces/interfaces.js';
-import type { TFieldState, TStoredImage } from '../../types/types';
+import type { IValidator } from '../../interfaces/iValidator.js';
+import type { TStoredImage } from '../../types/typePersistanceDataImage.js';
+import type { TFieldState } from '../../types/typeStateFields.js';
 import { convertBytes } from '../../utils/parsedAndFormatValuesUtils.js';
 
 // VALIDACION ENTRADA IMAGEN DE EXPERIENCIAS

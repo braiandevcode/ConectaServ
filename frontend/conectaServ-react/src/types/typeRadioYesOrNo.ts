@@ -1,0 +1,1 @@
+export type TYesOrNo = 'yes' | 'no'; //TIPO PARA RADIOS REINTEGRO Y PRESUPUESTO

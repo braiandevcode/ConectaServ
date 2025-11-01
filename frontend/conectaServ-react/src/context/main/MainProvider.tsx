@@ -1,34 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import type { TMain } from '../../types/types';
 import MainContext from './MainContext';
 import { ENamesOfKeyLocalStorage, EPathPage } from '../../types/enums';
 import { clearPersistence } from '../../utils/storageUtils';
+import type { TMain } from '../../types/typeMain';
+import type { TFormRole } from '../../types/typeFormRole';
+import useGlobalModal from '../../hooks/useGlobalModal';
+import { EModalGlobalType } from '../../types/enumGlobalModalType';
 
 // PROVEEMOS LOGICA Y ESTADOS AL CONTEXTO PRINCIPAL
-const MainProvider = ({ children }: { children: React.ReactNode }) => {
-  const stored = localStorage.getItem('role');
-  // -------------------HOOKS DE REACT-------------------------//
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+const MainProvider = ({ children }: { children: ReactNode }) => {
+  const { closeGlobalModal, openGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
+  const stored = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE) as TFormRole | null;
 
   // ESTADO PARA SABER SI EL USUARIO ES CLIENTE (TRUE), PRO (FALSE), O NULO SI NO HAY ROL
   const [client, setClient] = useState<boolean | null>(null);
 
-  // ESTADO PARA CONTROLAR SI EL MODAL ESTA CERRADO O ABIERTO
-  const [isModalClosed, setIsModalClosed] = useState(true);
-
-  // ESTADO PARA MODAL ==> UTILIZANDO HERRAMIENTA DE MODALES DE REACT
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // ESTADO PARA CONTROLAR LA CLASE QUE MUESTRA U OCULTA EL MODAL
-  const [isShow, setIsShow] = useState('modal-role modal-role--hide');
+  // ------------------HOOKS DE REACT-------------------------//
+  const { pathname, state } = useLocation(); //==> LOCATION DE RACT
+  const navigate = useNavigate(); //==> NAVIGATE DE RACT
+  const [loading, setLoading] = useState(false); // ==> BANDERA DEL PROCESO DE LOADER
 
   // ----------------------useEffects----------------------------------//
   useEffect(() => {
     // FUNCION INTERNA ASiNCRONA PARA LIMPIAR DATOS
-    const runClear = async () => {
+    const clear = async () => {
       try {
         await clearPersistence(); // LIMPIA INDEXEDDB + STORAGE
       } catch (error) {
@@ -37,63 +33,50 @@ const MainProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     // SI EL ROL GUARDADO ES CLIENTE Y ESTAMOS EN LA RUTA CORRECTA
-    if (location.pathname === EPathPage.PATH_FORM_CLIENT && stored === 'client') {
+    if (pathname === EPathPage.PATH_FORM_CLIENT && stored === 'client') {
       setClient(true);
-    }else if (location.pathname === EPathPage.PATH_FORM_PROFESSIONAL && stored === 'pro') { // SI EL ROL GUARDADO ES PRO Y ESTAMOS EN LA RUTA CORRECTA
+    } else if (pathname === EPathPage.PATH_FORM_TASKER && stored === 'tasker') {
+      // SI EL ROL GUARDADO ES PRO Y ESTAMOS EN LA RUTA CORRECTA
       setClient(false);
-    }else {  // SI NO HAY ROL VALIDO O NO ESTAMOS EN UNA RUTA DE REGISTRO
-      localStorage.removeItem('role');
-      localStorage.removeItem(ENamesOfKeyLocalStorage.CLIENT_DATA);
+    } else {
+      // SI NO HAY ROL VALIDO O NO ESTAMOS EN UNA RUTA DE REGISTRO
+
       // LIMPIAR DATOS ASÍNCRONAMENTE
-      runClear();
+      clear();
       // REDIRECCIONAR AL HOME
       navigate('/', { replace: true });
     }
 
     //ASEGURAR QUE EL MODAL SE CIERRE AL CAMBIAR DE RUTA
-    setIsModalClosed(true);
-  }, [location.pathname, navigate]); // DEPENDE SOLO DE PATH Y NAVIGATE
+    closeGlobalModal();
+  }, [pathname, navigate]); // DEPENDE SOLO DE PATH Y NAVIGATE
 
-  // ACTUALIZA LA CLASE DEL MODAL CUANDO CAMBIA SU ESTADO (ABIERTO / CERRADO)
   useEffect(() => {
-    // GUARDO EN MEMORIA LA CLASE SENGUN BANDERA
-    const replaceClass: string = isModalClosed ? 'modal-role modal-role--hide' : 'modal-role';
-    setIsShow(replaceClass); //SETEAR LA CLASE
-  }, [isModalClosed]); // DEPENDE DEL ESTAD DE BANDERA PARA DE CI ESTA CERRADO O NO
-
-  // ------------------EVENTOS--------------------------------------------------//
-
-  // FUNCION PARA ABRIR O CERRAR EL MODAL
-  const handleToggleModal = () => {
-    setIsModalClosed((prev) => !prev); //LO CONTRARIO A LO QUE VENGA
-  };
+    if (state?.showLogin) {
+      openGlobalModal(EModalGlobalType.MODAL_LOGIN);
+    }
+  }, [state, openGlobalModal]);
 
   // FUNCION QUE SE EJECUTA CUANDO EL USUARIO ELIGE CLIENTE
   const handleClientClick = () => {
+    localStorage.setItem(ENamesOfKeyLocalStorage.ROLE, 'client');
     setClient(true); //ROL CLIENTE EN TRUE
-    setIsModalClosed(true); // MODAL CERRADO
-    localStorage.setItem('role', 'client');
+    closeGlobalModal();
   };
 
   // FUNCION QUE SE EJECUTA CUANDO EL USUARIO ELIGE PROFESIONAL
-  const handleProClick = () => {
+  const handleTaskerClick = () => {
+    localStorage.setItem(ENamesOfKeyLocalStorage.ROLE, 'tasker');
     setClient(false); //ROL CLIENTE EN FALSE
-    setIsModalClosed(true); //MODAL CERRADO
-    localStorage.setItem('role', 'pro');
+    closeGlobalModal();
   };
 
   const contextMainValue: TMain = {
-    setIsModalOpen,
-    setIsModalClosed,
     setLoading,
-    handleToggleModal, // FUNCION PARA ABRIR / CERRAR MODAL
     handleClientClick, // FUNCION PARA ELEGIR CLIENTE
-    handleProClick, // FUNCION PARA ELEGIR PROFESIONAL
-    isModalOpen,
+    handleTaskerClick, // FUNCION PARA ELEGIR PROFESIONAL
     client, // TRUE = CLIENTE, FALSE = PRO, NULL = NO DEFINIDO
-    isModalClosed, // ESTADO DE SI EL MODAL ESTA CERRADO
     loading,
-    isShow, // CLASES CSS PARA MOSTRAR / OCULTAR MODAL
   };
 
   return <MainContext.Provider value={contextMainValue}>{children}</MainContext.Provider>;

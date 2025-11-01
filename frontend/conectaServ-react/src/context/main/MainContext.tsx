@@ -1,18 +1,13 @@
 import { createContext } from 'react';
-import type { TMain } from '../../types/types';
+import type { TMain } from '../../types/typeMain';
 
+// CONTEXT MAIN
 const defaultMainContext: TMain = {
-  setIsModalClosed: () => true,
   setLoading: () => false,
-  loading: false,
-  isShow: '',
-  client: false,
-  isModalClosed: true,
-  handleToggleModal: () => {},
   handleClientClick: () => {},
-  handleProClick: () => {},
-  isModalOpen:false, 
-  setIsModalOpen: () => {},
+  handleTaskerClick: () => {},
+  loading: false,
+  client: false,
 };
 
 const MainContext = createContext(defaultMainContext);

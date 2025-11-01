@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { StepOneContext } from '../context/register/registerPro/StepOneContext';
-import type { TTypeContextStepOne } from '../types/types';
+import { StepOneContext } from '../context/register/registerTasker/StepOneContext';
+import type { TTypeContextStepOne } from '../types/typeContextStepOne';
 
 const useStepOne = () => {
   const context = useContext<TTypeContextStepOne>(StepOneContext);

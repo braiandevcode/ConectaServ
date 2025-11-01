@@ -11,6 +11,9 @@
   --text-color-primary: #4e4c4c;
   --text-color-secondary: #f2f2f2;
   --text-color-info: #1e5da3;
+  --text-color-danger: #d42f2f;
+  --text-color-warn: #d3d614e5;
+  --text-color-success: #0f800fcb;
 
   /* ENLACES */
   --link-color-primary: #fdfdfd;
@@ -18,27 +21,45 @@
   --link-hover-primary: #1e5ca3b2;
   --link-hover-secondary: #fdfdfd;
 
-  /* BOTONES */
+  /* VARIABLES COLOR DE TEXTO PARA BOTONES */
   --btn-text-primary: #fdfdfd;
   --btn-text-secondary: #1e5da3;
-  --btn-ghost: transparent;
-  --btn-hover: #1d4ed8;
+  --btn-text-gray: #7a7878;
 
-  /* VARIABLE PARA ANCHOS */
+  /* VARIABLES COLOR DE FONDO PARA BOTONES */
+  --btn-gray: #7a7878;
+  --btn-hover: #1d4ed8;
+  --btn-danger: #d42f2f;
+  --btn-success: #0f800fcb;
+  --btn-warning: #d3d614e5;
+  --btn-ghost: transparent;
+  --btn-info: #1e5da3;
+
+  /* PARA ESTILOS HOVER EN BOTON FANTASMA*/
+  --btn-gosth-hover: #beb6b63d; /* UN COLOR LIGERAMENTE DIFERENTE */
+
+
+  /* VARIABLE ESTILOS A ICONOS */
+  --icon-color: gray;
+  /* PARA ESTILOS HOVER EN ICONO */
+  --icon-color-hover: #333; /* COLOR DE CONTRASTE */
+
+  /* VARIABLE PARA ANCHOS  Y ALTURA*/
   --w-container: 100%;
+  --w-min-container: 100dvw;
+  --h-min-container: 100dvh;
 }
 
 /* BASE BODY Y TIPOGRAFÍA */
 body {
   background-color: var(--bg-primary);
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   letter-spacing: 1px;
 }
 
 body,
-.root__sub-root,
 main {
-  min-height: 100dvh;
+  min-height: var(--h-min-container);
 }
 
 a {
@@ -89,96 +110,24 @@ h4 {
   transition: background-color 0.3s ease;
 }
 
-.modal {
-  transform: scale(1);
-  opacity: 1;
-  visibility: visible;
-  width: 90%;
-  max-width: 600px;
-  max-height: 400px;
-  background-color: var(--bg-primary);
-  border-radius: 12px;
-  padding: 1.1rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.4s linear, opacity 0.3s linear, visibility 0.3s linear;
-  z-index: 10;
+.btn__close {
+  background-color: var(--btn-danger);
 }
 
-.modal--hide,
-.modal-wrapper--hide {
-  transform: scale(0);
-  opacity: 0;
-  visibility: hidden;
+.btn__ghost {
+  background-color: var(--btn-ghost);
 }
 
-/* ESTILO GENERALES PARA MODALES EN LA PAGINA */
-.modal-wrapper {
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0); /*SEMITRANSPARENTE */
-  backdrop-filter: blur(12px); /* PROPIEDAD QUE APLICA EL BLUR AL DOM DETRAS DEL MODAL */
-  z-index: 100;
+.btn__info {
+  background-color: var(--btn-info);
 }
 
-/* QUITAR ESTILOS SOLO PARA EL LOADER */
-.modal--ghost {
-  box-shadow: none;
-  border: none;
-  padding: 0;
-  background-color: transparent;
+.btn__success {
+  background-color: var(--btn-success);
 }
 
-.modal .modal__message {
-  color: var(--text-color-primary);
-}
-
-/* CONTENEDOR DE ICONO DE MODAL DE EXITO */
-.modal__icon-wrapper {
-  font-size: 8rem;
-}
-/* ICONO DE EXITO */
-.modal__icon-wrapper .fa-circle-check,
-.modal__icon-wrapper .fa-check-circle {
-  color: var(--color-success);
-}
-
-.modal__icon-wrapper .fa-thumbs-up,
-.modal__icon-wrapper .fa-solid.fa-circle-info {
-  color: #1e6aad;
-}
-
-.modal__icon-wrapper .fa-triangle-exclamation {
-  color: var(--color-warnning);
-}
-
-/* CONTENEDOR MODAL DE LOADER */
-.modal-spinner {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background-color: rgba(5, 5, 5, 0);
-}
-
-/* EL SPINNER */
-.modal-spinner__spinner {
-  width: inherit;
-  height: inherit;
-  background-color: transparent;
-  border-radius: 50%;
-  border-top: 20px solid var(--bg-secondary);
-  border-right: 20px solid transparent;
-  border-bottom: 20px solid transparent;
-  border-left: 20px solid transparent;
-  animation: spin 1.2s linear infinite;
-}
-
-/* ANIMACION DEL LOADER TIPICO */
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.btn__warn {
+  background-color: var(--btn-warning);
 }
 
 /* MEDIA QUERIES */
