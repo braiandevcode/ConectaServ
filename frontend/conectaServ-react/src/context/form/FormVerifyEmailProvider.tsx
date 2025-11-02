@@ -36,7 +36,7 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
   const [time, setTime] = useState<iTimeExpire>({ min: 0, sec: 0 });
 
   // ID DE REFERENCIA PARA EL TIMMER
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const NUM_DIGITS: number = 6;
 
@@ -127,13 +127,13 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // FUNCION PARA CORRER EL TIEMPO DE EXPIRACION
-  const runTimerExpiration = (): NodeJS.Timeout => {
+  const runTimerExpiration = (): ReturnType<typeof setInterval> => {
     // ESTE FORMATO DEBERIA MANDARME EL BACKEND: { code: "123456", expiresAt: "2025-10-30T15:30:00Z" }
     // SIMULAR DATOS DE CODIGO Y TIEMPO EN QUE LLEGA
     const duration: number = 2 * 60 * 1000;
     const expiresAt: number = Date.now() + duration; // SUMAMOS 2 MINUTOS EN MILISEGUNDOS PARA SIMULAR EXPIRACION
     // CREAMOS EL INTERVALO QUE SE EJECUTARA CADA SEGUNDO
-    const timer: NodeJS.Timeout = setInterval(() => {
+    const timer: ReturnType<typeof setInterval> = setInterval(() => {
       const remaining: number = expiresAt - Date.now(); // CALCULAMOS MILISEGUNDOS RESTANTES
 
       if (remaining <= 0) {

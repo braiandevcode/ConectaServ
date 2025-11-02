@@ -3,10 +3,13 @@ import LoginContext from './LoginContext';
 import type { TAuthLogin } from '../../types/typeAuthLogin';
 import useMain from '../../hooks/useMain';
 import { isLengthValid } from '../../utils/validateFieldUtils';
+import useUserApi from '../../hooks/useUserApi';
+import useGlobalModal from '../../hooks/useGlobalModal';
 
 // PROVEEDOR DE LOS ESTADOS, FUNCIONALIDAD Y LOGICA DEL LOGIN
 const LoginProvider = ({ children }: { children: ReactNode }) => {
   const { client } = useMain();
+  const { isGlobalModalOpen } = useGlobalModal();
   const [error, setError] = useState<string>('');
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [password, setPassword] = useState<string>('');
@@ -18,21 +21,29 @@ const LoginProvider = ({ children }: { children: ReactNode }) => {
 
   const [isValid, setIsValid] = useState<boolean>(false);
 
-  // OBSERVAR client
+  const { signInUser } = useUserApi();
+
   useEffect(() => {
-    setRole(initialRole);
-  }, [client]); // ==> CLIENT ES ESTADO EXTERNO
+    if (isGlobalModalOpen) {
+      setIsValid(validateFieldsLogin());
+    }
+  }, [isGlobalModalOpen, validateFieldsLogin]);
+
+  // OBSERVAR client
+  useEffect(() => setRole(initialRole), [client]); // ==> CLIENT ES ESTADO EXTERNO
 
   // EVENTO DE CAMBIO EN PASSWORD
   const handlePassword = (e: FormEvent<HTMLInputElement>) => {
     const value: string = e.currentTarget.value;
     setPassword(value);
+    setIsValid(validateFieldsLogin) // ==> REVALIDAR EN CADA CAMBIO DE PASSWORD
   };
 
   // EVENTO DE CAMBIO EN USERNAME
   const handleUserName = (e: FormEvent<HTMLInputElement>) => {
     const value: string = e.currentTarget.value;
     setUserName(value);
+    setIsValid(validateFieldsLogin) // ==> REVALIDAR EN CADA CAMBIO DE USERNAME
   };
 
   function validateFieldsLogin() {
@@ -42,9 +53,9 @@ const LoginProvider = ({ children }: { children: ReactNode }) => {
   }
 
   // EVENTO DE CAMBIO EN PASSWORD
-  const submitLogin = (e: FormEvent<HTMLFormElement>) => {
+  const submitLogin = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    console.log('submit');
+    await signInUser({ password, userName, setError, setIsAuth })
   };
 
   // OBJETO DE ESTADOS ACTUALIZADOS PARA EL CONTEXTO

@@ -49,13 +49,14 @@ export enum ENamesOfKeyLocalStorage {
   IMAGE_INDEXED_DB = 'images',
   INTERACTED = 'interacted',
   CODE = 'codeEmail',
-  IS_VERIFY_CODE= 'isVerified'
+  IS_VERIFY_CODE = 'isVerified'
 }
 
 // ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES ENDPOINTS
 export enum EEndpoint {
-  USER_ROLE = '/user:role', 
-  USER = '/user'
+  USER_ROLE = '/user:role',
+  USER = '/user',
+  AUTH = '/auth/login'
 }
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA

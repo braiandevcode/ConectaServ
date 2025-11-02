@@ -18,7 +18,7 @@ const emailValidator: EmailValidator = new EmailValidator(); // ==> INSTANCIA DE
 const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
   const { openGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
   const { handleClientClick, handleTaskerClick, client } = useMain(); // HOOK QUE USA EL CONTEXTO DE MAIN PRINCIPAL
-  const { getUsers } = useUserApi(); //HOOK PARA PETICIONES A DATOS DEL USUARIO
+  const { getIdentifyEmail } = useUserApi(); //HOOK PARA PETICIONES A DATOS DEL USUARIO
 
   const navigate = useNavigate();
 
@@ -70,7 +70,7 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
     const stored = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE);
     if (!stored) return; //ASEGURAR QUE EN STORAGE ESTE ALMACENADO EL ROLE
     // LLAMO AL METODO Y PASO EL ARGUMENTO ESPERADO INTERNAMENTE
-    const result = (await getUsers({ setIsSendingIdentificationEmail })) as TUser[] | [];
+    const result = (await getIdentifyEmail({ setIsSendingIdentificationEmail })) as TUser[] | [];
 
     // SI NO HAY RESULTADOS NO SEGUIR
     if (!result) {

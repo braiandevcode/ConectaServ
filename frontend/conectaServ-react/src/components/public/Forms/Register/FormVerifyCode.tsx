@@ -23,12 +23,12 @@ const FormVerifyCode: FC = () => {
   const { setIsSendingIdentificationEmail } = useIdentifyEmail();
   const { openGlobalModal, showError } = useGlobalModal();
   const { resendEmail } = useRegister();
-  const { getUsers, sendCodeToUserEmail } = useUserApi();
+  const { getIdentifyEmail, sendCodeToUserEmail } = useUserApi();
 
   // ENVIAR CODIGO
   const send = async (): Promise<void> => {
     try {
-      const resultVerifyUser: TUser[] | undefined = await getUsers({ setIsSendingIdentificationEmail });
+      const resultVerifyUser: TUser[] | null = await getIdentifyEmail({ setIsSendingIdentificationEmail });
 
       if (!resultVerifyUser) return; //NO SEGUIR getUser YA MANEJA ENVIO DE LA INFO SEGUN EL PROBLEMA
 
