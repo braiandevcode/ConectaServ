@@ -9,6 +9,7 @@ import { Tasker } from './tasker/entities/tasker.entity';
 import { Location } from './location/entities/location.entity';
 import { Category } from './category/entities/category.entity';
 import { ServicesModule } from './services/services.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -38,7 +39,8 @@ import { ServicesModule } from './services/services.module';
     Tasker,
     Location,
     Category,
-    ServicesModule
+    ServicesModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
