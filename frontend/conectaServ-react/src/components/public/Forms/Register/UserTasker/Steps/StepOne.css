@@ -1,0 +1,16 @@
+/* -------------------ESTILOS ESPECIFICOS  DEL COMPONENTE PASO 1 --------------------*/
+
+/* ESTILOS GENERALES A TODOS LOS ITEMS DE CHECKBOX DEL FORMULARIO DE CADA SECCION*/
+.context,
+.day,
+.hour,
+.service {
+  font-size: small;
+}
+
+/* ESCRITORIO 1024PX */
+@media (min-width: 1024px) {
+  .form-groupSelectCategory__title {
+    justify-content: start;
+  }
+}

@@ -1,8 +1,9 @@
 import type { RefObject } from 'react';
-import type { TExperienceImagesPreviewProps, TStoredImage } from '../types/types';
 import { verifyMetaDataImage } from './validateFieldUtils';
 import { getImageDataUrlFromIndexedDB } from './storageUtils';
 import { ENamesOfKeyLocalStorage } from '../types/enums';
+import type { TExperienceImagesPreviewProps } from '../types/typeImageExperiences';
+import type { TStoredImage } from '../types/typePersistanceDataImage';
 
 // TIPADO INTERNO
 type TLoadImages = Pick<TExperienceImagesPreviewProps, 'setSrcVector'> & {

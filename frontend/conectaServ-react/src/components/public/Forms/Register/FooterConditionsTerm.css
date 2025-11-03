@@ -1,0 +1,18 @@
+/*---------------------------SECCION DE TERMINOS Y CONDICIONES DEL FORM-----------------------------------------------------------------*/
+.form__link {
+  color: var(--link-color-secondary);
+  text-decoration: underline;
+}
+
+/* LABELS DE CHECK */
+.form__checkbox-label {
+  font-size: 0.6rem;
+}
+
+/* ASEGURAR QUE LOS EVENTOS DE HOVER SEAN PRECISOS SOLO PARA TABLET Y ESCRITORIO (INVESTIGADO) */
+@media (hover: hover) and (pointer: fine) {
+  /* HOVER EN EL AREA */
+  .link__link:hover{
+    color: var(--btn-hover);
+  }
+}

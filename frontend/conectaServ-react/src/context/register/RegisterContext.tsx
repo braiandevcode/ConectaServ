@@ -1,30 +1,25 @@
 import { createContext } from 'react';
-import type { TRegister } from '../../types/types';
-import { ELocationKey } from '../../types/enums';
+import type { TRegister } from '../../types/typeRegister';
 
 // DEFINIR VALORES POR DEFECTO DE LOS ESTADOS
 const defaultRegisterContext: TRegister = {
-  isSending:false,
+  isSuccefullyVerified: false,
+  setIsSuccefullyVerified: () => {},
+  resendEmail: { emailUser: '' },
+  setResendEmail: () => {},
   setIsSending: () => {},
-  interactedConfirmPassword:false,
   setInteractedConfirmPassword: () => {},
   setInteractedPassword: () => {},
   setConfirmPassword: () => {},
   setPassword: () => {},
-  setStoredFullName: () => {},
-  setStoredUserName: () => {},
-  setStoredEmail: () => {},
-  setStoredLocation: () => {},
   setTerms: () => {},
+  onChangeTerms: () => false,
+  interactedConfirmPassword: false,
+  isSending: false, // ==> INICIO LOADING EN FALSE
   interactedPassword: false,
-  storedFullName: '',
-  storedUserName: '',
-  storedLocation: ELocationKey.NONE,
-  storedEmail: '',
   confirmPassword: '',
   password: '',
   terms: false,
-  onChangeTerms: () => false,
 };
 
 export const RegisterContext = createContext<TRegister>(defaultRegisterContext);

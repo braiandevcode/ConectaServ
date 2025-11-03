@@ -1,26 +1,27 @@
 import { Route, Routes } from 'react-router';
-import LoginModal from './components/LoginModal';
-import Home from './pages/Home';
-import RegisterClient from './components/RegisterClient';
-import RegisterPro from './components/RegisterPro';
+// import LoginModal from './components/public/Modals/ModalLogin';
 import MainLayout from './routes/MainLayout';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsAndConditions from './pages/TermsAndConditions';
-import RegisterProfessionalLayout from './routes/RegisterProLayout';
+import PrivacyPolicy from './components/public/PrivacyPolicy';
+import TermsAndConditions from './components/public/TermsAndConditions';
 import RegisterClientLayout from './routes/RegisterClientLayout';
 import { useEffect, useState } from 'react';
 import Loader from './components/Loader';
 import RegisterLayout from './routes/RegisterLayout';
+import Home from './components/public/Home';
+import RegisterClient from './components/public/Forms/Register/UserClient/RegisterClient';
+import RegisterTasker from './components/public/Forms/Register/UserTasker/RegisterTasker';
+import RegisterTaskerLayout from './routes/RegisterTaskerLayout';
 // COMPONENTE APP PRINCIPAL
 export default function App() {
   const [initialLoading, setInitialLoading] = useState(true);
 
-  useEffect(() => {
+  useEffect(() => {  
     const timer = setTimeout(() => setInitialLoading(false), 1000); // SIMULA CARGA
     return () => clearTimeout(timer);
   }, []);
 
-  if (initialLoading) return <Loader />;
+  // SI ES CARGA INICIAL
+  if (initialLoading) return <Loader />; // ==> MOSTRAR LOADER
 
   // --------RENDER APP + RUTAS---------------------//
   return (
@@ -28,12 +29,11 @@ export default function App() {
       <Routes>
         <Route path='/' element={<MainLayout />}>
           <Route path='/' element={<Home />} />
-          <Route path='login' element={<LoginModal />} />
           <Route path='register' element={<RegisterLayout />}>
             <Route path='privacity' element={<PrivacyPolicy />} />
             <Route path='terms' element={<TermsAndConditions />} />
-            <Route element={<RegisterProfessionalLayout />}>
-              <Route path='pro' element={<RegisterPro />} />
+            <Route element={<RegisterTaskerLayout />}>
+              <Route path='tasker' element={<RegisterTasker />} />
             </Route>
             <Route element={<RegisterClientLayout />}>
               <Route path='client' element={<RegisterClient />} />

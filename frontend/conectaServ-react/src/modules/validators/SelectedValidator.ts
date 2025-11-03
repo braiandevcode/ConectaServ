@@ -1,7 +1,7 @@
 // IMPORTACIONES
-import type { IValidator } from "../../interfaces/interfaces";
+import type { IValidator } from '../../interfaces/iValidator.js';
+import type { TFieldState } from '../../types/typeStateFields.js';
 import { EDefaultSelected } from "../../types/enums";
-import type { TFieldState } from "../../types/types";
 import { isValueField } from "../../utils/validateFieldUtils";
 
 // VALIDACION SELECTS

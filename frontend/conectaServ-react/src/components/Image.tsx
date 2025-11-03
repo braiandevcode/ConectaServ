@@ -1,8 +1,8 @@
-import type { TImage } from '../types/types';
+import type { TImage } from "../types/typeImage";
+
 // COMPONENTE IMAGEN
 const Image = ({ src, className, alt, attribute }: TImage) => {
-  console.log(attribute);
-
-  return <img src={src} alt={alt} className={className} {...(attribute ? attribute : {} )}></img>;
+  const attr = attribute ? {...attribute} : {} // ==> SI TIENE ATRIBUTOS DE IMAGEN AÑADIR SINO VACIO
+  return <img src={src} alt={alt} className={className} {...attr}></img>;
 };
 export default Image;

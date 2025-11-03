@@ -1,6 +1,7 @@
 // IMPORTACIONES
 import { ENamesOfKeyLocalStorage } from '../types/enums';
-import type { TIdString, TStoredImage } from '../types/types';
+import type { TStoredImage } from '../types/typePersistanceDataImage';
+import type { TIdString } from '../types/typeUUID';
 
 //------------------------ALMACENAMIENTO EN INDEXEDDB---------------------------------------------------//
 
@@ -162,5 +163,8 @@ export const clearPersistence = async () => {
   localStorage.removeItem(ENamesOfKeyLocalStorage.CURRENT_STEP);
   localStorage.removeItem(ENamesOfKeyLocalStorage.STEP_DATA);
   localStorage.removeItem(ENamesOfKeyLocalStorage.INTERACTED);
-  localStorage.removeItem('role');
+  localStorage.removeItem(ENamesOfKeyLocalStorage.CODE);
+  localStorage.removeItem(ENamesOfKeyLocalStorage.CLIENT_DATA);
+  localStorage.removeItem(ENamesOfKeyLocalStorage.ROLE);
+  localStorage.removeItem(ENamesOfKeyLocalStorage.IS_VERIFY_CODE);
 };

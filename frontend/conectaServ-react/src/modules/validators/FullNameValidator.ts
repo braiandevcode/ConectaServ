@@ -1,5 +1,5 @@
-import type { IValidator } from '../../interfaces/interfaces.js';
-import type { TFieldState } from '../../types/types';
+import type { IValidator } from '../../interfaces/iValidator.js';
+import type { TFieldState } from '../../types/typeStateFields.js';
 import { capitalizeWords, normalizeSpaces } from '../../utils/parsedAndFormatValuesUtils.js';
 import { isLengthValid, isValueField, validateWithRegex } from '../../utils/validateFieldUtils.js';
 

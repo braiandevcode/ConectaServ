@@ -1,5 +1,6 @@
-import type { IValidator } from '../../interfaces/interfaces';
-import type { TFieldState, TStoredImage } from '../../types/types';
+import type { IValidator } from '../../interfaces/iValidator.js';
+import type { TStoredImage } from '../../types/typePersistanceDataImage.js';
+import type { TFieldState } from '../../types/typeStateFields.js';
 
 // VALIDACION PARA IMAGEN DEL PERFIL
 export default class ImageProfileValidator implements IValidator {
