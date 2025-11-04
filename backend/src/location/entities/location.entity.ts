@@ -1,6 +1,7 @@
-import { Tasker } from "src/tasker/entities/tasker.entity";
+import { Users } from "src/user/entities/user.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 
+// CAMBIE  ENTIDAD DE TASKER POR USUARIO
 @Entity("locations")
 export class Location {
     @PrimaryColumn()
@@ -8,7 +9,7 @@ export class Location {
     @Column()
     locationName: string;
 
-    //Relaciones
-    @ManyToOne(type=>Tasker, tasker=>tasker.location)
-    public tasker: Tasker;
+    //RELACIONES
+    @ManyToOne(type=> Users, user=> user.location)
+    public user: Users;
 }

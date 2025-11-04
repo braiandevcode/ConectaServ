@@ -10,6 +10,16 @@ import { Location } from './location/entities/location.entity';
 import { Category } from './category/entities/category.entity';
 import { ServicesModule } from './services/services.module';
 import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+import { ContextsModule } from './contexts/contexts.module';
+import { HoursModule } from './hours/hours.module';
+import { DaysModule } from './days/days.module';
+import { ProfilesModule } from './profiles/profiles.module';
+import { ExperiencesModule } from './experiences/experiences.module';
+import { ContextModule } from './context/context.module';
+import { HourModule } from './hour/hour.module';
+import { DayModule } from './day/day.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -40,7 +50,17 @@ import { AuthModule } from './auth/auth.module';
     Location,
     Category,
     ServicesModule,
-    AuthModule
+    AuthModule,
+    UserModule,
+    ContextsModule,
+    HoursModule,
+    DaysModule,
+    ProfilesModule,
+    ExperiencesModule,
+    ContextModule,
+    HourModule,
+    DayModule,
+    ProfileModule
   ],
   controllers: [AppController],
   providers: [AppService],

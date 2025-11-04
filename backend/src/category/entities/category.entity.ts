@@ -1,14 +1,15 @@
-import { Tasker } from "src/tasker/entities/tasker.entity";
+import { Users } from "src/user/entities/user.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 
+// TAMBIEN CAMBIE A USUARIO
 @Entity("categories")
 export class Category {
     @PrimaryColumn()
     idCategory: string;
     @Column()
-    categoryName: string;
+    category_name: string;
 
     //Relaciones
-    @ManyToOne(type=>Tasker, tasker=>tasker.category)
-    public tasker: Tasker;
+    @ManyToOne(type=>Users, user=>user.category)
+    public user: Users;
 }
