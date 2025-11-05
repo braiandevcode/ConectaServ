@@ -1,15 +1,22 @@
-import { Users } from "src/user/entities/user.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { User } from 'src/user/entities/user.entity';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-// CAMBIE  ENTIDAD DE TASKER POR USUARIO
-@Entity("locations")
+//ENTIDAD DE LOCALIDAD ELEGIDA POR EL USUAURIO
+@Entity('locations')
 export class Location {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn('uuid', { name: 'id_category' })
     idLocation: string;
-    @Column()
+    @Column({ type: 'varchar', length:150, nullable:false})
     locationName: string;
 
-    //RELACIONES
-    @ManyToOne(type=> Users, user=> user.location)
-    public user: Users;
+    //RELACIONES ==> UNA MISMA LOCALIDAD PUEDE PERTENECER A MUCHOS USUARIOS
+    @OneToMany((type) => User, (user) => user.location)
+    public user: User[]; //==> VARIOS USUARIOS TIENEN ESTA LOCALIZACIÓN
+
+
+    @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
+    updatedAt: Date;
 }

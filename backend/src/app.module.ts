@@ -1,25 +1,20 @@
-import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { LocationsModule } from './location/locations.module';
-import { CategoryModule } from './category/category.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Tasker } from './tasker/entities/tasker.entity';
-import { Location } from './location/entities/location.entity';
-import { Category } from './category/entities/category.entity';
+// import { Tasker } from './tasker/entities/tasker.entity';
 import { ServicesModule } from './services/services.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { ContextsModule } from './contexts/contexts.module';
-import { HoursModule } from './hours/hours.module';
-import { DaysModule } from './days/days.module';
-import { ProfilesModule } from './profiles/profiles.module';
 import { ExperiencesModule } from './experiences/experiences.module';
 import { ContextModule } from './context/context.module';
 import { HourModule } from './hour/hour.module';
 import { DayModule } from './day/day.module';
 import { ProfileModule } from './profile/profile.module';
+import { BudgetModule } from './budget/budget.module';
+import { LocationsModule } from './location/locations.module';
+import { CategoryModule } from './category/category.module';
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -43,24 +38,20 @@ import { ProfileModule } from './profile/profile.module';
         password: config.get<string>('DB_PASSWORD'), // PASSWORD DE LA DB
         database: config.get<string>('DB_NAME'), // NOMBRE DE LA BASE DE DATOS
         entities: [__dirname + '/**/*.entity{.ts,.js}'], // ENTIDADES QUE VA A LEER
-        synchronize: true, // AUTO SINCRONIZA SCHEMA (NO USAR EN PRODUCCIÓN)
+        synchronize: false, // AUTO SINCRONIZA SCHEMA (EN TRUE NO USAR EN PRODUCCIÓN)
       }),
     }),
-    Tasker,
-    Location,
-    Category,
     ServicesModule,
     AuthModule,
     UserModule,
-    ContextsModule,
-    HoursModule,
-    DaysModule,
-    ProfilesModule,
     ExperiencesModule,
     ContextModule,
     HourModule,
     DayModule,
-    ProfileModule
+    ProfileModule,
+    BudgetModule,
+    LocationsModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
