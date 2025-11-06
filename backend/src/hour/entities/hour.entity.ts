@@ -1,3 +1,4 @@
+import { Tasker } from 'src/tasker/entities/tasker.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -10,6 +11,6 @@ export class Hour {
   @Column({ name: 'hour_name', type: 'varchar', length: 250, nullable: false })
   hourName: string;
 
-  @ManyToMany(() => User, (users) => users.hours)
-  users: User[];
+  @ManyToMany(() => Tasker, (user) => user.hours)
+  users: Tasker[];
 }

@@ -1,3 +1,4 @@
+import { DetailsProfileTasker } from 'src/details_profile_taskers/entities/details_profile_tasker.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -13,7 +14,7 @@ import {
 @Entity('experiences')
 export class Experience {
   @PrimaryColumn({ name: 'id_experience', type: 'uuid' }) //ID IMAGEN  UUID VIENE DEL FRONT
-  idLocation: string;
+  idExperience: string;
   @Column({ name: 'image_base64', type: 'text', nullable: false })
   imageBase64: string;
 
@@ -39,10 +40,10 @@ export class Experience {
   })
   order: number;
 
- // RELACION M:1 UNA O MUCHAS IMAGENES PERTENECEN A UN USUARIO
-  @ManyToOne(() => User, (user) => user.imagesExperiences)
-  @JoinColumn({ name: 'id_user' }) // FK EN TABLA EXPERIENCIAS
-  user: User;
+  // RELACION M:1 UNO O MUCHOS REGISTROS DE IMAGENES DE EXPERIENCIAS PERTENECEN A UN  SOLO REGISTRO DE DETALLES DE PERFIL DE TASKER
+  @ManyToOne(() => DetailsProfileTasker,(details) => details.imagesExperiences)
+  @JoinColumn({ name: 'id_details_profile_tasker' }) // FK EN TABLA EXPERIENCIAS
+  details: DetailsProfileTasker;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;

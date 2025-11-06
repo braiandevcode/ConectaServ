@@ -15,6 +15,8 @@ import { CategoryModule } from './category/category.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RoleModule } from './role/role.module';
+import { DetailsProfileTaskersModule } from './details_profile_taskers/details_profile_taskers.module';
 
 @Module({
   imports: [
@@ -52,6 +54,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     BudgetModule,
     LocationsModule,
     CategoryModule,
+    RoleModule,
+    DetailsProfileTaskersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

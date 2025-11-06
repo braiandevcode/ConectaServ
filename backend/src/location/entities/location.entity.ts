@@ -10,9 +10,8 @@ export class Location {
     locationName: string;
 
     //RELACIONES ==> UNA MISMA LOCALIDAD PUEDE PERTENECER A MUCHOS USUARIOS
-    @OneToMany((type) => User, (user) => user.location)
-    public user: User[]; //==> VARIOS USUARIOS TIENEN ESTA LOCALIZACIÓN
-
+    @OneToMany(() => User, (user) => user.location)
+    user: User[]; //==> VARIOS USUARIOS TIENEN ESTA LOCALIZACIÓN
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
     createdAt: Date;
