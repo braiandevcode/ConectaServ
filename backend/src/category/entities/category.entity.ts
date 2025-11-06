@@ -1,4 +1,4 @@
-import { User } from 'src/user/entities/user.entity';
+import { Tasker } from 'src/tasker/entities/tasker.entity';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 // TAMBIEN CAMBIE A USUARIO
@@ -14,13 +14,15 @@ export class Category {
   })
   categoryName: string;
 
-  //RELACION ==> UNA CATEGORIA PUEDE PERTENCER A VARIOS USUARIOS
-  @OneToMany((type) => User, (user) => user.category)
-  public user: User[]; //==> USUARIOS QUE PERTENECE A ESA CATEGORIA
+  //RELACION ==> UNA CATEGORIA PUEDE PERTENCER A VARIOS TASKERS
+  @OneToMany(() => Tasker, (tasker) => tasker.category)
+  tasker: Tasker[]; //==> TASKER QUE PERTENECE A ESA CATEGORIA
 
+  // FECHA DE CREACION
   @CreateDateColumn({ name: 'created_at', type: 'timestamp', nullable: false })
   createdAt: Date;
 
+  // FECHA DE ACTUALIZACION
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
   updatedAt: Date; // SE ACTUALIZA AUTOMÁTICAMENTE AL MODIFICAR
 }
