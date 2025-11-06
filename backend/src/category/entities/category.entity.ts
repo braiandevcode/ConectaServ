@@ -1,14 +1,26 @@
-import { Tasker } from "src/tasker/entities/tasker.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { User } from 'src/user/entities/user.entity';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity("categories")
+// TAMBIEN CAMBIE A USUARIO
+@Entity('categories')
 export class Category {
-    @PrimaryColumn()
-    idCategory: string;
-    @Column()
-    categoryName: string;
+  @PrimaryGeneratedColumn('uuid', { name: 'id_category' })
+  idCategory: string;
+  @Column({
+    name: 'category_name',
+    type: 'varchar',
+    length: 150,
+    nullable: false,
+  })
+  categoryName: string;
 
-    //Relaciones
-    @ManyToOne(type=>Tasker, tasker=>tasker.category)
-    public tasker: Tasker;
+  //RELACION ==> UNA CATEGORIA PUEDE PERTENCER A VARIOS USUARIOS
+  @OneToMany((type) => User, (user) => user.category)
+  public user: User[]; //==> USUARIOS QUE PERTENECE A ESA CATEGORIA
+
+  @CreateDateColumn({ name: 'created_at', type: 'timestamp', nullable: false })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
+  updatedAt: Date; // SE ACTUALIZA AUTOMÁTICAMENTE AL MODIFICAR
 }

@@ -18,9 +18,9 @@ export type TFormVerifyCode = {
   setFormState: Dispatch<SetStateAction<iFormValidationVerifyEmail>>;
   setTime: Dispatch<SetStateAction<iTimeExpire>>;
   setExpired: Dispatch<SetStateAction<boolean>>;
-  runTimerExpiration: () => NodeJS.Timeout;
-  updatedIsSuccefullyVerified:(isVerifiedSuccess: boolean) => void;
-  timerRef: RefObject<NodeJS.Timeout | null>;
+  runTimerExpiration: () => ReturnType<typeof setInterval> | null;
+  updatedIsSuccefullyVerified: (isVerifiedSuccess: boolean) => void;
+  timerRef: RefObject<ReturnType<typeof setInterval> | null>;
   time: iTimeExpire;
   expired: boolean;
   isSendingCode: boolean; //PARA INDICAR QUE EL CODIGO SE ESTA ENVIANDO AL USUSARIO

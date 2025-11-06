@@ -23,7 +23,7 @@ const FieldsClient = () => {
   const { formState, dataClient } = useRegisterClient(); //HOOK  QUE USA CONTEXTO REGISTRO CLIENTE
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useFieldsClient(); // HOOK QUE USA CONTEXTO DE LOS CAMPOS DEL FORMULARIO DE CLIENTE
   const { setIsSendingIdentificationEmail } = useIdentifyEmail();
-  const { sendCodeToUserEmail, getUsers } = useUserApi()
+  const { sendCodeToUserEmail, getIdentifyEmail } = useUserApi()
   const { openGlobalModal, showError } = useGlobalModal();
 
   // ESTA DESHABILITADO SI:
@@ -36,9 +36,9 @@ const FieldsClient = () => {
   const isDisabled: boolean = !formState.email.isValid || isSendingCode || isCodeSent || isSuccefullyVerified;
 
   // ENVIAR CODIGO
-  const send = async (): Promise<void> => {
+  const send = async (): Promise<void | null> => {
     try {
-      const resultVerifyUser: TUser[] | undefined = await getUsers({ setIsSendingIdentificationEmail });
+      const resultVerifyUser: TUser[] | null = await getIdentifyEmail({ setIsSendingIdentificationEmail });
 
       if (!resultVerifyUser) return; //NO SEGUIR getUser YA MANEJA ENVIO DE LA INFO SEGUN EL PROBLEMA
 

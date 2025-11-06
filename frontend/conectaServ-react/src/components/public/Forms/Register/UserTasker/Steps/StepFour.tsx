@@ -29,15 +29,15 @@ const StepFour = () => {
   const { password, isSending, isSuccefullyVerified, interactedPassword, interactedConfirmPassword, confirmPassword, setResendEmail } = useRegister(); //HOOK DE ESTADOS DE REGISTROS EN COMUN
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useStepFour(); // HOOK PASO 4
   const { setIsSendingIdentificationEmail } = useIdentifyEmail();
-  const { sendCodeToUserEmail, getUsers } = useUserApi();
+  const { sendCodeToUserEmail, getIdentifyEmail } = useUserApi();
   const { openGlobalModal, showError } = useGlobalModal();
 
   // ENVIAR CODIGO
-  const send = async (): Promise<void> => {
+  const send = async (): Promise<void | null> => {
     try {
-      const resultVerifyUser: TUser[] | undefined = await getUsers({ setIsSendingIdentificationEmail });
+      const resultVerifyUser: TUser[] | null = await getIdentifyEmail({ setIsSendingIdentificationEmail });
 
-      if (!resultVerifyUser) return; //NO SEGUIR getUser YA MANEJA ENVIO DE LA INFO SEGUN EL PROBLEMA
+      if (!resultVerifyUser) return null; //NO SEGUIR getIdentifyEmail YA MANEJA ENVIO DE LA INFO SEGUN EL PROBLEMA
 
       // SI HAY DATOS DE USUARIOS
       const emailExist: boolean = resultVerifyUser.some((d) => d.email === stepData[EKeyDataByStep.FOUR].email);

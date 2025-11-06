@@ -5,7 +5,7 @@ import { formStateVerifyCodeEmail } from '../../config/formStateVerifyCodeEmail'
 const arrayRefInitialValue: RefObject<(HTMLInputElement | null)[]> = { current: [] }; //ESTADO INICIAL PARA ARRAY DE REFERENCIAS
 // ESTADOS INICIALES
 const defaultFormVerifyEmailContext: TFormVerifyCode = {
-  timerRef: createRef<NodeJS.Timeout | null>(),
+  timerRef: createRef<ReturnType<typeof setInterval> | null>(),
   expired: false,
   inputRefs: arrayRefInitialValue,
   otp: [],
