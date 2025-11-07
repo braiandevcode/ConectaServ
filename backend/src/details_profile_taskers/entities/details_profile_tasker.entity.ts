@@ -25,7 +25,7 @@ export class DetailsProfileTasker {
   imageProfile: Profile;
 
   // RELACION  1:M UN REGISTRO DE DE DETALLES DEL PERFIL DEL TASKER ==> PUEDE ESTAR ASOCIADO A UNA O VARIAS O NINGUNA IMAGEN DE EXPERIENCIAS
-  @OneToMany(() => Experience, (image) => image.details)
+  @OneToMany(() => Experience, (experiences) => experiences.details)
   imagesExperiences: Experience[];
 
   // RELACION  1:1 UN REGISTRO DE DETALLES DE PERFIL SOLO TENDRA DETALLES DE UN TASKER
