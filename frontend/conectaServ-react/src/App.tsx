@@ -11,6 +11,7 @@ import RegisterClientLayout from './routes/RegisterClientLayout';
 import { useEffect, useState } from 'react';
 import Loader from './components/Loader';
 import RegisterLayout from './routes/RegisterLayout';
+import Services from './pages/Services';
 // COMPONENTE APP PRINCIPAL
 export default function App() {
   const [initialLoading, setInitialLoading] = useState(true);
@@ -24,23 +25,31 @@ export default function App() {
 
   // --------RENDER APP + RUTAS---------------------//
   return (
-    <>
+    // <>
+    //   <Routes>
+    //     <Route path='/' element={<MainLayout />}>
+    //       <Route path='/' element={<Home />} />
+    //       <Route path='services' element={<Services />} />
+    //       <Route path='login' element={<LoginModal />} />
+    //       <Route path='register' element={<RegisterLayout />}>
+    //         <Route path='privacity' element={<PrivacyPolicy />} />
+    //         <Route path='terms' element={<TermsAndConditions />} />
+    //         <Route element={<RegisterProfessionalLayout />}>
+    //           <Route path='pro' element={<RegisterPro />} />
+    //         </Route>
+    //         <Route element={<RegisterClientLayout />}>
+    //           <Route path='client' element={<RegisterClient />} />
+    //         </Route>
+    //       </Route>
+    //     </Route>
+    //   </Routes>
+    // </>
+
+
       <Routes>
-        <Route path='/' element={<MainLayout />}>
-          <Route path='/' element={<Home />} />
-          <Route path='login' element={<LoginModal />} />
-          <Route path='register' element={<RegisterLayout />}>
-            <Route path='privacity' element={<PrivacyPolicy />} />
-            <Route path='terms' element={<TermsAndConditions />} />
-            <Route element={<RegisterProfessionalLayout />}>
-              <Route path='pro' element={<RegisterPro />} />
-            </Route>
-            <Route element={<RegisterClientLayout />}>
-              <Route path='client' element={<RegisterClient />} />
-            </Route>
-          </Route>
-        </Route>
+        {/* <Route path="/" element={<Home />} /> */}
+        <Route path="/services" element={<Services />} />
       </Routes>
-    </>
+
   );
 }

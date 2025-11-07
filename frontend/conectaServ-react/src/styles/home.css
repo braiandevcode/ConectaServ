@@ -66,6 +66,8 @@ button.color:active {
   text-decoration: none;
   color: black;
   font-weight: 600;
+  display: flex;
+  align-items: center;
 }
 
 .nav-links.active {
