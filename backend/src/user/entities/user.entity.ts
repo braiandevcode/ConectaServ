@@ -1,12 +1,6 @@
-import { Category } from 'src/category/entities/category.entity';
-import { Context } from 'src/context/entities/context.entity';
-import { Day } from 'src/day/entities/day.entity';
-import { Experience } from 'src/experiences/entities/experience.entity';
-import { Hour } from 'src/hour/entities/hour.entity';
 import { Location } from 'src/location/entities/location.entity';
-import { Profile } from 'src/profile/entities/profile.entity';
 import { Role } from 'src/role/entities/role.entity';
-import { Service } from 'src/services/entities/service.entity';
+
 import {
   Check,
   Column,
@@ -16,8 +10,6 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
-  OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';

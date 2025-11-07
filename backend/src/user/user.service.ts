@@ -4,7 +4,14 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
+  // SEGUIR MAÑANA
+  async create(createUserDto: CreateUserDto) {
+    try {
+      
+    } catch (error) {
+      
+    }
+    console.log(createUserDto);
     return 'This action adds a new user';
   }
 
