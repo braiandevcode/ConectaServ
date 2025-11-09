@@ -1,5 +1,5 @@
 import { User } from "src/user/entities/user.entity";
-import { Column, Entity, ManyToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('Roles')
 export class Role {
@@ -9,6 +9,7 @@ export class Role {
     @Column({ name: 'name_role', type:'varchar', length:50, nullable:false })
     nameRole:string;
 
+    // UNO O MAS ROLES PUEDEN PERTENECER A UNO O MAS USUARIOS
     @ManyToMany(() => User, (user) => user.roles)
     users:User[]
 }

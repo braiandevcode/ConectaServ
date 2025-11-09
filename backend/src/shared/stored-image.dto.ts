@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsUUID, IsNotEmpty, IsBase64 } from 'class-validator';
+import { IsString, IsNumber, IsUUID, IsNotEmpty, IsBase64, Max } from 'class-validator';
 
 export class StoredImageDto {
   @IsNotEmpty({ message: 'nombre de imagen no puede estar vacio ' })

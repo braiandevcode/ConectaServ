@@ -13,7 +13,7 @@ import { StoredImageDto } from 'src/shared/stored-image.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 // DATOS SOLO PARA TASKERS
-export class CreateTaskerDto extends CreateUserDto {
+export class CreateTaskerDto {
   @IsNotEmpty({ message: 'La categoria no puede estar vacia' })
   @IsString({ message: 'La categoria debe ser una cadena de texto' })
   category: string;

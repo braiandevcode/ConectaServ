@@ -1,7 +1,8 @@
-import { IsIn, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsIn, IsNotEmpty, IsNumber, IsOptional, IsString, Max } from 'class-validator';
 
 export class CreateBudgetDto {
   @IsNumber({}, {message: 'El valor del monto debe ser numerico'})
+  @Max(100000000)
   amountBudge: number;
 
   //@IsIn VALIDA QUE EL VALOR ESTÉ DENTRO DE LA LISTA DE OPCIONES

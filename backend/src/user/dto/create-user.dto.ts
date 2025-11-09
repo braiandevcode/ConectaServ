@@ -1,4 +1,3 @@
-import { Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
   IsArray,
@@ -6,13 +5,8 @@ import {
   IsEmail,
   IsIn,
   IsNotEmpty,
-  IsNumber,
-  IsOptional,
   IsString,
-  IsUUID,
-  ValidateNested,
 } from 'class-validator';
-import { StoredImageDto } from 'src/shared/stored-image.dto';
 
 export class CreateUserDto {
   @IsNotEmpty({ message: 'Nombre completo no puede estar vacio' })
@@ -29,20 +23,20 @@ export class CreateUserDto {
   email: string;
 
   @IsNotEmpty({ message: 'Password requerido' })
-  @IsUUID() // ==> QUE SEA FORMATO UUID
+  @IsString({ message: 'password debe ser de tipo string' })
   password: string;
 
   @IsNotEmpty({ message: 'La localidad no puede estar vacia' })
   @IsString({ message: 'La localidad debe ser una cadena de texto' })
-  location: string;
+  city: string;
 
-  @IsArray({ message: 'El valor de be ser un array' })
-  @ArrayNotEmpty()
+  @IsNotEmpty({ message: 'El role es requerido' })
+  @IsString({ message: 'El role debe ser una cadena de texto' })
   //@IsIn VALIDA QUE EL VALOR ESTÉ DENTRO DE LA LISTA DE OPCIONES
   @IsIn(['client', 'tasker'], {
     message: 'El role debe ser "client" o "tasker"',
   })
-  roles: string[];
+  role: string;
 
   @IsNotEmpty({ message: 'Debe tener un valor' })
   @IsBoolean({ message: 'isVerified debe ser un boolean' })

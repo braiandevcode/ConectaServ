@@ -1,5 +1,4 @@
 import { Tasker } from 'src/tasker/entities/tasker.entity';
-import { User } from 'src/user/entities/user.entity';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 // ENTIDAD DE HABITOS ELEGIDOS
@@ -13,5 +12,5 @@ export class Context {
 
   // RELACION M:N ==> 1 O MAS HABITOS DE TRABAJO PUEDE PERTENECER A MUCHOS TASKERS
   @ManyToMany(() => Tasker, (tasker) => tasker.contexts)
-  users: Tasker[];
+  taskers: Tasker[];
 }

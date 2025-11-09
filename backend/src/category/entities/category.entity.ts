@@ -1,5 +1,12 @@
 import { Tasker } from 'src/tasker/entities/tasker.entity';
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 // TAMBIEN CAMBIE A USUARIO
 @Entity('categories')
@@ -16,7 +23,7 @@ export class Category {
 
   //RELACION ==> UNA CATEGORIA PUEDE PERTENCER A VARIOS TASKERS
   @OneToMany(() => Tasker, (tasker) => tasker.category)
-  tasker: Tasker[]; //==> TASKER QUE PERTENECE A ESA CATEGORIA
+  taskers: Tasker[]; //==> TASKER QUE PERTENECE A ESA CATEGORIA
 
   // FECHA DE CREACION
   @CreateDateColumn({ name: 'created_at', type: 'timestamp', nullable: false })
@@ -25,4 +32,8 @@ export class Category {
   // FECHA DE ACTUALIZACION
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
   updatedAt: Date; // SE ACTUALIZA AUTOMÁTICAMENTE AL MODIFICAR
+
+  // FECHA DE ELIMINACION
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
+  deleteAt: Date; // FECHA DE ELIMINACION
 }
