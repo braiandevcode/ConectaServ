@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('budgets')
 export class Budget {
@@ -26,8 +33,11 @@ export class Budget {
   amount: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp', nullable: false })
-  createdAt: Date;
+  createdAt: Date; //FECHA DE CREACION
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
-  updatedAt: Date; // SE ACTUALIZA AUTOMÁTICAMENTE AL MODIFICAR
+  updatedAt: Date; //FECHA DE MODIFICACION
+
+  @DeleteDateColumn({ name: 'updated_at', type: 'timestamp' })
+  deletedAt: Date; // FECHA DE ELIMINACION
 }

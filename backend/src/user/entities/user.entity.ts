@@ -1,22 +1,19 @@
-import { Category } from 'src/category/entities/category.entity';
-import { Context } from 'src/context/entities/context.entity';
-import { Day } from 'src/day/entities/day.entity';
-import { Experience } from 'src/experiences/entities/experience.entity';
-import { Hour } from 'src/hour/entities/hour.entity';
+import { Exclude } from 'class-transformer';
+import { JoinMannager } from 'src/config/JoinMannager.';
 import { Location } from 'src/location/entities/location.entity';
-import { Profile } from 'src/profile/entities/profile.entity';
 import { Role } from 'src/role/entities/role.entity';
-import { Service } from 'src/services/entities/service.entity';
+import { Tasker } from 'src/tasker/entities/tasker.entity';
+
 import {
   Check,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -26,7 +23,7 @@ import {
 @Check('"active" IN (0, 1)')
 export class User {
   @PrimaryGeneratedColumn('uuid', { name: 'id_user' })
-  idTasker: string;
+  idUser: string;
 
   @Column({ name: 'fullName', length: 150, nullable: false })
   fullName: string;
@@ -43,6 +40,7 @@ export class User {
   })
   email: string;
 
+  @Exclude() //AL RETORNAR EXCLUYO EL PASSWORD
   @Column({ name: 'password', type: 'text', nullable: false })
   password: string;
 
@@ -52,28 +50,63 @@ export class User {
     nullable: false,
     default: false,
   })
-  verified: boolean;
+  isVerified: boolean;
 
+  //BORRADO LOGICO PARA INTEGRIDAD, AUDITORIA O RECUPERACION
   @Column({
     name: 'active',
-    type: 'int',
+    type: 'boolean',
     nullable: false,
-    default: 0,
+    default: true,
   })
-  active: number;
+  active: boolean;
 
   //RELACIONES MUCHOS A UNO => MUCHOS USUARIOS TENDRAN UNA LOCALIDAD
-  @ManyToOne(() => Location, (location) => location.user)
-  @JoinColumn({ name: 'id_location' }) //==> UNION DE TABLAS
-  location: Location;
+  @ManyToOne(() => Location, (city) => city.user, { cascade: true })
+  @JoinColumn(
+    JoinMannager.manyToOneConfig({
+      current: {
+        name: 'id_location',
+        referencedColumnName: 'idLocation',
+        fkName: 'fk_user_location',
+      },
+    }),
+  ) //==> UNION DE TABLAS
+  city: Location;
 
-  @ManyToMany(() => Role, (role) => role.users)
-  @JoinTable() // ==> UNIR EN ESTA ENTIDAD YA QUE ES DUEÑA (CONTIENE LA RELACION DE ROLES)
-  roles:Role[]
+  // MUCHOS USUARIOS TENDRAN UNO O MAS ROLES
+  @ManyToMany(() => Role, (role) => role.users, { cascade: true })
+  // ==> UNIR EN ESTA ENTIDAD YA QUE ES DUEÑA (CONTIENE LA RELACION DE ROLES)
+  @JoinTable(
+    JoinMannager.manyToManyConfig({
+      name: 'user_roles', // NOMBRAMIENTO DE LA TABLA INTERMEDIA
+      current: {
+        name: 'id_user',
+        referencedColumnName: 'idUser',
+        fkName: 'fk_user_role_user',
+      }, // COLUMNA DE USER
+      related: {
+        name: 'id_role',
+        referencedColumnName: 'idRole',
+        fkName: 'fk_user_role_role',
+      }, // COLUMNA DE ROLE
+    }),
+  )
+  roles: Role[];
 
+  // RELACION 1:1 UN USUARIO SOLO PODRA SER UN UNICO TASKER
+  @OneToOne(() => Tasker, (tasker) => tasker.user)
+  tasker:Tasker;
+
+  // FECHA DE CREACION
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
 
+  // FECHA DE ACTUALIZACION
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
   updatedAt: Date;
+
+  // FECHA DE ELIMINACION O NULL
+  @DeleteDateColumn({ name: 'delete_at', type: 'timestamp' })
+  deleteAt: Date;
 }

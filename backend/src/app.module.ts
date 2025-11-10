@@ -1,5 +1,3 @@
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 // import { Tasker } from './tasker/entities/tasker.entity';
 import { ServicesModule } from './services/services.module';
 import { AuthModule } from './auth/auth.module';
@@ -57,7 +55,5 @@ import { DetailsProfileTaskersModule } from './details_profile_taskers/details_p
     RoleModule,
     DetailsProfileTaskersModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

@@ -4,6 +4,7 @@ import { Tasker } from 'src/tasker/entities/tasker.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   OneToMany,
   OneToOne,
@@ -25,16 +26,19 @@ export class DetailsProfileTasker {
   imageProfile: Profile;
 
   // RELACION  1:M UN REGISTRO DE DE DETALLES DEL PERFIL DEL TASKER ==> PUEDE ESTAR ASOCIADO A UNA O VARIAS O NINGUNA IMAGEN DE EXPERIENCIAS
-  @OneToMany(() => Experience, (image) => image.details)
+  @OneToMany(() => Experience, (experiences) => experiences.details)
   imagesExperiences: Experience[];
 
   // RELACION  1:1 UN REGISTRO DE DETALLES DE PERFIL SOLO TENDRA DETALLES DE UN TASKER
   @OneToOne(() => Tasker, (tasker) => tasker.detailsProfileTasker)
-  tasker:Tasker;
+  tasker: Tasker;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
   updatedAt: Date;
+
+  @DeleteDateColumn({ name: 'updated_at', type: 'timestamp' })
+  deleteAt: Date;
 }
