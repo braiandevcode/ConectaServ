@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import type { TTypeContextBasic } from '../types/types';
 import { FieldsClientContext } from '../context/register/registerClient/FieldsClientContext';
+import type { TTypeContextBasic } from '../types/typeContextBasic';
 
 const useFieldsClient = () => {
   const context = useContext<TTypeContextBasic>(FieldsClientContext);

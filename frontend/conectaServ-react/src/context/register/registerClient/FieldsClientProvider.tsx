@@ -5,12 +5,15 @@ import EmailValidator from '../../../modules/validators/EmailValidator';
 import SelectedValidator from '../../../modules/validators/SelectedValidator';
 import PasswordValidator from '../../../modules/validators/PasswordValidator';
 import ConfirmPasswordValidator from '../../../modules/validators/ConfirmPasswordValidator';
-import type { TFieldState, TLocationKey, TStepBasic, TTypeContextBasic } from '../../../types/types';
 import useRegisterClient from '../../../hooks/useRegisterClient';
 import { EDataClient, ENamesOfKeyLocalStorage } from '../../../types/enums';
 import { FieldsClientContext } from './FieldsClientContext';
 import useRegister from '../../../hooks/useRegister';
 import useMain from '../../../hooks/useMain';
+import type { TStepBasic } from '../../../types/typeBasic';
+import type { TLocationKey } from '../../../types/typeLocation';
+import type { TFieldState } from '../../../types/typeStateFields';
+import type { TTypeContextBasic } from '../../../types/typeContextBasic';
 
 const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
   const fullNameValidator: FullNameValidator = new FullNameValidator();
@@ -21,7 +24,7 @@ const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
   const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordValidator();
   // HOOK REGISTRO CLIENTE
   const { formState, setIsValid, isValid, validateClient, setDataClient, setFormState, dataClient } = useRegisterClient(); //HOOK CONTEXTO REGISTRO DE CLIENTE
-  const { terms, password, confirmPassword, setInteractedConfirmPassword, setInteractedPassword, setPassword, setConfirmPassword } = useRegister(); //HOOK CONTEXTO DE REGISTRO GENERA
+  const { terms, password, isSuccefullyVerified, confirmPassword, setInteractedConfirmPassword, setInteractedPassword, setPassword, setConfirmPassword } = useRegister(); //HOOK CONTEXTO DE REGISTRO GENERA
   const { client } = useMain(); //HOOK CONTEXTO MAIN
   
   // EFECTO PARA ALMACENAR DATOS DEL FORMULARIO EN STORAGE
@@ -50,7 +53,9 @@ const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
     const isValid: boolean = validateClient();
     // GUARDO EL RESULTADO FINAL DE LA VALIDACION DEL PASO
     setIsValid(isValid);
-  }, [terms, isValid, formState.fullName, password, confirmPassword, formState.userName.value, formState.email.value, formState.location.value]);
+
+    // DEPENDENCIAS SON EXTERAS AL COMPONENTE
+  }, [terms, isValid, isSuccefullyVerified, formState.fullName, password, confirmPassword, formState.userName.value, formState.email.value, formState.location.value]);
 
   // FULL NAME
   const handleFullName = (e: React.FormEvent<HTMLInputElement>) => {

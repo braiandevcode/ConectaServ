@@ -1,5 +1,5 @@
-import type { IValidator } from '../../interfaces/interfaces.js';
-import type { TFieldState } from '../../types/types.js';
+import type { IValidator } from '../../interfaces/iValidator.js';
+import type { TFieldState } from '../../types/typeStateFields.js';
 import { formatMontoOnlyNumber, parseMontoToNumber } from '../../utils/parsedAndFormatValuesUtils.js';
 import { isValueField, validateWithRegex } from '../../utils/validateFieldUtils.js';
 

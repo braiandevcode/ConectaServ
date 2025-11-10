@@ -1,0 +1,47 @@
+/* TARJETA PRINCIPAL DE MODAL  */
+.modal-role__card {
+  text-decoration: none;
+  flex: 1;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 0.6rem;
+  transition: all 0.3s ease;
+  background-color: var(--bg-primary);
+}
+
+.modal-role__icon-container {
+  font-size: 1.3rem;
+  color: var(--bg-secondary);
+}
+
+.modal-role__card-title {
+  font-weight: 600;
+  color: var(--bg-secondary);
+}
+
+.modal-role__card-description {
+  color: var(--text-color-primary);
+}
+
+/************************MEDIAQUERYES ***************************************/
+/* 768px */
+@media (min-width: 768px) {
+  .modal-role__icon-container {
+    font-size: 1.6rem;
+  }
+}
+
+/* 1024px */
+@media (min-width: 1024px) {
+  .modal-role__icon-container {
+    font-size: 2rem;
+  }
+}
+
+/* ASEGURAR QUE LOS EVENTOS DE HOVER SEAN PRECISOS SOLO PARA TABLET Y ESCRITORIO  */
+@media (hover: hover) and (pointer: fine) {
+  .modal-role__card:hover {
+    border-color: var(--link-hover-primary);
+    background-color: var(--link-hover-secondary);
+  }
+}

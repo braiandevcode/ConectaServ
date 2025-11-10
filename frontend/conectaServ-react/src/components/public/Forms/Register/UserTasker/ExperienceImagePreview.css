@@ -1,0 +1,23 @@
+/*----------------------------------------------------ESTILOS DE SECCION EXPERIENCIAS----------------------------------------------------------------------**/
+/* ESTILOS PARA LAS IMAGENES DE VISTA PREVIA (UNICAS Y MULTIPLES) */
+.experience-image-preview {
+  width: 150px;
+  height: 150px;
+  border-radius: 8px;
+  object-fit: cover; /* AJUSTE DE IMAGEN */
+  display: block;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); /* SOMBRA SUAVE*/
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease; /* EFECTO SUAVE */
+  margin: 5px;
+}
+
+/* ASEGURAR QUE LOS EVENTOS DE HOVER SEAN PRECISOS SOLO PARA TABLET Y ESCRITORIO (INVESTIGADO) */
+@media (hover: hover) and (pointer: fine) {
+  /* EFECTO HOVER EN IMAGENES */
+  .experience-image-preview:hover {
+    transform: scale(1.05);
+    box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.2);
+  }
+}

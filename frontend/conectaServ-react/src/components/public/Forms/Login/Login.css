@@ -1,0 +1,11 @@
+.loginForm__textActionRegister,
+.loginForm__linkForgotPassword{
+  color: var(--text-color-primary);
+}
+
+.loginForm__link {
+  text-decoration: underline;
+  letter-spacing: 2px;
+  color: var(--link-color-secondary);
+}
+

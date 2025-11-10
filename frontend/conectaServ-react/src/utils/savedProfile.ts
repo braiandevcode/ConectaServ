@@ -1,10 +1,10 @@
 import { fileToStoredImage } from './storageUtils';
-import type { TRegisterPro } from '../types/types';
 import type { TSavedImage } from '../types/typeSavedImages';
 import { EKeyDataByStep } from '../types/enums';
+import type { TRegisterTasker } from '../types/typeRegisterTasker';
 
 // TIPADO ENCADENANDO PROPIEDADES DE OTROS TIPOS EXISTENTES
-type TSavedProfile = Pick<TRegisterPro, 'setStepData'> & TSavedImage;
+type TSavedProfile = Pick<TRegisterTasker, 'setStepData'> & TSavedImage;
 
 // FUNCION ASINCRONA PARA GUARDAR DATOS DE PERFIL
 const savedProfile = async ({ formState, listFiles, setStepData }: TSavedProfile) => {

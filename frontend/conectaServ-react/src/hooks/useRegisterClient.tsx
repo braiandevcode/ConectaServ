@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import type { TRegisterClient } from '../types/types';
 import { ClientContext } from '../context/register/registerClient/ClientContext';
+import type { TRegisterClient } from '../types/typeRegisterClient';
 
 const useRegisterClient = () => {
   const context = useContext<TRegisterClient>(ClientContext);

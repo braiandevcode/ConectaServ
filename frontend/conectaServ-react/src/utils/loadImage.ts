@@ -1,11 +1,12 @@
 import { ENamesOfKeyLocalStorage } from "../types/enums";
-import type { TProfileImagePreviewProps, TStoredImage } from "../types/types";
+import type { TProfileImagePreviewProps } from "../types/typeImageProfilePreview";
+import type { TStoredImage } from "../types/typePersistanceDataImage";
 import { getImageDataUrlFromIndexedDB } from "./storageUtils";
 import { verifyMetaDataImage } from "./validateFieldUtils";
 
 // TIPADO INTERNO
 type TLoadImage = Pick<TProfileImagePreviewProps, 'setSrc'> & {
-    storedImage:TStoredImage | null
+  storedImage:TStoredImage | null
 }
 
 //  LEER DATOS DE IMAGEN DE PERFIL EN STORAGE Y AGREGAR AL SOURCE

@@ -5,14 +5,15 @@ const apiRequest = async <T>(url: string, options: RequestInit = {}): Promise<T>
 
     // SI FALLO ALGO
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || 'Error en la petición');
+      // ESTO SE HACE PORQUE NO TODOS LOS ERRORES TIENEN CUERPO JSON.
+      // SI EL SERVIDOR NO MANDARA NADA TIRARIA OTRO ERROR
+      const error = await response.json().catch(() => ({}));
+      throw error;
     }
 
     // PARSEAR A FORMATO JSON
     return await response.json();
-  } catch (error) {
-    console.error('API request error:', error);
+  } catch (error: any) {
     throw error;
   }
 };

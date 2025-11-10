@@ -1,0 +1,1 @@
+export type TFormRole = 'tasker' | 'client';

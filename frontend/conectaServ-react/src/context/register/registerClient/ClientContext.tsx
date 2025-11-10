@@ -1,23 +1,18 @@
 import { createContext } from 'react';
-import type { TRegisterClient } from '../../../types/types';
-import { emptyDataClient, formStateValidFieldClient } from '../../../config/constant';
+import type { TRegisterClient } from '../../../types/typeRegisterClient';
+import { defaultDataClient } from '../../../config/defaultDataClient';
+import { formStateValidFieldClient } from '../../../config/formStateValidationFieldClient';
 // DEFINIR VALORES POR DEFECTO DE LOS ESTADOS
 const defaultRegisterClientContext: TRegisterClient = {
   setDataClient: () => {},
   validateClient: () => false,
-  onSubmitForm: () => {},
+  setIsLoaded: () => {},
   setFormState: () => {},
-  // setStoredLocation: () => {},
   setIsValid: () => {},
-  isValid:false,
+  isLoaded: false,
+  isValid: false,
   formState: formStateValidFieldClient,
-  // storedFullName: '',
-  dataClient: emptyDataClient,
-  // storedUserName: '',
-  // storedLocation: ELocationKey.NONE,
-  // storedEmail: '',
-  // confirmPassword: '',
-  // password: '',
+  dataClient: defaultDataClient,
 };
 
 export const ClientContext = createContext<TRegisterClient>(defaultRegisterClientContext);
