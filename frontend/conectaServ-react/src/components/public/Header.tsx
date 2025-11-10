@@ -5,7 +5,7 @@ import { Link, useLocation } from "react-router";
 import Button from '../Button';
 import useHeader from '../../hooks/useHeader';
 
-const Header1 = () => {
+const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -111,4 +111,4 @@ const Header1 = () => {
     );
 };
 
-export default Header1;
+export default Header;
