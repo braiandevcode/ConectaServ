@@ -16,7 +16,7 @@ import Services from './pages/Services';
 export default function App() {
   const [initialLoading, setInitialLoading] = useState(true);
 
-  useEffect(() => {  
+  useEffect(() => {
     const timer = setTimeout(() => setInitialLoading(false), 1000); // SIMULA CARGA
     return () => clearTimeout(timer);
   }, []);
@@ -26,29 +26,10 @@ export default function App() {
 
   // --------RENDER APP + RUTAS---------------------//
   return (
-    // <>
-    //   <Routes>
-    //     <Route path='/' element={<MainLayout />}>
-    //       <Route path='/' element={<Home />} />
-    //       <Route path='services' element={<Services />} />
-    //       <Route path='login' element={<LoginModal />} />
-    //       <Route path='register' element={<RegisterLayout />}>
-    //         <Route path='privacity' element={<PrivacyPolicy />} />
-    //         <Route path='terms' element={<TermsAndConditions />} />
-    //         <Route element={<RegisterProfessionalLayout />}>
-    //           <Route path='pro' element={<RegisterPro />} />
-    //         </Route>
-    //         <Route element={<RegisterClientLayout />}>
-    //           <Route path='client' element={<RegisterClient />} />
-    //         </Route>
-    //       </Route>
-    //     </Route>
-    //   </Routes>
-    // </>
-
-
+    <>
       <Routes>
         <Route path='/' element={<MainLayout />}>
+
           <Route path='/' element={<Home />} />
           <Route path='register' element={<RegisterLayout />}>
             <Route path='privacity' element={<PrivacyPolicy />} />
@@ -60,8 +41,11 @@ export default function App() {
               <Route path='client' element={<RegisterClient />} />
             </Route>
           </Route>
+
+            <Route path='services' element={<Services />} />
         </Route>
       </Routes>
-
+    </>
+    
   );
 }
