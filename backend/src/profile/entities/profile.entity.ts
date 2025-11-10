@@ -1,3 +1,4 @@
+import { JoinMannager } from 'src/config/JoinMannager.';
 import { DetailsProfileTasker } from 'src/details_profile_taskers/entities/details_profile_tasker.entity';
 import {
   Column,
@@ -9,7 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('Profiles')
+@Entity('image_profiles')
 export class Profile {
   @PrimaryColumn({ name: 'id_profile', type: 'uuid' }) //ID IMAGEN UUID VIENE DEL FRONT
   idProfile: string;
@@ -40,7 +41,15 @@ export class Profile {
 
   // RELACION 1:1 UNA IMAGEN DE PERFIL PUEDE PERTENECER O NO A UN SOLO REGISTRO DE DETALLES DE TASKER
   @OneToOne(() => DetailsProfileTasker, (details) => details.imageProfile)
-  @JoinColumn({ name: 'id_details_profile_tasker' }) //FK DE CLAVE DE DETALLES DE PERFIL DE UN TASKER EN TABLA PERFIL
+  @JoinColumn(
+    JoinMannager.manyToOneConfig({
+      current: {
+        name: 'id_details_profile_tasker',
+        referencedColumnName: 'idDetailsProfileTasker',
+        fkName: 'fk_profile_details_profile_tasker',
+      },
+    }),
+  ) //FK DE CLAVE DE DETALLES DE PERFIL DE UN TASKER EN TABLA PERFIL
   detailsProfileTasker: DetailsProfileTasker;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })

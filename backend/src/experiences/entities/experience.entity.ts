@@ -1,3 +1,4 @@
+import { JoinMannager } from 'src/config/JoinMannager.';
 import { DetailsProfileTasker } from 'src/details_profile_taskers/entities/details_profile_tasker.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
@@ -11,7 +12,7 @@ import {
 } from 'typeorm';
 
 // ENTIDAD DE IMAGENES DE EXPERIENCIAS ELEGIDAS
-@Entity('experiences')
+@Entity('image_experiences')
 export class Experience {
   @PrimaryColumn({ name: 'id_experience', type: 'uuid' }) //ID IMAGEN  UUID VIENE DEL FRONT
   idExperience: string;
@@ -41,8 +42,16 @@ export class Experience {
   order: number;
 
   // RELACION M:1 UNO O MUCHOS REGISTROS DE IMAGENES DE EXPERIENCIAS PERTENECEN A UN  SOLO REGISTRO DE DETALLES DE PERFIL DE TASKER
-  @ManyToOne(() => DetailsProfileTasker,(details) => details.imagesExperiences)
-  @JoinColumn({ name: 'id_details_profile_tasker' }) // FK EN TABLA EXPERIENCIAS
+  @ManyToOne(() => DetailsProfileTasker, (details) => details.imagesExperiences)
+  @JoinColumn(
+    JoinMannager.manyToOneConfig({
+      current: {
+        name: 'id_details_profile_tasker',
+        referencedColumnName: 'idDetailsProfileTasker',
+        fkName: 'fk_image_experiences_deatils_profile_tasker',
+      },
+    }),
+  ) // FK EN TABLA EXPERIENCIAS
   details: DetailsProfileTasker;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
