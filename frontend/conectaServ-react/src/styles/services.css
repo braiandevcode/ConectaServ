@@ -382,7 +382,7 @@ button.color:active {
     border-right: 1px solid #ccc;
     position: relative;
     background: none;
-    width: auto;
+    width: max-content;
 }
 
 .filters__btn{

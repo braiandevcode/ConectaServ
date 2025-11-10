@@ -11,11 +11,12 @@ import Home from './components/public/Home';
 import RegisterClient from './components/public/Forms/Register/UserClient/RegisterClient';
 import RegisterTasker from './components/public/Forms/Register/UserTasker/RegisterTasker';
 import RegisterTaskerLayout from './routes/RegisterTaskerLayout';
+import Services from './pages/Services';
 // COMPONENTE APP PRINCIPAL
 export default function App() {
   const [initialLoading, setInitialLoading] = useState(true);
 
-  useEffect(() => {  
+  useEffect(() => {
     const timer = setTimeout(() => setInitialLoading(false), 1000); // SIMULA CARGA
     return () => clearTimeout(timer);
   }, []);
@@ -28,6 +29,7 @@ export default function App() {
     <>
       <Routes>
         <Route path='/' element={<MainLayout />}>
+
           <Route path='/' element={<Home />} />
           <Route path='register' element={<RegisterLayout />}>
             <Route path='privacity' element={<PrivacyPolicy />} />
@@ -39,8 +41,11 @@ export default function App() {
               <Route path='client' element={<RegisterClient />} />
             </Route>
           </Route>
+
+            <Route path='services' element={<Services />} />
         </Route>
       </Routes>
     </>
+    
   );
 }

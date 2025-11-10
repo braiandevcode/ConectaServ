@@ -42,9 +42,9 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
       // SI NO HAY ROL VALIDO O NO ESTAMOS EN UNA RUTA DE REGISTRO
 
       // LIMPIAR DATOS ASÍNCRONAMENTE
-      clear();
+      // clear();
       // REDIRECCIONAR AL HOME
-      navigate('/', { replace: true });
+      // navigate('/', { replace: true });
     }
 
     //ASEGURAR QUE EL MODAL SE CIERRE AL CAMBIAR DE RUTA

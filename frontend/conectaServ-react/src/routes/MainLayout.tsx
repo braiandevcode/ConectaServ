@@ -27,7 +27,8 @@ const MainLayout = () => {
             <>
               <Header /> {/* HEADER FIJO QUE SE MUESTRA EN TODAS LAS PAGINAS */}
               {/* CONTENEDOR PRINCIPAL DONDE SE CARGA EL CONTENIDO SEGUN LA RUTA ACTUAL */}
-              <main className='c-flex c-flex-column c-flex-items-center'>
+              <main> 
+                {/* className='c-flex c-flex-column c-flex-items-center' */}
                 <Outlet /> {/* OUTLET ES EL ESPACIO DONDE REACT ROUTER RENDERIZA LA PAGINA ACTUAL */}
               </main>
               <Footer /> {/* FOOTER FIJO QUE SE MUESTRA EN TODAS LAS PAGINAS */}
