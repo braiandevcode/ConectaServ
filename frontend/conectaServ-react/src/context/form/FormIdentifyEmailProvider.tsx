@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router';
 import type { TUser } from '../../types/typeUser';
 import useUserApi from '../../hooks/useUserApi';
 import FormIdentifyEmailContext from './FormIdentifyEmailContext';
+import { clearPersistence } from '../../utils/storageUtils';
 
 const emailValidator: EmailValidator = new EmailValidator(); // ==> INSTANCIA DE VALIDACION DE ENTRADA DE CODIGO
 
@@ -22,7 +23,7 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
 
   const navigate = useNavigate();
 
-  // ESTADO PARA VERIFICAR EXISTENIA DE AMIL ANTES DE REDIRIGIR A UN REGISTRO
+  // ESTADO PARA VERIFICAR EXISTENIA DE EMAIL ANTES DE REDIRIGIR A UN REGISTRO
   // ASEGURA DE QUE NO SE VUELVA A REGISTRAR UN MISMO USUARIO
   const [isExistEmail, setIsExistEmail] = useState<boolean>(false);
 
@@ -41,15 +42,22 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
 
   const [formState, setFormState] = useState<iFormStateValidationIdentifyEmail>(initialFormIdentifyEmail);
 
+  const cleanInputEmail = async () => {
+    // await clearPersistence(); //LIMPIO TODO LO QUE REFIERA A ALMACENAMIENTO LOCAL DE REGISTRO
+    // COMO FUENTE DE VERDAD DE VALOR DEL INPUT LIMPIAR
+    setFormState((prev) => ({ ...prev, emailIdentify: { error: '', value: '', isValid: false } }));
+    setEmailIdentify('');
+  }
+
   // MOSTRAR MODAL CON FORMULARIO DE IDENTIFICACION DE EMAIL
   const handleClickClientIdentifyEmail = () => {
     handleClientClick(); //GUARDAR ROLE CLIENT
-    openGlobalModal(EModalGlobalType.MODAL_IDENTIFY_EMAIL);
+    openGlobalModal(EModalGlobalType.MODAL_IDENTIFY_EMAIL, cleanInputEmail);
   };
 
   const handleClickTaskerIdentifyEmail = () => {
     handleTaskerClick(); //GUARDAR ROLE TASKER
-    openGlobalModal(EModalGlobalType.MODAL_IDENTIFY_EMAIL);
+    openGlobalModal(EModalGlobalType.MODAL_IDENTIFY_EMAIL, cleanInputEmail);
   };
 
   // EVENTO DE ENTRADA DEL EMAIL
@@ -67,26 +75,26 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
     e.preventDefault();
     const role: 'client' | 'tasker' | null = client === null ? null : client ? 'client' :'tasker';
     setFormState((prev) => ({ ...prev, emailIdentify: { error: '', value: '', isValid: false } }));
+    setFormState((prev) => ({ ...prev, emailIdentify: { error: '', value: '', isValid: false } }));
     const stored = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE);
-    if (!stored) return; //ASEGURAR QUE EN STORAGE ESTE ALMACENADO EL ROLE
-    // LLAMO AL METODO Y PASO EL ARGUMENTO ESPERADO INTERNAMENTE
-    const result = (await getIdentifyEmail({ setIsSendingIdentificationEmail })) as TUser[] | [];
-
-    // SI NO HAY RESULTADOS NO SEGUIR
-    if (!result) {
-      localStorage.removeItem(ENamesOfKeyLocalStorage.ROLE); //REMOVER DEL STORAGE EL ROLE
-      return; //SALIR
-    }
-
-    // SI LA SOLICITUD TRAE DATOS
-    const findIndexEmailIdentify: number = result.findIndex((data) => data.email === emailIdentify);
-    // SI ES DIFERENTE DE -1 LO ENCONTRO
-    if (findIndexEmailIdentify !== -1) {
-      openGlobalModal(EModalGlobalType.MODAL_LOGIN);
-      setIsExistEmail(true);
-    } else {
-      navigate(`register/${role}`); //SEGUN EL ROL
-      setIsExistEmail(false);
+    try {
+      // LLAMO AL METODO Y PASO EL ARGUMENTO ESPERADO INTERNAMENTE
+      const result = (await getUsers({ setIsSendingIdentificationEmail })) as TUser[] | [];
+      // SI LA SOLICITUD TRAE DATOS
+      if (result) {
+        const findIndexEmailIdentify: number = result.findIndex((data) => data.email === emailIdentify);
+        // SI ES DIFERENTE DE -1 LO ENCONTRO
+        if (findIndexEmailIdentify !== -1) {
+          openGlobalModal(EModalGlobalType.MODAL_LOGIN);
+          setIsExistEmail(true);
+        }else{
+          navigate(`register/${stored}`); //SEGUN EL ROL GUARDADO NAVEGAR
+          setIsExistEmail(false);
+        }
+      }
+    } catch (error) {
+      await clearPersistence(); //ASEGURO LIMIAR STORAGE
+      throw error;
     }
   };
 

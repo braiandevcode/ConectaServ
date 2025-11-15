@@ -10,10 +10,11 @@ import { EDataClient, ENamesOfKeyLocalStorage } from '../../../types/enums';
 import { FieldsClientContext } from './FieldsClientContext';
 import useRegister from '../../../hooks/useRegister';
 import useMain from '../../../hooks/useMain';
-import type { TStepBasic } from '../../../types/typeBasic';
 import type { TLocationKey } from '../../../types/typeLocation';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TTypeContextBasic } from '../../../types/typeContextBasic';
+import useFormVerifyEmailCode from '../../../hooks/useFormVerifyEmailCode';
+import type { TUser } from '../../../types/typeUser';
 
 const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
   const fullNameValidator: FullNameValidator = new FullNameValidator();
@@ -37,17 +38,19 @@ const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
   // EFECTO QUE ACTUALIZA DATOS DE LOS CAMPOS EN STORAGE
   useEffect(() => {
     // NUEVO OBJETO CON VALORES NUEVOS
-    const newData: TStepBasic = {
+    const newData: Omit<TUser, 'password' | 'isVerified' | 'roleData'> = {
       fullName: formState.fullName.value as string,
       userName: formState.userName.value as string,
       email: formState.email.value as string,
-      location: formState.location.value as TLocationKey,
+      locationData: { cityName: formState.cityName.value as TLocationKey},
     };
 
     // ACTUALIZAR DATOS DE CLIENTE EN STORAGE
     setDataClient((prev) => ({
-      ...prev,
-      [EDataClient.DATA]: newData,
+      [EDataClient.DATA]:{
+        ...prev[EDataClient.DATA],
+        ...newData
+      }
     }));
 
     const isValid: boolean = validateClient();
@@ -55,7 +58,7 @@ const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
     setIsValid(isValid);
 
     // DEPENDENCIAS SON EXTERAS AL COMPONENTE
-  }, [terms, isValid, isSuccefullyVerified, formState.fullName, password, confirmPassword, formState.userName.value, formState.email.value, formState.location.value]);
+  }, [terms, isValid, isSuccefullyVerified, formState.fullName, password, confirmPassword, formState.userName.value, formState.email.value, formState.cityName.value]);
 
   // FULL NAME
   const handleFullName = (e: React.FormEvent<HTMLInputElement>) => {
@@ -82,7 +85,7 @@ const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
   const handleChangeLocation = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value: TLocationKey = e.target.value as TLocationKey;
     const validated: TFieldState = selectedCategoryValidator.validate(value);
-    setFormState((prev) => ({ ...prev, location: validated }));
+    setFormState((prev) => ({ ...prev, cityName: validated }));
   };
 
   // PASSWORD

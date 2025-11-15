@@ -27,11 +27,11 @@ const { USER, AUTH_LOGIN } = endPointUser; //DESESTRUCTURAR ENDPOINT
 const useUserApi = () => {
   const { setLoading } = useMain(); //HOOK QUE USA EL CONTEXTO DE MAIN PRINCIPAL
   const { showError, showSuccess, openGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
-  const { updateCodeEmail, updatedIsSendingCode, updatedIsSentCode } = useFormVerifyEmailCode();
-  const { openRegisterModal } = useRegisterModal()
-  const { setIsSending } = useRegister();
- 
-  const navigate = useNavigate();  // HOOK NAVIGATE DE REACT
+  const { openRegisterModal } = useRegisterModal(); //HOOK PARA EL MODAL GLOBAL DE REGISTRO
+  const { updateCodeEmail, updatedIsSendingCode, updatedIsSentCode } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO PARA VERIFICACION DE EMAIL
+  const { setIsSending } = useRegister(); //HOOK QUE USA CONTEXTO PARA LOS REGISTROS GENERAL
+  // HOOK NAVIGATE DE REACT
+  const navigate = useNavigate();
 
   // FUNCION PARA CUANDO EL REGISTRO ES EXITOSO
   const showMsgSuccessRegister = (): void => {
@@ -68,7 +68,7 @@ const useUserApi = () => {
       // SINO DE 500 EN ADELANTE,
       // 5xx o ERROR DE RED O DESCONOCIDO
       showError('Ups...', 'Tuvimos un inconveniente al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde.');
-      return null; //NO SEGUIR
+      throw error;
     } finally {
       setLoading(false); //LOADING  A FALSE
       setIsSendingIdentificationEmail(false); //ENVIANDO A FALSE
@@ -108,6 +108,7 @@ const useUserApi = () => {
         // 5xx o ERROR DE RED O DESCONOCIDO
         showError('Ups...', 'Tuvimos un inconveniente al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde.');
       }
+      throw error;
     } finally {
       setLoading(false); //LOADING EN FALSE
     }

@@ -1,9 +1,9 @@
-import { ECategoryKey, EKeyDataByStep, ELocationKey } from '../types/enums';
-import type { TStepDataTasker } from '../types/typeStepData';
+import { ECategoryKey, EKeyDataByStep, ELocationKey } from "../types/enums";
+import type { TStepDataTasker } from "../types/typeStepData";
+
 
 // VALORES POR DEFECTO DE DATOS DE PROFESIONAL
-export const defaultDataTasker: TStepDataTasker = {
-  type: 'tasker',
+export const defaultDataPro: TStepDataTasker = {
   [EKeyDataByStep.ONE]: {
     category: ECategoryKey.NONE,
     'service[]': [],
