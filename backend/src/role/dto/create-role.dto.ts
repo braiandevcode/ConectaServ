@@ -1,15 +1,13 @@
 import {
-  IsIn,
+  IsEnum,
   IsNotEmpty,
   IsString,
 } from 'class-validator';
+import { ERoles } from 'src/types/enums/enumRoles';
 
 export class CreateRoleDto {
-  //@IsIn VALIDA QUE EL VALOR ESTÉ DENTRO DE LA LISTA DE OPCIONES
   @IsNotEmpty({ message: 'El role es requerido' })
   @IsString({ message: 'El role debe ser una cadena de texto' })
-  @IsIn(['client', 'tasker'], {
-    message: 'El role debe ser "client" o "tasker"',
-  })
-  role: string;
+  @IsEnum(ERoles, { message: 'El role estblecido no es válido.' })
+  role: ERoles;
 }

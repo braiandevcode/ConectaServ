@@ -1,4 +1,5 @@
-import { ArrayNotEmpty, IsArray, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsEnum, IsString } from 'class-validator';
+import { EDay } from 'src/types/enums/enumDay';
 
 export class CreateDayDto {
   @IsArray({ message: 'los datos de day deben ser un arreglo' })
@@ -7,5 +8,6 @@ export class CreateDayDto {
     each: true,
     message: 'cada elemento de day debe ser una cadena de texto',
   })
+  @IsEnum(EDay, { message: 'Los valores establecidos no son validos como días' })
   day: string[];
 }

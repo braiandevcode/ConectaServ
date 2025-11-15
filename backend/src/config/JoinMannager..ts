@@ -24,7 +24,7 @@ export class JoinMannager {
 
   // RECIBE UN OBJETO CON LOS DATOS DE LA ENTIDAD ACTUAL Y RELACIONADA
   public static manyToOneConfig(params: {
-    current: { name: string; referencedColumnName: string; fkName?: string };
+    current: { name?: string; referencedColumnName?: string; fkName?: string };
   }) {
     return {
       name: params.current.name,

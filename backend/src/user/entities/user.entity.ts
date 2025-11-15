@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { JoinMannager } from 'src/config/JoinMannager.';
 import { Location } from 'src/location/entities/location.entity';
 import { Role } from 'src/role/entities/role.entity';
@@ -40,7 +40,7 @@ export class User {
   })
   email: string;
 
-  @Exclude() //AL RETORNAR EXCLUYO EL PASSWORD
+  // @Exclude() //AL RETORNAR EXCLUYO EL PASSWORD
   @Column({ name: 'password', type: 'text', nullable: false })
   password: string;
 
@@ -62,7 +62,7 @@ export class User {
   active: boolean;
 
   //RELACIONES MUCHOS A UNO => MUCHOS USUARIOS TENDRAN UNA LOCALIDAD
-  @ManyToOne(() => Location, (city) => city.user, { cascade: true })
+  @ManyToOne(() => Location, (location) => location.user, { nullable:false })
   @JoinColumn(
     JoinMannager.manyToOneConfig({
       current: {
@@ -72,10 +72,10 @@ export class User {
       },
     }),
   ) //==> UNION DE TABLAS
-  city: Location;
+  cityName: Location;
 
   // MUCHOS USUARIOS TENDRAN UNO O MAS ROLES
-  @ManyToMany(() => Role, (role) => role.users, { cascade: true })
+  @ManyToMany(() => Role, (role) => role.users, { nullable: false })
   // ==> UNIR EN ESTA ENTIDAD YA QUE ES DUEÑA (CONTIENE LA RELACION DE ROLES)
   @JoinTable(
     JoinMannager.manyToManyConfig({
@@ -95,8 +95,22 @@ export class User {
   roles: Role[];
 
   // RELACION 1:1 UN USUARIO SOLO PODRA SER UN UNICO TASKER
-  @OneToOne(() => Tasker, (tasker) => tasker.user)
-  tasker:Tasker;
+  @OneToOne(() => Tasker, (tasker) => tasker.user, { cascade:true, nullable:true })
+   @JoinColumn(
+    JoinMannager.manyToOneConfig({
+      current: {
+        name: 'id_tasker',
+        referencedColumnName: 'idTasker',
+        fkName: 'fk_user_tasker',
+      },
+    }),
+  )
+  tasker: Tasker;
+
+  @Expose()
+  get isTasker(): boolean {
+    return this.roles?.some((r) => r.nameRole === 'tasker') ?? false;
+  }
 
   // FECHA DE CREACION
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
@@ -107,6 +121,6 @@ export class User {
   updatedAt: Date;
 
   // FECHA DE ELIMINACION O NULL
-  @DeleteDateColumn({ name: 'delete_at', type: 'timestamp' })
-  deleteAt: Date;
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp' })
+  deletedAt: Date;
 }

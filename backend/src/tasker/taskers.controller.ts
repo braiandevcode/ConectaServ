@@ -8,11 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { TaskersService } from './taskers.service';
-import { CreateTaskerDto } from './dto/create-tasker.dto';
 import { UpdateTaskerDto } from './dto/update-tasker.dto';
-// import { Category } from 'src/category/entities/category.entity';
-import { Tasker } from './entities/tasker.entity';
-// import { Tasker } from './entities/tasker.entity';
 
 @Controller('categories')
 export class TaskersController {
@@ -23,17 +19,17 @@ export class TaskersController {
   //     return this.taskersService.findByCategory(category);
   //   }
 
-  @Get('services/:serviceName/taskers')
-  async getByServiceName(
-    @Param('serviceName') serviceName: string,
-  ): Promise<Tasker[]> {
-    return this.taskersService.findByServiceName(serviceName);
-  }
+  // @Get('services/:serviceName/taskers')
+  // async getByServiceName(
+  //   @Param('serviceName') serviceName: string,
+  // ): Promise<Tasker[]> {
+  //   return this.taskersService.findByServiceName(serviceName);
+  // }
 
-  @Post()
-  create(@Body() createTaskerDto: CreateTaskerDto) {
-    return this.taskersService.create(createTaskerDto);
-  }
+  // @Post()
+  // create(@Body() createTaskerDto: CreateTaskerDto) {
+  //   return this.taskersService.create(createTaskerDto);
+  // }
 
   @Get()
   findAll() {

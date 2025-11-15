@@ -1,4 +1,4 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateExperienceDto } from './create-experience.dto';
+import { SharedImageDto } from 'src/shared/dtos/shared-image.dto';
 
-export class UpdateExperienceDto extends PartialType(CreateExperienceDto) {}
+export class UpdateExperienceDto extends PartialType(SharedImageDto) {}
