@@ -8,6 +8,7 @@ export interface iNamesGroupsChecks {
 // INTERFACES PARA RUTAS DE LAS PAGINAS
 export interface iEndPointUser {
   USER:string;
+  AUTH_LOGIN:string;
 }
 
 // INTERFACES PARA URL DE PETICIONES

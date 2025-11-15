@@ -1,30 +1,20 @@
-.btn__ghost {
-  background-color: var(--btn-gosth);
-  color: #ffffff;
-  font-weight: bold;
-  transition: background-color 0.3s ease-in;
+.btn__closeModal {
+  font-size: 1rem;
+  z-index: 1000;
+  right: 0.2rem;
+  top: 0.2rem;
+  opacity: 0.8;
+  transition: opacity 0.3s ease-in-out;
 }
 
-.btn__ghost:hover {
-  /* CAMBIAR COLOR DE FONDO */
-  background-color: var(--btn-gosth-hover);
+@media (min-width: 1024px) {
+  .btn__closeModal {
+    font-size: 1.2rem;
+  }
 }
 
-/* ESTILO AL ICONO DENTRO DEL BOTON */
-.btn__ghost svg {
-  color: var(--icon-color); 
-  /*AGREGAR TRANSICION SOLO AL ICONO*/
-  transition: color 0.3s ease-in;
-}
-
-/* 2. ESTILO DEL ICONO AL HACER HOVER EN EL BOTON PADRE */  
-/* CUANDO AL ELEMENTO  CON LA CLASE btn__ghost TENGA EL HOVER SELECCIONAR AL SVG DENTRO */
-.btn__ghost:hover svg {
-  color: var(--icon-color-hover); /* Cambia el color del icono sin usar !important */
-}
-/* OTROS ESTILOS */
-.btn__closeMessage {
-  padding: 0.2rem;
-  top: 0.4rem;
-  right: 0.8rem;
+@media (hover: hover) and (pointer: fine) {
+  .btn__closeModal:hover {
+    opacity: 1;
+  }
 }

@@ -10,6 +10,7 @@ import useRegister from '../../../../../hooks/useRegister';
 // CSS
 import '../../FormBase.css';
 import { FaInfoCircle, FaUserCircle } from 'react-icons/fa';
+// import { MdSend } from 'react-icons/md';
 
 // FORMULARIO DE CLIENTE
 const Form = () => {

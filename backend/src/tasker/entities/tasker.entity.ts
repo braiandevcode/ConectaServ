@@ -1,39 +1,59 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryColumn } from "typeorm";
-import { Category } from "src/category/entities/category.entity";
-import { Location } from "src/location/entities/location.entity";
-import { Service } from "src/services/entities/service.entity";
+import {
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Category } from 'src/category/entities/category.entity';
+import { Service } from 'src/services/entities/service.entity';
+import { Context } from 'src/context/entities/context.entity';
+import { Day } from 'src/day/entities/day.entity';
+import { Hour } from 'src/hour/entities/hour.entity';
+import { DetailsProfileTasker } from 'src/details_profile_taskers/entities/details_profile_tasker.entity';
 
-@Entity("taskers")
+@Entity('taskers')
 export class Tasker {
-    @PrimaryColumn({ name: "id_tasker", type: "char", length: 36 })
-    idTasker: string;
+  @PrimaryGeneratedColumn('uuid', { name: 'id_tasker' })
+  idTasker: string;
 
-    @Column({ name: "fullName", length: 150 })
-    fullName: string;
+  //RELACIONES MUCHOS A UNO => MUCHOS TASKERS TENDRAN UNA MISMA CATEGORIA
+  @ManyToOne(() => Category, (category) => category.tasker)
+  @JoinColumn({ name: 'id_category' }) //==> UNIR COLUMNAS
+  category: Category;
 
-    @Column({ name: "userName", length: 150 })
-    userName: string;
+  // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS SERVICIOS ELEGIDOS
+  @ManyToMany(() => Service, (services) => services.taskers)
+  @JoinTable()
+  services: Service[];
 
-    @Column("text", { nullable: true })
-    description: string;
+  // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS HABITOS DE TRABAJO ELEGIDOS
+  @ManyToMany(() => Context, (contexts) => contexts.users)
+  @JoinTable()
+  contexts: Context[];
 
-    @Column({ unique: true, length: 320 })
-    email: string;
+  // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS DIAS ELEGIDOS
+  @ManyToMany(() => Day, (day) => day.taskers)
+  @JoinTable()
+  days: Day[];
 
-    @Column()
-    password: string;
+  // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS HORARIOS ELEGIDOS
+  @ManyToMany(() => Hour, (hours) => hours.users)
+  @JoinTable()
+  hours: Hour[];
 
-    //Relaciones
-    @ManyToOne(type => Location, location => location.tasker)
-    @JoinColumn()
-    public location: Location;
+  // RELACION  1:1 UN TASKER SOLO ESTA ASOCIADO A UN REGISTRO DE DETALLES DE SU PERFIL
+  @OneToOne(() => DetailsProfileTasker, (details) => details.tasker)
+  @JoinColumn({ name: 'id_details_profile_tasker' }) // ==> FK
+  detailsProfileTasker: DetailsProfileTasker;
 
-    @ManyToOne(type => Category, category => category.tasker)
-    @JoinColumn()
-    public category: Category;
+  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+  createdAt: Date;
 
-    // Relación N:M con servicios (subcategorias)
-    @ManyToMany(() => Service, service => service.taskers)
-    @JoinTable()
-    services: Service[];
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
+  updatedAt: Date;
 }

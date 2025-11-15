@@ -1,12 +1,11 @@
 import type { iFormStateValidationTask } from '../interfaces/iFormStateValidationTask';
 import { ECategoryKey } from '../types/enums';
-import useFormVerifyEmailCode from './useFormVerifyEmailCode';
+
 import useRegister from './useRegister';
 
 // GANCHO PARA VALIDAR POR PASOS EN REGISTRO DE TASKER
 const useValidateTasker = ({ step, formState, hasInteracted, hasContext, hasBudge }: { step: number; hasBudge:boolean; hasContext: boolean; formState: iFormStateValidationTask; hasInteracted: boolean }) => {
-  const { isSuccefullyVerified } = useFormVerifyEmailCode(); //HOOK DE VERIFICACION DE CODIGO
-  const { terms } = useRegister(); //HOOK QUE USA CONTEXTO NIVEL REGISTRO
+  const { terms, isSuccefullyVerified } = useRegister(); //HOOK QUE USA CONTEXTO DE REGISTRO
   // ------------------------FUNCION PARA VALIDAR SEGUN EL PASO----------------------------------------//
   const validateCurrentStep = (): boolean => {
     let isValid: boolean = false; //VARIABLE EN SCOPE LOCAL

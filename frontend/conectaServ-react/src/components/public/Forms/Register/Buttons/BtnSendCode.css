@@ -1,10 +1,13 @@
-.btn__info {
+.btn__sendCode {
   font-size: 0.9rem;
   padding: 0.6rem;
   opacity: 0.9;
   transition: opacity 0.4s ease-in-out;
+  background-color: var(--btn-success);
 }
 
-.btn__info:hover {
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  .btn__sendCode:hover {
+    opacity: 1;
+  }
 }

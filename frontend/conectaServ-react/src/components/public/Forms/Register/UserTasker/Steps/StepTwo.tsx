@@ -61,7 +61,7 @@ const StepTwo = () =>{
                 </div>
               </label>
 
-              <div className='form-groupProfile__previewImage c-flex c-flex-wrap gap-2'>{profile && <ProfileImagePreview />}</div>
+              <div className='form-groupProfile__previewImage c-flex c-flex-wrap gap-2 position-relative'>{profile && <ProfileImagePreview />}</div>
               {formState.imageProfile.error && (
                 <div>
                   <span className={`has-error ${formState.imageProfile.error === '__hidden__' ? 'hidden' : ''}`}>{formState.imageProfile.error !== '__hidden__' ? formState.imageProfile.error : ''}</span>

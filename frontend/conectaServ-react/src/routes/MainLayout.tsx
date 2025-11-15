@@ -14,8 +14,6 @@ import FormIdentifyEmailProvider from '../context/form/FormIdentifyEmailProvider
 const MainLayout = () => {
   const { loading } = useMain();
   
-  console.log('loading cargando? ', loading);  
-
   return (
     // ENVOLVEMOS TODO CON EL PROVIDER PRINCIPAL PARA COMPARTIR DATOS GLOBALES ENTRE COMPONENTES
     // CONTEXTO GLOBAL PARA MODALES DE MENSAJES EN TODA LA APP

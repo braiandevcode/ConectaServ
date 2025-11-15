@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
 import type { TRegisterTasker } from '../../../types/typeRegisterTasker';
-import { defaultDataPro } from '../../../config/defaultDataPro';
+import { defaultDataTasker } from '../../../config/defaultDataTasker';
 import { formStateValidFieldTasker } from '../../../config/formStateValidFieldTasker';
 
 // DEFINIR VALORES POR DEFECTO DE LOS ESTADOS
@@ -27,7 +27,7 @@ const defaultContextTasker: TRegisterTasker = {
   isFieldsBasic:true, //POR DEFECTO EL PASO DE CAMPOS BASICO EXISTE
   isLoaded:false,
   amountFieldFormat: '',
-  stepData: defaultDataPro,
+  stepData: defaultDataTasker,
   valueSelected: '',
   isFocus: false,
   isReinsertDisabled: false,

@@ -10,7 +10,7 @@ const BtnBack = ({ handleBtnBack, ...props }: iBtnBack) => {
   return (
     <>
       <div className='c-flex c-flex-items-center'>
-        <Button type='button' className='register__arrow-left c-flex c-flex-items-center cursor-pointer' onClick={handleBtnBack} {...props}>
+        <Button type='button' className='register__arrow-left' onClick={handleBtnBack} {...props}>
           {<FaArrowAltCircleLeft />}
         </Button>
       </div>

@@ -5,7 +5,6 @@ import useIdentifyEmail from '../../../hooks/useIdentifyEmail';
 
 // TARJETA ROL CLIENTE
 const RoleCardClient = () => {
-  // const { handleClientClick } = useMain(); // HOOK NIVEL MAIN
   const { handleClickClientIdentifyEmail } = useIdentifyEmail(); // HOOK NQUE CONSUME CONTEXTO FORMULARIO DE IDENTIFICACION DE EMAIL
   return (
     <>

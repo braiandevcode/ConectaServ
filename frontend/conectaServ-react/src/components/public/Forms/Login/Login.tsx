@@ -6,16 +6,10 @@ import useHeader from '../../../../hooks/useHeader';
 
 // CSS
 import './Login.css';
-import { useEffect } from 'react';
 
 const Login = () => {
-  const { password, userName, submitLogin, handlePassword, handleUserName, validateFieldsLogin, setIsValid, isValid } = useLogin();
+  const { password, userName, error, submitLogin, handlePassword, handleUserName, isValid } = useLogin();
   const { openRole } = useHeader(); // ==> HOOK PARA EL HEADER
-
-  useEffect(() => {
-    setIsValid(validateFieldsLogin) // ==> REVALIDAR EN CADA CAMBIO DE PASSWORD Y USERNAME
-  }, [password, userName]); // PASSWORD Y USERNAME ESTADOS EXTERNOS
-
 
   return (
     <>
@@ -38,6 +32,10 @@ const Login = () => {
             </span>
           </label>
           <input type='password' id='password' autoComplete='off' className={`form-basic__input`} aria-label='Contrasena' placeholder='***********' value={password} onChange={handlePassword} required />
+        </div>
+
+        <div>
+          <p className='has-error'>{error && error}</p>
         </div>
 
         <div className='loginForm__textActionForgotPassword c-flex c-flex-items-center gap-2'>

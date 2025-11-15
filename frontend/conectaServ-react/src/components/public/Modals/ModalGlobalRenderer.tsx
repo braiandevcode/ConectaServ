@@ -11,14 +11,13 @@ import useGlobalModal from '../../../hooks/useGlobalModal';
 import ModalIdentifyEmail from './ModalIdentifyEmail';
 import ModalLogin from './ModalLogin';
 
-
-
 // DEFINE QUE MODAL RENDERIZAR EN CONTEXTO GLOBAL
 const ModalGlobalRenderer = (): JSX.Element | null => {
   const { currentGlobalModal, isGlobalModalOpen, closeGlobalModal } = useGlobalModal(); //HOOK NIVEL MAIN
 
+
   // MAPEO DE MODALES A MOSTRAR/OCULTAR
-  const MODAL_COMPONENTS:TGlobalModalComponents = {
+  const MODAL_COMPONENTS: TGlobalModalComponents = {
     [EModalGlobalType.MODAL_ROLE]: ModalRole,
     [EModalGlobalType.MODAL_LOGIN]: ModalLogin,
     [EModalGlobalType.MODAL_IDENTIFY_EMAIL]: ModalIdentifyEmail,

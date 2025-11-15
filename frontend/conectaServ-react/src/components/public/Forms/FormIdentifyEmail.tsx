@@ -6,6 +6,7 @@ import LoaderBtn from '../../LoaderBtn';
 
 // CSS
 import './FormIdentifyEmail.css';
+import { MdSend } from 'react-icons/md';
 
 // FORMULARIO DE IDENTIFICACION DE EMAIL
 const FormIdentyfyEmail = () => {
@@ -27,7 +28,7 @@ const FormIdentyfyEmail = () => {
             <div className='w-full c-flex c-flex-items-center'>{renderFieldError(formState, 'emailIdentify')}</div>
           </div>
         </div>
-        <div className='c-flex c-flex-items-center'>{isSendingIdentificationEmail ? <LoaderBtn /> : <BtnSubmit text={'Enviar'} variant='btn btn__submit' disabled={!formState.emailIdentify.isValid || isSendingIdentificationEmail} />}</div>
+        <div className='c-flex c-flex-items-center'>{isSendingIdentificationEmail ? <LoaderBtn /> : <BtnSubmit IconReact={MdSend} text={'Enviar'} variant='btn btn__submit' disabled={!formState.emailIdentify.isValid || isSendingIdentificationEmail} />}</div>
       </form>
     </>
   );
