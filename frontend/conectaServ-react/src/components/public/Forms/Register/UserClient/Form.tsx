@@ -15,7 +15,12 @@ import { FaInfoCircle, FaUserCircle } from 'react-icons/fa';
 const Form = () => {
   const { isSending } = useRegister(); //HOOK QUE USA EL CONTEXTO DE REGISTRO GENERAL
   const { isValid } = useRegisterClient(); //HOOK QUE USA EL CONTEXTO DE REGISTRO CLIENTE
-  const { submitDataRegister, isReady } = useSendData(); //HOOK QUE SE ENCARGA DE ENVIAR LOS DATOS
+  // const { submitDataRegister, isReady } = useSendData(); //HOOK QUE SE ENCARGA DE ENVIAR LOS DATOS
+
+  const { submitDataRegister} = useSendData(); //HOOK QUE SE ENCARGA DE ENVIAR LOS DATOS
+
+
+  
   return (
     <>
       <form className='form' onSubmit={submitDataRegister}>
@@ -41,7 +46,10 @@ const Form = () => {
             </FieldsClientProvider>
             <FooterConditionsTerm />
           </div>
-          {isSending ? <LoaderBtn /> : <BtnSubmit variant='btn btn__submit' disabled={!isValid || !isReady} text={isReady ? 'Enviar' : 'Cargando datos...'} />}
+          {/* {isSending ? <LoaderBtn /> : <BtnSubmit variant='btn btn__submit' disabled={!isValid} text={isReady ? 'Enviar' : 'Cargando datos...'} />} */}
+
+          {isSending ? <LoaderBtn /> : <BtnSubmit variant='btn btn__submit' disabled={!isValid} text='Enviar'/>}
+
         </div>
       </form>
     </>

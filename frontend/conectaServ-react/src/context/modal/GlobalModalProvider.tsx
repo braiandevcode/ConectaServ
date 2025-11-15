@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import ModalContext from './GlobalModalContext';
 import type { iMessageState } from '../../interfaces/iMessageState';
 import type { TGlobalModal } from '../../types/typeGlobalModal';
@@ -15,51 +15,45 @@ const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
   const [messageState, setMessageState] = useState<iMessageState>({ type: null, text: null, title: null });
 
   //ESTADO QUE DETERMINA LA EJECUCION DE UNA CALLBACK
-  const [onCloseCallback, setOnCloseCallback] = useState<(() => void) | null>(null);
+  // const [onCloseCallback, setOnCloseCallback] = useState<(() => void) | null>(null);
 
+  const onCloseCallbackRef = useRef<(() => Promise<void> | void) | null>(null);
   // ----------------------EVENTOS--------------------------------------------------//
   //FUNCION PARA CERRAR UN MODAL ==> ACEPTA UNA CALLBACK OPCIONAL PARA EJECUTAR UNA ACCION DESPUES
-  const closeGlobalModal = (): void => {
+  const closeGlobalModal = async (): Promise<void> => {
     setIsGlobalModalOpen(false); // ==> CIERRA EL MODAL PRIMERO
     setCurrentGlobalModal(null); // ==> DESTRUYE EL MODAL DESPUES
 
     //EJECUTA LA ACCION CALLBACK SI SE PASA UNA CALLBACK
-    // SI HAY CALLBACK
-    if (onCloseCallback) {
-      const cb = onCloseCallback; //EJECUTAR
-      setOnCloseCallback(null); // ==> LIMPIAR
-      cb();
+    // SI HAY CALLBACK ES DECIR, SI SE SETEO COMO LO HACE ANTES EL OPENGLOBALMODAL
+    if (onCloseCallbackRef.current) {
+      const cb = onCloseCallbackRef.current; //GUARDO 
+      // setOnCloseCallback(null); // ==> LIMPIAR LA CALLBACK
+      onCloseCallbackRef.current = null;
+      await cb(); // EJECUTO
     }
   };
 
   // FUNCION PARA ABRIR UN MODAL Y SU ACCION DE CALLBACK OPCIONAL
-  const openGlobalModal = <T extends EModalGlobalType>(modalType: T, cb?: () => void): void => {
+  const openGlobalModal = <T extends EModalGlobalType>(modalType: T, cb?: () => Promise<void> | void): void => {
     setCurrentGlobalModal(modalType); // ==> CREAR EL MODAL PRIMERO
     setIsGlobalModalOpen(true); // ==> ABRIR LUEGO
-
-    // SI HAY CALLBACK SETEAR EL CALLBACK EN EL ESTADO
-    if (cb) {
-      // USAMOS SETTER DE FUNCION PARA EVITAR PROBLEMAS DE CIERRE
-      setOnCloseCallback(cb); //SETEAR LA CALLBACK QUE SE LE PASE
-    } else {
-      setOnCloseCallback(null); //SINO SETEA A NULL
-    }
+    onCloseCallbackRef.current = cb || null
   };
 
   // FUNCION PARA USAR EN CUALQUIER CONTEXTO DE APP
-  const showSuccess = (title: string, text: string, cb?: () => void) => {
+  const showSuccess = (title: string, text: string, cb?: () => Promise<void> | void) => {
     setMessageState({ type: 'success', title, text });
     openGlobalModal(EModalGlobalType.MODAL_SUCCESS, cb);
   };
 
   // FUNCION PARA MENSAJE DE ERROR EN CUALQUIER CONTEXTO DE APP
   const showError = (title: string, text: string) => {
-    console.log('Me llamaron soy el error que adie quiere ver');
     setMessageState({ type: 'error', title, text });
   };
 
   const valueGlobalModalContext: TGlobalModal = {
-    setOnCloseCallback,
+    onCloseCallbackRef,
     closeGlobalModal,
     openGlobalModal,
     setCurrentGlobalModal,
@@ -67,7 +61,6 @@ const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
     setMessageState,
     showError,
     showSuccess,
-    onCloseCallback,
     currentGlobalModal,
     isGlobalModalOpen,
     messageState,

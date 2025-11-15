@@ -11,6 +11,6 @@ export type TPlaintTasker = Omit<TStepOne, 'valueSelected'> &
   TStepThree &
   TStepBasic & {
     password: string;
-    roles: string[];
+    roles: string;
     isVerified:boolean;
   };
