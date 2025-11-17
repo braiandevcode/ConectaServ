@@ -26,3 +26,4 @@ dist-ssr
 .env
 .env.*
 cleanDb.mjs
+.prettierrc.js
