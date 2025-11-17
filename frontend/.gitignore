@@ -1,7 +1,0 @@
-.env
-.prettierrc
-.prettierrc.*
-**/dist
-/node_modules
-**/db/db.json
-**/*txt
