@@ -12,6 +12,7 @@ import RegisterClient from './components/public/Forms/Register/UserClient/Regist
 import RegisterTasker from './components/public/Forms/Register/UserTasker/RegisterTasker';
 import RegisterTaskerLayout from './routes/RegisterTaskerLayout';
 import Services from './pages/Services';
+import InfoTasker from './components/public/InfoTasker';
 // COMPONENTE APP PRINCIPAL
 export default function App() {
   const [initialLoading, setInitialLoading] = useState(true);
@@ -43,6 +44,7 @@ export default function App() {
           </Route>
 
             <Route path='services' element={<Services />} />
+            <Route path='services/infoTasker' element={<InfoTasker />} />
         </Route>
       </Routes>
     </>

@@ -2,7 +2,7 @@ import "./../styles/services.css";
 
 import { useState, useEffect } from "react";
 // import Header from "../components/Header";
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 
 
 interface ServiceCard {
@@ -23,6 +23,8 @@ const Services = () => {
   //Estado de filtros (guarda los dias seleccionados, y los horarios seleccionados)
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [selectedHours, setSelectedHours] = useState<string[]>([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.setItem("role", "client");
@@ -187,7 +189,7 @@ const Services = () => {
                     <button
                       className="viewProfile__btn btn"
                       onClick={() =>
-                        (window.location.href = "/infoProvider.html")
+                        (navigate(`infoTasker`))
                       }
                     >
                       Ver perfil
