@@ -6,7 +6,7 @@ export interface iFormStateValidationClient {
   fullName: TFieldState;
   userName: TFieldState;
   email: TFieldState;
-  location: TFieldState;
+  cityName: TFieldState;
   password: TFieldState;
   confirmPassword: TFieldState;
 }

@@ -1,0 +1,10 @@
+backend/data/
+backend/src/mockDb/
+frontend/node_modules/
+frontend/dist/
+conectaServ-react/node_modules/
+conectaServ-react/**/db
+**/db
+**/mockDb
+.env
+.env.*

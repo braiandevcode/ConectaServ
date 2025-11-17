@@ -1,6 +1,6 @@
 // IMPORTACIONES
 import { ENamesOfKeyLocalStorage } from '../types/enums';
-import type { TStoredImage } from '../types/typePersistanceDataImage';
+import type { TImageData } from '../types/typeRegisterEndDto';
 import type { TIdString } from '../types/typeUUID';
 
 //------------------------ALMACENAMIENTO EN INDEXEDDB---------------------------------------------------//
@@ -105,7 +105,7 @@ export const deleteImageFromIndexedDB = (id: TIdString, nameDb: string): Promise
 };
 
 // FUNCION QUE RETORNA UN OBJETO CON UNA PROMESA
-export const fileToStoredImage = async (file: File): Promise<TStoredImage> => {
+export const fileToStoredImage = async (file: File): Promise<TImageData> => {
   const { name, size, type } = file; //DESESTRUCTURAMOS OBJETO DE FILE
   const idImage: TIdString = crypto.randomUUID(); //SE CREAR RANDOM DE ID UNICA PARA IMAGEN
 
@@ -121,12 +121,12 @@ export const fileToStoredImage = async (file: File): Promise<TStoredImage> => {
   await saveImageToIndexedDB(idImage, dataUrl, ENamesOfKeyLocalStorage.IMAGE_INDEXED_DB);
 
   // DEVOLVER OBJETO SIN dataUrl
-  return { name, size, type, idImage };
+  return { name, size, type, idImage, dataUrl};
 };
 
 //-------------------- ALMACENAMIENTO EN LOCALSTORAGE -----------------------------------------------//
 //FUNCION PARA OBTENER UN ARRAY DE STRING PARSEADO
-export const getStoredStringArray = (key: string): string[] | TStoredImage[] => {
+export const getStoredStringArray = (key: string): string[] | TImageData[] => {
   try {
     const raw: string | null = localStorage.getItem(key);
     if (!raw) return [];

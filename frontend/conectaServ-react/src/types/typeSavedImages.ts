@@ -1,7 +1,8 @@
 import type { RefObject } from 'react';
-import type { iFormStateValidationPro } from '../interfaces/iFormStateValidationPro';
+import type { iFormStateValidationTask } from '../interfaces/iFormStateValidationTask';
+
 // INTERFACE PARA ALMACENAR IMAGEN EN REGISTRO PROFESIONAL
 export type TSavedImage = {
-  formState: iFormStateValidationPro;
+  formState: iFormStateValidationTask;
   listFiles: RefObject<File | FileList | null>;
 };

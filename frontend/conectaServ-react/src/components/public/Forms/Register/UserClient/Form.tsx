@@ -16,10 +16,15 @@ import { MdSend } from 'react-icons/md';
 const Form = () => {
   const { isSending } = useRegister(); //HOOK QUE USA EL CONTEXTO DE REGISTRO GENERAL
   const { isValid } = useRegisterClient(); //HOOK QUE USA EL CONTEXTO DE REGISTRO CLIENTE
-  const { submitDataRegister, isReady } = useSendData(); //HOOK QUE SE ENCARGA DE ENVIAR LOS DATOS
+  // const { submitDataRegister, isReady } = useSendData(); //HOOK QUE SE ENCARGA DE ENVIAR LOS DATOS
+
+  const { submitDataRegister} = useSendData(); //HOOK QUE SE ENCARGA DE ENVIAR LOS DATOS
+
+
+  
   return (
     <>
-      <form className='form' onSubmit={submitDataRegister}>
+      <form className='form' onSubmit={submitDataRegister} encType='multipart/form-data'>
         <div className='c-flex c-flex-column c-flex-justify-center form__header'>
           <h2 className='c-flex c-flex-wrap c-flex-items-center gap-1/2 form__subtitle'>
             <div className='c-flex w-full c-flex-items-center gap-1/2'>
@@ -42,7 +47,10 @@ const Form = () => {
             </FieldsClientProvider>
             <FooterConditionsTerm />
           </div>
-          {isSending ? <LoaderBtn /> : <BtnSubmit IconReact={MdSend} iconProps={{ size: 20 }} variant='btn btn__submit' disabled={!isValid || !isReady} text={isReady ? 'Enviar' : 'Cargando datos...'} />}
+          {/* {isSending ? <LoaderBtn /> : <BtnSubmit variant='btn btn__submit' disabled={!isValid} text={isReady ? 'Enviar' : 'Cargando datos...'} />} */}
+
+          {isSending ? <LoaderBtn /> : <BtnSubmit variant='btn btn__submit' disabled={!isValid} text='Enviar'/>}
+
         </div>
       </form>
     </>

@@ -1,7 +1,5 @@
 import type { FormEvent } from 'react';
 import { EDataClient, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../types/enums';
-import type { TPlainClient } from '../types/typePlainClient';
-import type { TPlaintTasker } from '../types/typePlainDataTasker';
 import useMain from './useMain';
 import useRegister from './useRegister';
 import useRegisterClient from './useRegisterClient';
@@ -11,13 +9,16 @@ import useValidateStep from './useValidateStep';
 import type { TUser } from '../types/typeUser';
 import useUserApi from './useUserApi';
 import useFormVerifyEmailCode from './useFormVerifyEmailCode';
+import type { TFormRole } from '../types/typeFormRole';
+import type { ITaskerData } from '../interfaces/iTaskerData';
+import type { TImageData } from '../types/typeRegisterEndDto';
 
 // HOOK QUE SE ENCARGA DEL PROCESO DE ENVIO DE DATOS AL BACKEND
 const useSendDataRegister = () => {
   const { client } = useMain(); // HOOK QUE USA EL CONTEXTO A NIVEL MAIN
   const { password } = useRegister(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO GENERALES
-  const { dataClient, isLoaded: isLoadedClient, isValid } = useRegisterClient(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO CLIENTE
-  const { stepData, isLoaded: isLoadedProfessional, isStepValid } = useRegisterTasker(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO PROFESIONAL
+  const { dataClient, isLoaded: isValid } = useRegisterClient(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO CLIENTE
+  const { stepData, isStepValid } = useRegisterTasker(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO PROFESIONAL
   const { showError} = useGlobalModal(); //HOOK QUE USA CONTEXTO DE MODALES GLOBAL
   const { addUser } = useUserApi(); //HOOK PARA PETICIONES DATOS DE USUARIOS
   const { isCodeVerified } = useFormVerifyEmailCode();
@@ -25,8 +26,7 @@ const useSendDataRegister = () => {
   const { isLastStep } = useValidateStep(); // HOOK PARA VALIDAR PASO
 
   // SI SE CARGO TODO EN CONTEXTO DE CLIENTE Y EN PROFESIONAL
-  const isReady: boolean = isLoadedClient || isLoadedProfessional;
-
+  // const isReady: boolean = isLoadedClient || isLoadedProfessional;
 
   // ENVIAR DATOS AL BACKEND DE CUALQUIERA DE LOS DOS REGISTROS
   const submitDataRegister= async (e: FormEvent<HTMLFormElement>) => {
@@ -43,48 +43,70 @@ const useSendDataRegister = () => {
 
     // SI NO ES VALIDO O NO CORRESPONDE AL PASO FINAL
     const isNotValidAndStepNotValid: boolean = !isStepValid || !isLastStep;
+
     if (isNotValidAndStepNotValid && !isValid) return; //SI AMBOS NO SON VALIDO NO SEGUIR
 
-    //-------------------OBJETO APLANADO PARA ENVIO DATOS DEL PROFESIONAL--------------------------------//
+    //-------------------DATOS EXTRAS DE ROLE TASKER--------------------------------//
     // CON ALIAS PARA NO CHOCAR CON VARIABLE DE ESTADO
     const { valueSelected: valueSelectedAlias, ...res } = stepData[EKeyDataByStep.ONE];
+    const {imageExperienceData, imageProfileData } = stepData[EKeyDataByStep.TWO];
 
+    let dataProfileOutId:Omit<TImageData, 'idImage'> | null = null;
+
+    // SI TRAE DATOS DE IMAGEN DE PERFIL
+    if(imageProfileData){
+      const {idImage, ...restDataProfile } =imageProfileData;
+      dataProfileOutId = {...restDataProfile};
+    }
+
+    // PREGUNTO SI VIENE CON ELEMENTOS Y SI DENTRO DE CADA OBJETO NO ESTA VACIO
+   const dataExperienceOutId: Omit<TImageData, "idImage"> [] = imageExperienceData.reduce((vectorAcc, { idImage, ...rest }): Omit<TImageData, 'idImage'>[] => {
+      vectorAcc.push(rest);
+      return vectorAcc
+    },[] as Omit<TImageData, 'idImage'>[]);
+
+ 
     // VERIFICAR EL ROLE QUE EL USUARIO ELIGUIO PARA EL REGISTRO Y GUARDARLO
-    const newRole: string = client ? 'client' : 'tasker';
-
-    // INICIO Y DECLARO VECTOR DE ROLE EN MEMORIA
-    const roleVector: string[] = [newRole];
+    const newRole: TFormRole = client ? 'client' : 'tasker';
 
     // CREA NUEVO OBJETO APLANADO
     const dataSendTasker = {
-      ...res, // SE PROPAGAN TODAS LAS PROPIEDADES DE CADA PASO
-      ...stepData[EKeyDataByStep.TWO],
+      ...res, // SE PROPAGAN TODAS LAS PROPIEDADES DE CADA 
+      ...(stepData[EKeyDataByStep.TWO]),
+      imageProfileData:dataProfileOutId,
+      imageExperienceData:dataExperienceOutId,
       ...(stepData[EKeyDataByStep.THREE] ?? {}), //PUEDE NO ESTAR
-      ...stepData[EKeyDataByStep.FOUR],
+    } as ITaskerData;
+
+    //------------------- DATOS DEL USUARIO ROLE CLIENTE--------------------------------//
+    const { ...copy } = (dataClient[EDataClient.DATA] as TUser) ?? {};
+
+    const baseUser:TUser = { ...copy }; // CAMPOS BASICOS FULLNAME, USERNAME, EMAIL, LOCATION
+
+    // BANDERA QUE ESPECIFICA SI VIENEN DATOS DE ROLE TASKER
+    const isTasker:boolean = newRole === 'tasker';
+    // DEPENDIENDO DEL ROL ELEGUIR DE QUE REGITRO VIENEN CON DATOS BASICOS 
+    // SI ES TASKER PISAMOS DATOS CON LOS DEL PASO CUATRO QUE SON EQUIVALENTES
+    const mergedBase = isTasker ? {...baseUser, ...stepData[EKeyDataByStep.FOUR] ?? {}} : baseUser
+
+    // CREA NUEVO OBJETO 
+    const dataUser = {
+      ...mergedBase,
       password, //SE AGREGA EL PASSWORD
-      roles: roleVector,
-      isVerified: isCodeVerified, //SI ESTA VERIFICADO
-    } as TPlaintTasker;
-
-    //-------------------OBJETO APLANADO PARA ENVIO DATOS DEL CLIENTE--------------------------------//
-    const { ...copy } = (dataClient[EDataClient.DATA] as TPlainClient) ?? {};
-
-    // CREA NUEVO OBJETO APLANADO
-    const dataSendClient = {
-      ...copy,
-      password, //SE AGREGA EL PASSWORD
-      roles: roleVector, //AGREGAR ROLE
-      isVerified:isCodeVerified //SI ESTA VERIFICADO
-    } as TPlainClient;
+      roleData:{ role: newRole },
+      isVerified:isCodeVerified, //SI ESTA VERIFICADO
+      taskerData: isTasker ? dataSendTasker : null
+    } as TUser
 
 
-    // SI CLIENTE ES TRUE  NEVO DATO DE CLIENTE, SINO PROFESIONAL
-    const newData: TUser = client ? dataSendClient : dataSendTasker;
+    const newData:TUser = dataUser; //NUEVO USUARIOA
  
-    await addUser({ newData}); //AGREGAR USUARIO
+    await addUser({ newData }); //AGREGAR USUARIO
   };
 
-  return { submitDataRegister,  isReady };
+  // return { submitDataRegister,  isReady };
+  return { submitDataRegister };
+
 };
 
 export default useSendDataRegister;

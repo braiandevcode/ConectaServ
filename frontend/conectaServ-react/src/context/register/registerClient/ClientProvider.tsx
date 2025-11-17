@@ -33,7 +33,7 @@ const ClientProvider = ({ children }: { children: ReactNode }) => {
 
   const stored = readExistingData(ENamesOfKeyLocalStorage.CLIENT_DATA) ?? {}; //LEEO Y PARSEO OBJETO GENERAL DE PASOS
 
-  // OBJETO GENERAL DE PASOS CON VALORES POR DEFECTO Y PARA ALMACENAR EN STROAGE
+  // OBJETO GENERAL DE PASOS CON VALORES POR DEFECTO Y PARA ALMACENAR EN STORAGE
   const [dataClient, setDataClient] = useState<TDataClient>(() => {
     return {
       type: 'client',
@@ -50,7 +50,7 @@ const ClientProvider = ({ children }: { children: ReactNode }) => {
     fullName: fullNameValidator.validate(dataClient[EDataClient.DATA].fullName ?? ''),
     userName: userNameValidator.validate(dataClient[EDataClient.DATA].userName ?? ''),
     email: emailValidator.validate(dataClient[EDataClient.DATA].email ?? ''),
-    location: selectedCategoryValidator.validate(dataClient[EDataClient.DATA].location ?? ''),
+    cityName: selectedCategoryValidator.validate(dataClient[EDataClient.DATA].locationData.cityName ?? ''),
     password: passwordValidator.validate(password ?? ''),
     confirmPassword: confirmPasswordValidator.validate(confirmPassword ?? ''),
   };

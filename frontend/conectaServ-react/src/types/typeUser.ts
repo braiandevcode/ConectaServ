@@ -1,4 +1,3 @@
-import type { TPlainClient } from "./typePlainClient";
-import type { TPlaintTasker } from "./typePlainDataTasker";
+import type { IUserData } from '../interfaces/iUserData';
 
-export type TUser = TPlainClient | TPlaintTasker;
+export type TUser = & IUserData;

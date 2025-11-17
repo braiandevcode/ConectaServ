@@ -58,16 +58,16 @@ const useStepDataTasker = () => {
     // OBJETO INICIAL DE VALIDACIONES QUE LEERA LOS DATOS EN ALMACEN LOCAL Y VALIDARA O DEJAR VALORES POR DEFECTO
     const initialFormState: iFormStateValidationTask = {
       // ESTADOS DE ENTRADA EN PASO 1
-      category: selectedCategoryValidator.validate(stepData[EKeyDataByStep.ONE].category ?? ''),
-      'service[]': { value: stepData[EKeyDataByStep.ONE]['service[]'] ?? [], error: '', isValid: false },
-      'context[]': { value: stepData[EKeyDataByStep.ONE]['context[]'] ?? [], error: '', isValid: false },
-      'day[]': { value: stepData[EKeyDataByStep.ONE]['day[]'] ?? [], error: '', isValid: false },
-      'hour[]': { value: stepData[EKeyDataByStep.ONE]['hour[]'] ?? [], error: '', isValid: false },
+      category: selectedCategoryValidator.validate(stepData[EKeyDataByStep.ONE].categoryData.category ?? ''),
+      'service': { value: stepData[EKeyDataByStep.ONE].serviceData['service'] ?? [], error: '', isValid: false },
+      'workArea': { value: stepData[EKeyDataByStep.ONE].workAreaData?.workArea ?? [], error: '', isValid: false },
+      'day': { value: stepData[EKeyDataByStep.ONE].dayData['day'] ?? [], error: '', isValid: false },
+      'hour': { value: stepData[EKeyDataByStep.ONE].hourData['hour'] ?? [], error: '', isValid: false },
 
       // ESTADOS DE ENTRADA EN PASO 2
-      descriptionUser: descriptionValidator.validate(stepData[EKeyDataByStep.TWO].descriptionUser ?? ''),
-      imageProfile: imageProfileValidator.validate(stepData[EKeyDataByStep.TWO].imageProfile),
-      imageExperiences: imageExperiencesValidator.validate(stepData[EKeyDataByStep.TWO].imageExperiences),
+      description: descriptionValidator.validate(stepData[EKeyDataByStep.TWO].description ?? ''),
+      imageProfileData: imageProfileValidator.validate(stepData[EKeyDataByStep.TWO].imageProfileData),
+      imageExperienceData: imageExperiencesValidator.validate(stepData[EKeyDataByStep.TWO].imageExperienceData),
 
       // ESTADOS DE ENTRADA EN PASO 3
       amountBudge: budgeValidator.validate(String(stepData[EKeyDataByStep.THREE]?.amountBudge ?? '')),
@@ -78,7 +78,7 @@ const useStepDataTasker = () => {
       fullName: fullNameValidator.validate(stepData[EKeyDataByStep.FOUR].fullName) ?? '',
       userName: userNameValidator.validate(stepData[EKeyDataByStep.FOUR].userName ?? ''),
       email: emailValidator.validate(stepData[EKeyDataByStep.FOUR].email ?? ''),
-      location: selectedCategoryValidator.validate(stepData[EKeyDataByStep.FOUR].location ?? ''),
+      cityName: selectedCategoryValidator.validate(stepData[EKeyDataByStep.FOUR].locationData.cityName ?? ''),
       password: passwordValidator.validate(password ?? ''),
       confirmPassword: confirmPasswordValidator.validate(confirmPassword ?? ''),
     };

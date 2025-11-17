@@ -129,7 +129,7 @@ const StepFour = () => {
               </span>
               <span className='span-required'>*</span>
             </label>
-            <select id='location' disabled={isSending} className={`to-left form__location-select ${styleBorderFieldError(formState, 'location')}`} value={formState.location.value as string} onChange={handleChangeLocation} required>
+            <select id='cityName' disabled={isSending} className={`to-left form__location-select ${styleBorderFieldError(formState, 'cityName')}`} value={formState.cityName.value as string} onChange={handleChangeLocation} required>
               <option value={ELocationKey.NONE} disabled>
                 Seleccione una ciudad
               </option>
@@ -137,7 +137,7 @@ const StepFour = () => {
               <option value={ELocationKey.AZUL}>Azul</option>
               <option value={ELocationKey.TANDIL}>Tandil</option>
             </select>
-            {renderFieldError(formState, 'location')}
+            {renderFieldError(formState, 'cityName')}
           </div>
 
           <div className='c-flex c-flex-column gap-1/2 form__field'>

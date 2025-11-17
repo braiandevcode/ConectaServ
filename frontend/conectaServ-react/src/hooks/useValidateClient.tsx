@@ -7,9 +7,9 @@ const useValidateClient = ({ formState }: { formState: iFormStateValidationClien
   const validateClient = (): boolean => {
     let isValid: boolean = false;
     // ASEGURO QUE SEA ROL CLIENTE
-    const { fullName, userName, email, location, password, confirmPassword } = formState;
+    const { fullName, userName, email, cityName, password, confirmPassword } = formState;
 
-    const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && location.isValid && password.isValid && confirmPassword.isValid && terms && isSuccefullyVerified;
+    const isValidStep: boolean = fullName.isValid && userName.isValid && email.isValid && cityName.isValid && password.isValid && confirmPassword.isValid && terms && isSuccefullyVerified;
     isValid = isValidStep;
     return isValid;
   }

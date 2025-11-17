@@ -1,22 +1,11 @@
-import type React from 'react';
-import { EKeyDataByStep } from '../types/enums';
-import { useEffect } from 'react';
-import type { TOptionWork } from '../types/typeOptionsWork';
+import { EEntitiesGroup, EKeyDataByStep } from '../types/enums';
+import { useEffect, type ChangeEvent } from 'react';
+import type { TEntitie, TOptionWork } from '../types/typeOptionsWork';
 import type { TStepOne } from '../types/typeStepOne';
 import useRegisterTasker from './useRegisterTasker';
+import { ENTITY_TO_GROUP } from '../config/configGroupsByNameChekboxTasker';
 
-// ESTE HOOK SE ENCARGA DE DOS COSAS PRINCIPALES:
-//
-// 1️- RESETEAR LOS GRUPOS DE CHECKBOXES CUANDO CAMBIA LA CATEGORIA (EFECTO useEffect)
-//     - VACIA LOS ARRAYS DE 'service[]', 'context[]', 'day[]' Y 'hour[]'.
-//     - RESETEA TAMBIEN EL ESTADO DE CONTEXTO DE REGISTRO DE PROFESIONAL (stepData) PARA REFLEJAR LOS NUEVOS VALORES VACIOS.
-//
-// 2- ACTUALIZAR UN GRUPO DE CHECKBOXES CUANDO SE MARCA O DESMARCA UNO (FUNCION verifyGroup)
-//     - AGREGA O ELIMINA EL VALOR SEGUN EL CHECK ESTE ACTIVADO O NO.
-//     - ACTUALIZA EL formState LOCAL (VALIDACION Y ERRORES).
-//     - ACTUALIZA EL stepData DE CONTEXTO DE REGISTRO DE PROFESIONAL CON LOS NUEVOS VALORES DEL GRUPO.
-//     - NO VALIDA EL PASO COMPLETO, SOLO EL GRUPO MODIFICADO.
-//
+// CUSTOM HOOK
 export const useVerifyGroup = () => {
   const { stepData, setStepData, step, formState, setFormState, isResetDetailsWork } = useRegisterTasker(); //HOOK PERSONALIZADO QUE USA CONTEXTO REGISTRO PROFESIONAL
 
@@ -25,17 +14,17 @@ export const useVerifyGroup = () => {
     if (!isResetDetailsWork) return; // SI NO SE SOLICITA RESET, NO CONTINUAR
 
     // LIMPIAR TODOS LOS VALORES EN ARREGLOS DE GRUPOS DEL formState
-    formState['service[]'].value = [];
-    formState['context[]'].value = [];
-    formState['day[]'].value = [];
-    formState['hour[]'].value = [];
+    formState['service'].value = [];
+    formState['workArea'].value = [];
+    formState['day'].value = [];
+    formState['hour'].value = [];
 
     // NUEVO OBJETO DE DETALLES VACIO
-    const newStepOneDetailsWork: Omit<TStepOne, 'valueSelected' | 'category'> = {
-      'service[]': [],
-      'context[]': [],
-      'day[]': [],
-      'hour[]': [],
+    const newStepOneDetailsWork: Pick<TStepOne, 'serviceData' | 'workAreaData' | 'dayData' | 'hourData'> = {
+      serviceData: { service: [] },
+      workAreaData: { workArea: [] },
+      dayData: { day: [] },
+      hourData: { hour: [] },
     };
 
     // RESETEAR TODOS LOS GRUPOS EN OBJETO GLOBAL DE PASOS
@@ -58,44 +47,61 @@ export const useVerifyGroup = () => {
   };
 
   // FUNCION PRINCIPAL DE VERIFICACION DE GRUPOS
-  const verifyGroup = ({ e, group }: { e: React.ChangeEvent<HTMLInputElement>; group: TOptionWork }): string[] => {
-    const value: string = e.target.value; // ALMACENO EN MEMORIA VALOR DEL CHECK
-    const checked: boolean = e.target.checked; // ALMACENO EN MEMORIA BANDERA DEL CHECK
+  const verifyGroup = ({ e, entitie }: { e: ChangeEvent<HTMLInputElement>; entitie: TEntitie }): string[] => {
+    const group: TOptionWork = ENTITY_TO_GROUP[entitie]; // valor literal del group
+    const value = e.target.value;
+    const checked = e.target.checked;
 
-    // OBTENER ARRAY ACTUAL DEL GRUPO DESDE stepData EN LOCALSTORAGE
-    const currentStoredValues: string[] = stepData[EKeyDataByStep.ONE]?.[`${group}[]`] || [];
+    let currentStoredValues: string[] = [];
 
-    // GENERAR NUEVO ARRAY ACTUALIZADO Y REPOBLAR EN UI
+    //  SEGUN ENTITIE PARA QUE TS RECONOZCA EL ACCESO ==> DENOMINADO NARROWING
+    switch (entitie) {
+      case EEntitiesGroup.SERVICE_DATA:
+        currentStoredValues = stepData[EKeyDataByStep.ONE].serviceData.service;
+        break;
+      case EEntitiesGroup.WORK_AREA_DATA:
+        currentStoredValues = stepData[EKeyDataByStep.ONE]?.workAreaData?.workArea ?? [];
+        break;
+      case EEntitiesGroup.DAY_DATA:
+        currentStoredValues = stepData[EKeyDataByStep.ONE].dayData.day;
+        break;
+      case EEntitiesGroup.HOUR_DATA:
+        currentStoredValues = stepData[EKeyDataByStep.ONE].hourData.hour;
+        break;
+    }
+
     const updatedValues: string[] = updater(currentStoredValues, checked, value);
 
     // FUNCION DE ACTUALIZACION DE DATOS Y VALIDACIONES
     const updateCommon = (next: string[]) => {
-      const isValid = next.length > 0;
+      const isValid: boolean = next.length > 0;
 
-      // ACTUALIZAR VALIDACION LOCAL
+      // === ACTUALIZAR FORMSTATE ===
       setFormState((prev) => ({
         ...prev,
         [`${group}[]`]: {
-          isValid: isValid,
-          error: isValid ? '' : 'Checkbox requeridos',
+          isValid,
+          error: next.length > 0 ? '' : 'Checkbox requeridos',
           value: next,
         },
       }));
 
-      // ACTUALIZAR DATOS GLOBALES
+      // === ACTUALIZAR STEP DATA ===
       setStepData((prev) => ({
         ...prev,
         [EKeyDataByStep.ONE]: {
           ...prev[EKeyDataByStep.ONE],
-          [`${group}[]`]: next,
+          [entitie]: {
+            ...prev[EKeyDataByStep.ONE][entitie],
+            [group]: next,
+          },
         },
       }));
     };
 
-    // ACTUALIZAR CON NUEVOS VALORES
     updateCommon(updatedValues);
 
-    return updatedValues; // <-- NUEVO: DEVOLVEMOS EL ARRAY ACTUALIZADO
+    return updatedValues;
   };
 
   return { verifyGroup };

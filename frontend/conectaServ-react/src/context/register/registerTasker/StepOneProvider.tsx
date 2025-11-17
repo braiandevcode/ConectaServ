@@ -6,7 +6,7 @@ import SelectedValidator from '../../../modules/validators/SelectedValidator';
 import { useVerifyGroup } from '../../../hooks/useVerifyGroup';
 import type { TCategoryKey } from '../../../types/typeCategory';
 import type { TFieldState } from '../../../types/typeStateFields';
-import type { TOptionWork } from '../../../types/typeOptionsWork';
+import type { TEntitie } from '../../../types/typeOptionsWork';
 import type { TTypeContextStepOne } from '../../../types/typeContextStepOne';
 
 
@@ -14,7 +14,7 @@ import type { TTypeContextStepOne } from '../../../types/typeContextStepOne';
 const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
   const selectedCategoryValidator: SelectedValidator = new SelectedValidator(); //==> INSTANCIAR VALIDADOR DE SELECT
 
-  const { hasBudge, setStepData, stepData, setIsStepValid, setFormState, setHasInteracted, setValueSelected, setHasBudge, setHasContext, setIsResetDetailsWork, validateCurrentStep, hasContext } = useRegisterPro();
+  const { hasBudge, hasWorkArea, setStepData, stepData, setIsStepValid, setFormState, setHasInteracted, setValueSelected, setHasBudge, setHasWorkArea, setIsResetDetailsWork, validateCurrentStep } = useRegisterPro();
   const { verifyGroup } = useVerifyGroup(); //HOOK PARA MANEJAR LOGICA DE ELECCION DE DETALLES DE TRABAJO
 
   const titleRef = useRef<HTMLSelectElement>(null); // ==> REF PARA ACCEDER AL VALOR ACTUAL DE ELEMENTOS SELECT DEL DOM
@@ -43,16 +43,16 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
   // EFECTO PARA OBSERVAR SI CONTIENE O NO GRUPO CONTEXT Y REVALIDAR
   useEffect(() => {
     // SI NO HAY GRUO DE CHECKS DE CONTEXTO (HABITOS)
-    if (!hasContext) {
+    if (!hasWorkArea) {
       // SETEAR DATA GLOBAL EN STORAGE
       setStepData((prev) => {
         const copy = { ...prev }; // COPIAR TODO
-        delete copy[EKeyDataByStep.ONE]['context[]']; // ==> ELIMINAR SOLO ATRIBUTO "context[]"
+        delete copy[EKeyDataByStep.ONE]?.workAreaData; // ==> ELIMINAR SOLO ATRIBUTO "workArea"
         return copy;
       });
     }
     setIsStepValid(validateCurrentStep()); //REVALIDAR
-  }, [hasContext]); //==> OBSERVAR ESTADO "hasContext" EXTERNO EN "professionalProvider" Y EJECUTAR
+  }, [hasWorkArea]); //==> OBSERVAR ESTADO "hasContext" EXTERNO EN "professionalProvider" Y EJECUTAR
 
   // ACTUALIZAR STORAGE DE INTERACCION
   const updateHasInteracted = (newValue: boolean) => {
@@ -69,7 +69,7 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
     const value = e.target.value as TCategoryKey; //GUARDAMOS VALOR ELEGIDO Y CASTEAMOS AL TIPADO ESTRICTO PARA CATEGORIA
 
     // ACTUALIZAMOS BANDERAS
-    setHasContext(value !== ECategoryKey.MOVE);
+    setHasWorkArea(value !== ECategoryKey.MOVE);
     setHasBudge(value === ECategoryKey.REPAIR);
 
     if (!titleRef.current) return; //SI NO HAY VALOR EN REFERENCIA NO CONTINUAR
@@ -86,7 +86,9 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
       ...prev,
       [EKeyDataByStep.ONE]: {
         ...prev[EKeyDataByStep.ONE],
-        category: value,
+        categoryData:{
+          category: value
+        },
         valueSelected: selectedOptionText,
       },
     }));
@@ -96,17 +98,17 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
   //HANDLER DE EVENTO CHANGE CHECKBOXES
   // MANEJA EL CAMBIO DE LOS CHECKBOXES EN LOS DIFERENTES GRUPOS (service, context, day, hour)
   // ACTUALIZA EL ESTADO CORRESPONDIENTE AGREGANDO O REMOVIENDO EL VALOR SEGUN SI ESTA CHECKEADO O NO
-  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>, group: TOptionWork) => {
+  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>, entitie:TEntitie) => {
     setIsResetDetailsWork(false); //NO RESETEAR
-    const updatedValues: string[] = verifyGroup({ e, group }); //==> INVOCAR FUNCION DE HOOK PARA VERFICAR CHECKSBOXES
+    const updatedValues: string[] = verifyGroup({ e, entitie }); //==> INVOCAR FUNCION DE HOOK PARA VERFICAR CHECKSBOXES
 
     // ----------------------VALIDACION INSTANTANEA-----------------------//
     // ARMAR LISTA DE GRUPOS A VALIDAR
-    const groups = [group === 'service' ? updatedValues : (stepData[EKeyDataByStep.ONE]['service[]'] ?? []), group === 'day' ? updatedValues : (stepData[EKeyDataByStep.ONE]['day[]'] ?? []), group === 'hour' ? updatedValues : (stepData[EKeyDataByStep.ONE]['hour[]'] ?? [])];
+    const groups = [entitie === 'serviceData' ? updatedValues : (stepData[EKeyDataByStep.ONE].serviceData['service'] ?? []), entitie === 'dayData' ? updatedValues : (stepData[EKeyDataByStep.ONE].dayData['day'] ?? []), entitie === 'hourData' ? updatedValues : (stepData[EKeyDataByStep.ONE].hourData['hour'] ?? [])];
 
     // AGREGAR context[] SOLO SI EXISTE
-    if (hasContext) {
-      groups.push(group === 'context' ? updatedValues : (stepData[EKeyDataByStep.ONE]['context[]'] ?? []));
+    if (hasWorkArea) {
+      groups.push(entitie === 'workAreaData' ? updatedValues : (stepData[EKeyDataByStep.ONE]?.workAreaData?.workArea ?? []));
     }
 
     // VALIDAR QUE TODOS LOS GRUPOS TENGAN AL MENOS UN CHECK
