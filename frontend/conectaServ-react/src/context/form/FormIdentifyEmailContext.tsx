@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, type Context } from "react";
 import type { TIdentifyEmail } from "../../types/typeIdentifyEmail";
 import { formStateIdentifyEmail } from "../../config/formStateIdentifyEmail";
 
@@ -19,6 +19,6 @@ const defaulFormIdentifyEmailtContext: TIdentifyEmail = {
     isSentIdentificationEmail:false
 }
 
-const FormIdentifyEmailContext = createContext(defaulFormIdentifyEmailtContext);
+const FormIdentifyEmailContext:Context<TIdentifyEmail> = createContext(defaulFormIdentifyEmailtContext);
 
 export default FormIdentifyEmailContext;

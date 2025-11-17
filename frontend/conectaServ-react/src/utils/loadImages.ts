@@ -3,11 +3,11 @@ import { verifyMetaDataImage } from './validateFieldUtils';
 import { getImageDataUrlFromIndexedDB } from './storageUtils';
 import { ENamesOfKeyLocalStorage } from '../types/enums';
 import type { TExperienceImagesPreviewProps } from '../types/typeImageExperiences';
-import type { TStoredImage } from '../types/typePersistanceDataImage';
+import type { TImageData } from '../types/typeRegisterEndDto';
 
 // TIPADO INTERNO
 type TLoadImages = Pick<TExperienceImagesPreviewProps, 'setSrcVector'> & {
-  storedImages: TStoredImage[];
+  storedImages: TImageData[];
   countImagesExp: RefObject<number>;
 };
 

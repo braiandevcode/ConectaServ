@@ -2,7 +2,7 @@ import type { TWorkGroupOption } from '../../../../../types/typeWorkGoupOptions'
 import CheckBox from './CheckBox';
 
 // COMPONENTE PARA CREAR LOS GRUPOS DE CHECKBOXES
-const CheckboxGroup = ({ type, icon, title, options }: TWorkGroupOption) => {
+const CheckboxGroup = ({ type, icon, title, options, entitie }: TWorkGroupOption) => {
   const IconComponent = icon;
    return (
     <>
@@ -13,7 +13,7 @@ const CheckboxGroup = ({ type, icon, title, options }: TWorkGroupOption) => {
           <span className='span-required'>*</span>
         </h4>
       </div>
-      {options.map((opt, i) => <CheckBox type={type} opt={opt} i={i} key={i} /> )}
+      {options.map((opt, i) => <CheckBox type={type} opt={opt} i={i} key={i} entitie={entitie}/> )}
     </>
   );
 };

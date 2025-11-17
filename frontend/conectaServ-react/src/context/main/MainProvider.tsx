@@ -51,9 +51,12 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     closeGlobalModal();
   }, [pathname, navigate]); // DEPENDE SOLO DE PATH Y NAVIGATE
 
+  // EFECTO PARA MOSTRAR LOGIN LUEGO DE RENDERIZAR AL HOME AL REGISTRARSE
   useEffect(() => {
+    // OBJETO DE ESTADO DE NAVIGATE CON PROPIEDAD "showwLogin" BOOLEANO PARA INDICAR MUESTRE EL MODAL LUEGO DE NAVEGAR
+    // SI ESTA EN TRUE
     if (state?.showLogin) {
-      openGlobalModal(EModalGlobalType.MODAL_LOGIN);
+      openGlobalModal(EModalGlobalType.MODAL_LOGIN); // ==> MOSTRAR MODAL
     }
   }, [state, openGlobalModal]);
 

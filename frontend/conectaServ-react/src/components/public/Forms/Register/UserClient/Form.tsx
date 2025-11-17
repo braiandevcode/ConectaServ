@@ -24,7 +24,7 @@ const Form = () => {
   
   return (
     <>
-      <form className='form' onSubmit={submitDataRegister}>
+      <form className='form' onSubmit={submitDataRegister} encType='multipart/form-data'>
         <div className='c-flex c-flex-column c-flex-justify-center form__header'>
           <h2 className='c-flex c-flex-wrap c-flex-items-center gap-1/2 form__subtitle'>
             <div className='c-flex w-full c-flex-items-center gap-1/2'>

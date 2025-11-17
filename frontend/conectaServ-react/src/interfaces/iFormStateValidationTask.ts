@@ -5,21 +5,21 @@ export interface iFormStateValidationTask {
   fullName: TFieldState;
   userName: TFieldState;
   email: TFieldState;
-  location: TFieldState;
+  cityName: TFieldState;
   password: TFieldState;
   confirmPassword: TFieldState;
 
   // PASO 1 CATEGORIA
   category: TFieldState;
-  'service[]': TFieldState;
-  'context[]': TFieldState;
-  'day[]': TFieldState;
-  'hour[]': TFieldState;
+  service: TFieldState;
+  workArea: TFieldState;
+  day: TFieldState;
+  hour: TFieldState;
 
   // PASO 2 PERFIL
-  descriptionUser: TFieldState;
-  imageProfile: TFieldState;
-  imageExperiences: TFieldState;
+  description: TFieldState;
+  imageProfileData: TFieldState;
+  imageExperienceData: TFieldState;
 
   // PASO 3 (PRESUPUESTO SI INCLUYE SOLO VALIDAR EL CAMPO DEL MONTO)
   amountBudge: TFieldState;

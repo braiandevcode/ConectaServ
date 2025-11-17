@@ -1,7 +1,7 @@
 import type { TOptionItem } from '../types/typeOptionItem';
 
 // HABITOS/CONTEXTOS DE TRABAJOS
-export const CONTEXTS: TOptionItem[] = [
+export const WORK_AREA: TOptionItem[] = [
   { label: 'Hogar', value: 'hogar' },
   { label: 'Comercios', value: 'comercios' },
   { label: 'Oficina', value: 'oficina' },

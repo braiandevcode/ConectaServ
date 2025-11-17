@@ -28,10 +28,18 @@ export enum EDataClient {
 
 // NOMBRE DE CAMPOS DE LOS GRUPOS DE CHECKXBOXES (DETALLES DE PROFESION)
 export enum EGroupCheckBox {
-  SERVICE = 'service[]',
-  CONTEXT = 'context[]',
-  DAY = 'day[]',
-  HOUR = 'hour[]',
+  SERVICE = 'service',
+  WORK_AREA = 'workArea',
+  DAY = 'day',
+  HOUR = 'hour',
+}
+
+// ENUM PARA CADA ENTIDAD DE UN GRUPO DE DETALLES DE TRABAJO DEL TASKER
+export enum EEntitiesGroup {
+  SERVICE_DATA = 'serviceData',
+  WORK_AREA_DATA = 'workAreaData',
+  DAY_DATA = 'dayData',
+  HOUR_DATA = 'hourData',
 }
 
 // ENUM PARA VALORES POR DEFAULT DE SELECT

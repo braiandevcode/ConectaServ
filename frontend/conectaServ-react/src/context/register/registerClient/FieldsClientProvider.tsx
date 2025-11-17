@@ -38,7 +38,7 @@ const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
   // EFECTO QUE ACTUALIZA DATOS DE LOS CAMPOS EN STORAGE
   useEffect(() => {
     // NUEVO OBJETO CON VALORES NUEVOS
-    const newData: Omit<TUser, 'password' | 'isVerified' | 'roleData'> = {
+    const newData: Omit<TUser, 'password' | 'isVerified' | 'roleData' | 'taskerData'> = {
       fullName: formState.fullName.value as string,
       userName: formState.userName.value as string,
       email: formState.email.value as string,

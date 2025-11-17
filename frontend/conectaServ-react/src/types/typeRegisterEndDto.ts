@@ -1,10 +1,13 @@
 import type { ERoles } from "./enumRoles";
 import type { ECategoryKey, ELocationKey } from "./enums";
+import type { TYesOrNo } from "./typeRadioYesOrNo";
+import type { TIdString } from "./typeUUID";
 
 export type TImageData = {
   size: number;
   name: string;
   type: string;
+  idImage: TIdString,
   dataUrl: string;
 };
 
@@ -39,6 +42,6 @@ export type THourData = {
 
 export type TBudgetData = {
   amountBudge: number;
-  budgeSelected: 'yes' | 'no' | string;
-  reinsert: 'yes' | 'no' | string;
+  budgeSelected: TYesOrNo;
+  reinsert: TYesOrNo ;
 };

@@ -88,14 +88,16 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
   const handleChangeLocation = (e: ChangeEvent<HTMLSelectElement>) => {
     const value: TLocationKey = e.target.value as TLocationKey;
     const result: TFieldState = selectedCategoryValidator.validate(value);
-    setFormState((prev) => ({ ...prev, location: result }));
+    setFormState((prev) => ({ ...prev, cityName: result }));
 
     // ACTUALIZAR ESTADO GLOBAL
     setStepData((prev) => ({
       ...prev,
       [EKeyDataByStep.FOUR]: {
         ...prev[EKeyDataByStep.FOUR],
-        location: result.value as TLocationKey,
+        locationData:{
+          cityName: result.value as TLocationKey,
+        }
       },
     }));
   };

@@ -5,17 +5,27 @@ import type { TStepDataTasker } from "../types/typeStepData";
 // VALORES POR DEFECTO DE DATOS DE PROFESIONAL
 export const defaultDataPro: TStepDataTasker = {
   [EKeyDataByStep.ONE]: {
-    category: ECategoryKey.NONE,
-    'service[]': [],
-    'context[]': [],
-    'day[]': [],
-    'hour[]': [],
+    categoryData:{
+      category: ECategoryKey.NONE,
+    },
+    workAreaData:{
+      workArea:[]
+    },
+    serviceData:{
+       service:[]
+    },
+    dayData:{
+      day:[]
+    },
+    hourData:{
+      hour:[]
+    },
     valueSelected: '',
   },
   [EKeyDataByStep.TWO]: {
-    descriptionUser: '',
-    imageProfile: null,
-    imageExperiences: [],
+    description:'',
+    imageProfileData:null,
+    imageExperienceData: [],
   },
   [EKeyDataByStep.THREE]: {
     budgeSelected: 'no',
@@ -26,6 +36,8 @@ export const defaultDataPro: TStepDataTasker = {
     fullName: '',
     userName: '',
     email: '',
-    location: ELocationKey.NONE,
+    locationData: {
+      cityName:ELocationKey.NONE
+    }
   },
 };

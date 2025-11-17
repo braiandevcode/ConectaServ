@@ -76,7 +76,7 @@ const FormVerifyCode: FC = () => {
         <div className='otp-container c-flex c-flex-justify-center gap-1/2'>
           {[...Array(NUM_DIGITS)].map((_, index) => (
             <input
-              key={index - 1}
+              key={index - 1} //[1,2,3,4,5,6] ==> COMO EL PRIMER VALOR DE INDEX ES 1 PARA QUE ARRNQUE EN CERO RESTAMOS 1
               ref={(el: HTMLInputElement | null) => {
                 inputRefs.current[index] = el;
               }}
@@ -85,8 +85,8 @@ const FormVerifyCode: FC = () => {
               type='text'
               maxLength={1} //ACEPTAR SOLO 1 DIGITO
               pattern='[0-9]' // ASEGURA PATRON NUMERICO
-              // USAR EL VALOR DEL ARRAY "opt"
-              value={otp[index] ?? ''}
+              
+              value={otp[index] ?? ''} // VALOR DE ESTADO DEL ARRAY "otp"
               onChange={(e) => handleChange(e, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
               aria-label={`Dígito ${index + 1} del código de verificación`}
