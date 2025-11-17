@@ -6,7 +6,6 @@ import type { iFormStateValidationIdentifyEmail } from '../../interfaces/iFormSt
 import type { TFieldState } from '../../types/typeStateFields';
 import EmailValidator from '../../modules/validators/EmailValidator';
 import useMain from '../../hooks/useMain';
-import { ENamesOfKeyLocalStorage } from '../../types/enums';
 import { useNavigate } from 'react-router';
 import type { TUser } from '../../types/typeUser';
 import useUserApi from '../../hooks/useUserApi';
@@ -76,10 +75,9 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
     const role: 'client' | 'tasker' | null = client === null ? null : client ? 'client' :'tasker';
     setFormState((prev) => ({ ...prev, emailIdentify: { error: '', value: '', isValid: false } }));
     setFormState((prev) => ({ ...prev, emailIdentify: { error: '', value: '', isValid: false } }));
-    const stored = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE);
     try {
       // LLAMO AL METODO Y PASO EL ARGUMENTO ESPERADO INTERNAMENTE
-      const result = (await getUsers({ setIsSendingIdentificationEmail })) as TUser[] | [];
+      const result = (await getIdentifyEmail({ setIsSendingIdentificationEmail })) as TUser[] | [];
       // SI LA SOLICITUD TRAE DATOS
       if (result) {
         const findIndexEmailIdentify: number = result.findIndex((data) => data.email === emailIdentify);
@@ -88,7 +86,7 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
           openGlobalModal(EModalGlobalType.MODAL_LOGIN);
           setIsExistEmail(true);
         }else{
-          navigate(`register/${stored}`); //SEGUN EL ROL GUARDADO NAVEGAR
+          navigate(`register/${role}`); //SEGUN EL ROL GUARDADO NAVEGAR
           setIsExistEmail(false);
         }
       }

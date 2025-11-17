@@ -63,7 +63,8 @@ export enum ENamesOfKeyLocalStorage {
 // ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES ENDPOINTS
 export enum EEndpoint {
   USER_ROLE = '/user:role', 
-  USER = '/users'
+  USER = '/users',
+  AUTH= '/api/auth'
 }
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA

@@ -14,9 +14,7 @@ const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
   //ESTADO PARA MENSAJES EN MODALES
   const [messageState, setMessageState] = useState<iMessageState>({ type: null, text: null, title: null });
 
-  //ESTADO QUE DETERMINA LA EJECUCION DE UNA CALLBACK
-  // const [onCloseCallback, setOnCloseCallback] = useState<(() => void) | null>(null);
-
+  //REF QUE DETERMINA LA EJECUCION DE UNA CALLBACK
   const onCloseCallbackRef = useRef<(() => Promise<void> | void) | null>(null);
   // ----------------------EVENTOS--------------------------------------------------//
   //FUNCION PARA CERRAR UN MODAL ==> ACEPTA UNA CALLBACK OPCIONAL PARA EJECUTAR UNA ACCION DESPUES
@@ -28,7 +26,6 @@ const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
     // SI HAY CALLBACK ES DECIR, SI SE SETEO COMO LO HACE ANTES EL OPENGLOBALMODAL
     if (onCloseCallbackRef.current) {
       const cb = onCloseCallbackRef.current; //GUARDO 
-      // setOnCloseCallback(null); // ==> LIMPIAR LA CALLBACK
       onCloseCallbackRef.current = null;
       await cb(); // EJECUTO
     }
