@@ -1,9 +1,0 @@
-.no-scroll{
-   overflow: hidden;
-}
-
-.container-modal{
-   background-color: rgba(5, 5, 5, 0.589);
-   backdrop-filter: blur(15px);
-   z-index: 100;
-}
