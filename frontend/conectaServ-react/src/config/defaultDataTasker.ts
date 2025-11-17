@@ -3,7 +3,7 @@ import type { TStepDataTasker } from "../types/typeStepData";
 
 
 // VALORES POR DEFECTO DE DATOS DE PROFESIONAL
-export const defaultDataPro: TStepDataTasker = {
+export const defaultDataTasker: TStepDataTasker = {
   [EKeyDataByStep.ONE]: {
     categoryData:{
       category: ECategoryKey.NONE,
