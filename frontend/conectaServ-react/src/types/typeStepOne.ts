@@ -1,11 +1,11 @@
-import type { TCategoryKey } from "./typeCategory";
+import type { TCategoryData, TDayData, THourData, TServiceData, TWorkAreaData } from './typeRegisterEndDto';
 
 // TIPO PASO 1  (para guardar en STEP_DATA en localStorage)
 export type TStepOne = {
-  category: TCategoryKey;
-  'service[]': string[];
-  'context[]'?: string[];
-  'day[]': string[];
-  'hour[]': string[];
+  categoryData: TCategoryData;
+  serviceData: TServiceData;
+  workAreaData?: TWorkAreaData;
+  dayData: TDayData;
+  hourData: THourData;
   valueSelected: string;
 };

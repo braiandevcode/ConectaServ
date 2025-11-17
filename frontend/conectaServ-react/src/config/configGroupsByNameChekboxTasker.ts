@@ -1,10 +1,9 @@
-import type { iNamesGroupsChecks } from "../interfaces/interfaces";
-import { EGroupCheckBox } from "../types/enums";
+import { EEntitiesGroup, EGroupCheckBox } from "../types/enums";
 
-//CONFIG GROUP CHECKBOX PROFESSIONAL
-export const namesCheckBoxesTasker: iNamesGroupsChecks = {
-  service: EGroupCheckBox.SERVICE,
-  context: EGroupCheckBox.CONTEXT,
-  day: EGroupCheckBox.DAY,
-  hour: EGroupCheckBox.HOUR,
-};
+// RELACION ENTRE ENTIDAD Y SU GROUP
+export const ENTITY_TO_GROUP = {
+  [EEntitiesGroup.SERVICE_DATA]: EGroupCheckBox.SERVICE,
+  [EEntitiesGroup.WORK_AREA_DATA]: EGroupCheckBox.WORK_AREA,
+  [EEntitiesGroup.DAY_DATA]: EGroupCheckBox.DAY,
+  [EEntitiesGroup.HOUR_DATA]: EGroupCheckBox.HOUR,
+} as const;

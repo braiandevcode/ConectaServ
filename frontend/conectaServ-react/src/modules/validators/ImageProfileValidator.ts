@@ -1,10 +1,10 @@
 import type { IValidator } from '../../interfaces/iValidator.js';
-import type { TStoredImage } from '../../types/typePersistanceDataImage.js';
+import type { TImageData } from '../../types/typeRegisterEndDto.js';
 import type { TFieldState } from '../../types/typeStateFields.js';
 
 // VALIDACION PARA IMAGEN DEL PERFIL
 export default class ImageProfileValidator implements IValidator {
-  public validate(file: File | TStoredImage | null): TFieldState {
+  public validate(file: File | TImageData | null): TFieldState {
     const allowedTypes: string[] = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     const maxSizeMB: number = 5;
 

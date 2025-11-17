@@ -1,6 +1,9 @@
-import { createContext } from 'react';
+import { createContext, type RefObject } from 'react';
 import type { TGlobalModal } from '../../types/typeGlobalModal';
 
+
+
+const onCloseCbRefInitialValue: RefObject<(()=> Promise<void> | void) | null> = { current: null }; //ESTADO INICIAL PARA ARRAY DE REFERENCIAS
 const defaultGlobalModalContext: TGlobalModal = {
   setMessageState: () => {},
   showError: () => {},
@@ -9,8 +12,7 @@ const defaultGlobalModalContext: TGlobalModal = {
   setIsGlobalModalOpen: () => {},
   openGlobalModal: () => {},
   closeGlobalModal: () => {},
-  setOnCloseCallback: () => {},
-  onCloseCallback:null,
+  onCloseCallbackRef: onCloseCbRefInitialValue,
   messageState: { type: null, text: null, title: null },
   currentGlobalModal: null,
   isGlobalModalOpen: false,

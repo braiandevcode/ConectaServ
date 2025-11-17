@@ -17,7 +17,7 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
   const codeValidator: CodeValidator = new CodeValidator(); // ==> INSTANCIA DE VALIDACION DE ENTRADA DE CODIGO
   const { showError, showSuccess, openGlobalModal } = useGlobalModal(); // ==> HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
   const { closeRegisterModal, isRegisterModalOpen } = useRegisterModal(); // ==> HOOK QUE USA EL CONTEXTO DE MODAL EN REGISTRO
-  const { setIsSuccefullyVerified, isSuccefullyVerified } = useRegister();
+  const { setIsSuccefullyVerified, isSuccefullyVerified } = useRegister(); // ==> HOOK QUE CONSUME EL CONTEXTO DE REGISTRO GENERAL
 
   // ESTADO DE VERIFICACION DE CODIGO LEYENDO EN STORAGE
   const [codeStoredEmail, setCodeStoredEmail] = useState<string>(() => {
@@ -54,44 +54,21 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
   const [formState, setFormState] = useState<iFormValidationVerifyEmail>(initialFormVerifyEmailState);
 
   // DEFINIR UN ARRAY DE REFERENCIAS DE TIPO HTMLInputElement O null
-  // AEGURAR QUE ESOS ELEMENTOS TENFRAN LA FUNCION FOCUS PARA EJECUTAR
+  // AEGURA QUE ESOS ELEMENTOS TENGAN LA FUNCION FOCUS PARA EJECUTAR
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-
-  // ---------------------------------------EFECTOS--------------------------------------------------------//
-  //EJECUTAR RESETEO CADA VEZ QUE MODAL SE ABRE O CIERRA
-  useEffect(() => {
-    // SI EL MODAL ACABA DE ABRIRSE
-    if (isRegisterModalOpen) {
-      // DAR FOCO SI EL PRIMER CAMPO ESTA VACIO
-      if (inputRefs.current[0] && otp[0] === '') {
-        inputRefs.current[0].focus(); // ==> FOCUS
-      }
-    }
-
-    // SI EL MODAL ESTA CERRADO O ACABA DE CERRARSE
-    if (!isRegisterModalOpen) {
-      // RESETAR ESTADO DE VALIDACION
-      setFormState(initialFormVerifyEmailState);
-    }
-  }, [isRegisterModalOpen]); // DEPENDE DEL ESTADO DEL PADRE MODAL DE VERIFICACION
-
-  // EFECTO PARA ALMACENAR BANDERA DE SI ESTA VERIFICADO O NO
-  useEffect(() => {
-    localStorage.setItem(ENamesOfKeyLocalStorage.IS_VERIFY_CODE, String(isSuccefullyVerified));
-  }, [isSuccefullyVerified]); //==> DEPENDENCIA EXTERNA
 
   //------------------------------------EVENTOS------------------------------------------------//
 
   //HANDLER DE MANEJO DE DIGITO ==> MANEJO DE LOGICA otp
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number): void => {
     const value: string = e.currentTarget.value; //VALOR INGRESADO
-    const length: number = inputRefs.current.length - 1; //==> GUARDAR EN MEMORIA LA LONGITUD DE REF RESTANDO UNO
+    const length: number = inputRefs.current.length - 1; //==> GUARDAR EN MEMORIA LA LONGITUD DE REF RESTANDO UNO (6 - 1 = 5)
 
     // PERMITIR UN SOLO DIGITO O VACIO SI SE BORRA
     if (!validateWithRegex({ pattern: /^[0-9]$/, text: value }) && value !== '') return; //==> SI NO ES VALIDO NO SEGUIR
 
-    // ACTUALIZAR EL ARREGLO DE ESTADO opt
-    const newOtp: string[] = [...otp]; //COPIAR TODO LO PREVIO
+    // ACTUALIZAR EL ARREGLO DE ESTADO otp
+    const newOtp: string[] = [...otp]; //COPIAR TODO LO PREVIO ["","","","","",""]
     newOtp[index] = value; // ==>AGREGAR EL NUEVO VALOR AL ARRAY SEGUN INDICE
     setOtp(newOtp); // ==> SETEAR EL ARRAY ACTUALIZADO
 
@@ -107,7 +84,7 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
 
       // SI EXISTE ELEMENTO INPUT
       if (nextInput) {
-        nextInput.focus(); //HACER FOCO AUTOMATICO LLEVANDOTE AL SIGUIENTE INPUT
+        nextInput.focus(); //HACER FOCO AUTOMATICO AL SIGUIENTE INPUT
       }
     }
   };
@@ -116,7 +93,7 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index: number): void => {
     const key: string = e.key;
     //MOVER FOCO HACIA ATRAS AL PRECIONAR 'Backspace'(TECLA DE BORRAR) EN UN CAMPO VACIO
-    // SI SE PRESIONABOTON DE BORRAR Y EL INDICE ES MAYOR A CERO Y EL CAMPO DEL INDICE ESTA VACIO
+    // SI SE PRESIONA BOTON DE BORRAR Y EL INDICE ES MAYOR A CERO Y EL CAMPO DEL INDICE ESTA VACIO
     if (key === 'Backspace' && index > 0 && otp[index] === '') {
       // GUARDAR REFERENCIA DE ELEMENTO PREVIO MEDIANTE LA REF DEL INICE RESTANDO 1
       const prevInput: HTMLInputElement | null = inputRefs.current[index - 1];
@@ -139,12 +116,12 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
       if (remaining <= 0) {
         // SI EL TIEMPO SE TERMINO, MARCAMOS COMO EXPIRADO Y LIMPIAMOS EL INTERVALO
         setExpired(true);
-        setTime({ min: 0, sec: 0 }); // OPCIONAL: MOSTRAR 0:0
+        setTime({ min: 0, sec: 0 });
         localStorage.removeItem(ENamesOfKeyLocalStorage.CODE);
-        setOtp(Array(NUM_DIGITS).fill('')); // LIMPIAR INPUTS
+        setOtp(Array(NUM_DIGITS).fill('')); // LIMPIAR VALORES DE ESTADO
         setFormState(initialFormVerifyEmailState); // RESETEAR VALIDACION
-        clearInterval(timer);
-        return;
+        clearInterval(timer); // LIMPIAR INTERVALO
+        return; //NO SEGUIR
       }
 
       // CONVERTIMOS LOS MILISEGUNDOS RESTANTES A MINUTOS Y SEGUNDOS
@@ -195,8 +172,31 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updatedIsSuccefullyVerified = (isVerifiedSuccess: boolean) => {
-    setIsSuccefullyVerified(isVerifiedSuccess);
+    setIsSuccefullyVerified(isVerifiedSuccess); //VERIFICADO SATISFACTORIO
   };
+
+  // ---------------------------------------EFECTOS--------------------------------------------------------//
+  //EJECUTAR RESETEO CADA VEZ QUE MODAL SE ABRE O CIERRA
+  useEffect(() => {
+    // SI EL MODAL ACABA DE ABRIRSE
+    if (isRegisterModalOpen) {
+      // DAR FOCO SI EL PRIMER CAMPO ESTA VACIO
+      if (inputRefs.current[0] && otp[0] === '') {
+        inputRefs.current[0].focus(); // ==> FOCUS
+      }
+    }
+
+    // SI EL MODAL ESTA CERRADO O ACABA DE CERRARSE
+    if (!isRegisterModalOpen) {
+      // RESETAR ESTADO DE VALIDACION
+      setFormState(initialFormVerifyEmailState);
+    }
+  }, [isRegisterModalOpen]); // DEPENDE DEL ESTADO DEL PADRE MODAL DE VERIFICACION
+
+  // EFECTO PARA ALMACENAR BANDERA DE SI ESTA VERIFICADO O NO
+  useEffect(() => {
+    localStorage.setItem(ENamesOfKeyLocalStorage.IS_VERIFY_CODE, String(isSuccefullyVerified));
+  }, [isSuccefullyVerified, updatedIsSuccefullyVerified]); //==> DEPENDENCIA EXTERNA
 
   // --------------------EVENTOS-------------------------------//
   // HANDLER PARA ENVIO DE VERIFICACION DE CODIGO POR PARTE DEL USUARIO
@@ -204,23 +204,22 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
     e.preventDefault(); //PREVENIR COMPORTAMIENTO POR DEFECTO
 
     // "GUARDRAIL"
-    if (expired) return; //SI NO ES VALIDO O EXPIRO NO ACCIONAR NADA
+    if (expired) return; //SI EXPIRO NO ACCIONAR NADA
 
     setIsVerifyingCode(true); //PROCESO DE VERIFICACION DE CODIGO EN PROGRESO
 
-    // ACA DEBERIA IR EL FETCH AN ENDPOINT DL BACKEND PARA GENERAR EL CODIGO Y QUE EL BACKEND SE ENCARGE DE GENERAR
-    // Y VERIFICAR GUARDANDO SESSION TEMPORL DE USUARIO EN DB/CACHE
-    // SIMULACION DE DELAY DE ENVIO
+    // ACA DEBERIA IR EL FETCH AL ENDPOINT DEL BACKEND PARA GENERAR EL CODIGO Y QUE EL BACKEND SE ENCARGE DE GENERAR
+    // Y VERIFICAR GUARDANDO SESSION TEMPORAL DE USUARIO EN DB/CACHE
     setOtp(Array(NUM_DIGITS).fill('')); //LIMPIAR CAMPOS
 
     // SIMULACION DE ESPERA ==> LEYENDO Y ESPERANDO CONSULTA EN BACKEND Y DB
     setTimeout(() => {
       setIsVerifyingCode(false); // ==> LA VERIFICACION DEL CODIGO YA NO ESTA EN PROGRESO
-      // VERIFICAR LUEGO DEL SUBMIT QUE SEA ESTRICTAMENTE EL MISMO CODIGO
       setIsCodeVerified(true); // INDICA QUE TERMINO LA VERIFICACION
 
       // updatedIsSuccefullyVerified(fullCode.trim() === codeStoredEmail.trim());
 
+      // VERIFICAR LUEGO DEL SUBMIT QUE SEA ESTRICTAMENTE EL MISMO CODIGO
       if (fullCode.trim() === codeStoredEmail.trim()) {
         updatedIsSuccefullyVerified(true);
         showSuccess('¡Correo Verificado!', '¡Su correo fue verificado con exito!');

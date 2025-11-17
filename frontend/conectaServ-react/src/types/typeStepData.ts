@@ -8,5 +8,5 @@ export type TStepDataTasker = {
   [EKeyDataByStep.ONE]: TStepOne;
   [EKeyDataByStep.TWO]: TStepTwo;
   [EKeyDataByStep.THREE]?: TStepThree;
-  [EKeyDataByStep.FOUR]: TStepBasic;
+  [EKeyDataByStep.FOUR]: Omit<TStepBasic, 'taskerData'>;
 };

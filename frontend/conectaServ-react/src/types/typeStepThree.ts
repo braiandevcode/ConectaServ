@@ -1,8 +1,3 @@
-import type { TYesOrNo } from "./typeRadioYesOrNo";
-
+import type { TBudgetData } from "./typeRegisterEndDto";
 // TIPO PASO 3 (PARA GUARDAR EN localStorage)
-export type TStepThree = {
-  amountBudge: number;
-  budgeSelected: TYesOrNo;
-  reinsert: TYesOrNo;
-};
+export type TStepThree = TBudgetData;

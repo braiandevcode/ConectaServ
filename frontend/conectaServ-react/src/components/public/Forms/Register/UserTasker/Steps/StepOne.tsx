@@ -32,7 +32,7 @@ export default function StepOne() {
           </label>
 
           {/* SELECT PRINCIPAL DE CATEGORIA */}
-          <select ref={titleRef} value={stepData[EKeyDataByStep.ONE].category} onChange={handleChangeSelected} id='category' className={`w-full form-groupSelectCategory__select ${styleBorderFieldError(formState, 'category')}`} name='category'>
+          <select ref={titleRef} value={stepData[EKeyDataByStep.ONE].categoryData.category} onChange={handleChangeSelected} id='category' className={`w-full form-groupSelectCategory__select ${styleBorderFieldError(formState, 'category')}`} name='category'>
             <option value={ECategoryKey.NONE} disabled>
               Seleccione una categoría
             </option>

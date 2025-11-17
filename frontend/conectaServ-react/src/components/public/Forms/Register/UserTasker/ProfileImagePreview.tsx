@@ -1,7 +1,7 @@
 import useRegisterTasker from '../../../../../hooks/useRegisterTasker';
 import useStepTwo from '../../../../../hooks/useStepTwo';
 import { EKeyDataByStep } from '../../../../../types/enums';
-import type { TStoredImage } from '../../../../../types/typePersistanceDataImage';
+import type { TImageData } from '../../../../../types/typeRegisterEndDto';
 import type { TIdString } from '../../../../../types/typeUUID';
 import BtnDeleteImage from './Buttons/BtnDeleteImage';
 
@@ -13,7 +13,7 @@ const ProfileImagePreview = () => {
   const { stepData } = useRegisterTasker(); //HOOK PERSONALIZADO QUE USA CONTEXTO NIVEL PASO DOS
   const { src, onDeleteProfile } = useStepTwo();
   if (!src) return; //SI NO HAY SRC NO SEGUIR
-  const profile: TStoredImage | null = stepData[EKeyDataByStep.TWO].imageProfile;
+  const profile: TImageData| null = stepData[EKeyDataByStep.TWO].imageProfileData;
   if (!profile) return; // ==> SI ES NULO NO SEGUIR
   const idImage: TIdString = profile.idImage;
   return (

@@ -20,6 +20,9 @@ import { EModalRegistersType } from '../types/enumModalRegistersTypes';
 import type { TDataLoginUser } from '../types/typeDataLoginUser';
 import type { TStateLogin } from '../types/typeStateLogin';
 import type { TIdString } from '../types/typeUUID';
+import type { ITaskerData } from '../interfaces/iTaskerData';
+import type { TImageData } from '../types/typeRegisterEndDto';
+import { dataURLtoBlob } from '../utils/dataUrlToBlob';
 
 const { USER, AUTH_LOGIN } = endPointUser; //DESESTRUCTURAR ENDPOINT
 
@@ -27,11 +30,11 @@ const { USER, AUTH_LOGIN } = endPointUser; //DESESTRUCTURAR ENDPOINT
 const useUserApi = () => {
   const { setLoading } = useMain(); //HOOK QUE USA EL CONTEXTO DE MAIN PRINCIPAL
   const { showError, showSuccess, openGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
-  const { updateCodeEmail, updatedIsSendingCode, updatedIsSentCode } = useFormVerifyEmailCode();
-  const { openRegisterModal } = useRegisterModal()
-  const { setIsSending } = useRegister();
- 
-  const navigate = useNavigate();  // HOOK NAVIGATE DE REACT
+  const { openRegisterModal } = useRegisterModal(); //HOOK PARA EL MODAL GLOBAL DE REGISTRO
+  const { updateCodeEmail, updatedIsSendingCode, updatedIsSentCode } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO PARA VERIFICACION DE EMAIL
+  const { setIsSending } = useRegister(); //HOOK QUE USA CONTEXTO PARA LOS REGISTROS GENERAL
+  // HOOK NAVIGATE DE REACT
+  const navigate = useNavigate();
 
   // FUNCION PARA CUANDO EL REGISTRO ES EXITOSO
   const showMsgSuccessRegister = (): void => {
@@ -68,7 +71,7 @@ const useUserApi = () => {
       // SINO DE 500 EN ADELANTE,
       // 5xx o ERROR DE RED O DESCONOCIDO
       showError('Ups...', 'Tuvimos un inconveniente al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde.');
-      return null; //NO SEGUIR
+      throw error;
     } finally {
       setLoading(false); //LOADING  A FALSE
       setIsSendingIdentificationEmail(false); //ENVIANDO A FALSE
@@ -77,6 +80,52 @@ const useUserApi = () => {
 
   // ENVIAR DATOS DEL REGISTRO METODO POST
   const addUser = async ({ newData }: { newData: TUser }) => {
+    const fd: FormData = new FormData();  //INSTANCIA DE FORMDATA
+    
+    let taskerDataWithOutImage: Omit<ITaskerData, 'imageProfileData' | 'imageExperienceData'> | undefined = undefined;
+    let imageProfileData:TImageData | null | undefined= null; // PARA IMAGEN DE PERFIL
+    let imageExperienceData: TImageData[] = []; // PARA ARRAY DE EXPERIENCIAS
+
+    // SEPARO DATOS Y ARCHIVOS OBTENIENDO BASE64 ORIGINAL
+    if (newData.taskerData) {
+        // OBTENGO LOS DATOS BASE64 ANTES DE OMITIR DEL JSON A ENVIAR
+        imageProfileData = newData.taskerData.imageProfileData; 
+        imageExperienceData = newData.taskerData.imageExperienceData || []; 
+
+        //SEPARO EL RESTO DEL JSON
+        const { imageProfileData: imgProfile, imageExperienceData: imgExp, ...dataTasker } = newData.taskerData;
+        taskerDataWithOutImage = dataTasker;
+    }
+
+    // JSON FINAL SIN IMAGENES BASE64
+    const jsonToSend: TUser = !newData.taskerData 
+        ? newData 
+        : { ...newData, taskerData: taskerDataWithOutImage }
+
+
+    // ADJUNTO EL JSON DE TEXTO
+    // 'data' DEBE COINCIDIR CON EL @Body('data') EN NestJS
+    fd.append('data', JSON.stringify(jsonToSend)); 
+
+    // ADJUNTO IMAGEN DE PERFIL (SIMPLE)
+    if (imageProfileData && imageProfileData.dataUrl) {
+        const profileBlob = dataURLtoBlob(imageProfileData.dataUrl);
+        if (profileBlob) {
+          fd.append('imageProfile', profileBlob, imageProfileData.name || 'profile.jpg'); 
+        }
+    }
+
+    // ADJUNTO IMAGENES DE EXPERIENCIAS (ARRAY)
+    imageExperienceData.forEach((imageData, index) => {
+        if (imageData.dataUrl) {
+            const experienceBlob = dataURLtoBlob(imageData.dataUrl);
+            if (experienceBlob) {
+                fd.append('imageExperiences', experienceBlob, imageData.name || `experience_${index}.jpg`);
+            }
+        }
+    });
+
+
     // TRY/CATCH
     try {
       setIsSending(true); //ENVIANDO DATOS
@@ -84,8 +133,7 @@ const useUserApi = () => {
       // PETICION FETCH CON HELPER
       await apiRequest(`${USER}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newData),
+        body: fd,
       });
 
       showMsgSuccessRegister();
@@ -108,6 +156,7 @@ const useUserApi = () => {
         // 5xx o ERROR DE RED O DESCONOCIDO
         showError('Ups...', 'Tuvimos un inconveniente al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde.');
       }
+      throw error;
     } finally {
       setLoading(false); //LOADING EN FALSE
     }

@@ -1,10 +1,3 @@
-export interface iNamesGroupsChecks {
-  service: string;
-  context: string;
-  day: string;
-  hour: string;
-}
-
 // INTERFACES PARA RUTAS DE LAS PAGINAS
 export interface iEndPointUser {
   USER:string;

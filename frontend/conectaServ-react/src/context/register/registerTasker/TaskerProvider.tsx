@@ -52,8 +52,8 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
   // ESTADO DE SI SE RESETA O NO LOS DEALLES DE TRABAJO
   const [isResetDetailsWork, setIsResetDetailsWork] = useState<boolean>(false);
 
-  const [hasBudge, setHasBudge] = useState<boolean>(stepData[EKeyDataByStep.ONE].category === ECategoryKey.REPAIR); // ESTADO INICIAL DE SI TIENE PASO DEL PRESUPUESTO O NO
-  const [hasContext, setHasContext] = useState<boolean>(stepData[EKeyDataByStep.ONE].category !== ECategoryKey.MOVE); // ESTADO DE SI TIENE O NO GRUPO DE CHECKS DE CONTEXTOS(HABITO)
+  const [hasBudge, setHasBudge] = useState<boolean>(stepData[EKeyDataByStep.ONE].categoryData.category === ECategoryKey.REPAIR); // ESTADO INICIAL DE SI TIENE PASO DEL PRESUPUESTO O NO
+  const [hasWorkArea, setHasWorkArea] = useState<boolean>(stepData[EKeyDataByStep.ONE].categoryData.category !== ECategoryKey.MOVE); // ESTADO DE SI TIENE O NO GRUPO DE CHECKS DE CONTEXTOS(HABITO)
 
   // ESTADO DE BANDER PARA SABER SI RENDERIZA O NO ULTIMO PASO
   const [isFieldsBasic, setIsFieldsBasic] = useState<boolean>(true);
@@ -69,7 +69,7 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
   const [formState, setFormState] = useState<iFormStateValidationTask>(() => initialFormState({ stepData }));
 
   //GANCHO PAR VALIDAR PASOS
-  const { validateCurrentStep } = useValidateTasker({ step, formState, hasBudge, hasContext, hasInteracted });
+  const { validateCurrentStep } = useValidateTasker({ step, formState, hasBudge, hasWorkArea, hasInteracted });
 
   // VALIDAR  CAMPOS POR PASOS
   const [isStepValid, setIsStepValid] = useState<boolean>(validateCurrentStep);
@@ -133,7 +133,7 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
     setHasInteracted,
     handleClickNext,
     handleClickPrev,
-    setHasContext,
+    setHasWorkArea,
     setHasBudge,
     setIsStepValid,
     setStep,
@@ -153,7 +153,7 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
     isFocus,
     isStepValid,
     step,
-    hasContext,
+    hasWorkArea,
     hasBudge,
   };
 

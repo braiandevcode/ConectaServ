@@ -1,7 +1,6 @@
 import useRegisterTasker from "../../../../../../hooks/useRegisterTasker";
 import useStepTwo from "../../../../../../hooks/useStepTwo";
 import { EKeyDataByStep } from "../../../../../../types/enums";
-import type { TStoredImage } from "../../../../../../types/typePersistanceDataImage";
 import { renderFieldError, styleBorderFieldError } from "../../../../../../utils/formUtils";
 import ExperienceImagesPreview from "../ExperienceImagePreview";
 import ProfileImagePreview from "../ProfileImagePreview";
@@ -15,6 +14,7 @@ import { IoMdImages } from 'react-icons/io';
 
 // CSS
 import './StepTwo.css';
+import type { TImageData } from "../../../../../../types/typeRegisterEndDto";
 
 // COMPONENTE PASO 2
 const StepTwo = () =>{
@@ -22,8 +22,8 @@ const StepTwo = () =>{
   const { formState, stepData } = useRegisterTasker();
   const { handleImageProfileChange, handleImageExperiencesChange, handleDescriptionInput, handleDescriptionBlur } = useStepTwo();
 
-  const profile:TStoredImage | null = stepData[EKeyDataByStep.TWO].imageProfile;
-  const experiences: TStoredImage[] = stepData[EKeyDataByStep.TWO].imageExperiences;
+  const profile:TImageData | null = stepData[EKeyDataByStep.TWO].imageProfileData;
+  const experiences: TImageData[] = stepData[EKeyDataByStep.TWO].imageExperienceData;
   return (
     <>
       <div className='mb-2 c-flex c-flex-column gap-1'>
@@ -37,12 +37,12 @@ const StepTwo = () =>{
         <div className='mb-2 c-flex c-flex-column c-flex-items-center gap-3 form-groupProfile__body'>
           {/* DESCRIPCIÓN PERFIL */}
           <div className='w-full c-flex c-flex-items-center c-flex-column gap-1/2 w-full form-groupProfile__containerDescription'>
-            <label htmlFor='descriptionUser' className='to-left c-flex c-flex-items-center gap-1/2 form-groupProfile__label'>
+            <label htmlFor='description' className='to-left c-flex c-flex-items-center gap-1/2 form-groupProfile__label'>
               <FaFileLines size={20} />
               <span>Descripción de perfil (Opcional)</span>
             </label>
-            <textarea id='descriptionUser' name='descriptionUser' value={formState.descriptionUser.value as string} className={`w-full form-groupProfile__textarea ${styleBorderFieldError(formState, 'descriptionUser')}`} placeholder='Cuentales a la gente sobre ti...' spellCheck='true' lang='es' onChange={handleDescriptionInput} onBlur={handleDescriptionBlur} autoFocus></textarea>
-            {renderFieldError(formState, 'descriptionUser')}
+            <textarea id='description' name='description' value={formState.description.value as string} className={`w-full form-groupProfile__textarea ${styleBorderFieldError(formState, 'description')}`} placeholder='Cuentales a la gente sobre ti...' spellCheck='true' lang='es' onChange={handleDescriptionInput} onBlur={handleDescriptionBlur} autoFocus></textarea>
+            {renderFieldError(formState, 'description')}
           </div>
 
           {/* FOTO PERFIL */}
@@ -62,9 +62,9 @@ const StepTwo = () =>{
               </label>
 
               <div className='form-groupProfile__previewImage c-flex c-flex-wrap gap-2 position-relative'>{profile && <ProfileImagePreview />}</div>
-              {formState.imageProfile.error && (
+              {formState.imageProfileData.error && (
                 <div>
-                  <span className={`has-error ${formState.imageProfile.error === '__hidden__' ? 'hidden' : ''}`}>{formState.imageProfile.error !== '__hidden__' ? formState.imageProfile.error : ''}</span>
+                  <span className={`has-error ${formState.imageProfileData.error === '__hidden__' ? 'hidden' : ''}`}>{formState.imageProfileData.error !== '__hidden__' ? formState.imageProfileData.error : ''}</span>
                 </div>
               )}
             </div>
@@ -88,9 +88,9 @@ const StepTwo = () =>{
               </label>
 
               {experiences && experiences.length > 0 && <div className='form-groupProfile__previewMultipleImages c-flex c-flex-wrap gap-2'>{<ExperienceImagesPreview />}</div>}
-              {formState.imageExperiences.error && (
+              {formState.imageExperienceData.error && (
                 <div>
-                  <span className={`has-error ${formState.imageExperiences.error === '__hidden__' ? 'hidden' : ''}`}>{formState.imageExperiences.error !== '__hidden__' ? formState.imageExperiences.error : ''}</span>
+                  <span className={`has-error ${formState.imageExperienceData.error === '__hidden__' ? 'hidden' : ''}`}>{formState.imageExperienceData.error !== '__hidden__' ? formState.imageExperienceData.error : ''}</span>
                 </div>
               )}
             </div>

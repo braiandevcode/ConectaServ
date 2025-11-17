@@ -10,7 +10,7 @@ const CheckboxGroupsContainer = () => {
   const { stepData } = useRegisterTasker(); // ==> //HOOK PERSONALIZADO QUE USA CONTEXTO NIVEL REGISTRO PROFESIONAL
 
   // EXCLUYO AL NONE EN TIPADO
-  const config: TCategoryConfig = categoryConfigs[stepData[EKeyDataByStep.ONE].category as Exclude<TCategoryKey, ECategoryKey.NONE>];
+  const config: TCategoryConfig = categoryConfigs[stepData[EKeyDataByStep.ONE].categoryData.category as Exclude<TCategoryKey, ECategoryKey.NONE>];
 
   return (
     <div className='c-flex c-flex-column gap-1 form-groupSpeciality'>

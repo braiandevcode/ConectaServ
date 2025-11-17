@@ -9,7 +9,7 @@ type TSavedProfile = Pick<TRegisterTasker, 'setStepData'> & TSavedImage;
 // FUNCION ASINCRONA PARA GUARDAR DATOS DE PERFIL
 const savedProfile = async ({ formState, listFiles, setStepData }: TSavedProfile) => {
   // ==> SOLO CORRER SI EXISTE FILE VALIDO Y EL CAMPO ES VALIDO
-  if (formState && formState.imageProfile?.isValid) {
+  if (formState && formState.imageProfileData?.isValid) {
     if (!listFiles.current) return;
 
     // ==> VERIFICAR QUE SEA INSTANCIA DE File (EVITA QUE SE EJECUTE CUANDO RECARGO Y YA TENGO TStoredImage)
@@ -21,7 +21,7 @@ const savedProfile = async ({ formState, listFiles, setStepData }: TSavedProfile
         ...prev,
         [EKeyDataByStep.TWO]: {
           ...prev[EKeyDataByStep.TWO],
-          imageProfile: newProfile,
+          imageProfileData: newProfile,
         },
       }));
     }
