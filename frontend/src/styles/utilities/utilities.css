@@ -20,9 +20,24 @@
   width: var(--w-container);
 }
 
-/* 100% */
+/* ANCHO 100% */
 .w-full {
   width: var(--w-container);
+}
+
+/* ANCHO MINIMO AL 100% */
+.w-min-full {
+  width: 100dvw;
+}
+
+/* ALTO 100% */
+.h-full {
+  height: 100%;
+}
+
+/* ALTO MINIMO AL 100% */
+.h-min-full {
+  height: 100dvh;
 }
 
 /****ELEMENTOS FLEXBOX ***/
@@ -171,6 +186,25 @@
   gap: 3rem;
 }
 
+/* GAP 4REM*/
+.gap-4 {
+  gap: 4rem;
+}
+
+/* GAP 3REM*/
+.gap-5 {
+  gap: 5rem;
+}
+/* GAP 6REM*/
+.gap-12 {
+  gap: 12rem;
+}
+
+/* GAP 3REM*/
+.gap-20 {
+  gap: 20rem;
+}
+
 /* ELEMENTOS CON CURSOR POINTER */
 .cursor-pointer {
   cursor: pointer;
@@ -269,4 +303,24 @@
 /* RELATIVE*/
 .position-sticky{
   position: sticky;
+}
+
+/* INSET */
+.inset-0{
+  inset: 0;
+}
+
+/* TEXTO CENTRADO */
+.text-center{
+  text-align: center;
+}
+
+/* TEXTO AL INICIO */
+.text-start{
+  text-align:start;
+}
+
+/* TEXTO AL FINAL*/
+.text-end{
+  text-align:end;
 }

@@ -1,9 +1,9 @@
-//---------------------------------ENUMS PARA EVITAR ERRORES Y PORQUE SE REUTILIZAN VARIA VECES-----------------------------------------
 // TIPO DE CATEGORIAS VALIDAS
 export enum ECategoryKey {
   REPAIR = 'reparacion-mantenimiento',
   GARDEN = 'jardineria',
   MOVE = 'mudanza-transporte',
+  NONE = 'none',
 }
 
 // TIPO DE LOCALIDADES VALIDAS
@@ -11,6 +11,7 @@ export enum ELocationKey {
   OLAVARRIA = 'olavarría',
   AZUL = 'azul',
   TANDIL = 'tandil',
+  NONE = 'none',
 }
 
 // INDICE DE PASOS
@@ -21,12 +22,24 @@ export enum EKeyDataByStep {
   FOUR = '4',
 }
 
+export enum EDataClient {
+  DATA = 'data-client',
+}
+
 // NOMBRE DE CAMPOS DE LOS GRUPOS DE CHECKXBOXES (DETALLES DE PROFESION)
 export enum EGroupCheckBox {
-  SERVICE = 'service[]',
-  CONTEXT = 'context[]',
-  DAY = 'day[]',
-  HOUR = 'hour[]',
+  SERVICE = 'service',
+  WORK_AREA = 'workArea',
+  DAY = 'day',
+  HOUR = 'hour',
+}
+
+// ENUM PARA CADA ENTIDAD DE UN GRUPO DE DETALLES DE TRABAJO DEL TASKER
+export enum EEntitiesGroup {
+  SERVICE_DATA = 'serviceData',
+  WORK_AREA_DATA = 'workAreaData',
+  DAY_DATA = 'dayData',
+  HOUR_DATA = 'hourData',
 }
 
 // ENUM PARA VALORES POR DEFAULT DE SELECT
@@ -38,34 +51,28 @@ export enum EDefaultSelected {
 // NOMBRE DE CLAVES PARA LOCALSTORAGE
 export enum ENamesOfKeyLocalStorage {
   STEP_DATA = 'stepData',
+  CLIENT_DATA = 'data-client',
+  ROLE = 'role',
   CURRENT_STEP = 'currentStep',
-  IMAGE_INDEXED_DB = 'my-image-db',
+  IMAGE_INDEXED_DB = 'images',
+  INTERACTED = 'interacted',
+  CODE = 'codeEmail',
+  IS_VERIFY_CODE = 'isVerified'
 }
 
-// ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES
+// ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES ENDPOINTS
 export enum EEndpoint {
-  REGISTER_PROFESSIONAL = '/professional',
-  REGISTER_CLIENT = '/client',
-}
-
-// ENUM PARA LOS PUERTOS ACCESIBLE DE DOMINIOS
-export enum EPortServerDomain {
-  PORT_BACK = '3000', // SRVIDOR BACKEND
-  PORT_FRONT = '5500', //FRONTEND
-}
-
-// ENUM PARA CONFIGURACION DE DOMINIOS
-export enum EPathDomain {
-  HOST_LOCAL = 'http://localhost:',
-  HOST_EXTERNAL = '',
+  USER_ROLE = '/user:role', 
+  USER = '/users',
+  AUTH= '/api/auth'
 }
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA
 export enum EPathPage {
-  PATH_FORM_CLIENT = '/frontend/src/pages/register-client.html',
-  PATH_FORM_PROFESSIONAL = '/frontend/src/pages/register-pro.html',
-  PATH_TERMS = '/frontend/src/pages/termsAndConditions.html',
-  PATH_PRIVACY = '/frontend/src/pages/privacyPolicy.html',
+  PATH_FORM_CLIENT = '/register/client',
+  PATH_FORM_TASKER = '/register/tasker',
+  PATH_TERMS = '/register/terms',
+  PATH_PRIVACY = '/register/privacity',
 }
 
 // ENUM PARA TIPOS DE INPUTS
