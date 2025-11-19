@@ -21,6 +21,7 @@ import { User } from 'src/user/entities/user.entity';
 import { Budget } from 'src/budget/entities/budget.entity';
 import { Profile } from 'src/profile/entities/profile.entity';
 import { Experience } from 'src/experiences/entities/experience.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('taskers')
 export class Tasker {
@@ -30,6 +31,7 @@ export class Tasker {
   @Column({ name: 'description',type:'varchar', length: 350, default:'' })
   description:string;
 
+  @Exclude()
   @Column({ name: 'id_category', type: 'uuid', nullable: false }) 
   idCategory: string;
 
@@ -44,7 +46,7 @@ export class Tasker {
       },
     }),
   ) //==> UNIR COLUMNAS
-  category: Category;
+  categoryData: Category;
 
   // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS SERVICIOS ELEGIDOS
   @ManyToMany(() => Service, (services) => services.taskers, { cascade: true })
@@ -63,7 +65,7 @@ export class Tasker {
       }, //COLUMNA ENTIDAD RELACIONADA
     }),
   )
-  services: Service[];
+  servicesData: Service[];
 
   // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS HABITOS DE TRABAJO ELEGIDOS
   @ManyToMany(() => WorkArea, (works) => works.tasker, { cascade: true })
@@ -82,7 +84,7 @@ export class Tasker {
       }, //COLUMNA ENTIDAD RELACIONADA
     }),
   )
-  workArea: WorkArea[];
+  workAreasData: WorkArea[];
 
   // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS DIAS ELEGIDOS
   @ManyToMany(() => Day, (day) => day.taskers)
@@ -101,7 +103,7 @@ export class Tasker {
       }, //COLUMNA ENTIDAD RELACIONADA
     }),
   )
-  days: Day[];
+  daysData: Day[];
 
   // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS HORARIOS ELEGIDOS
   @ManyToMany(() => Hour, (hours) => hours.users)
@@ -120,7 +122,7 @@ export class Tasker {
       }, //COLUMNA ENTIDAD RELACIONADA
     }),
   )
-  hours: Hour[];
+  hoursData: Hour[];
 
   // RELACION  1:1 UN TASKER SOLO ESTA ASOCIADO A UN REGISTRO DE DETALLES DE SU PERFIL
   @OneToOne(() => Profile, (image) => image.tasker)
@@ -141,10 +143,10 @@ export class Tasker {
       },
     }),
   )
-  budget:Budget | null;
+  budgetData:Budget | null;
 
   // RELACION 1:1 UN TASKER SOLO PODRA ESTAR ASOCIADO A UN USUARIO
-  @OneToOne(() => User, (user) => user.tasker)
+  @OneToOne(() => User, (user) => user.taskerData)
   user: User;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })

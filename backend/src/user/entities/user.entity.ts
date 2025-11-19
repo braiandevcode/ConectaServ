@@ -1,4 +1,4 @@
-import { Expose } from 'class-transformer';
+import { Exclude } from 'class-transformer';
 import { JoinMannager } from 'src/config/JoinMannager.';
 import { Location } from 'src/location/entities/location.entity';
 import { Role } from 'src/role/entities/role.entity';
@@ -40,7 +40,7 @@ export class User {
   })
   email: string;
 
-  // @Exclude() //AL RETORNAR EXCLUYO EL PASSWORD
+  @Exclude() //AL RETORNAR EXCLUYO EL PASSWORD
   @Column({ name: 'password', type: 'text', nullable: false })
   password: string;
 
@@ -72,7 +72,7 @@ export class User {
       },
     }),
   ) //==> UNION DE TABLAS
-  cityName: Location;
+  locationData: Location;
 
   // MUCHOS USUARIOS TENDRAN UNO O MAS ROLES
   @ManyToMany(() => Role, (role) => role.users, { nullable: false })
@@ -92,7 +92,7 @@ export class User {
       }, // COLUMNA DE ROLE
     }),
   )
-  roles: Role[];
+  rolesData: Role[];
 
   // RELACION 1:1 UN USUARIO SOLO PODRA SER UN UNICO TASKER
   @OneToOne(() => Tasker, (tasker) => tasker.user, { cascade:true, nullable:true })
@@ -105,12 +105,7 @@ export class User {
       },
     }),
   )
-  tasker: Tasker;
-
-  @Expose()
-  get isTasker(): boolean {
-    return this.roles?.some((r) => r.nameRole === 'tasker') ?? false;
-  }
+  taskerData: Tasker;
 
   // FECHA DE CREACION
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })

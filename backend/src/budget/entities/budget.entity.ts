@@ -36,7 +36,7 @@ export class Budget {
   amount: number;
 
   // RELACION 1:1 UN REGISTRO DE PRESUPUESTO SOLO PERTENECE A UN TASKER
-  @OneToOne(() => Tasker, (tasker) => tasker.budget)
+  @OneToOne(() => Tasker, (tasker) => tasker.budgetData)
   tasker:Tasker;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp', nullable: false })

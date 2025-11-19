@@ -11,6 +11,6 @@ export class Role {
     nameRole:ERoles;
 
     // UNO O MAS ROLES PUEDEN PERTENECER A UNO O MAS USUARIOS
-    @ManyToMany(() => User, (user) => user.roles)
+    @ManyToMany(() => User, (user) => user.rolesData)
     users:User[]
 }

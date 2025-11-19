@@ -13,10 +13,10 @@ import {
 
 @Entity('image_profiles')
 export class Profile {
-  @PrimaryGeneratedColumn('uuid', { name: 'id_profile'})
+  @PrimaryGeneratedColumn('uuid', { name: 'id_profile' })
   idProfile: string;
-  
-  @Column({ name: 'image_base64', type: 'blob', nullable: false })
+
+  @Column({ name: 'image_base64', type: 'longblob', nullable: false })
   imageBase64: Buffer;
 
   @Column({ name: 'mime_type', type: 'varchar', length: 100, nullable: false })
@@ -34,15 +34,15 @@ export class Profile {
   originalName: string;
 
   @Column({
-    name: 'order',
-    type: 'tinyint',
-    unsigned: true,
+    name: 'system_file_name',
+    type: 'char',
+    length: 45,
     nullable: false,
   })
-  order: number;
+  systemFileName: string;
 
   // RELACION 1:1 UNA IMAGEN DE PERFIL PUEDE PERTENECER O NO A UN SOLO REGISTRO DE DETALLES DE TASKER
-  @OneToOne(() => Tasker, (tasker) => tasker.imageProfile, { cascade:true })
+  @OneToOne(() => Tasker, (tasker) => tasker.imageProfile, { cascade: true })
   @JoinColumn(
     JoinMannager.manyToOneConfig({
       current: {

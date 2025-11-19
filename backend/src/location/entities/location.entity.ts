@@ -20,7 +20,7 @@ export class Location {
   cityName: ELocations;
 
   //RELACIONES ==> UNA MISMA LOCALIDAD PUEDE PERTENECER A MUCHOS USUARIOS
-  @OneToMany(() => User, (user) => user.cityName)
+  @OneToMany(() => User, (user) => user.locationData)
   user: User[]; //==> VARIOS USUARIOS TIENEN UNA MISMA CIUDAD
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })

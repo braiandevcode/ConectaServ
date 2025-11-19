@@ -14,7 +14,7 @@ export class ErrorManager extends HttpException {
   }
 
   // FIRMA
-  public static createSignatureError(message: string) {
+  public static createSignatureError(message: string):HttpException {
     const typeName: string = message.split(' :: ')[0]; //==> POSICION DE INDICE 0 DONDE ESTA EL VALOR DEL TIPO DE ERROR
     const status:number = HttpStatus[typeName] 
         ? (HttpStatus[typeName] as number) 

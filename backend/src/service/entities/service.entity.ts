@@ -18,6 +18,6 @@ export class Service {
   serviceName: EServiceGarden | EServiceRepair | EServiceMoving;
 
   //RELACION N:N MUCHOS SERVICIOS PUEDEN PERTENECER A MUCHOS USUARIOS
-  @ManyToMany(() => Tasker, (tasker) => tasker.services)
+  @ManyToMany(() => Tasker, (tasker) => tasker.servicesData)
   taskers: Tasker[];
 }

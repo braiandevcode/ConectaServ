@@ -12,6 +12,6 @@ export class WorkArea {
   workAreaName: EWorkAreas;
 
   // RELACION M:N ==> 1 O MAS HABITOS DE TRABAJO PUEDE PERTENECER A MUCHOS TASKERS
-  @ManyToMany(() => Tasker, (tasker) => tasker.workArea)
+  @ManyToMany(() => Tasker, (tasker) => tasker.workAreasData)
   tasker: Tasker[];
 }

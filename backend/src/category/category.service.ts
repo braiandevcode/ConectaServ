@@ -28,7 +28,6 @@ export class CategoryService {
       //  ESTO PERMITE QUE SI SE AGREGAN MAS CATEGORIAS YA ESTA FLEXIBLE Y PREPARADO A NO DUPLICAR EN LA TABLA
       let categoryEntity = await repo.findOne({
         where: { categoryName: createCategoryDto.category },
-        // select: ['idCategory','categoryName'],
       });
 
       this.logger.debug(categoryEntity);

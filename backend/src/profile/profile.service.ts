@@ -1,10 +1,11 @@
 import { HttpException, Injectable, Logger } from '@nestjs/common';
-import { UpdateProfileDto } from './dto/update-profile.dto';
+// import { UpdateProfileDto } from './dto/update-profile.dto';
 import { EntityManager, Repository } from 'typeorm';
 import { Profile } from './entities/profile.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorManager } from 'src/config/ErrorMannager';
-import { SharedImageDto } from 'src/shared/dtos/shared-image.dto';
+import { randomUUID } from 'crypto';
+import path from 'path'; //MODULO DE NODE
 
 @Injectable()
 export class ProfileService {
@@ -14,66 +15,36 @@ export class ProfileService {
     private readonly imageProfileRepo: Repository<Profile>,
   ) {}
   async create(
-    storedImageProfile: SharedImageDto,
+    file: Express.Multer.File | null,
     idTasker: string,
     manager?: EntityManager,
   ): Promise<Profile | null> {
-    // PODRIA SER QUE ESTEN EN UN MIDLEWARE O EN OTRO PUNTO DEL PROYECTO
-    const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
     try {
+      this.logger.debug(file);
       // AQUI SE DEFINE CUAL Repository/Manager USAR
       const repo: Repository<Profile> = manager
         ? manager.getRepository(Profile)
         : this.imageProfileRepo;
 
-      // ENTIDAD IMAGEN DE PERFIL Y EXPERIENCIAS
-      //IMAGEN DE  PERFIL
-      let imageProfileTasker: Profile | null = null;
-      if (storedImageProfile) {
-        imageProfileTasker = repo.create({
-          ...storedImageProfile,
-          tasker: { idTasker },
-        });
+      if (!file) return null;
 
-        this.logger.debug(imageProfileTasker);
+      const extension = path.extname(file.originalname);
+      const systemFileName: string = `${randomUUID()}${extension}`;
 
-        this.logger.debug(imageProfileTasker.size);
-        // VERIFICAR EL LIMITE DE TAMAÑO
-        if (imageProfileTasker.size > MAX_SIZE_BYTES) {
-          ErrorManager.createSignatureError(
-            `PAYLOAD_TOO_LARGE :: El tamaño del archivo excede el límite permitido.`,
-          );
-        }
+      const newImageProfile: Profile = repo.create({
+        size: file.size,
+        mimeType: file.mimetype,
+        originalName: file.originalname,
+        imageBase64: file.buffer,
+        systemFileName,
+        tasker: { idTasker },
+      });
 
-        this.logger.debug(imageProfileTasker.mimeType);
-        this.logger.debug(imageProfileTasker.originalName);
+      this.logger.debug(newImageProfile);
 
-        // VERIFICAR SI EL MIME/TYPE CUMPLE O LA EXTENCION
-        if (!imageProfileTasker.mimeType.match(/(image\/jpg|jpeg|png|webp)$/) || !imageProfileTasker.originalName.match(/\.(jpg|jpeg|png|webp)$/)) {
-          ErrorManager.createSignatureError(
-            `UNSUPPORTED_MEDIA_TYPE :: Tipo de archivo no soportado.`,
-          );
-        }
+      const savedImageProfile: Profile = await repo.save(newImageProfile);
 
-        let base64Content: string | undefined; //STRING O INDEFINIDO
-
-        //LIMPIEZA Y DECODIFICACION
-        // EXTRAE SOLO LA PARTE DE LOS DATOS DE BASE64, QUITA EL PREFIJO ==>  "data:mime/type;base64,"
-        base64Content = storedImageProfile.dataUrl.split(';base64,').pop();
-
-        if (base64Content) {
-          //CONVIERTE EL STRING Base64 A UN BUFFER BINARIO
-          // ES MAS EFICIENTR QUE GUARDAR EL STRING LARGO
-          const imageBuffer: Buffer = Buffer.from(base64Content, 'base64');
-
-          imageProfileTasker.imageBase64 = imageBuffer;
-
-          imageProfileTasker = await repo.save(imageProfileTasker);
-        }
-
-        this.logger.debug(imageProfileTasker);
-      }
-      return imageProfileTasker;
+      return savedImageProfile; //RETORNAR ENTIDAD GUARDADA
     } catch (error) {
       const err = error as HttpException;
 
@@ -94,9 +65,9 @@ export class ProfileService {
     return `This action returns a #${id} profile`;
   }
 
-  update(id: number, updateProfileDto: UpdateProfileDto) {
-    return `This action updates a #${id} profile`;
-  }
+  // update(id: number, updateProfileDto: UpdateProfileDto) {
+  //   return `This action updates a #${id} profile`;
+  // }
 
   remove(id: number) {
     return `This action removes a #${id} profile`;

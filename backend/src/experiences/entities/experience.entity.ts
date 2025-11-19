@@ -16,7 +16,7 @@ import {
 export class Experience {
   @PrimaryGeneratedColumn('uuid',{ name: 'id_experience'})
   idExperience: string;
-  @Column({ name: 'image_base64', type: 'blob', nullable: false })
+  @Column({ name: 'image_base64', type: 'longblob', nullable: false })
   imageBase64: Buffer;
 
   @Column({ name: 'mime_type', type: 'varchar', length: 100, nullable: false })
@@ -40,6 +40,14 @@ export class Experience {
     nullable: false,
   })
   order: number;
+
+  @Column({
+    name:'system_file_name',
+    type:'char',
+    length:45,
+    nullable:false,
+  })
+  systemFileName:string;
 
   // RELACION M:1 UNO O MUCHOS REGISTROS DE IMAGENES DE EXPERIENCIAS PERTENECEN A UN  SOLO REGISTRO DE DETALLES DE PERFIL DE TASKER
   @ManyToOne(() => Tasker, (tasker) =>tasker.imageExperience, { cascade:true })

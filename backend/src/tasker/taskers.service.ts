@@ -2,7 +2,7 @@ import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { CreateTaskerDto } from './dto/create-tasker.dto';
 import { UpdateTaskerDto } from './dto/update-tasker.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager,  Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { Tasker } from './entities/tasker.entity';
 import { Category } from 'src/category/entities/category.entity';
 import { ErrorManager } from 'src/config/ErrorMannager';
@@ -22,6 +22,9 @@ import { ProfileService } from 'src/profile/profile.service';
 import { ExperiencesService } from 'src/experiences/experiences.service';
 import { Profile } from 'src/profile/entities/profile.entity';
 import { Experience } from 'src/experiences/entities/experience.entity';
+import { instanceToPlain } from 'class-transformer';
+import { TaskerResponse } from './dto/response-tasker.dto';
+import { ImageMetadataDto } from 'src/shared/dtos/image-dto';
 
 @Injectable()
 export class TaskersService {
@@ -31,17 +34,53 @@ export class TaskersService {
     @InjectRepository(Tasker) private readonly taskerRepo: Repository<Tasker>,
     private readonly categoryService: CategoryService,
     private readonly workAreaService: WorkAreaService,
-    private readonly hourService:HourService,
+    private readonly hourService: HourService,
     private readonly dayService: DayService,
     private readonly serviceService: ServicesService,
-    private readonly budgetService:BudgetService,
-    private readonly imageProfileService:ProfileService,
+    private readonly budgetService: BudgetService,
+    private readonly imageProfileService: ProfileService,
     private readonly imageExpService: ExperiencesService,
   ) {}
 
+  // METODO PARA MAPEAR PROPIEDADES NECESARIAS DE  CADA IMAGEN DE EXPERIENCIA
+  private mapExperienceImages = (experiences: Experience[]): ImageMetadataDto[]=> {
+    return experiences.map((exp): ImageMetadataDto=> ({
+      idImage:exp.idExperience,
+      systemFileName: exp.systemFileName,
+      mimeType: exp.mimeType,
+      originalName: exp.originalName,
+      size: exp.size,
+      createAt:exp.createdAt,
+      updateAt: exp.updatedAt,
+      deleteAt:exp.deletedAt,
+      order: exp.order, 
+      idTasker:exp.tasker.idTasker,
+    }  
+  ));
+  };
+
+  // METODO PARA MAPEAR PROPIEDADES NECESARIAS DE PERFIL
+  private mapProfileImage = (profile: Profile | null) : ImageMetadataDto | null => {
+    if (!profile) return null;
+
+    return {
+      idImage:profile.idProfile,
+      systemFileName: profile.systemFileName,
+      mimeType: profile.mimeType,
+      originalName: profile.originalName,
+      size:profile.size,
+      createAt:profile.createdAt,
+      updateAt:profile.updatedAt,
+      deleteAt:profile.deletedAt,
+      idTasker:profile.tasker.idTasker,
+    } as ImageMetadataDto;
+  };
+
   async create(
+    fileProfile: Express.Multer.File | null,
+    filesExp: Express.Multer.File[],
     createTaskerDto: CreateTaskerDto,
-    mannager:EntityManager //ADMINISTRADOR DE TRANSACCION DE typeorm
+    mannager: EntityManager, //ADMINISTRADOR DE TRANSACCION DE typeorm
   ): Promise<Tasker> {
     const {
       categoryData,
@@ -50,61 +89,100 @@ export class TaskersService {
       workAreaData,
       serviceData,
       description,
-      imageExperienceData,
-      imageProfileData,
-      budgetData
+      budgetData,
     } = createTaskerDto;
     try {
-
       // OBTENER EL ROPISITORIO TRANSACCIONAL ==> NECESARIO PARA EL CREATE
-      const taskerRepository: Repository<Tasker> = mannager.getRepository(Tasker);
+      const taskerRepository: Repository<Tasker> =
+        mannager.getRepository(Tasker);
 
-      const categoryEntity: Category = await this.categoryService.findOrCreate(categoryData, mannager);
+      const categoryEntity: Category = await this.categoryService.findOrCreate(
+        categoryData,
+        mannager,
+      );
 
       //------------------------------HABITOS------------------------------//
-      const workAreaEntity: WorkArea[] = await this.workAreaService.findeOrCreate(workAreaData.workArea, mannager);
-      
+      const workAreaEntity: WorkArea[] =
+        await this.workAreaService.findeOrCreate(
+          workAreaData.workArea,
+          mannager,
+        );
+
       //------------------------------SERVICIOS------------------------------//
-      const serviceEntity: Service[] = await this.serviceService.findeOrCreate(categoryData.category as ECategory, serviceData.service, mannager);
+      const serviceEntity: Service[] = await this.serviceService.findeOrCreate(
+        categoryData.category as ECategory,
+        serviceData.service,
+        mannager,
+      );
 
       //------------------------------DIAS------------------------------//
-      const dayEntity: Day[] = await this.dayService.findeOrCreate(dayData.day, mannager);
-      
+      const dayEntity: Day[] = await this.dayService.findeOrCreate(
+        dayData.day,
+        mannager,
+      );
+
       //------------------------------HORARIOS------------------------------//
-      const hourEntity: Hour[] = await this.hourService.findeOrCreate(hourData.hour, mannager);
+      const hourEntity: Hour[] = await this.hourService.findeOrCreate(
+        hourData.hour,
+        mannager,
+      );
 
       // -------------SECCION DE DATOS PRESUPUESTO-------------------//
       let budgetEntity: Budget | null = null;
       // PREGUNTAR SI VIENEN DATOS EN DTO ANTES DE PROCESAR A AGREGAR EN PRESUPUESTO
-      if(budgetData)  budgetEntity = await this.budgetService.create(budgetData, categoryEntity.categoryName, mannager);
-      
+      if (budgetData)
+        budgetEntity = await this.budgetService.create(
+          budgetData,
+          categoryEntity.categoryName,
+          mannager,
+        );
+
       // OBJETO DE DATOS QUE SE AGREGAN AL TASKER
       const newDataTasker: Tasker = taskerRepository.create({
         ...createTaskerDto,
         description,
-        category: categoryEntity,
-        workArea:workAreaEntity,
-        services: serviceEntity,
-        days: dayEntity,
-        hours: hourEntity,
-        budget: budgetEntity,
-        idCategory: categoryEntity.idCategory
+        categoryData: categoryEntity,
+        workAreasData: workAreaEntity,
+        servicesData: serviceEntity,
+        daysData: dayEntity,
+        budgetData: budgetEntity,
+        hoursData: hourEntity,
+        idCategory: categoryEntity.idCategory,
       });
 
-      // LLAMO A SERVICIO DE CREACION Y ALMACENAMIENTO DE IMAGEN DEL PERFIL
-      const imageProfile:Profile | null = await this.imageProfileService.create(imageProfileData, newDataTasker.idTasker, mannager);
-      this.logger.debug(imageProfile)
-
-      
-      // LLAMO A SERVICIO DE CREACION Y ALMACENAMIENTO DE IMAGENES DEL EXPERIENCIAS
-      const imagesExperiences:Experience[] = await this.imageExpService.create(imageExperienceData, newDataTasker.idTasker, mannager);
-      this.logger.debug(imagesExperiences)
-      
       // ALMACENAR DATOS
-      const savedDataTasker: Tasker = await taskerRepository.save(newDataTasker);
+      const savedDataTasker: Tasker =
+        await taskerRepository.save(newDataTasker);
 
-      return {...savedDataTasker, ...budgetEntity };
+      // LLAMO A SERVICIO DE CREACION Y ALMACENAMIENTO DE IMAGEN DEL PERFIL
+      const imageProfile: Profile | null =
+        (await this.imageProfileService.create(
+          fileProfile,
+          savedDataTasker.idTasker,
+          mannager,
+        )) ?? null;
 
+      this.logger.debug(imageProfile);
+
+      // LLAMO A SERVICIO DE CREACION Y ALMACENAMIENTO DE IMAGENES DEL EXPERIENCIAS
+      const imagesExperiences: Experience[] =
+        (await this.imageExpService.create(
+          filesExp,
+          savedDataTasker.idTasker,
+          mannager,
+        )) ?? [];
+
+      this.logger.debug(imagesExperiences);
+
+      const taskerPlain = instanceToPlain(savedDataTasker) as Tasker;
+
+      this.logger.debug(taskerPlain);
+
+      return {
+        ...taskerPlain,
+        profileImage: this.mapProfileImage(imageProfile),
+        experiencesImages: this.mapExperienceImages(imagesExperiences),
+      } as TaskerResponse;
     } catch (error) {
       const err = error as HttpException;
 

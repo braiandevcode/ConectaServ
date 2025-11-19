@@ -45,7 +45,7 @@ export class EntityCreatorService {
         
         //CLAUSULA In():BUSCA FILAS DONDE EL VALOR DE UNA COLUMNA ESPECIFICA COINCIDA CON CUALQUIERA DE LOS VALORES PROPORCIONADOS EN UN ARRAY.
         where: { [keyName]: In(keyNames) } as unknown as FindOptionsWhere<R>, // INDICA WHERE DEL TIPO QUE VENGA DEL REPO
-        select: [keyName], //SOLO DEVOLVER DATOS DE LA COLUMNA CON EL NAME QUE SE LE PASE
+        // select: [keyName], //SOLO DEVOLVER DATOS DE LA COLUMNA CON EL NAME QUE SE LE PASE
       });
 
       this.logger.debug(existingEntities);
@@ -58,8 +58,7 @@ export class EntityCreatorService {
       this.logger.debug(allCurrentExixtNames);
 
       // FUNCION QUE RETORNA UN BOOLEAN ==> RETORNA VERDAD SI NO EXISTE EN LA DB SINO FALSE
-      const isNotExistingName = (name: string): boolean =>
-        !allCurrentExixtNames.includes(name as R[keyof R & string]);
+      const isNotExistingName = (name: string): boolean => !allCurrentExixtNames.includes(name as R[keyof R & string]);
 
       this.logger.debug(isNotExistingName);
 

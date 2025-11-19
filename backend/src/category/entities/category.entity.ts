@@ -24,7 +24,7 @@ export class Category {
   categoryName: ECategory;
 
   //RELACION ==> UNA CATEGORIA PUEDE PERTENCER A VARIOS TASKERS
-  @OneToMany(() => Tasker, (tasker) => tasker.category)
+  @OneToMany(() => Tasker, (tasker) => tasker.categoryData)
   taskers: Tasker[]; //==> TASKER QUE PERTENECE A ESA CATEGORIA
 
   // FECHA DE CREACION
