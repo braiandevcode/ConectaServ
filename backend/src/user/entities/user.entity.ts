@@ -62,7 +62,7 @@ export class User {
   active: boolean;
 
   //RELACIONES MUCHOS A UNO => MUCHOS USUARIOS TENDRAN UNA LOCALIDAD
-  @ManyToOne(() => Location, (city) => city.user, { cascade: true })
+  @ManyToOne(() => Location, (location) => location.user, { nullable:false })
   @JoinColumn(
     JoinMannager.manyToOneConfig({
       current: {
@@ -72,10 +72,10 @@ export class User {
       },
     }),
   ) //==> UNION DE TABLAS
-  city: Location;
+  locationData: Location;
 
   // MUCHOS USUARIOS TENDRAN UNO O MAS ROLES
-  @ManyToMany(() => Role, (role) => role.users, { cascade: true })
+  @ManyToMany(() => Role, (role) => role.users, { nullable: false })
   // ==> UNIR EN ESTA ENTIDAD YA QUE ES DUEÑA (CONTIENE LA RELACION DE ROLES)
   @JoinTable(
     JoinMannager.manyToManyConfig({
@@ -92,11 +92,20 @@ export class User {
       }, // COLUMNA DE ROLE
     }),
   )
-  roles: Role[];
+  rolesData: Role[];
 
   // RELACION 1:1 UN USUARIO SOLO PODRA SER UN UNICO TASKER
-  @OneToOne(() => Tasker, (tasker) => tasker.user)
-  tasker:Tasker;
+  @OneToOne(() => Tasker, (tasker) => tasker.user, { cascade:true, nullable:true })
+   @JoinColumn(
+    JoinMannager.manyToOneConfig({
+      current: {
+        name: 'id_tasker',
+        referencedColumnName: 'idTasker',
+        fkName: 'fk_user_tasker',
+      },
+    }),
+  )
+  taskerData: Tasker;
 
   // FECHA DE CREACION
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
@@ -107,6 +116,6 @@ export class User {
   updatedAt: Date;
 
   // FECHA DE ELIMINACION O NULL
-  @DeleteDateColumn({ name: 'delete_at', type: 'timestamp' })
-  deleteAt: Date;
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp' })
+  deletedAt: Date;
 }

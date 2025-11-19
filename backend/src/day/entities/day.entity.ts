@@ -12,6 +12,6 @@ export class Day {
   dayName: string;
 
   // RELACION M:N ==> 1 O MAS DIAS DE TRABAJO PUEDE PERTENECER A MUCHOS TASKERS
-  @ManyToMany(() => Tasker, (tasker) => tasker.days)
+  @ManyToMany(() => Tasker, (tasker) => tasker.daysData)
   taskers: Tasker[];
 }

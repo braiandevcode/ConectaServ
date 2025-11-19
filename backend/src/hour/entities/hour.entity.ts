@@ -11,6 +11,6 @@ export class Hour {
   @Column({ name: 'hour_name', type: 'varchar', length: 250, nullable: false })
   hourName: string;
 
-  @ManyToMany(() => Tasker, (user) => user.hours)
+  @ManyToMany(() => Tasker, (user) => user.hoursData)
   users: Tasker[];
 }

@@ -1,9 +1,8 @@
-// import { Tasker } from './tasker/entities/tasker.entity';
-import { ServicesModule } from './services/services.module';
+import { ServicesModule } from './service/services.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ExperiencesModule } from './experiences/experiences.module';
-import { ContextModule } from './context/context.module';
+import { WorkAreaModule } from './work-area/workArea.module';
 import { HourModule } from './hour/hour.module';
 import { DayModule } from './day/day.module';
 import { ProfileModule } from './profile/profile.module';
@@ -14,7 +13,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoleModule } from './role/role.module';
-import { DetailsProfileTaskersModule } from './details_profile_taskers/details_profile_taskers.module';
 
 @Module({
   imports: [
@@ -38,14 +36,14 @@ import { DetailsProfileTaskersModule } from './details_profile_taskers/details_p
         password: config.get<string>('DB_PASSWORD'), // PASSWORD DE LA DB
         database: config.get<string>('DB_NAME'), // NOMBRE DE LA BASE DE DATOS
         entities: [__dirname + '/**/*.entity{.ts,.js}'], // ENTIDADES QUE VA A LEER
-        synchronize: false, // AUTO SINCRONIZA SCHEMA (EN TRUE NO USAR EN PRODUCCIÓN)
+        synchronize: false// AUTO SINCRONIZA SCHEMA (EN TRUE NO USAR EN PRODUCCIÓN)
       }),
     }),
     ServicesModule,
     AuthModule,
     UserModule,
     ExperiencesModule,
-    ContextModule,
+    WorkAreaModule,
     HourModule,
     DayModule,
     ProfileModule,
@@ -53,7 +51,6 @@ import { DetailsProfileTaskersModule } from './details_profile_taskers/details_p
     LocationsModule,
     CategoryModule,
     RoleModule,
-    DetailsProfileTaskersModule,
   ],
 })
 export class AppModule {}

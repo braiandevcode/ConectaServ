@@ -1,4 +1,5 @@
 import {
+  Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
@@ -11,21 +12,31 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Category } from 'src/category/entities/category.entity';
-import { Service } from 'src/services/entities/service.entity';
-import { Context } from 'src/context/entities/context.entity';
+import { Service } from 'src/service/entities/service.entity';
+import { WorkArea } from 'src/work-area/entities/workArea.entity';
 import { Day } from 'src/day/entities/day.entity';
 import { Hour } from 'src/hour/entities/hour.entity';
-import { DetailsProfileTasker } from 'src/details_profile_taskers/entities/details_profile_tasker.entity';
 import { JoinMannager } from 'src/config/JoinMannager.';
 import { User } from 'src/user/entities/user.entity';
+import { Budget } from 'src/budget/entities/budget.entity';
+import { Profile } from 'src/profile/entities/profile.entity';
+import { Experience } from 'src/experiences/entities/experience.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('taskers')
 export class Tasker {
   @PrimaryGeneratedColumn('uuid', { name: 'id_tasker' })
   idTasker: string;
 
+  @Column({ name: 'description',type:'varchar', length: 350, default:'' })
+  description:string;
+
+  @Exclude()
+  @Column({ name: 'id_category', type: 'uuid', nullable: false }) 
+  idCategory: string;
+
   //RELACIONES MUCHOS A UNO => MUCHOS TASKERS TENDRAN UNA MISMA CATEGORIA
-  @ManyToOne(() => Category, (category) => category.taskers, { cascade: true })
+  @ManyToOne(() => Category, (category) => category.taskers, { nullable:false })
   @JoinColumn(
     JoinMannager.manyToOneConfig({
       current: {
@@ -35,7 +46,7 @@ export class Tasker {
       },
     }),
   ) //==> UNIR COLUMNAS
-  category: Category;
+  categoryData: Category;
 
   // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS SERVICIOS ELEGIDOS
   @ManyToMany(() => Service, (services) => services.taskers, { cascade: true })
@@ -54,29 +65,29 @@ export class Tasker {
       }, //COLUMNA ENTIDAD RELACIONADA
     }),
   )
-  services: Service[];
+  servicesData: Service[];
 
   // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS HABITOS DE TRABAJO ELEGIDOS
-  @ManyToMany(() => Context, (contexts) => contexts.taskers, { cascade: true })
+  @ManyToMany(() => WorkArea, (works) => works.tasker, { cascade: true })
   @JoinTable(
     JoinMannager.manyToManyConfig({
       //CLASE CONFIGURATIVA PERSONAL
       current: {
         name: 'id_tasker',
         referencedColumnName: 'idTasker',
-        fkName: 'fk_tasker_context_tasker', //==> NOMBRE DE LA CLAVE FORANEA HACIA TASKER
+        fkName: 'fk_tasker_work_area_tasker', //==> NOMBRE DE LA CLAVE FORANEA HACIA TASKER
       }, //COLUMNA ENTIDAD ACTUAL
       related: {
-        name: 'id_context',
-        referencedColumnName: 'idContext',
-        fkName: 'fk_tasker_context_context', // NOMBRE DE LA CLAVE FORANEA HACIA CONTEXT
+        name: 'id_work_area',
+        referencedColumnName: 'idWorkArea',
+        fkName: 'fk_tasker_work_area_work_area', // NOMBRE DE LA CLAVE FORANEA HACIA HABITOS DE TRABAJO
       }, //COLUMNA ENTIDAD RELACIONADA
     }),
   )
-  contexts: Context[];
+  workAreasData: WorkArea[];
 
   // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS DIAS ELEGIDOS
-  @ManyToMany(() => Day, (day) => day.taskers, { cascade: true })
+  @ManyToMany(() => Day, (day) => day.taskers)
   @JoinTable(
     JoinMannager.manyToManyConfig({
       //CLASE CONFIGURATIVA PERSONAL
@@ -92,10 +103,10 @@ export class Tasker {
       }, //COLUMNA ENTIDAD RELACIONADA
     }),
   )
-  days: Day[];
+  daysData: Day[];
 
   // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS HORARIOS ELEGIDOS
-  @ManyToMany(() => Hour, (hours) => hours.users, { cascade: true })
+  @ManyToMany(() => Hour, (hours) => hours.users)
   @JoinTable(
     JoinMannager.manyToManyConfig({
       //CLASE CONFIGURATIVA PERSONAL
@@ -111,34 +122,31 @@ export class Tasker {
       }, //COLUMNA ENTIDAD RELACIONADA
     }),
   )
-  hours: Hour[];
+  hoursData: Hour[];
 
   // RELACION  1:1 UN TASKER SOLO ESTA ASOCIADO A UN REGISTRO DE DETALLES DE SU PERFIL
-  @OneToOne(() => DetailsProfileTasker, (details) => details.tasker, {
-    cascade: true,
-  })
-  @JoinColumn(
-    JoinMannager.manyToOneConfig({
-      current: {
-        name: 'id_details_profile_tasker',
-        referencedColumnName: 'idDetailsProfileTasker',
-        fkName: 'fk_tasker_details_profile_tasker',
-      },
-    }),
-  ) // ==> FK
-  detailsProfileTasker: DetailsProfileTasker;
+  @OneToOne(() => Profile, (image) => image.tasker)
+  imageProfile: Profile;
 
-  // RELACION 1:1 UN TASKER SOLO PODRA ESTAR ASOCIADO A UN USUARIO
-  @OneToOne(() => User, (user) => user.tasker, { cascade: true })
-  @JoinColumn(
+
+  @OneToOne(() => Experience, (images) => images.tasker)
+  imageExperience: Experience[];
+
+  // RELACION 1:1 UN TASKER SOLO TENDRA CERO O UN REGISTRO DE PRESUPUESTO
+  @OneToOne(() => Budget, (budget) => budget.tasker, { cascade: true, nullable:true })
+   @JoinColumn(
     JoinMannager.manyToOneConfig({
       current: {
-        name: 'id_user',
-        referencedColumnName: 'idUser',
-        fkName: 'fk_tasker_user',
+        name: 'id_budget',
+        referencedColumnName: 'idBudget',
+        fkName: 'fk_tasker_budget',
       },
     }),
   )
+  budgetData:Budget | null;
+
+  // RELACION 1:1 UN TASKER SOLO PODRA ESTAR ASOCIADO A UN USUARIO
+  @OneToOne(() => User, (user) => user.taskerData)
   user: User;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
@@ -147,6 +155,6 @@ export class Tasker {
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: 'delete_at', type: 'timestamp' })
-  deleteAt: Date;
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp' })
+  deletedAt: Date;
 }
