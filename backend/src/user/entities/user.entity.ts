@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { Code } from 'src/code/entities/code.entity';
 import { JoinMannager } from 'src/config/JoinMannager.';
 import { Location } from 'src/location/entities/location.entity';
 import { Role } from 'src/role/entities/role.entity';
@@ -14,6 +15,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
