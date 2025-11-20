@@ -121,7 +121,7 @@ export class CodeService {
       }
 
       // SI NO EXISTE, PROCEDEMOS A GENERAR Y ALMACENAR
-      // GENERAR CÓDIGO Y TOKEN
+      // GENERAR CODIGO Y TOKEN
       generateCode = this.generateRandomNumber(); // GENERAR NUMERO ALEATORIO
       verificationToken = this.generateVerificationToken(email); // GENERAR EL TOKEN JWT
 
@@ -165,7 +165,7 @@ export class CodeService {
 
       this.logger.debug({ token: verificationToken, sussess: true });
 
-      return { token: verificationToken, success: true }; // RETORNAR EL TOKEN QUE EL FRONTEND DEBE ALMACENAR
+      return { token: verificationToken, success:true, expiresAt:expirationTime }; // RETORNAR EL TOKEN QUE EL FRONTEND DEBE ALMACENAR
     } catch (error) {
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
