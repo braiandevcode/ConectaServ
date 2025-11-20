@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { iConfigDataEmailJs } from 'src/interface/iConfigDataEmailjs';
-import { iParamsInit } from 'src/interface/iParamInit';
 
 // @Injectable()
 // export class ConfigResendService {
@@ -57,7 +55,7 @@ export class ConfigResendService {
   constructor(private readonly configService: ConfigService) {}
 
   // CONFIGURAR Y LEER VARIABLES DE ENTORNO DE RESEND
-  public configCredentialsResend(): iConfigDataResend {
+  private configCredentialsResend(): iConfigDataResend {
     const DATA_RESEND: iConfigDataResend = {
       // CARGAR LA RESEND_API_KEY DESDE VARIABLE DE ENTORNO
       RESEND_API_KEY: this.configService.getOrThrow<string>('RESEND_API_KEY'), // ==> API KEY
@@ -75,9 +73,7 @@ export class ConfigResendService {
     const { RESEND_API_KEY } = this.resendKey; // DESESTRUCTURO OBJETO
 
     // ESTE OBJETO ES EL QUE PASARAS AL SERVICIO DE ENVÍO
-    return {
-      apiKey: RESEND_API_KEY,
-    };
+    return { apiKey: RESEND_API_KEY };
   }
 }
 

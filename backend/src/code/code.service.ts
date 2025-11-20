@@ -29,12 +29,12 @@ export class CodeService {
     private readonly emailCredentialsService: ConfigResendService,
     private readonly userService: UserService,
   ) {
-    // INICIALIZAR EL CLIENTE RESEND CON LA API KEY (SUSTITUYE A emailjs.init)
+    // INICIALIZAR EL CLIENTE RESEND CON LA API KEY
     const { apiKey } = this.emailCredentialsService.getClientInit();
     this.resend = new Resend(apiKey); //INSTANCIA DE RESEND
   }
 
-  //METODO DE OBJETO DE CONFIGURACION PARA ENVIO DEL TEMPLATE AL EMAIL DEL USUARIO
+  //METODO PRIVADO QUE RETORNA OBJETO DE CONFIGURACION PARA ENVIO DEL TEMPLATE AL EMAIL DEL USUARIO
   private templateParamsEmailjs = ({ to_email, verification_code }: TVerifyCode): TVerifyCode => ({
     to_email, // ==> CORREO DE DESTINO
     verification_code, //==> CODIGO GENERADO A LA PLANTILLA
@@ -58,16 +58,16 @@ export class CodeService {
     return this.jwtService.sign(payload);
   }
 
-  // ENVIO DE CODIGO MEDIANTE SERVICIO RESEND (SUSTITUYE A EMAILJS)
+  // ENVIO DE CODIGO MEDIANTE SERVICIO RESEND
   private async sendEmailService({ email, code }: iSendResendEmail): Promise<CreateEmailResponse> {
     try {
-      // USO METODO CONFIGURATIVO (MANTENGO EL FLUJO DE TEMPLATE)
+      // USO METODO CONFIGURATIVO
       const templateParams: TVerifyCode = this.templateParamsEmailjs({
         to_email: email,
         verification_code: code.toString(),
       });
 
-      // CREAR HTML SIMPLE PARA EL EMAIL USANDO LOS PARAMS DE LA "PLANTILLA" 
+      // HTML SIMPLE PARA EL EMAIL USANDO LOS PARAMS DE LA "PLANTILLA" 
       const html:string = `<p>TU CÓDIGO ES: <strong>${templateParams.verification_code}</strong></p>`;
 
       // ENVIO Y RESPUESTA DEL SERVICIO RESEND
