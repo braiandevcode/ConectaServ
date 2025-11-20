@@ -1,13 +1,11 @@
 import { HttpException, Injectable, Logger } from '@nestjs/common';
 // import { UpdateCodeDto } from './dto/update-code.dto';
 import { TVerifyCode } from 'src/types/typeSendVerifyCode';
-import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 import { ErrorManager } from 'src/config/ErrorMannager';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Code } from './entities/code.entity';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
-import { User } from 'src/user/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { RequestCodeDto } from './dto/request-code-dto';
 import { iPayloadTokenVerifyEmail } from 'src/interface/iPyloadTokenVerifyEmail';
