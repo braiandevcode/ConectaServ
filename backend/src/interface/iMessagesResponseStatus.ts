@@ -1,0 +1,4 @@
+export interface iMessageResponseStatus{
+    message:string; 
+    success: boolean;
+}

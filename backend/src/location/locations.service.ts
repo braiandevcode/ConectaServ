@@ -1,11 +1,61 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { EntityManager, Repository } from 'typeorm';
+import { Location } from './entities/location.entity';
+import { ELocations } from 'src/types/enums/enumLocations';
+import { ErrorManager } from 'src/config/ErrorMannager';
 
 @Injectable()
 export class LocationsService {
-  create(createLocationDto: CreateLocationDto) {
-    return 'This action adds a new location';
+  // INJECCION DEL REPOSITORIO => BUENA PRACTICA PARA LOGS
+  private readonly logger: Logger = new Logger(Location.name);
+  constructor(
+    @InjectRepository(Location) private readonly locationRepository: Repository<Location>,
+  ) {}
+
+  //BUSCAR O CREAR
+  async findOrCreate(createLocationDto:CreateLocationDto, manager?:EntityManager): Promise<Location> {
+    const repo: Repository<Location> = manager ? manager.getRepository(Location) : this.locationRepository;
+    try {
+      let locationEntity = await repo.findOne({
+        //EL NOMBRE DE CIUDAD QUE OBTENGA Y SE LE PASE
+        where: { cityName: createLocationDto.cityName }, 
+      });
+
+      this.logger.debug(locationEntity);
+
+      // SI NO EXISTE LA CIUDAD CREARLA
+      if (!locationEntity) {
+        // EL METODO 'CREATE' SOLO CONSTRUYE UNA INSTANCIA DE LA ENTIDAD EN MEMORIA, APLICANDO DEFAULTS Y PREPARANDO VALIDACIONES, SIN INTERACTUAR CON LA BASE DE DATOS.
+        locationEntity = repo.create(createLocationDto);
+   
+        this.logger.debug(locationEntity.cityName);
+        this.logger.debug(locationEntity.user);
+
+        // VALIDAR QUE LA CIUDAD SEA UNA PERMITIDA
+        if (!Object.values(ELocations).includes(locationEntity.cityName)) {
+          ErrorManager.createSignatureError(
+            `FORBIDDEN :: La ciudad no es una ubicación permitida. 2`,
+          );
+        }
+        
+        // EL METODO 'SAVE' EJECUTA EL COMANDO SQL 'INSERT' EN LA BASE DE DATOS Y DEVUELVE LA ENTIDAD CON SU NUEVO ID.
+        locationEntity = await repo.save({...locationEntity });
+      }
+      return locationEntity;
+    } catch (error) {
+       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
+      const err = error as HttpException;
+      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
+
+      // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
+      if (err instanceof ErrorManager) throw err;
+
+      // SI NO, CREO UN ERROR 500 GENERICO CON FIRMA DE ERROR
+      throw ErrorManager.createSignatureError(err.message);
+    }
   }
 
   findAll() {

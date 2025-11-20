@@ -7,10 +7,10 @@ import { UpdateBudgetDto } from './dto/update-budget.dto';
 export class BudgetController {
   constructor(private readonly budgetService: BudgetService) {}
 
-  @Post()
-  create(@Body() createBudgetDto: CreateBudgetDto) {
-    return this.budgetService.create(createBudgetDto);
-  }
+  // @Post()
+  // create(@Body() createBudgetDto: CreateBudgetDto) {
+  //   return this.budgetService.create(createBudgetDto);
+  // }
 
   @Get()
   findAll() {

@@ -1,9 +1,8 @@
-// import { Tasker } from './tasker/entities/tasker.entity';
-import { ServicesModule } from './services/services.module';
+import { ServicesModule } from './service/services.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ExperiencesModule } from './experiences/experiences.module';
-import { ContextModule } from './context/context.module';
+import { WorkAreaModule } from './work-area/workArea.module';
 import { HourModule } from './hour/hour.module';
 import { DayModule } from './day/day.module';
 import { ProfileModule } from './profile/profile.module';
@@ -14,7 +13,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoleModule } from './role/role.module';
-import { DetailsProfileTaskersModule } from './details_profile_taskers/details_profile_taskers.module';
+import { CodeModule } from './code/code.module';
+import Joi from 'joi';
+import { ConfigResendModule } from './configResend/config-resend.module';
 
 @Module({
   imports: [
@@ -23,6 +24,31 @@ import { DetailsProfileTaskersModule } from './details_profile_taskers/details_p
       // CARGA VARIABLES DE ENTORNO DESDE ARCHIVO .ENV
       isGlobal: true, // DISPONIBLE EN TODA LA APP SIN VOLVER A IMPORTAR
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}.local`, // ARCHIVO .ENV SEGUN EL ENTORNO
+
+      //ACTUALIZACIÓN DEL ESQUEMA DE JOI
+      validationSchema: Joi.object({
+        //VARIABLES ENTORNO BASE DE DATOS
+        DB_HOST: Joi.string().required(),
+        DB_PORT: Joi.string().required(),
+        DB_USERNAME: Joi.string().required(),
+        DB_PASSWORD: Joi.string().required(),
+        DB_NAME: Joi.string().required(),
+
+        // JWT
+        JWT_SECRET_VERIFICATION_EMAIL:Joi.string().required(),
+
+        RESEND_API_KEY:Joi.string().required(),
+
+        // DOMINIO + PUERTO
+        FE_HOST:Joi.string().required(),
+        FE_PORT:Joi.number().required(),
+
+
+        // VARIABLES ENTORNO EMAILJS
+        PUBLIC_KEY: Joi.string().required(),
+        SERVICE_ID: Joi.string().required(),
+        TEMPLATE_ID: Joi.string().required(),
+      }),
     }),
     // CONECTAR BASE DE DATOS
     TypeOrmModule.forRootAsync({
@@ -41,11 +67,12 @@ import { DetailsProfileTaskersModule } from './details_profile_taskers/details_p
         synchronize: false, // AUTO SINCRONIZA SCHEMA (EN TRUE NO USAR EN PRODUCCIÓN)
       }),
     }),
+
     ServicesModule,
     AuthModule,
     UserModule,
     ExperiencesModule,
-    ContextModule,
+    WorkAreaModule,
     HourModule,
     DayModule,
     ProfileModule,
@@ -53,7 +80,8 @@ import { DetailsProfileTaskersModule } from './details_profile_taskers/details_p
     LocationsModule,
     CategoryModule,
     RoleModule,
-    DetailsProfileTaskersModule,
+    CodeModule,
+    ConfigResendModule,
   ],
 })
 export class AppModule {}
