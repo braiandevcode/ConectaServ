@@ -35,7 +35,6 @@ const useStepDataTasker = () => {
 
   const stored = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA); //LEEO Y PARSEO OBJETO GENERAL DE PASOS
   const STEP_DATA_TASKER: TStepDataTasker = {
-    type: 'tasker',
     [EKeyDataByStep.ONE]: {
       ...defaultDataTasker[EKeyDataByStep.ONE], //VALOR POR DEFECTO
       ...stored?.[EKeyDataByStep.ONE], // PISADO PODR EL VALOR EN STORAGE

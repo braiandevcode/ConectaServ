@@ -23,7 +23,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
 
   // ----------------------useEffects----------------------------------//
   useEffect(() => {
-    // FUNCION INTERNA ASiNCRONA PARA LIMPIAR DATOS
+    // FUNCION INTERNA ASINCRONA PARA LIMPIAR DATOS
     const clear = async () => {
       try {
         await clearPersistence(); // LIMPIA INDEXEDDB + STORAGE
@@ -40,7 +40,6 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
       setClient(false);
     } else {
       // SI NO HAY ROL VALIDO O NO ESTAMOS EN UNA RUTA DE REGISTRO
-
       // LIMPIAR DATOS ASÍNCRONAMENTE
       clear();
       // REDIRECCIONAR AL HOME

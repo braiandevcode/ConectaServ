@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type KeyboardEvent, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent, type ClipboardEvent, type FormEvent, type KeyboardEvent, type ReactNode } from 'react';
 import { ENamesOfKeyLocalStorage } from '../../types/enums';
 import { FormVerifyEmailContext } from './FormVerifyEmailContext';
 import useGlobalModal from '../../hooks/useGlobalModal';
@@ -9,41 +9,34 @@ import type { iFormValidationVerifyEmail } from '../../interfaces/iFormValidatio
 import CodeValidator from '../../modules/validators/CodeValidator';
 import type { TFieldState } from '../../types/typeStateFields';
 import { validateWithRegex } from '../../utils/validateFieldUtils';
-import type { iTimeExpire } from '../../interfaces/iTimeExpire';
 import useRegister from '../../hooks/useRegister';
+import useUserApi from '../../hooks/useUserApi';
+import type { iFormStateValidationClient } from '../../interfaces/iFormStateValidationClient';
+import type { iFormStateValidationTask } from '../../interfaces/iFormStateValidationTask';
+import type { iStatusError } from '../../interfaces/iSatatus';
 
 // PROVIDER DE MODAL DE VERIFICACION DE CODIGO DE EMAIL
 const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
+  //---------------------CONSTANTES GLOBALES--------------------------------//
+  const NUM_DIGITS: number = 6; //CANTIDAS DE DIGITOS PARA EL OTP
+
+  // -----------------------CUSTOM HOOKS-------------------------------//
   const codeValidator: CodeValidator = new CodeValidator(); // ==> INSTANCIA DE VALIDACION DE ENTRADA DE CODIGO
   const { showError, showSuccess, openGlobalModal } = useGlobalModal(); // ==> HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
   const { closeRegisterModal, isRegisterModalOpen } = useRegisterModal(); // ==> HOOK QUE USA EL CONTEXTO DE MODAL EN REGISTRO
-  const { setIsSuccefullyVerified, isSuccefullyVerified } = useRegister(); // ==> HOOK QUE CONSUME EL CONTEXTO DE REGISTRO GENERAL
+  const { setIsSuccefullyVerified, timerRef, setTime,isSuccefullyVerified } = useRegister(); // ==> HOOK QUE CONSUME EL CONTEXTO DE REGISTRO GENERAL
+  const { userVerify} = useUserApi(); //CUSTOM HOOK API USUARIO
 
-  // ESTADO DE VERIFICACION DE CODIGO LEYENDO EN STORAGE
-  const [codeStoredEmail, setCodeStoredEmail] = useState<string>(() => {
-    const storedCodeEmail: string | null = localStorage.getItem(ENamesOfKeyLocalStorage.CODE);
-    return storedCodeEmail ?? '';
-  });
-
+  // -----------------------ESTADOS LOCALES--------------------//
+  const [token, setToken] = useState<string>('');  // ==> ESTADO DE TOKEN
   const [isSendingCode, setIsSendingCode] = useState<boolean>(false); //==> ESTADO INICAL DE SI SE ESTA ENVIANDO EL CODIGO
   const [isCodeSent, setIsCodeSent] = useState<boolean>(false); //==> ESTADO INICAL DE SI SE ENVIO EL CODIGO
   const [isVerifyingCode, setIsVerifyingCode] = useState<boolean>(false); //==> ESTADO INICAL DE SI SE ESTA VERIFICANDO EL CODIGO
   const [isCodeVerified, setIsCodeVerified] = useState<boolean>(false); //==> ESTADO INICAL DE SI SE VERIFICO EL EMAIL MEDIANTE EL CODIGO
+  const [expired, setExpired] = useState<boolean>(false); // ==> ESTADO DE BANDERA PARA DETERMINAR EXPIRACION DEL CODIGO
+  const [otp, setOtp] = useState<string[]>(Array(NUM_DIGITS).fill(''));  // ==> ESTADO INICIAL DE ARRAYS CON CADENAS VACIAS. OTP: "One-Time Password"
 
-  // ESTADO DE BANDERA PARA DETERMINAR EXPIRACION DEL CODIGO
-  const [expired, setExpired] = useState<boolean>(false);
-  // ESTADO PARA EL TIEMPO ACTUAL DE EXPIRACION DEL CODIGO
-  const [time, setTime] = useState<iTimeExpire>({ min: 0, sec: 0 });
-
-  // ID DE REFERENCIA PARA EL TIMMER
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const NUM_DIGITS: number = 6;
-
-  // ESTADO INICIAL DE ARRAYS CON CADENAS VACIAS
-  const [otp, setOtp] = useState<string[]>(Array(NUM_DIGITS).fill(''));
-
-  const fullCode: string = otp.join(''); //GUARDAR LA CADENA UNIDA
+  const fullCode: string = otp.join(''); // ==> GUARDAR LA CADENA UNIDA DE OTP
 
   // ESTADO INICIAL
   const initialFormVerifyEmailState: iFormValidationVerifyEmail = {
@@ -53,11 +46,123 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
 
   const [formState, setFormState] = useState<iFormValidationVerifyEmail>(initialFormVerifyEmailState);
 
+  // --------------HOOKS DE REF------------------------------//
   // DEFINIR UN ARRAY DE REFERENCIAS DE TIPO HTMLInputElement O null
-  // AEGURA QUE ESOS ELEMENTOS TENGAN LA FUNCION FOCUS PARA EJECUTAR
+  // AEGURA QUE ESOS ELEMENTOS TENGAN LA FUNCION FOCUS PARA EJECUTAR EN CADA CAMPO
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
+  //-------FUNCIONES-------------------//
+  const updateTokenEmail = (token: string, expiresAt:Date): void => {
+    //ACTUALIZA EL ALMACENAMIENTO LOCAL DEL NAVEGADOR
+    setToken(token); // => ACTUALIZA EL ESTADO LOCAL
+    // SI NO HAY TOKEN
+    if (!token) {
+      if (timerRef.current) {
+        clearInterval(timerRef.current); //=> LIMPIAR
+        timerRef.current = null; // ==> PASAR REF A NULL
+      }
+      return;
+    };
+
+    // LIMPIAR CUALQUIER TIMER VIEJO
+    if (timerRef.current) clearInterval(timerRef.current);
+    setExpired(false); //EXPIRADO EN FALSE
+    timerRef.current = runTimerExpiration({ expiresAt }); //CORRER EL TIEMPO
+  };
+
+  // FUNCION PARA ACTUALIZAR BANDERA DE SI SE ESTA ENVIANDO CODIGO AL EMAIL DEL USUARIO O NO
+  const updatedIsSendingCode = (isSendingCode: boolean): void => {
+    setIsSendingCode(isSendingCode);
+  };
+
+  // FUNCION PARA ACTUALIZAR BANDERA DE SI SE ESTA ENVIANDO CODIGO AL EMAIL DEL USUARIO O NO
+  const updatedIsSentCode = (isSentCode: boolean): void => {
+    setIsCodeSent(isSentCode);
+  };
+
+  // ACTUALIZAR EL ESTADO DE VALIDACION DEL CAMPO
+  const updatedFormState = (value: string) => {
+    const validate: TFieldState = codeValidator.validate(value);
+    setFormState((prev) => ({ ...prev, emailCode: validate }));
+  };
+
+  const updatedIsSuccefullyVerified = (isVerifiedSuccess: boolean) => {
+    setIsSuccefullyVerified(isVerifiedSuccess); //VERIFICADO SATISFACTORIO
+  };
+
+  // FUNCION PARA CORRER EL TIEMPO DE EXPIRACION
+  const runTimerExpiration = ({ expiresAt }: { expiresAt:Date }): ReturnType<typeof setInterval> => {
+    // CREAMOS EL INTERVALO QUE SE EJECUTARA CADA SEGUNDO
+    const timer: ReturnType<typeof setInterval> = setInterval(() => {      
+      const remaining: number = expiresAt.getTime() - Date.now(); // CALCULAMOS MILISEGUNDOS RESTANTES
+
+      if (remaining <= 0) {
+        // SI EL TIEMPO SE TERMINO, MARCAMOS COMO EXPIRADO Y LIMPIAMOS EL INTERVALO
+        setExpired(true);
+        setTime({ min: 0, sec: 0 });
+        setOtp(Array(NUM_DIGITS).fill('')); // LIMPIAR VALORES DE ESTADO
+        setFormState(initialFormVerifyEmailState); // RESETEAR VALIDACION
+        clearInterval(timer); // LIMPIAR INTERVALO
+        return; //NO SEGUIR
+      }
+
+      // CONVERTIMOS LOS MILISEGUNDOS RESTANTES A MINUTOS Y SEGUNDOS
+      const min: number = Math.floor(remaining / 1000 / 60); // MINUTOS COMPLETOS
+      const sec: number = Math.floor((remaining / 1000) % 60); // SEGUNDOS RESTANTES
+
+      setTime({ min, sec }); // ACTUALIZAMOS EL ESTADO PARA RENDERIZAR EL CRONOMETRO
+    }, 1000);
+
+    return timer;
+  };
+
+  // ---------------------------------------EFECTOS--------------------------------------------------------//
+  // EFECTO QUE DEPENDIENDO DE SI EL MODAL ESTA CERRADO SE LIMPIA DEL STORAGE
+  useEffect(() => {
+    // SI EL MODAL ACABA DE ABRIRSE
+    if (isRegisterModalOpen) {
+      // DAR FOCO SI EL PRIMER CAMPO ESTA VACIO
+      if (inputRefs.current[0] && otp[0] === '') {
+        inputRefs.current[0].focus(); // ==> FOCUS
+      }
+    }
+
+    // SI EL MODAL ESTA CERRADO O ACABA DE CERRARSE
+    if (!isRegisterModalOpen) {
+      // RESETAR ESTADO DE VALIDACION
+      setFormState(initialFormVerifyEmailState);
+    }
+  }, [isRegisterModalOpen]); // DEPENDE DEL ESTADO DEL PADRE MODAL DE VERIFICACION
+
+  // EFECTO PARA ALMACENAR BANDERA DE SI ESTA VERIFICADO O NO
+  useEffect(() => {
+    localStorage.setItem(ENamesOfKeyLocalStorage.IS_VERIFY_CODE, String(isSuccefullyVerified));
+  }, [isSuccefullyVerified, updatedIsSuccefullyVerified]); //==> DEPENDENCIA EXTERNA
+
+
   //------------------------------------EVENTOS------------------------------------------------//
+
+  // EVENTO PARA PEGAR TEXTO
+  const handlePaste = (e:ClipboardEvent<HTMLInputElement>): void => {
+    e.preventDefault(); // EVITAR EL PASTE POR DEFECTO
+    const pastedData:string = e.clipboardData.getData('Text').trim(); // TEXTO PEGADO SIN ESPACIOS
+
+    // GUARDO EN MEMORIA Y SEPARO POR '' CONVIRTIENDO EL STRNG A UN ARREGLO PARA DESPUES TOMAR SOLO LOS PRIMEROS 6 DIGITOS
+    const digits:string[] = pastedData.split('').slice(0, NUM_DIGITS); 
+
+    // MAPEAR SIN ALTERAR POSICION NI VALORES ESPERADOS
+    //EJ: [1,9,8,3,4,7] O ["L","5", "T", "G", "8", "1"] ESTE ULTIMO EN EL MAPEAO IGNORA LOS QUE NO SON NUMEROS REMPLAZANDO A VACIO
+    const newOtp = digits.map(digit => validateWithRegex({ pattern: /^[0-9]$/, text: digit })  ? digit : '');
+  
+    setOtp(newOtp); //PASAR EL NUEVO ARRAY Y ACTUALIZAR ESTADO OTP 
+    updatedFormState(newOtp.join('')); // ACTUALIZAR VALIDACION
+
+    // ENFOQUE AUTOMÁTICO AL ULTIMO DIGITO PEGADO
+    const lastIndex = digits.length - 1;
+    if (inputRefs.current[lastIndex]) {
+      inputRefs.current[lastIndex].focus();
+    }
+  };
 
   //HANDLER DE MANEJO DE DIGITO ==> MANEJO DE LOGICA otp
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number): void => {
@@ -102,143 +207,44 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
       }
     }
   };
-
-  // FUNCION PARA CORRER EL TIEMPO DE EXPIRACION
-  const runTimerExpiration = (): ReturnType<typeof setInterval> => {
-    // ESTE FORMATO DEBERIA MANDARME EL BACKEND: { code: "123456", expiresAt: "2025-10-30T15:30:00Z" }
-    // SIMULAR DATOS DE CODIGO Y TIEMPO EN QUE LLEGA
-    const duration: number = 2 * 60 * 1000;
-    const expiresAt: number = Date.now() + duration; // SUMAMOS 2 MINUTOS EN MILISEGUNDOS PARA SIMULAR EXPIRACION
-    // CREAMOS EL INTERVALO QUE SE EJECUTARA CADA SEGUNDO
-    const timer: ReturnType<typeof setInterval> = setInterval(() => {
-      const remaining: number = expiresAt - Date.now(); // CALCULAMOS MILISEGUNDOS RESTANTES
-
-      if (remaining <= 0) {
-        // SI EL TIEMPO SE TERMINO, MARCAMOS COMO EXPIRADO Y LIMPIAMOS EL INTERVALO
-        setExpired(true);
-        setTime({ min: 0, sec: 0 });
-        localStorage.removeItem(ENamesOfKeyLocalStorage.CODE);
-        setOtp(Array(NUM_DIGITS).fill('')); // LIMPIAR VALORES DE ESTADO
-        setFormState(initialFormVerifyEmailState); // RESETEAR VALIDACION
-        clearInterval(timer); // LIMPIAR INTERVALO
-        return; //NO SEGUIR
-      }
-
-      // CONVERTIMOS LOS MILISEGUNDOS RESTANTES A MINUTOS Y SEGUNDOS
-      const min: number = Math.floor(remaining / 1000 / 60); // MINUTOS COMPLETOS
-      const sec: number = Math.floor((remaining / 1000) % 60); // SEGUNDOS RESTANTES
-
-      setTime({ min, sec }); // ACTUALIZAMOS EL ESTADO PARA RENDERIZAR EL CRONOMETRO
-    }, 1000);
-
-    return timer;
-  };
-
-  //-------ACTUALIZAR EN STORAGE CODIGO DE VERIFICACION-------------------//
-  const updateCodeEmail = (newCode: string): void => {
-    //ACTUALIZA EL ALMACENAMIENTO LOCAL DEL NAVEGADOR
-    localStorage.setItem(ENamesOfKeyLocalStorage.CODE, String(newCode));
-    setCodeStoredEmail(newCode); // => ACTUALIZA EL ESTADO LOCAL
-
-    // SI HAY CARACTERES
-    if (newCode.length > 0) {
-      // LIMPIAR CUALQUIER TIMER VIEJO
-      if (timerRef.current) clearInterval(timerRef.current);
-      setExpired(false); //EXPIRADO EN FALSE
-      timerRef.current = runTimerExpiration(); //CORRER EL TIEMPO
-    } else {
-      // SI HAY TIMER
-      if (timerRef.current) {
-        clearInterval(timerRef.current); //=> LIMPIAR
-        timerRef.current = null; // ==> PASAR REF A NULL
-      }
-    }
-  };
-
-  // FUNCION PARA ACTUALIZAR BANDERA DE SI SE ESTA ENVIANDO CODIGO AL EMAIL DEL USUARIO O NO
-  const updatedIsSendingCode = (isSendingCode: boolean): void => {
-    setIsSendingCode(isSendingCode);
-  };
-
-  // FUNCION PARA ACTUALIZAR BANDERA DE SI SE ESTA ENVIANDO CODIGO AL EMAIL DEL USUARIO O NO
-  const updatedIsSentCode = (isSentCode: boolean): void => {
-    setIsCodeSent(isSentCode);
-  };
-
-  // ACTUALIZAR EL ESTADO DE VALIDACION DEL CAMPO
-  const updatedFormState = (value: string) => {
-    const validate: TFieldState = codeValidator.validate(value);
-    setFormState((prev) => ({ ...prev, emailCode: validate }));
-  };
-
-  const updatedIsSuccefullyVerified = (isVerifiedSuccess: boolean) => {
-    setIsSuccefullyVerified(isVerifiedSuccess); //VERIFICADO SATISFACTORIO
-  };
-
-  // ---------------------------------------EFECTOS--------------------------------------------------------//
-  //EJECUTAR RESETEO CADA VEZ QUE MODAL SE ABRE O CIERRA
-  useEffect(() => {
-    // SI EL MODAL ACABA DE ABRIRSE
-    if (isRegisterModalOpen) {
-      // DAR FOCO SI EL PRIMER CAMPO ESTA VACIO
-      if (inputRefs.current[0] && otp[0] === '') {
-        inputRefs.current[0].focus(); // ==> FOCUS
-      }
-    }
-
-    // SI EL MODAL ESTA CERRADO O ACABA DE CERRARSE
-    if (!isRegisterModalOpen) {
-      // RESETAR ESTADO DE VALIDACION
-      setFormState(initialFormVerifyEmailState);
-    }
-  }, [isRegisterModalOpen]); // DEPENDE DEL ESTADO DEL PADRE MODAL DE VERIFICACION
-
-  // EFECTO PARA ALMACENAR BANDERA DE SI ESTA VERIFICADO O NO
-  useEffect(() => {
-    localStorage.setItem(ENamesOfKeyLocalStorage.IS_VERIFY_CODE, String(isSuccefullyVerified));
-  }, [isSuccefullyVerified, updatedIsSuccefullyVerified]); //==> DEPENDENCIA EXTERNA
-
-  // --------------------EVENTOS-------------------------------//
+  
   // HANDLER PARA ENVIO DE VERIFICACION DE CODIGO POR PARTE DEL USUARIO
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async <T extends iFormStateValidationClient | iFormStateValidationTask>(e: FormEvent<HTMLFormElement>, formState:T, fieldName: keyof T): Promise<void> => {
     e.preventDefault(); //PREVENIR COMPORTAMIENTO POR DEFECTO
-
     // "GUARDRAIL"
     if (expired) return; //SI EXPIRO NO ACCIONAR NADA
-
     setIsVerifyingCode(true); //PROCESO DE VERIFICACION DE CODIGO EN PROGRESO
 
-    // ACA DEBERIA IR EL FETCH AL ENDPOINT DEL BACKEND PARA GENERAR EL CODIGO Y QUE EL BACKEND SE ENCARGE DE GENERAR
-    // Y VERIFICAR GUARDANDO SESSION TEMPORAL DE USUARIO EN DB/CACHE
-    setOtp(Array(NUM_DIGITS).fill('')); //LIMPIAR CAMPOS
-
-    // SIMULACION DE ESPERA ==> LEYENDO Y ESPERANDO CONSULTA EN BACKEND Y DB
-    setTimeout(() => {
+    try {
+      const fieldState = formState[fieldName] as TFieldState; //SEGUN EL NAME DE LA INTERFACE
+      setOtp(Array(NUM_DIGITS).fill('')); //LIMPIAR CAMPOS
       setIsVerifyingCode(false); // ==> LA VERIFICACION DEL CODIGO YA NO ESTA EN PROGRESO
       setIsCodeVerified(true); // INDICA QUE TERMINO LA VERIFICACION
+      const result = await userVerify({ email:(fieldState.value as string), token, code:fullCode });
 
-      // updatedIsSuccefullyVerified(fullCode.trim() === codeStoredEmail.trim());
-
-      // VERIFICAR LUEGO DEL SUBMIT QUE SEA ESTRICTAMENTE EL MISMO CODIGO
-      if (fullCode.trim() === codeStoredEmail.trim()) {
+      if (result?.success) {
         updatedIsSuccefullyVerified(true);
         showSuccess('¡Correo Verificado!', '¡Su correo fue verificado con exito!');
         openGlobalModal(EModalGlobalType.MODAL_SUCCESS);
       } else {
         updatedIsSuccefullyVerified(false);
-        setIsCodeSent(false); //==> REINICIAR A FALSO SI EL ERROR ES INVALIDO
-        showError('Código incorrecto', 'El código ingresado no es valido, Intente nuevamente.');
+        setIsCodeSent(false);
+        showError('Código incorrecto', 'El código ingresado no es valido.');
         openGlobalModal(EModalGlobalType.MODAL_ERROR);
-        localStorage.removeItem(ENamesOfKeyLocalStorage.CODE);
       }
+    } catch (error: unknown) {
+      const err = error as iStatusError;
+      openGlobalModal(EModalGlobalType.MODAL_ERROR);
+      showError('Error inesperado', 'Intente de nuevo más tarde.');
+      throw err;
+    }finally{
       closeRegisterModal(); //CERRAR MODAL ACTUAL AUTOMATICAMENTE LUEGO DEL EVENTO
-    }, 3000);
+    } 
   };
 
   const valuesFormVerifyEmailContext: TFormVerifyCode = {
     updatedIsSuccefullyVerified,
     setExpired,
-    setTime,
     handleChange,
     handleKeyDown,
     setIsCodeSent,
@@ -249,12 +255,13 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
     setFormState,
     handleSubmit,
     setIsSendingCode,
-    updateCodeEmail,
+    updateTokenEmail,
     updatedIsSendingCode,
     updatedIsSentCode,
     runTimerExpiration,
-    timerRef,
-    codeStoredEmail,
+    setToken,
+    handlePaste,
+    token,
     formState,
     isCodeSent,
     isCodeVerified,
@@ -263,7 +270,6 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
     isSendingCode,
     inputRefs,
     expired,
-    time,
   };
 
   return <FormVerifyEmailContext.Provider value={valuesFormVerifyEmailContext}>{children}</FormVerifyEmailContext.Provider>;

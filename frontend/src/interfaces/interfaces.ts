@@ -1,7 +1,11 @@
 // INTERFACES PARA RUTAS DE LAS PAGINAS
 export interface iEndPointUser {
   USER:string;
+  USER_IDENTIFY:string;
   AUTH_LOGIN:string;
+  USER_VERIFY:string;
+  USER_CODE_REQUEST:string;
+  USER_CODE_DELETE:string;
 }
 
 // INTERFACES PARA URL DE PETICIONES

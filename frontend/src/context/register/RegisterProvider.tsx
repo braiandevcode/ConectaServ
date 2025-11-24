@@ -1,14 +1,16 @@
-import { useEffect, useState, type ChangeEvent, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent, type ReactNode } from 'react';
 import { RegisterContext } from './RegisterContext';
 import type { TRegister } from '../../types/typeRegister';
 import { ENamesOfKeyLocalStorage } from '../../types/enums';
 import { useLocation, useNavigate } from 'react-router';
 import type { iEmailUser } from '../../interfaces/iEmailUser';
+import type { iTimeExpire } from '../../interfaces/iTimeExpire';
 
 // CONTEXTO DE ESTADOS GENERALES A FORMULARIOS
 const RegisterProvider = ({ children }: { children: ReactNode }) => {
   const location = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
+
   //ESTADO DE TERMINOS Y CONDICIONES EN FALSE SIEMPRE
   const [terms, setTerms] = useState<boolean>(false);
   //BANDERA PARA SABER SI YA INTERACTUO O NO EN PASSWORD Y CONFIRMAR PASSWORD. UTIL PARA EVITAR ESTILOS INNECESARIOS AL MONTAR COMPONENTE
@@ -18,9 +20,15 @@ const RegisterProvider = ({ children }: { children: ReactNode }) => {
   const [password, setPassword] = useState<string>(''); //ESTADO EN TIEMPO RUNTIME PARA PASSWORD
   const [confirmPassword, setConfirmPassword] = useState<string>(''); //ESTADO EN TIEMPO RUNTIME PARA CONFIRMPASSWORD
 
-  const [resendEmail, setResendEmail] = useState<iEmailUser>({ emailUser: '' });
+  const [resendEmail, setResendEmail] = useState<iEmailUser>({ emailCode: '' });
 
-    // ESTADO LOCAL DE SI YA SE VERIFICO CORRECTAMENTE
+  const [expiresAt, setExpiresAt] = useState<number | null>(null);
+
+
+  const [time, setTime] = useState<iTimeExpire>({ min: 0, sec: 0 }); // ==> ESTADO PARA EL TIEMPO ACTUAL DE EXPIRACION DEL CODIGO
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null); // ==> ID DE REFERENCIA PARA EL TIMMER
+
+  // ESTADO LOCAL DE SI YA SE VERIFICO CORRECTAMENTE
   const [isSuccefullyVerified, setIsSuccefullyVerified] = useState<boolean>(() => {
     return localStorage.getItem(ENamesOfKeyLocalStorage.IS_VERIFY_CODE) === 'true';
   });
@@ -49,10 +57,9 @@ const RegisterProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [location.pathname, navigate]); //==> DEPENDE DE CAMBIOS EN LOCATION Y NAVIGATE, HOOKS DE REACT
 
+  
   //VALORES DE ESTADOS QUE CONSUME EL CONTEXTO
   const contextValuesRegister: TRegister = {
-    resendEmail,
-    isSuccefullyVerified,
     setIsSuccefullyVerified,
     setResendEmail,
     setInteractedConfirmPassword,
@@ -62,6 +69,13 @@ const RegisterProvider = ({ children }: { children: ReactNode }) => {
     setConfirmPassword,
     setPassword,
     setIsSending,
+    expiresAt,
+    setExpiresAt,
+    setTime,
+    time,
+    timerRef,
+    resendEmail,
+    isSuccefullyVerified,
     isSending,
     confirmPassword,
     interactedConfirmPassword,

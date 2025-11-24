@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { ECategory } from 'src/types/enums/enumCategory';
+import { ECategory } from 'src/common/enums/enumCategory';
 
 export class CreateCategoryDto {
   @IsNotEmpty({ message: 'La categoria no puede estar vacia' })

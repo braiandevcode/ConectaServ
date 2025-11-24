@@ -56,15 +56,18 @@ export enum ENamesOfKeyLocalStorage {
   CURRENT_STEP = 'currentStep',
   IMAGE_INDEXED_DB = 'images',
   INTERACTED = 'interacted',
-  CODE = 'codeEmail',
   IS_VERIFY_CODE = 'isVerified'
 }
 
-// ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES ENDPOINTS
+//ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES ENDPOINTS
 export enum EEndpoint {
-  USER_ROLE = '/user:role', 
-  USER = '/users',
-  AUTH= '/api/auth'
+  USER= '/api/v1/users',
+  USER_CODE_REQUEST='/api/v1/code/request',
+  USER_VERIFY='/api/v1/users/verify',
+  USER_CODE_DELETE= '/api/v1/code',
+  USER_IDENTIFY='/api/v1/users/identify',
+  CODE_VERIFY ='/api/v1/code/verify',
+  AUTH= '/api/v1/auth',
 }
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA

@@ -1,4 +1,4 @@
-import { ELocations } from 'src/types/enums/enumLocations';
+import { ELocations } from 'src/common/enums/enumLocations';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,

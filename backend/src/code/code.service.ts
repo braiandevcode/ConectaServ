@@ -1,4 +1,4 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 // import { UpdateCodeDto } from './dto/update-code.dto';
 import { TVerifyCode } from 'src/types/typeSendVerifyCode';
 import { ErrorManager } from 'src/config/ErrorMannager';
@@ -9,14 +9,18 @@ import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { RequestCodeDto } from './dto/request-code-dto';
 import { iPayloadTokenVerifyEmail } from 'src/interface/iPyloadTokenVerifyEmail';
-import { ETokenType } from 'src/types/enums/enumTokenType';
 import { iSendResendEmail } from 'src/interface/iSendResendEmail';
 import { VerifyCodeDto } from './dto/verify-code-dto';
-import { EStatusVerifyEmail } from 'src/types/enums/enumStatusVerifyEmail';
 import { iMessageResponseStatus } from 'src/interface/iMessagesResponseStatus';
 import { iMessageStausToken } from 'src/interface/iMessageStatusToken';
 import { ConfigResendService } from 'src/configResend/config-resend.service';
 import { CreateEmailResponse, Resend } from 'resend';
+import { UpdateResult } from 'typeorm/browser';
+import { User } from 'src/user/entities/user.entity';
+import { join } from 'path'; //MODULO PATH DE NODE
+import { readFileSync } from 'fs'; //MODULO FS DE NODE
+import { ETokenType } from 'src/common/enums/enumTokenType';
+import { EStatusVerifyEmail } from 'src/common/enums/enumStatusVerifyEmail';
 
 @Injectable()
 export class CodeService {
@@ -58,6 +62,14 @@ export class CodeService {
     return this.jwtService.sign(payload);
   }
 
+  // METODO PARA CREAR PLANTILLA DE RESEND
+  private getMailServiceHtml(code:string):string{
+    const filePath:string = join(__dirname, "../templates/code_verify.html");
+    let html:string = readFileSync(filePath, 'utf-8');
+    html = html.replace('{{CODE}}', code);
+    return html;
+  }
+
   // ENVIO DE CODIGO MEDIANTE SERVICIO RESEND
   private async sendEmailService({ email, code }: iSendResendEmail): Promise<CreateEmailResponse> {
     try {
@@ -68,7 +80,7 @@ export class CodeService {
       });
 
       // HTML SIMPLE PARA EL EMAIL USANDO LOS PARAMS DE LA "PLANTILLA" 
-      const html:string = `<p>TU CÓDIGO ES: <strong>${templateParams.verification_code}</strong></p>`;
+      const html:string = this.getMailServiceHtml(templateParams.verification_code);
 
       // ENVIO Y RESPUESTA DEL SERVICIO RESEND
       const responseService:CreateEmailResponse = await this.resend.emails.send({
@@ -78,7 +90,7 @@ export class CodeService {
         html,
       });
 
-      // VALIDAR RESPUESTA BASICA (RESEND DEVUELVE UN OBJETO CON ID SI SE ENVIO CORRECTAMENTE)
+      // VALIDAR RESPUESTA BASICA
       if (!responseService || !responseService.data || !responseService.data.id) {
         // LOG Y RETORNO
         this.logger.debug(responseService);
@@ -91,7 +103,7 @@ export class CodeService {
     } catch (error) {
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
-      this.logger.error(err?.message ?? String(error), (err as any)?.stack); // LOG PARA DEPURACION
+      this.logger.error(err?.message ?? String(error), err.stack); // LOG PARA DEPURACION
 
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
@@ -100,50 +112,61 @@ export class CodeService {
     }
   }
 
-  //CREAR Y GUARDAR EL DATO EN DB
+  //SOLICITAR SERVICIO RESEND Y GUARDAR DATOS EN DB
   async requestCode(requestCodeDto: RequestCodeDto): Promise<iMessageStausToken> {
-    const { email } = requestCodeDto;
-    let generateCode: number; // AUX PARA NUMERO DE CODIGO GENERADO
-    let verificationToken: string; // AUX PARA EL TOKEN GENERADO
+    const { emailCode } = requestCodeDto; //DESESTRUCTURO EL CUERPO
+    let code: number; // AUX PARA ALMACENAR EN MOMORIA NUMERO DE CODIGO GENERADO
+    let token: string; // AUX PARA ALMACENAR EN MOMORIA EL TOKEN GENERADO
 
-    this.logger.debug(email);
+    this.logger.debug(emailCode);
     try {
-      // LLAMAR AL SERVICIO PARA QUE HAGA LA CONSULTA A LA TABLA USUARIOS Y FILTRE EL EMAIL QUE SE LE PASA
-      const resultUserService: any = await this.userService.getUserEmail({ email });
+      // LLAMAR AL SERVICIO QUE SE ENCARGA DE LA CONSULTA A LA TABLA USUARIOS Y FILTRA POR EL EMAIL QUE SE LE PASA
+      const resultUserService: User | null = await this.userService.getUserEmail({ email: emailCode});
 
       this.logger.debug(resultUserService);
 
-      // SI YA EXISTE CONFLICTO
-      if (resultUserService) {
-        this.logger.debug(resultUserService);
-        // USAMOS EL MANEJADOR DE ERRORES YA DEFINIDO POR TI
-        throw ErrorManager.createSignatureError(`CONFLICT :: El email ya está registrado, intenta con otro`);
+      // SI YA EXISTE 
+      if (resultUserService) {        
+        throw ErrorManager.createSignatureError('CONFLICT :: El email ya existe')
       }
 
       // SI NO EXISTE, PROCEDEMOS A GENERAR Y ALMACENAR
       // GENERAR CODIGO Y TOKEN
-      generateCode = this.generateRandomNumber(); // GENERAR NUMERO ALEATORIO
-      verificationToken = this.generateVerificationToken(email); // GENERAR EL TOKEN JWT
+      code = this.generateRandomNumber(); // GENERAR NUMERO ALEATORIO
+      token = this.generateVerificationToken(emailCode); // GENERAR EL TOKEN JWT
 
-      // CALCULAR EXPIRACION
-      const expirationTime: Date = new Date();
+      // ENVIAR CON SERVICIO
+      const resendResponse: CreateEmailResponse =  await this.sendEmailService({ email:emailCode, code });
+      // SI HAY ERROR DEL SERVICIO NO ALMACENAR EN DB
+      if(resendResponse.error?.statusCode === 404){
+        throw ErrorManager.createSignatureError(`NOT_FOUND :: El proceso no se pudo concretar, correo inexistente`);
+      }
 
-      this.logger.debug('ANTES', expirationTime);
+      let expiresAt:Date | null = null;
 
-      // 5 MINUTOS DE EXPIRACIÓN EL MISMO TIEMPO QUE TIENE JWT
-      expirationTime.setMinutes(expirationTime.getMinutes() + 5);
+      if(resendResponse.headers){
+        // CALCULAR EXPIRACION
+        const sendTime = new Date(resendResponse.headers.date); // MOMENTO REAL DEL ENVIO POR LIBRERIA RESEND
+        expiresAt = new Date(sendTime.getTime() + 5 * 60 * 1000); // 5 MINUTOS DESDE EL ENVIO REAL
+        this.logger.debug('ANTES', expiresAt);
+      }
 
-      this.logger.debug('SUMADO A 5M', expirationTime);
+      // SI NO VIENE FECHA ERROR
+      if(expiresAt === null){
+        throw ErrorManager.createSignatureError(`INTERNAL_SERVER_ERROR :: El servicio no pudo concretar el envio, por un problema desconocido`);
+      }
+
+      this.logger.debug('SUMADO A 5M', expiresAt);
 
       const newValues = {
-        code: generateCode.toString(), // CONVERSIÓN A STRING
+        code: code.toString(), // CONVERSIÓN A STRING
         status: EStatusVerifyEmail.PENDING, // ESTADO INICIAL
-        expiresAt: expirationTime, // SE GUARDA EL TIEMPO DE EXPIRACIÓN
+        expiresAt: expiresAt, // SE GUARDA EL TIEMPO DE EXPIRACIÓN
       };
 
       // ACTUALIZAR REGISTRO DE CODIGO
-      const updateResult = await this.codeRepository.update(
-        { toEmail: email }, // CRITERIO, BUSCO POR EMAIL QUE ES UNIQUE
+      const updateResult: UpdateResult = await this.codeRepository.update(
+        { toEmail: emailCode }, // CRITERIO, BUSCO POR EMAIL QUE ES UNIQUE
         newValues, // NUEVOS VALORES A REEMPLAZAR
       );
 
@@ -151,7 +174,7 @@ export class CodeService {
       if (updateResult.affected === 0) {
         // GUARDAR NUEVO REGISTRO EN LA DB (SE CUMPLE TU SEGUNDO REQUERIMIENTO PARCIAL)
         const newCodeRecordCode = this.codeRepository.create({
-          toEmail: email,
+          toEmail: emailCode,
           ...newValues,
         });
         this.logger.debug('NEWRECORDCODE', newCodeRecordCode);
@@ -160,21 +183,19 @@ export class CodeService {
         await this.codeRepository.save(newCodeRecordCode);
       }
 
-      // ENVIAR CON SERVICIO
-      await this.sendEmailService({ email, code: generateCode });
+      this.logger.debug({ token, sussess: true, expiresAt  });
 
-      this.logger.debug({ token: verificationToken, sussess: true });
-
-      return { token: verificationToken, success:true, expiresAt:expirationTime }; // RETORNAR EL TOKEN QUE EL FRONTEND DEBE ALMACENAR
-    } catch (error) {
+      return { token, success:true, expiresAt:expiresAt }; // RETORNAR DATOS QUE EL FRONTEND NECESITARA
+    } catch (error){
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
-      this.logger.error(err?.message ?? String(error), (err as any)?.stack); // LOG PARA DEPURACION
+
+     this.logger.error(err?.message ?? String(error), (err as any)?.stack); // LOG PARA DEPURACION
 
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
       // SI NO, CREO UN ERROR 500 GENERICO CON FIRMA DE ERROR
-      throw ErrorManager.createSignatureError(err?.message ?? 'Error desconocido en requestCode');
+      throw ErrorManager.createSignatureError(err?.message ?? 'Error desconocido');
     }
   }
 
@@ -187,14 +208,14 @@ export class CodeService {
       const payload: iPayloadTokenVerifyEmail = this.jwtService.verify(token); // JWT VERIFICA FIRMA QUE VIENE DEL FRONTEND
 
       this.logger.debug('PAYLOAD', payload);
-      // SI EL EMAIL DEL TOKEN COINCIDE CON EL EMAIL DEL CUERPO
+      // SI EL EMAIL DEL TOKEN NO COINCIDE CON EL EMAIL DEL CUERPO
       if (payload.email !== email || payload.type !== ETokenType.EMAIL_VERIFY) {
         // EL TOKEN NO CORRESPONDE A ESTE EMAIL/FLUJO
-        ErrorManager.createSignatureError(`UNAUTHORIZED :: El token no corresponde al email o al flujo de verificación.`);
+        throw ErrorManager.createSignatureError(`UNAUTHORIZED :: El token no corresponde al email o al flujo de verificación.`);
       }
     } catch (error) {
       // SI jwtService.verify FALLA LANZA EXCEPCIÓN.
-      ErrorManager.createSignatureError(`UNAUTHORIZED :: Token inválido o expirado.`);
+      throw ErrorManager.createSignatureError(`UNAUTHORIZED :: Token inválido o expirado.`);
     }
 
     // VERIFICAR EN LA DB
@@ -219,18 +240,6 @@ export class CodeService {
     );
 
     // ENVIAR BOOLEAN DE EXITO
-    return { message: 'Verificado con exito', success: true } as iMessageResponseStatus;
-  }
-
-  findAll() {
-    return `This action returns all code`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} code`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} code`;
+    return { message: 'Verificado con exito', success: true, status: HttpStatus.OK } as iMessageResponseStatus;
   }
 }

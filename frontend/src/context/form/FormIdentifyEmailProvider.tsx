@@ -7,16 +7,18 @@ import type { TFieldState } from '../../types/typeStateFields';
 import EmailValidator from '../../modules/validators/EmailValidator';
 import useMain from '../../hooks/useMain';
 import { useNavigate } from 'react-router';
-import type { TUser } from '../../types/typeUser';
+// import type { TUser } from '../../types/typeUser';
 import useUserApi from '../../hooks/useUserApi';
 import FormIdentifyEmailContext from './FormIdentifyEmailContext';
 import { clearPersistence } from '../../utils/storageUtils';
+import type { iMessageResponseStatus } from '../../interfaces/iMessageResponseStatusBack';
+import type { iStatusError } from '../../interfaces/iSatatus';
 
 const emailValidator: EmailValidator = new EmailValidator(); // ==> INSTANCIA DE VALIDACION DE ENTRADA DE CODIGO
 
 // PROVIDER PARA IDENTIFICACION DE EMAIL
 const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
-  const { openGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
+  const { openGlobalModal, showError } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
   const { handleClientClick, handleTaskerClick, client } = useMain(); // HOOK QUE USA EL CONTEXTO DE MAIN PRINCIPAL
   const { getIdentifyEmail } = useUserApi(); //HOOK PARA PETICIONES A DATOS DEL USUARIO
 
@@ -67,32 +69,38 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
     setEmailIdentify(value); //SETEAR EL EMAIL INGRESADO
   };
   
-
-
   //EVENTO DE SUBMIT DE IDENTIFICACION AL BACKEND
-  const submitIdentifyEmail = async (e: FormEvent<HTMLFormElement>) => {
+  const submitIdentifyEmail = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const role: 'client' | 'tasker' | null = client === null ? null : client ? 'client' :'tasker';
-    setFormState((prev) => ({ ...prev, emailIdentify: { error: '', value: '', isValid: false } }));
-    setFormState((prev) => ({ ...prev, emailIdentify: { error: '', value: '', isValid: false } }));
     try {
+      setFormState((prev) => ({ ...prev, emailIdentify: { error: '', value: '', isValid: false } }));
       // LLAMO AL METODO Y PASO EL ARGUMENTO ESPERADO INTERNAMENTE
-      const result = (await getIdentifyEmail({ setIsSendingIdentificationEmail })) as TUser[] | [];
-      // SI LA SOLICITUD TRAE DATOS
-      if (result) {
-        const findIndexEmailIdentify: number = result.findIndex((data) => data.email === emailIdentify);
-        // SI ES DIFERENTE DE -1 LO ENCONTRO
-        if (findIndexEmailIdentify !== -1) {
-          openGlobalModal(EModalGlobalType.MODAL_LOGIN);
-          setIsExistEmail(true);
-        }else{
+      const result: iMessageResponseStatus | null = await getIdentifyEmail({ setIsSendingIdentificationEmail, emailIdentify: (formState.emailIdentify.value as string) });
+    
+      if(result){
+        // SI ES 200 NO EXISTE PASAR AL REGISTRO
+        if(result.success){
           navigate(`register/${role}`); //SEGUN EL ROL GUARDADO NAVEGAR
           setIsExistEmail(false);
+          return;
         }
       }
+      
     } catch (error) {
+      const err = error as iStatusError; //FIRMA PERSONALIZADA PARA LOS ESTADOS DEL BACKEND
+      
+      // SI YA EXISTE MANDAR AL LOGIN
+      if(err.status === 409){     
+        openGlobalModal(EModalGlobalType.MODAL_LOGIN);
+        setIsExistEmail(true);
+        return;
+      }
+
+      openGlobalModal(EModalGlobalType.MODAL_ERROR);
       await clearPersistence(); //ASEGURO LIMIAR STORAGE
-      throw error;
+      showError('Error inesperado', 'Intente de nuevo más tarde.');
+      throw err;
     }
   };
 

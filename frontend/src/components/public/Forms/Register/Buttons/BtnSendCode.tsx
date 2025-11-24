@@ -4,7 +4,7 @@ import type { iBtnSendCode } from '../../../../../interfaces/iBtnSendCode';
 // CSS
 import './BtnSendCode.css';
 
-// BOTON PARA ENVIAR CODIGO DE VERIFICACION ==> BOTON DENOMINADO INTELIGENTE
+// BOTON PARA ENVIAR CODIGO DE VERIFICACION
 const BtnSendCode = ({ handleSend, text, IconReact, iconProps, className, ...props }: iBtnSendCode) => {
   return (
     <>

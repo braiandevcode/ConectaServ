@@ -1,5 +1,9 @@
+import { HttpStatus } from "@nestjs/common";
+
 export interface iMessageStausToken{
-    token: string;
-    expiresAt:Date;
+    token?: string;
     success:boolean;
+    // statusCode: HttpStatus
+    expiresAt?:Date;
+    message?:string;
 }

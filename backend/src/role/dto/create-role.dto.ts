@@ -3,7 +3,7 @@ import {
   IsNotEmpty,
   IsString,
 } from 'class-validator';
-import { ERoles } from 'src/types/enums/enumRoles';
+import { ERoles } from 'src/common/enums/enumRoles';
 
 export class CreateRoleDto {
   @IsNotEmpty({ message: 'El role es requerido' })

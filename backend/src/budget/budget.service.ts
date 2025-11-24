@@ -5,7 +5,7 @@ import { Budget } from './entities/budget.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { ErrorManager } from 'src/config/ErrorMannager';
-import { ECategory } from 'src/types/enums/enumCategory';
+import { ECategory } from 'src/common/enums/enumCategory';
 
 @Injectable()
 export class BudgetService {
@@ -22,9 +22,8 @@ export class BudgetService {
     const { amountBudge, budgeSelected, reinsertSelected } = createBudgetDto;
     try {
       // AQUI SE DEFINE CUAL Repository/Manager USAR
-      const repo: Repository<Budget> = manager
-        ? manager.getRepository(Budget)
-        : this.budgetRepository;
+      const repo: Repository<Budget> = manager ? manager.getRepository(Budget) : this.budgetRepository;
+      
       let budgeTasker: Budget | null = null;
 
       this.logger.debug(category);
@@ -40,7 +39,7 @@ export class BudgetService {
 
         this.logger.debug(budgeTasker);
 
-        budgeTasker = await repo.save(budgeTasker);
+        // budgeTasker = await repo.save(budgeTasker);
       }
 
       return budgeTasker;

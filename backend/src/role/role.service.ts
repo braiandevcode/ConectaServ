@@ -1,11 +1,10 @@
 import { HttpException, Injectable, Logger } from '@nestjs/common';
-import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
-import { ERoles } from 'src/types/enums/enumRoles';
 import { ErrorManager } from 'src/config/ErrorMannager';
+import { ERoles } from 'src/common/enums/enumRoles';
 
 @Injectable()
 export class RoleService {

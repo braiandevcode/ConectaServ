@@ -16,13 +16,12 @@ export class Code {
     type: 'varchar',
     length: '6',
     nullable: false,
-    unique: true,
   })
   code: string;
-
-  @Column({ name: 'expires_at', type: 'timestamp' })
+  
+  @Column({ name: 'expires_at', type: 'timestamp', nullable:false })
   expiresAt: Date;
-
+  
   @Column({
     name: 'status',
     type: 'varchar',
@@ -30,7 +29,8 @@ export class Code {
     nullable: false,
   })
   status: string;
-
+  
+  // EMAIL UNICO
   @Column({
     name: 'to_email',
     type: 'varchar',

@@ -4,8 +4,8 @@ import { UpdateLocationDto } from './dto/update-location.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { Location } from './entities/location.entity';
-import { ELocations } from 'src/types/enums/enumLocations';
 import { ErrorManager } from 'src/config/ErrorMannager';
+import { ELocations } from 'src/common/enums/enumLocations';
 
 @Injectable()
 export class LocationsService {

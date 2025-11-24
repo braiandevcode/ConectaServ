@@ -1,6 +1,7 @@
-import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import type { ChangeEvent, Dispatch, RefObject, SetStateAction } from 'react';
 import type { TStepFourProps } from './typePropsStepFour';
 import type { iEmailUser } from '../interfaces/iEmailUser';
+import type { iTimeExpire } from '../interfaces/iTimeExpire';
 
 // TIPADO GENERAL PARA FORMULARIOS
 export type TRegister = Omit<TStepFourProps, 'handleChangeLocation' | 'handleConfirmPassword' | 'handleEmail' | 'handleFullName' | 'handlePassword' | 'handleUserName'> & {
@@ -16,5 +17,10 @@ export type TRegister = Omit<TStepFourProps, 'handleChangeLocation' | 'handleCon
   interactedConfirmPassword: boolean;
   terms: boolean;
   resendEmail: iEmailUser;
+  timerRef: RefObject<ReturnType<typeof setInterval> | null>;
+  time: iTimeExpire;
+  setTime: Dispatch<SetStateAction<iTimeExpire>>;
+  expiresAt:number | null;
+  setExpiresAt: Dispatch<SetStateAction<number | null>>
   setResendEmail: Dispatch<SetStateAction<iEmailUser>>;
 };

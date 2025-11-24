@@ -4,9 +4,10 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { EntityManager, Repository } from 'typeorm';
-import { ECategory } from 'src/types/enums/enumCategory';
 import { ErrorManager } from 'src/config/ErrorMannager';
-import { SERVICES_BY_CATEGORY } from 'src/types/enums/enum.utils';
+import { ECategory } from 'src/common/enums/enumCategory';
+import { SERVICES_BY_CATEGORY } from 'src/common/enums/enum.utils';
+
 
 @Injectable()
 export class CategoryService {

@@ -5,8 +5,8 @@ import { Day } from './entities/day.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { EntityCreatorService } from 'src/shared/entityCreator.service';
-import { VALID_DAYS } from 'src/types/enums/enum.utils';
 import { ErrorManager } from 'src/config/ErrorMannager';
+import { VALID_DAYS } from 'src/common/enums/enum.utils';
 
 @Injectable()
 export class DayService {
