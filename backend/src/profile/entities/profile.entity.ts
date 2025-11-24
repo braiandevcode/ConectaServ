@@ -1,21 +1,23 @@
 import { JoinMannager } from 'src/config/JoinMannager.';
-import { DetailsProfileTasker } from 'src/details_profile_taskers/entities/details_profile_tasker.entity';
+import { Tasker } from 'src/tasker/entities/tasker.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   OneToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('image_profiles')
 export class Profile {
-  @PrimaryColumn({ name: 'id_profile', type: 'uuid' }) //ID IMAGEN UUID VIENE DEL FRONT
+  @PrimaryGeneratedColumn('uuid', { name: 'id_profile' })
   idProfile: string;
-  @Column({ name: 'image_base64', type: 'text', nullable: false })
-  imageBase64: string;
+
+  @Column({ name: 'image_base64', type: 'longblob', nullable: false })
+  imageBase64: Buffer;
 
   @Column({ name: 'mime_type', type: 'varchar', length: 100, nullable: false })
   mimeType: string;
@@ -32,29 +34,32 @@ export class Profile {
   originalName: string;
 
   @Column({
-    name: 'order',
-    type: 'tinyint',
-    unsigned: true,
+    name: 'system_file_name',
+    type: 'char',
+    length: 45,
     nullable: false,
   })
-  order: number;
+  systemFileName: string;
 
   // RELACION 1:1 UNA IMAGEN DE PERFIL PUEDE PERTENECER O NO A UN SOLO REGISTRO DE DETALLES DE TASKER
-  @OneToOne(() => DetailsProfileTasker, (details) => details.imageProfile)
+  @OneToOne(() => Tasker, (tasker) => tasker.imageProfile, { cascade: true })
   @JoinColumn(
     JoinMannager.manyToOneConfig({
       current: {
-        name: 'id_details_profile_tasker',
-        referencedColumnName: 'idDetailsProfileTasker',
-        fkName: 'fk_profile_details_profile_tasker',
+        name: 'id_tasker',
+        referencedColumnName: 'idTasker',
+        fkName: 'fk_profile_tasker',
       },
     }),
   ) //FK DE CLAVE DE DETALLES DE PERFIL DE UN TASKER EN TABLA PERFIL
-  detailsProfileTasker: DetailsProfileTasker;
+  tasker: Tasker;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
   updatedAt: Date;
+
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp' })
+  deletedAt: Date;
 }

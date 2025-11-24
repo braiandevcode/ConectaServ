@@ -1,3 +1,4 @@
+import { ERoles } from "src/types/enums/enumRoles";
 import { User } from "src/user/entities/user.entity";
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
@@ -7,9 +8,9 @@ export class Role {
     idRole: string;
 
     @Column({ name: 'name_role', type:'varchar', length:50, nullable:false })
-    nameRole:string;
+    nameRole:ERoles;
 
     // UNO O MAS ROLES PUEDEN PERTENECER A UNO O MAS USUARIOS
-    @ManyToMany(() => User, (user) => user.roles)
+    @ManyToMany(() => User, (user) => user.rolesData)
     users:User[]
 }

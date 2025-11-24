@@ -3,7 +3,7 @@ import { DayService } from './day.service';
 import { CreateDayDto } from './dto/create-day.dto';
 import { UpdateDayDto } from './dto/update-day.dto';
 
-@Controller('day')
+@Controller('api')
 export class DayController {
   constructor(private readonly dayService: DayService) {}
 

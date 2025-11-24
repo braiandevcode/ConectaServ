@@ -1,4 +1,5 @@
-import { ArrayNotEmpty, IsArray, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsEnum, IsString } from 'class-validator';
+import { EHour } from 'src/types/enums/enumHour';
 
 export class CreateHourDto {
   @IsArray({ message: 'los datos de hour deben ser un arreglo' })
@@ -7,5 +8,6 @@ export class CreateHourDto {
     each: true,
     message: 'cada elemento de hour debe ser una cadena de texto',
   })
+   @IsEnum(EHour, { message: 'Los Horarios establecidos no son válidos.' })
   hour: string[];
 }

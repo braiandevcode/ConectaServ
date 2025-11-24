@@ -1,3 +1,4 @@
+import { ELocations } from 'src/types/enums/enumLocations';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -12,14 +13,14 @@ import {
 //ENTIDAD DE LOCALIDAD ELEGIDA POR EL USUAURIO
 @Entity('locations')
 export class Location {
-  @PrimaryGeneratedColumn('uuid', { name: 'id_location'})
+  @PrimaryGeneratedColumn('uuid', { name: 'id_location' })
   idLocation: string;
 
-  @Column({ name: 'city', type: 'varchar', length: 150, nullable: false })
-  city: string;
+  @Column({ name: 'city_name', type: 'varchar', length: 150, nullable: false, unique:true })
+  cityName: ELocations;
 
   //RELACIONES ==> UNA MISMA LOCALIDAD PUEDE PERTENECER A MUCHOS USUARIOS
-  @OneToMany(() => User, (user) => user.city)
+  @OneToMany(() => User, (user) => user.locationData)
   user: User[]; //==> VARIOS USUARIOS TIENEN UNA MISMA CIUDAD
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
@@ -28,6 +29,6 @@ export class Location {
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: 'delete_at', type: 'timestamp' })
-  deleteAtAt: Date;
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp' })
+  deletedAtAt: Date;
 }

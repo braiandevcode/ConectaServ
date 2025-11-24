@@ -1,8 +1,11 @@
+import { JoinMannager } from 'src/config/JoinMannager.';
+import { Tasker } from 'src/tasker/entities/tasker.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -12,16 +15,16 @@ export class Budget {
   @PrimaryGeneratedColumn('uuid', { name: 'id_budget' })
   idBudget: string;
 
-  @Column({ name: 'option_budge', type: 'varchar', length: 3, nullable: true })
-  budge: string;
+  @Column({ name: 'option_budge', type: 'varchar', length: 3, default: 'no'})
+  budgeSelected: string;
 
   @Column({
     name: 'option_reinsert',
     type: 'varchar',
     length: 3,
-    nullable: true,
+    default:'no'
   })
-  reinsert: string;
+  reinsertSelected: string;
 
   @Column({
     name: 'amount',
@@ -32,12 +35,16 @@ export class Budget {
   })
   amount: number;
 
+  // RELACION 1:1 UN REGISTRO DE PRESUPUESTO SOLO PERTENECE A UN TASKER
+  @OneToOne(() => Tasker, (tasker) => tasker.budgetData)
+  tasker:Tasker;
+
   @CreateDateColumn({ name: 'created_at', type: 'timestamp', nullable: false })
   createdAt: Date; //FECHA DE CREACION
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
   updatedAt: Date; //FECHA DE MODIFICACION
 
-  @DeleteDateColumn({ name: 'updated_at', type: 'timestamp' })
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp' })
   deletedAt: Date; // FECHA DE ELIMINACION
 }
