@@ -1,4 +1,5 @@
 import {
+  Check,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
@@ -24,6 +25,7 @@ import { Experience } from 'src/experiences/entities/experience.entity';
 import { Exclude } from 'class-transformer';
 
 @Entity('taskers')
+@Check('"active" IN (0, 1)')
 export class Tasker {
   @PrimaryGeneratedColumn('uuid', { name: 'id_tasker' })
   idTasker: string;
@@ -144,6 +146,15 @@ export class Tasker {
     }),
   )
   budgetData:Budget | null;
+
+  //BORRADO LOGICO PARA INTEGRIDAD, AUDITORIA O RECUPERACION
+  @Column({
+    name: 'active',
+    type: 'boolean',
+    nullable: false,
+    default: true,
+  })
+  active: boolean;
 
   // RELACION 1:1 UN TASKER SOLO PODRA ESTAR ASOCIADO A UN USUARIO
   @OneToOne(() => User, (user) => user.taskerData)

@@ -8,13 +8,13 @@ import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { RequestCodeDto } from './dto/request-code-dto';
-import { iPayloadTokenVerifyEmail } from 'src/interface/iPyloadTokenVerifyEmail';
+import { iPayloadTokenVerifyEmail } from 'src/code/interface/iPyloadTokenVerifyEmail';
 import { ETokenType } from 'src/types/enums/enumTokenType';
-import { iSendResendEmail } from 'src/interface/iSendResendEmail';
+import { iSendResendEmail } from 'src/code/interface/iSendResendEmail';
 import { VerifyCodeDto } from './dto/verify-code-dto';
 import { EStatusVerifyEmail } from 'src/types/enums/enumStatusVerifyEmail';
-import { iMessageResponseStatus } from 'src/interface/iMessagesResponseStatus';
-import { iMessageStausToken } from 'src/interface/iMessageStatusToken';
+import { iMessageResponseStatus } from 'src/code/interface/iMessagesResponseStatus';
+import { iMessageStausToken } from 'src/code/interface/iMessageStatusToken';
 import { ConfigResendService } from 'src/configResend/config-resend.service';
 import { CreateEmailResponse, Resend } from 'resend';
 
