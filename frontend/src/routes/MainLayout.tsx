@@ -8,6 +8,7 @@ import ModalGlobalRenderer from '../components/public/Modals/ModalGlobalRenderer
 // import GlobalModalProvider from '../context/modal/GlobalModalProvider';
 import LoginProvider from '../context/login/LoginProvider';
 import FormIdentifyEmailProvider from '../context/form/FormIdentifyEmailProvider';
+import GlobalModalProvider from '../context/modal/GlobalModalProvider';
 
 // LAYOUT PRINCIPAL DE LA APLICACION
 // ESTE LAYOUT ESTA A UNA RUTA O GRUPOS DE RUTAS Y SE USA COMO CONTENEDOR PARA ESAS RUTAS.
@@ -17,26 +18,27 @@ const MainLayout = () => {
   return (
     // ENVOLVEMOS TODO CON EL PROVIDER PRINCIPAL PARA COMPARTIR DATOS GLOBALES ENTRE COMPONENTES
     // CONTEXTO GLOBAL PARA MODALES DE MENSAJES EN TODA LA APP
-    <MainProvider>
-      <FormIdentifyEmailProvider>
-        <LoginProvider>
-          <ModalGlobalRenderer />
-          {loading ? (
-            <Loader />
-          ) : (
-            <>
-              <Header /> {/* HEADER FIJO QUE SE MUESTRA EN TODAS LAS PAGINAS */}
-              {/* CONTENEDOR PRINCIPAL DONDE SE CARGA EL CONTENIDO SEGUN LA RUTA ACTUAL */}
-              <main> 
-                {/* className='c-flex c-flex-column c-flex-items-center' */}
-                <Outlet /> {/* OUTLET ES EL ESPACIO DONDE REACT ROUTER RENDERIZA LA PAGINA ACTUAL */}
-              </main>
-              <Footer /> {/* FOOTER FIJO QUE SE MUESTRA EN TODAS LAS PAGINAS */}
-            </>
-          )}
-        </LoginProvider>
-      </FormIdentifyEmailProvider>
-    </MainProvider>
+    <GlobalModalProvider> {/* PARA QUE CUALQUIER MODAL INFORMATIVO TENGA ACCESO GLOBALMENTE */}
+      <MainProvider>
+        <FormIdentifyEmailProvider>
+          <LoginProvider>
+            <ModalGlobalRenderer />
+            {loading ? (
+              <Loader />
+            ) : (
+              <>
+                <Header /> {/* HEADER FIJO QUE SE MUESTRA EN TODAS LAS PAGINAS */}
+                {/* CONTENEDOR PRINCIPAL DONDE SE CARGA EL CONTENIDO SEGUN LA RUTA ACTUAL */}
+                <main> 
+                  <Outlet /> {/* OUTLET ES EL ESPACIO DONDE REACT ROUTER RENDERIZA LA PAGINA ACTUAL */}
+                </main>
+                <Footer /> {/* FOOTER FIJO QUE SE MUESTRA EN TODAS LAS PAGINAS */}
+              </>
+            )}
+          </LoginProvider>
+        </FormIdentifyEmailProvider>
+      </MainProvider>
+    </GlobalModalProvider>
   );
 };
 

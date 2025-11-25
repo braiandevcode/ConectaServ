@@ -20,12 +20,14 @@ import useIdentifyEmail from '../../../../../../hooks/useIdentifyEmail';
 import useUserApi from '../../../../../../hooks/useUserApi';
 import useGlobalModal from '../../../../../../hooks/useGlobalModal';
 import { EModalGlobalType } from '../../../../../../types/enumGlobalModalType';
-import type { TUser } from '../../../../../../types/typeUser';
+import type { iMessageStatusToken } from '../../../../../../interfaces/iMessageStatusToken';
+import type { iMessageResponseStatus } from '../../../../../../interfaces/iMessageResponseStatusBack';
+import type { iStatusError } from '../../../../../../interfaces/iSatatus';
 
 // COMPONENTE PASO 4
 const StepFour = () => {
   const { formState, stepData } = useRegisterTasker(); //HOOK REGISTRO PROFESIONAL
-  const { isSendingCode, isCodeSent} = useVerifyEmailCode(); //HOOK QUE USA CONTEXTO VERIFICACION DE EMAIL
+  const { isSendingCode, isCodeSent, updateTokenEmail} = useVerifyEmailCode(); //HOOK QUE USA CONTEXTO VERIFICACION DE EMAIL
   const { password, isSending, isSuccefullyVerified, interactedPassword, interactedConfirmPassword, confirmPassword, setResendEmail } = useRegister(); //HOOK DE ESTADOS DE REGISTROS EN COMUN
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useStepFour(); // HOOK PASO 4
   const { setIsSendingIdentificationEmail } = useIdentifyEmail();
@@ -35,26 +37,43 @@ const StepFour = () => {
   // ENVIAR CODIGO
   const send = async (): Promise<void | null> => {
     try {
-      const resultVerifyUser: TUser[] | null = await getIdentifyEmail({ setIsSendingIdentificationEmail });
+      const responseIdentify: iMessageResponseStatus | null = await getIdentifyEmail({ setIsSendingIdentificationEmail, emailIdentify: (formState.email.value as string) });
 
-      if (!resultVerifyUser) return null; //NO SEGUIR getIdentifyEmail YA MANEJA ENVIO DE LA INFO SEGUN EL PROBLEMA
-
-      // SI HAY DATOS DE USUARIOS
-      const emailExist: boolean = resultVerifyUser.some((d) => d.email === stepData[EKeyDataByStep.FOUR].email);
-      // SI EL EMAIL NO EXISTE
-      if (!emailExist) {
-        await sendCodeToUserEmail({ emailUser: stepData[EKeyDataByStep.FOUR].email }); // ENVIAR
-        setResendEmail({ emailUser: stepData[EKeyDataByStep.FOUR].email });
-      } else {
-        openGlobalModal(EModalGlobalType.MODAL_ERROR);
-        // SINO MENSAJE
-        showError('Email existente', 'El correo ya existe.');
+      
+  
+      if(responseIdentify){
+        console.log(responseIdentify.status);
+        // SI EL EMAIL NO EXISTE ES 200
+        if (responseIdentify.success) {
+          await sendCodeToUserEmail({ emailCode: stepData[EKeyDataByStep.FOUR].email }); // ENVIAR
+            const resend: iMessageStatusToken | undefined = await sendCodeToUserEmail({ emailCode:  stepData[EKeyDataByStep.FOUR].email }); // ENVIAR
+                  
+            // SI NO VIENE EL MENSAJE DE RESPUESTA O NO ES SUCCESS O NO HAY DATOS DE FECHA DE EXPIRACION
+            if(!resend || !resend.success || !resend.expiresAt){
+              openGlobalModal(EModalGlobalType.MODAL_ERROR);
+              showError('Error inesperado', 'Intente de nuevo más tarde.');
+              return;
+            }
+            updateTokenEmail(resend.token, new Date(resend.expiresAt));
+            setResendEmail({ emailCode: stepData[EKeyDataByStep.FOUR].email });
+        } 
       }
+
     } catch (error) {
+
+      const err = error as iStatusError; //FIRMA PERSONALIZADA PARA LOS ESTADOS DEL BACKEND
+      
+      //  SI EN ESTE PROCESO ES CONCLICT MOSTRAR MODAL
+      if(err.status === 409){
+        openGlobalModal(EModalGlobalType.MODAL_ERROR);
+        showError('Usuario existente', 'El correo ya se encuentra registrado.');
+        return;
+      }
+
       openGlobalModal(EModalGlobalType.MODAL_ERROR);
       // SINO MENSAJE
       showError('Error inesperado', 'Intente de nuevo más tarde.');
-      throw error;
+      throw err;
     }
   };
 

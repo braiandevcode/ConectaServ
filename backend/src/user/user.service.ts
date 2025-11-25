@@ -14,6 +14,8 @@ import { LocationsService } from 'src/location/locations.service';
 import { RoleService } from 'src/role/role.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { QueryRunner } from 'typeorm/browser';
+import { UserIdentifyEmailDto } from './dto/user-identify-email-dto';
+import { iMessageResponseStatus } from 'src/code/interface/iMessagesResponseStatus';
 
 @Injectable()
 export class UserService {
@@ -29,7 +31,7 @@ export class UserService {
     private readonly dataSource: DataSource,
   ) {}
 
-  // REGISTRAR
+  // CREAR DATOS BASICOS DE USUARIO (DEFAULT ROL CLIENTE)
   async create(
     fileProfile: Express.Multer.File | null,
     filesExp: Express.Multer.File[],
@@ -162,16 +164,16 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  // BUSCAR SOLO EL EMAIL EN LA TABLA USERS
+  // BUSCAR SOLO EL EMAIL EN LA TABLA USERS SIN CRITERIOS DE ACTIVO O NO
   async getUserEmail({ email }: { email: string }): Promise<User | null> {
     try {
       // CONSULTA
-      const resultQuery: User | null = await this.userRepository.findOne({
+      const resultFindOneByEmail: User | null = await this.userRepository.findOne({
         where: { email },
         select: ['email'], //BUSCAR SOLO EN LA COLUMNA EMAIL
       });
 
-      return resultQuery;
+      return resultFindOneByEmail;
     } catch (error) {
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
@@ -183,6 +185,37 @@ export class UserService {
       throw ErrorManager.createSignatureError(err.message);
     }
   }
+
+
+  
+  // BUSCAR SOLO EL EMAIL EN LA TABLA USERS DE USUARIOS ACTIVOS
+  async getUserEmailActive(userIdentifyEmailDto: UserIdentifyEmailDto): Promise<iMessageResponseStatus> {
+    try {
+      this.logger.debug(userIdentifyEmailDto.emailIdentify)
+      // CONSULTA
+      const resultQuery: User | null = await this.userRepository.findOne({
+        where: { email:userIdentifyEmailDto.emailIdentify, active: true },
+        select: ['email', 'active'], //BUSCAR SOLO EN LA COLUMNA EMAIL
+      });
+
+      // SI HAY RESULTADOS, PERO NO QUIERO RETORNAR EL OBJETO DE DATOS SOLO MENSAJE AL FRONT
+      if (resultQuery) {
+        throw ErrorManager.createSignatureError('CONFLICT :: El email ya existe')
+      }
+
+      return { message: 'Exito', success:true, status:HttpStatus.OK };
+    } catch (error) {
+      // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
+      const err = error as HttpException;
+      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
+
+      // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
+      if (err instanceof ErrorManager) throw err;
+      // SI NO, CREO UN ERROR 500 GENERICO CON FIRMA DE ERROR
+      throw ErrorManager.createSignatureError(err.message);
+    }
+  }
+
 
   // BUSCAR SOLO EL USUARIO EN LA TABLA USERS DE USUARIOS ACTIVOS
   async findByUserNameActiveForAuth({ userName }: { userName: string }): Promise<User | null> {

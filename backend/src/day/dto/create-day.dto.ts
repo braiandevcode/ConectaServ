@@ -1,5 +1,5 @@
 import { ArrayNotEmpty, IsArray, IsEnum, IsString } from 'class-validator';
-import { EDay } from 'src/types/enums/enumDay';
+import { EDay } from 'src/common/enums/enumDay';
 
 export class CreateDayDto {
   @IsArray({ message: 'los datos de day deben ser un arreglo' })

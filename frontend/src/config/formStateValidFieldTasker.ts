@@ -7,20 +7,20 @@ export const formStateValidFieldTasker: iFormStateValidationTask = {
   fullName: { value: '', error: '', isValid: false },
   userName: { value: '', error: '', isValid: false },
   email: { value: '', error: '', isValid: false },
-  location: { value: '', error: '', isValid: false },
+  cityName: { value: '', error: '', isValid: false },
   password: { value: '', error: '', isValid: false },
   confirmPassword: { value: '', error: '', isValid: false },
 
   // PASO 1 CATEGORIA
   category: { value: '', error: '', isValid: false },
-  'context[]': { value: '', error: '', isValid: false },
-  'service[]': { value: '', error: '', isValid: false },
-  'day[]': { value: '', error: '', isValid: false },
-  'hour[]': { value: '', error: '', isValid: false },
+  'workArea': { value: '', error: '', isValid: false },
+  'service': { value: '', error: '', isValid: false },
+  'day': { value: '', error: '', isValid: false },
+  'hour': { value: '', error: '', isValid: false },
   // PASO 2 PERFIL
-  descriptionUser: { value: '', error: '', isValid: true },
-  imageProfile: { value: null, error: '', isValid: true },
-  imageExperiences: { value: null, error: '', isValid: true },
+  description: { value: '', error: '', isValid: true },
+  imageProfileData: { value: null, error: '', isValid: true },
+  imageExperienceData: { value: null, error: '', isValid: true },
 
   // PASO 3 (PRESUPUESTO)
   amountBudge: { value: '', error: '', isValid: false },

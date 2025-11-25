@@ -1,5 +1,5 @@
+import { ECategory } from 'src/common/enums/enumCategory';
 import { Tasker } from 'src/tasker/entities/tasker.entity';
-import { ECategory } from 'src/types/enums/enumCategory';
 import {
   Column,
   CreateDateColumn,

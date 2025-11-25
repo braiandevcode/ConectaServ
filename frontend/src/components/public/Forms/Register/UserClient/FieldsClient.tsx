@@ -7,22 +7,25 @@ import { EDataClient, ELocationKey } from '../../../../../types/enums';
 import { renderFieldError, styleBorderFieldError } from '../../../../../utils/formUtils';
 import LoaderBtn from '../../../../LoaderBtn';
 import BtnSendCode from '../Buttons/BtnSendCode';
-
-// CSS
-import './FieldsClient.css';
 import useUserApi from '../../../../../hooks/useUserApi';
-import type { TUser } from '../../../../../types/typeUser';
 import useIdentifyEmail from '../../../../../hooks/useIdentifyEmail';
 import useGlobalModal from '../../../../../hooks/useGlobalModal';
 import { EModalGlobalType } from '../../../../../types/enumGlobalModalType';
+import type { iMessageResponseStatus } from '../../../../../interfaces/iMessageResponseStatusBack';
+
+// CSS
+import './FieldsClient.css';
+import type { iMessageStatusToken } from '../../../../../interfaces/iMessageStatusToken';
+import type { iStatusError } from '../../../../../interfaces/iSatatus';
+
 
 // COMPONENTE PASO CAMPO BASICO CLIENTE
 const FieldsClient = () => {
-  const { password, isSending, confirmPassword, interactedPassword, interactedConfirmPassword, setResendEmail, isSuccefullyVerified } = useRegister(); //HOOK QUE USA CONTEXTO REGISTRO GENERALES
-  const { isCodeSent, isSendingCode } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO FORULARIO DE VERIFICAION DE EMAIL(ENGLOBA PARA AMBOS REGISTROS)
+  const { password, isSending, confirmPassword, interactedPassword, interactedConfirmPassword, setResendEmail, isSuccefullyVerified} = useRegister(); //HOOK QUE USA CONTEXTO REGISTRO GENERALES
+  const { isCodeSent, isSendingCode, updateTokenEmail} = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO FORULARIO DE VERIFICAION DE EMAIL(ENGLOBA PARA AMBOS REGISTROS)
   const { formState, dataClient } = useRegisterClient(); //HOOK  QUE USA CONTEXTO REGISTRO CLIENTE
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useFieldsClient(); // HOOK QUE USA CONTEXTO DE LOS CAMPOS DEL FORMULARIO DE CLIENTE
-  const { setIsSendingIdentificationEmail } = useIdentifyEmail();
+  const { setIsSendingIdentificationEmail, emailIdentify } = useIdentifyEmail();
   const { sendCodeToUserEmail, getIdentifyEmail } = useUserApi()
   const { openGlobalModal, showError } = useGlobalModal();
 
@@ -33,31 +36,45 @@ const FieldsClient = () => {
     - SE ENVIO EL CODIGO O
     - SI LA VERIFICACION FUE SATISFACTORIA
   */
+
   const isDisabled: boolean = !formState.email.isValid || isSendingCode || isCodeSent || isSuccefullyVerified;
 
-  // ENVIAR CODIGO
+
+  // ENVIAR CODIGO (ESTE METODO SE DEBE CORREGIR YA QUE SE USA LA MISMA LOGICA EN VARIAS PARTES)
   const send = async (): Promise<void | null> => {
     try {
-      const resultVerifyUser: TUser[] | null = await getIdentifyEmail({ setIsSendingIdentificationEmail });
+      const responseIdentify: iMessageResponseStatus | null= await getIdentifyEmail({ setIsSendingIdentificationEmail, emailIdentify });
 
-      if (!resultVerifyUser) return; //NO SEGUIR getUser YA MANEJA ENVIO DE LA INFO SEGUN EL PROBLEMA
-
-      // SI HAY DATOS DE USUARIOS
-      const emailExist: boolean = resultVerifyUser.some((d) => d.email === dataClient[EDataClient.DATA].email);
-      // SI EL EMAIL NO EXISTE
-      if (!emailExist) {
-        await sendCodeToUserEmail({ emailUser: dataClient[EDataClient.DATA].email }); // ENVIAR
-        setResendEmail({ emailUser: dataClient[EDataClient.DATA].email })
-      } else {
-        openGlobalModal(EModalGlobalType.MODAL_ERROR);
-        // SINO MENSAJE
-        showError('Email existente', 'El correo ya existe.');
+      if(responseIdentify){
+        // SI ES SUCCESS
+        if (responseIdentify.success) {
+          const resend:iMessageStatusToken | undefined = await sendCodeToUserEmail({ emailCode:  dataClient[EDataClient.DATA].email }); // ENVIAR
+        
+          // SI ES SUCCESS O NO HAY DATOS DE FECHA DE EXPIRACION
+          // SI EL BACKEND RESPONDIO PERO LOS DATOS NO SON CORRECTOS
+          if (!resend?.success || !resend?.expiresAt) {
+            openGlobalModal(EModalGlobalType.MODAL_ERROR);
+            showError('Error inesperado', 'Intente de nuevo más tarde.');
+            return;
+          }
+          updateTokenEmail(resend.token, new Date(resend.expiresAt));
+          setResendEmail({ emailCode: dataClient[EDataClient.DATA].email })
+        } 
       }
     } catch (error) {
+      const err = error as iStatusError; //FIRMA PERSONALIZADA PARA LOS ESTADOS DEL BACKEND
+
+      //  SI EN ESTE PROCESO ES CONCLICT MOSTRAR MODAL
+      if(err.statusCode === 409){
+        openGlobalModal(EModalGlobalType.MODAL_ERROR);
+        showError('Email ya registrado', 'El correo ya se encuentra registrado.');
+        return;
+      }
+
       openGlobalModal(EModalGlobalType.MODAL_ERROR);
       // SINO MENSAJE
       showError('Error inesperado', 'Intente de nuevo más tarde.');
-      throw error;
+      throw err;
     }
   };
 

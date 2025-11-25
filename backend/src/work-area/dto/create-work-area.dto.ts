@@ -1,5 +1,5 @@
 import { ArrayNotEmpty, IsArray, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { EWorkAreas } from 'src/types/enums/enumWorkAreas';
+import { EWorkAreas } from 'src/common/enums/enumWorkAreas';
 
 export class CreateWorkAreaDto {
   @IsOptional()

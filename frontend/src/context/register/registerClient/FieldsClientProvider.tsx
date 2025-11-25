@@ -13,7 +13,6 @@ import useMain from '../../../hooks/useMain';
 import type { TLocationKey } from '../../../types/typeLocation';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TTypeContextBasic } from '../../../types/typeContextBasic';
-import useFormVerifyEmailCode from '../../../hooks/useFormVerifyEmailCode';
 import type { TUser } from '../../../types/typeUser';
 
 const FieldsClientProvider = ({ children }: { children: ReactNode }) => {

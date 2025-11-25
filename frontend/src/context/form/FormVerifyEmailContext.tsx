@@ -1,25 +1,24 @@
-import { createContext, createRef, type RefObject } from 'react';
+import { createContext, type RefObject } from 'react';
 import type { TFormVerifyCode } from '../../types/typeFormlVerifyCode';
 import { formStateVerifyCodeEmail } from '../../config/formStateVerifyCodeEmail';
 
 const arrayRefInitialValue: RefObject<(HTMLInputElement | null)[]> = { current: [] }; //ESTADO INICIAL PARA ARRAY DE REFERENCIAS
 // ESTADOS INICIALES
 const defaultFormVerifyEmailContext: TFormVerifyCode = {
-  timerRef: createRef<ReturnType<typeof setInterval> | null>(),
   expired: false,
   inputRefs: arrayRefInitialValue,
   otp: [],
   formState: formStateVerifyCodeEmail,
-  codeStoredEmail: '',
+  token:'',
   isSendingCode: false,
   isCodeSent: false,
   isVerifyingCode: false,
   isCodeVerified: false,
-  time: { min: 0, sec: 0 },
+  handlePaste: () => {},
+  setToken: () => {},
   updatedIsSuccefullyVerified: () => {},
   runTimerExpiration: () => setInterval(() => {}, 0),
   setExpired: () => {},
-  setTime: () => {},
   updatedIsSentCode: () => {},
   handleChange: () => {},
   handleKeyDown: () => {},
@@ -29,7 +28,7 @@ const defaultFormVerifyEmailContext: TFormVerifyCode = {
   setIsSendingCode: () => {},
   setIsCodeVerified: () => {},
   setIsVerifyingCode: () => {},
-  updateCodeEmail: () => {},
+  updateTokenEmail: () => {},
   handleSubmit: async () => {},
   updatedIsSendingCode: () => {},
   updatedFormState: () => {},
