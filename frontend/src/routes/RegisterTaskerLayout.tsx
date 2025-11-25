@@ -1,12 +1,17 @@
 import { Outlet } from 'react-router';
 import TaskerProvider from '../context/register/registerTasker/TaskerProvider';
+import FormVerifyEmailProvider from '../context/form/FormVerifyEmailProvider';
+import ModalRegisterRenderer from '../components/public/Modals/ModalRegisterRenderer';
 
-// LAYOUT DE REGISTRO PROFESIONAL
-// ESTE LAYOUT ESTA A UNA RUTA O GRUPOS DE RUTASY SE USA COMO CONTENEDOR PARA ESAS RUTAS.
+// LAYOUT DE REGISTRO DE TASKER
+// ESTE LAYOUT ESTA A UNA RUTA O GRUPOS DE RUTAS Y SE USA COMO CONTENEDOR PARA ESAS RUTAS.
 const RegisterTaskerLayout = () => {
   return (
     <TaskerProvider>
-        <Outlet /> {/* OUTLET REPRESENTA EL COMPONENTE HIJO SEGUN LA RUTA ACTUAL DEL REGISTRO */}
+      <FormVerifyEmailProvider>
+        <ModalRegisterRenderer />
+        <Outlet /> 
+      </FormVerifyEmailProvider>
     </TaskerProvider>
   );
 };

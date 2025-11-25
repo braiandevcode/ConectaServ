@@ -16,7 +16,6 @@ import { WorkAreaService } from 'src/work-area/workArea.service';
 import { HourService } from 'src/hour/hour.service';
 import { DayService } from 'src/day/day.service';
 import { ServicesService } from 'src/service/services.service';
-import { ECategory } from 'src/types/enums/enumCategory';
 import { BudgetService } from 'src/budget/budget.service';
 import { ProfileService } from 'src/profile/profile.service';
 import { ExperiencesService } from 'src/experiences/experiences.service';
@@ -25,6 +24,7 @@ import { Experience } from 'src/experiences/entities/experience.entity';
 import { instanceToPlain } from 'class-transformer';
 import { TaskerResponse } from './dto/response-tasker.dto';
 import { ImageMetadataDto } from 'src/shared/dtos/image-dto';
+import { ECategory } from 'src/common/enums/enumCategory';
 
 @Injectable()
 export class TaskersService {
@@ -76,6 +76,7 @@ export class TaskersService {
     } as ImageMetadataDto;
   };
 
+  // CREAR UN TASKER
   async create(
     fileProfile: Express.Multer.File | null,
     filesExp: Express.Multer.File[],
@@ -93,13 +94,9 @@ export class TaskersService {
     } = createTaskerDto;
     try {
       // OBTENER EL ROPISITORIO TRANSACCIONAL ==> NECESARIO PARA EL CREATE
-      const taskerRepository: Repository<Tasker> =
-        mannager.getRepository(Tasker);
+      const taskerRepository: Repository<Tasker> = mannager.getRepository(Tasker);
 
-      const categoryEntity: Category = await this.categoryService.findOrCreate(
-        categoryData,
-        mannager,
-      );
+      const categoryEntity: Category = await this.categoryService.findOrCreate(categoryData,mannager);
 
       //------------------------------HABITOS------------------------------//
       const workAreaEntity: WorkArea[] =
@@ -129,13 +126,14 @@ export class TaskersService {
 
       // -------------SECCION DE DATOS PRESUPUESTO-------------------//
       let budgetEntity: Budget | null = null;
-      // PREGUNTAR SI VIENEN DATOS EN DTO ANTES DE PROCESAR A AGREGAR EN PRESUPUESTO
-      if (budgetData)
+      // PREGUNTO SI VIENEN DATOS EN DTO ANTES DE PROCESAR A AGREGAR EN PRESUPUESTO
+      if (budgetData){
         budgetEntity = await this.budgetService.create(
           budgetData,
           categoryEntity.categoryName,
           mannager,
         );
+      }
 
       // OBJETO DE DATOS QUE SE AGREGAN AL TASKER
       const newDataTasker: Tasker = taskerRepository.create({
@@ -151,8 +149,7 @@ export class TaskersService {
       });
 
       // ALMACENAR DATOS
-      const savedDataTasker: Tasker =
-        await taskerRepository.save(newDataTasker);
+      const savedDataTasker: Tasker = await taskerRepository.save(newDataTasker);
 
       // LLAMO A SERVICIO DE CREACION Y ALMACENAMIENTO DE IMAGEN DEL PERFIL
       const imageProfile: Profile | null =

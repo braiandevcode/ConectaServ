@@ -5,8 +5,8 @@ import { Hour } from './entities/hour.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { EntityCreatorService } from 'src/shared/entityCreator.service';
-import { VALID_HOURS } from 'src/types/enums/enum.utils';
 import { ErrorManager } from 'src/config/ErrorMannager';
+import { VALID_HOURS } from 'src/common/enums/enum.utils';
 
 @Injectable()
 export class HourService {

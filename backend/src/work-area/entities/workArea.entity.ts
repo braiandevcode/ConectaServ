@@ -1,5 +1,5 @@
+import { EWorkAreas } from 'src/common/enums/enumWorkAreas';
 import { Tasker } from 'src/tasker/entities/tasker.entity';
-import { EWorkAreas } from 'src/types/enums/enumWorkAreas';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 // ENTIDAD DE HABITOS ELEGIDOS

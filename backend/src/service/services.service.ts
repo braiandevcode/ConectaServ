@@ -5,9 +5,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Service } from './entities/service.entity';
 import { EntityCreatorService } from 'src/shared/entityCreator.service';
 import { EntityManager, Repository } from 'typeorm';
-import { SERVICES_BY_CATEGORY } from 'src/types/enums/enum.utils';
 import { ErrorManager } from 'src/config/ErrorMannager';
-import { ECategory } from 'src/types/enums/enumCategory';
+import { ECategory } from 'src/common/enums/enumCategory';
+import { SERVICES_BY_CATEGORY } from 'src/common/enums/enum.utils';
 
 @Injectable()
 export class ServicesService {

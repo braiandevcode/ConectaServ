@@ -6,7 +6,7 @@ import { WorkArea } from './entities/workArea.entity';
 import { EntityManager, Repository } from 'typeorm';
 import { EntityCreatorService } from 'src/shared/entityCreator.service';
 import { ErrorManager } from 'src/config/ErrorMannager';
-import { VALID_WORK_AREAS } from 'src/types/enums/enum.utils';
+import { VALID_WORK_AREAS } from 'src/common/enums/enum.utils';
 
 @Injectable()
 export class WorkAreaService {

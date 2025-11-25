@@ -25,9 +25,6 @@ const useSendDataRegister = () => {
 
   const { isLastStep } = useValidateStep(); // HOOK PARA VALIDAR PASO
 
-  // SI SE CARGO TODO EN CONTEXTO DE CLIENTE Y EN PROFESIONAL
-  // const isReady: boolean = isLoadedClient || isLoadedProfessional;
-
   // ENVIAR DATOS AL BACKEND DE CUALQUIERA DE LOS DOS REGISTROS
   const submitDataRegister= async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // ==> PREVENIR
@@ -75,7 +72,7 @@ const useSendDataRegister = () => {
       ...(stepData[EKeyDataByStep.TWO]),
       imageProfileData:dataProfileOutId,
       imageExperienceData:dataExperienceOutId,
-      ...(stepData[EKeyDataByStep.THREE] ?? {}), //PUEDE NO ESTAR
+      budgetData:{...(stepData[EKeyDataByStep.THREE] ?? {})}, //PUEDE NO ESTAR
     } as ITaskerData;
 
     //------------------- DATOS DEL USUARIO ROLE CLIENTE--------------------------------//

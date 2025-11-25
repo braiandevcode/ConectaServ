@@ -1,6 +1,6 @@
 import { ArrayNotEmpty, IsArray, IsEnum, IsString } from 'class-validator';
-import { EServiceGarden } from 'src/types/enums/enumServiceGarden';
-import { EServiceMoving } from 'src/types/enums/enumServicesMoving';
+import { EServiceGarden } from 'src/common/enums/enumServiceGarden';
+import { EServiceMoving } from 'src/common/enums/enumServicesMoving';
 
 export class CreateServiceDto {
   @IsArray({ message: 'los datos de service deben ser un arreglo' })

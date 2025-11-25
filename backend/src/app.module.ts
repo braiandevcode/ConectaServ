@@ -17,6 +17,8 @@ import Joi from 'joi';
 import { ConfigResendModule } from './configResend/config-resend.module';
 import { AuthModule } from './auth/auth.module';
 import { RefreshTokensModule } from './refresh-tokens/refresh-tokens.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -70,10 +72,12 @@ import { RefreshTokensModule } from './refresh-tokens/refresh-tokens.module';
         password: config.get<string>('DB_PASSWORD'), // PASSWORD DE LA DB
         database: config.get<string>('DB_NAME'), // NOMBRE DE LA BASE DE DATOS
         entities: [__dirname + '/**/*.entity{.ts,.js}'], // ENTIDADES QUE VA A LEER
-        synchronize: false, // AUTO SINCRONIZA SCHEMA (EN TRUE NO USAR EN PRODUCCIÓN)
+        synchronize: true, // AUTO SINCRONIZA SCHEMA (EN TRUE NO USAR EN PRODUCCIÓN)
       }),
     }),
-
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'assets')
+    }),
     ServicesModule,
     AuthModule,
     UserModule,
