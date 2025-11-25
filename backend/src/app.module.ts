@@ -1,5 +1,4 @@
 import { ServicesModule } from './service/services.module';
-import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ExperiencesModule } from './experiences/experiences.module';
 import { WorkAreaModule } from './work-area/workArea.module';
@@ -16,8 +15,8 @@ import { RoleModule } from './role/role.module';
 import { CodeModule } from './code/code.module';
 import Joi from 'joi';
 import { ConfigResendModule } from './configResend/config-resend.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
+import { AuthModule } from './auth/auth.module';
+import { RefreshTokensModule } from './refresh-tokens/refresh-tokens.module';
 
 @Module({
   imports: [
@@ -36,20 +35,25 @@ import { join } from 'path';
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
 
-        // JWT
+        // JWT VERIFICACION DE EMAIL
         JWT_SECRET_VERIFICATION_EMAIL:Joi.string().required(),
+
+        // JWT AUTENTICACION DE USUARIO
+        JWT_SECRET_AUTH:Joi.string().required(),
+        //TIEMPO DE EXPIRACION DADO
+        JWT_EXPIRES_AUTH:Joi.string().required(),
+
+        // JWT REFRESH
+        JWT_SECRET_REFRESH:Joi.string().required(),
+
+        JWT_EXPIRES_REFRESH:Joi.string().required(),
+
 
         RESEND_API_KEY:Joi.string().required(),
 
         // DOMINIO + PUERTO
         FE_HOST:Joi.string().required(),
         FE_PORT:Joi.number().required(),
-
-
-        // VARIABLES ENTORNO EMAILJS
-        PUBLIC_KEY: Joi.string().required(),
-        SERVICE_ID: Joi.string().required(),
-        TEMPLATE_ID: Joi.string().required(),
       }),
     }),
     // CONECTAR BASE DE DATOS
@@ -86,6 +90,7 @@ import { join } from 'path';
     RoleModule,
     CodeModule,
     ConfigResendModule,
+    RefreshTokensModule,
   ],
 })
 export class AppModule {}
