@@ -168,7 +168,7 @@ export class UserService {
   async getUserEmail({ email }: { email: string }): Promise<User | null> {
     try {
       // CONSULTA
-      const resultQuery: User | null = await this.userRepository.findOne({
+      const resultFindOneByEmail: User | null = await this.userRepository.findOne({
         where: { email },
         select: ['email'], //BUSCAR SOLO EN LA COLUMNA EMAIL
       });
@@ -222,36 +222,6 @@ export class UserService {
     }
   }
 
-  // BUSCAR SOLO EL USUARIO EN LA TABLA USERS DE USUARIOS ACTIVOS
-  async findByUserNameActiveForAuth({ userName }: { userName: string }): Promise<User | null> {
-    try {
-      // CONSULTA
-      const resultQuery: User | null = await this.userRepository.findOne({
-        where: [
-          { email: userName, active: true },
-          { userName: userName, active: true },
-        ],
-        relations:['rolesData'],
-        select: ['idUser', 'email', 'userName', 'password', 'rolesData', 'active'],
-      });
-
-      // SI ES NULL RETORNAR NULO LIBRERIA PASSPORT MANEJA ESE CASO
-      if (!resultQuery) {
-        return null;
-      }
-
-      return resultQuery;
-    } catch (error) {
-      // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
-      const err = error as HttpException;
-      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
-
-      // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
-      if (err instanceof ErrorManager) throw err;
-      // SI NO, CREO UN ERROR 500 GENERICO CON FIRMA DE ERROR
-      throw ErrorManager.createSignatureError(err.message);
-    }
-  }
 
   // BUSCAR SOLO EL USUARIO EN LA TABLA USERS DE USUARIOS ACTIVOS
   async findByUserNameActiveForAuth({ userName }: { userName: string }): Promise<User | null> {
