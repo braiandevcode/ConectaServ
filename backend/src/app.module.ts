@@ -72,7 +72,7 @@ import { join } from 'path';
         password: config.get<string>('DB_PASSWORD'), // PASSWORD DE LA DB
         database: config.get<string>('DB_NAME'), // NOMBRE DE LA BASE DE DATOS
         entities: [__dirname + '/**/*.entity{.ts,.js}'], // ENTIDADES QUE VA A LEER
-        synchronize: true, // AUTO SINCRONIZA SCHEMA (EN TRUE NO USAR EN PRODUCCIÓN)
+        synchronize: false, // AUTO SINCRONIZA SCHEMA (EN TRUE NO USAR EN PRODUCCIÓN)
       }),
     }),
     ServeStaticModule.forRoot({

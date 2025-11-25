@@ -18,8 +18,8 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/shared/multer.options';
 import { TotalSizeValidationPipe } from 'src/shared/pipes/total-size-validation.pipe';
 import { ParseJsonPipe } from 'src/shared/pipes/parse-json.pipe';
-import { iMessageResponseStatus } from 'src/interface/iMessagesResponseStatus';
 import { UserIdentifyEmailDto } from './dto/user-identify-email-dto';
+import { iMessageResponseStatus } from 'src/code/interface/iMessagesResponseStatus';
 
 @Controller('api')
 export class UserController {
