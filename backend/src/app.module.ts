@@ -17,6 +17,8 @@ import Joi from 'joi';
 import { ConfigResendModule } from './configResend/config-resend.module';
 import { AuthModule } from './auth/auth.module';
 import { RefreshTokensModule } from './refresh-tokens/refresh-tokens.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [

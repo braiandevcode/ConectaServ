@@ -14,8 +14,8 @@ import { LocationsService } from 'src/location/locations.service';
 import { RoleService } from 'src/role/role.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { QueryRunner } from 'typeorm/browser';
-import { iMessageResponseStatus } from 'src/interface/iMessagesResponseStatus';
 import { UserIdentifyEmailDto } from './dto/user-identify-email-dto';
+import { iMessageResponseStatus } from 'src/code/interface/iMessagesResponseStatus';
 
 @Injectable()
 export class UserService {
