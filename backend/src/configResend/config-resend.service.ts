@@ -1,49 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-
-// @Injectable()
-// export class ConfigResendService {
-//   //EXPLICACION DE getOrThrow() DEL MODULO DE CongigModule:
-//   // INDICA AL COMPILADOR TS:
-//   // NO ME ADVIERTAS EL undefined
-//   // ESTAMOS SEGUROS DE QUE EL TIPO ES EL QUE INDICAMOS NO ES INDEFINIDO, PORQUE YA VALIDAMOS SU EXISTENCIA ANTES CON
-//   // LIBRERIA JOI AL INICIAR LA APP EN app.module.ts
-
-//   constructor(private readonly configService: ConfigService) {}
-
-//   // CONFIGURAR Y LEER VARIABLES ENTORNO DE CREDENCIALES
-//   public configCredentialsEmailjs(): iConfigDataEmailJs {
-//     const DATA_EMAILJS: iConfigDataEmailJs = {
-//       // CARGAR LA PUBLIC_KEY DESDE VARIABLE DE ENTORNO
-//       PUBLIC_KEY: this.configService.getOrThrow<string>('PUBLIC_KEY'), // ==> CLAVE PUBLICA
-//       SERVICE_ID: this.configService.getOrThrow<string>('SERVICE_ID'), // ==> ID SERVICIO
-//       TEMPLATE_ID:
-//         this.configService.getOrThrow<string>('TEMPLATE_ID'), // ==> ID PLANTILLA
-//     };
-//     return DATA_EMAILJS;
-//   }
-
-//   // OBTENER OBJETO DE CREDENCIALES CON GET ACCESOR
-//   get emailjsKey(): iConfigDataEmailJs {
-//     return this.configCredentialsEmailjs();
-//   }
-
-//   // LOS GET QUE NO SOLO MUESTRAN SINO QUE HACEN ALGO EXTRA LAS NOMBRO COMO METODO  NO COMO ACCESOR
-//   public getKey(): iParamsInit {
-//     const { PUBLIC_KEY } = this.emailjsKey; //DESESTRUCTURO OBJETO
-//     return {
-//       options: {
-//         publicKey: PUBLIC_KEY,
-//       },
-//     };
-//   }
-// }
-
-// INTERFAZ PARA TIPAR LAS CREDENCIALES
-export interface iConfigDataResend {
-  RESEND_API_KEY: string;
-}
-
+import { iConfigDataResend } from './interface/iConfigDataResend';
 @Injectable()
 export class ConfigResendService {
   // EXPLICACION DE getOrThrow() DEL MODULO DE ConfigModule:
