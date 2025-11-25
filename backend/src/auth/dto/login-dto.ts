@@ -7,7 +7,7 @@ export class LoginDto {
     @IsNotEmpty({ message: 'El campo usuario es obligatorio.' })
     userName: string;
 
-    //   CONTRASEÑA
+    // CONTRASEÑA
     @IsString({ message: 'La contraseña debe ser una cadena de texto.' })
     @IsNotEmpty({ message: 'El campo contraseña es obligatorio.' })
     password: string;

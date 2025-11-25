@@ -1,6 +1,8 @@
 import { Exclude } from 'class-transformer';
+import { Code } from 'src/code/entities/code.entity';
 import { JoinMannager } from 'src/config/JoinMannager.';
 import { Location } from 'src/location/entities/location.entity';
+import { RefreshToken } from 'src/refresh-tokens/entities/refresh-token.entity';
 import { Role } from 'src/role/entities/role.entity';
 import { Tasker } from 'src/tasker/entities/tasker.entity';
 
@@ -14,6 +16,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -106,6 +109,10 @@ export class User {
     }),
   )
   taskerData: Tasker;
+
+  // RELACION 1:N ==>UN USUARIO PUEDE TENER UNO O VARIOS REFRESH TOKENS
+  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
+  refreshTokens: RefreshToken[]; // RELACION CON UNO O MUCHO REFRESH TOKENS
 
   // FECHA DE CREACION
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })

@@ -51,7 +51,7 @@ export class UserService {
     await queryRunner.startTransaction(); // ==> INICIO DE LA TRANSACCIÓN
 
     try {
-      // VERIFICAR SI EL USUARIO YA EXISTE
+      // VERIFICAR SI EL USUARIO YA EXISTE Y SI EL ACTIVE ESTA EN TRUE
       // BUSCO EN LA TABLA DE USUARIOS POR EMAIL
       const existingUser: User | null = await queryRunner.manager.findOne(
         User,
@@ -128,9 +128,11 @@ export class UserService {
       }
 
       // SI E ROL ES TASKER PERO NO VIENEN DATOS NO CONTINUAR
-      if(roleData.role === 'tasker' && !taskerData){
-        ErrorManager.createSignatureError('INTERNAL_SERVER_ERROR :: El usuario fue registrado con rol "tasker" pero la entidad Tasker no se asoció correctamente.')
-        await queryRunner.rollbackTransaction(); // ROLLBACK: SI ALGO FALLA DESHACE  ==> User y Tasker. 
+      if (roleData.role === 'tasker' && !taskerData) {
+        ErrorManager.createSignatureError(
+          'INTERNAL_SERVER_ERROR :: El usuario fue registrado con rol "tasker" pero la entidad Tasker no se asoció correctamente.',
+        );
+        await queryRunner.rollbackTransaction(); // ROLLBACK: SI ALGO FALLA DESHACE  ==> User y Tasker.
       }
 
       await queryRunner.commitTransaction(); // COMMIT ==> SI TODO FUNCIONO GUARDAR.
@@ -158,6 +160,59 @@ export class UserService {
 
   findAll() {
     return `This action returns all user`;
+  }
+
+  // BUSCAR SOLO EL EMAIL EN LA TABLA USERS
+  async getUserEmail({ email }: { email: string }): Promise<User | null> {
+    try {
+      // CONSULTA
+      const resultQuery: User | null = await this.userRepository.findOne({
+        where: { email },
+        select: ['email'], //BUSCAR SOLO EN LA COLUMNA EMAIL
+      });
+
+      return resultQuery;
+    } catch (error) {
+      // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
+      const err = error as HttpException;
+      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
+
+      // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
+      if (err instanceof ErrorManager) throw err;
+      // SI NO, CREO UN ERROR 500 GENERICO CON FIRMA DE ERROR
+      throw ErrorManager.createSignatureError(err.message);
+    }
+  }
+
+  // BUSCAR SOLO EL USUARIO EN LA TABLA USERS DE USUARIOS ACTIVOS
+  async findByUserNameActiveForAuth({ userName }: { userName: string }): Promise<User | null> {
+    try {
+      // CONSULTA
+      const resultQuery: User | null = await this.userRepository.findOne({
+        where: [
+          { email: userName, active: true },
+          { userName: userName, active: true },
+        ],
+        relations:['rolesData'],
+        select: ['idUser', 'email', 'userName', 'password', 'rolesData', 'active'],
+      });
+
+      // SI ES NULL RETORNAR NULO LIBRERIA PASSPORT MANEJA ESE CASO
+      if (!resultQuery) {
+        return null;
+      }
+
+      return resultQuery;
+    } catch (error) {
+      // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
+      const err = error as HttpException;
+      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
+
+      // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
+      if (err instanceof ErrorManager) throw err;
+      // SI NO, CREO UN ERROR 500 GENERICO CON FIRMA DE ERROR
+      throw ErrorManager.createSignatureError(err.message);
+    }
   }
 
   findOne(id: number) {

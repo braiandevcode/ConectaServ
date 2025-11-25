@@ -1,39 +1,51 @@
-// import { Controller, HttpCode, Post, Req, Request, Res, UseGuards } from '@nestjs/common';
-// import { AuthService } from './auth.service';
-// import { AuthGuard } from '@nestjs/passport';
-
-// @Controller('auth')
-// export class AuthController {
-//     constructor(private readonly authService: AuthService) { }
-//     @Post('login')
-//     @UseGuards(AuthGuard('local')) //ACTIVA LOGICA DE VERIFICACION LocalStrategy
-//     @HttpCode(200)
-//     async authUser(@Req() request): Promise<{ accessToken: string; userName: string; }> {
-//         const {  } = request;
-//         return this.authService.authUser({ })
-//     }
-// }
-
-
-
-
-import { Controller, HttpCode, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import {
+  Controller,
+  Post,
+  Req,
+  UseGuards,
+  Body,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthGuard } from '@nestjs/passport';
 
-@Controller('auth')
+
+// @UseGuards(JwtAuthGuard) ==> JwtAuthGuard IMPLEMENTA LA VERIFICACION DEL HEADER AUTHORIZATION
+@Controller('api/v1/auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
-    @Post('login')
-    @UseGuards(AuthGuard('local')) // ACTIVA LA LOGICA DE VALIDATE EN LocalStrategy
-    @HttpCode(200) // 200 ES EL CÓDIGO POR DEFECTO PARA POST SIN REDIRECCIÓN, PUEDES OMITIRLO SI QUIERES MÁS BREVEDAD
-    async signIn(@Req() request): Promise<{ accessToken: string; userName: string }> {
-        // BUENA PRÁCTICA: PASSPORT YA VALIDÓ AL USUARIO Y ALMACENÓ SU OBJETO EN request.user
-        // ESTE OBJETO NO CONTIENE LA CONTRASEÑA, GRACIAS A LA LOGICA DE VALIDATEUSER.
-        const user = request.user; 
-        
-        // LLAMAR AL SERVICIO PARA GENERAR EL TOKEN (JWT)
-        return this.authService.login(user); // CAMBIAR EL NOMBRE DE LA FUNCIÓN A `LOGIN` PARA MAYOR CLARIDAD
-    }
+  // LOGIN CON USERNAME Y PASSWORD
+  @Post('/login')
+  @UseGuards(AuthGuard('local')) // USA PASSPORT PARA VALIDAR USUARIO Y CONTRASEÑA, EJECUTA PASSPORT LocalStrategy.
+  async login(@Req() request): Promise<{ accessToken: string; refreshToken: string }> {
+    // OBTENER OBJETO DEL USUARIO VALIDADO POR PASSPORT
+    const user = request.user;
+
+    console.log(user);
+    
+
+    // OBTENER IP Y USER-AGENT (OPCIONAL) PARA GUARDAR EN REFRESH TOKEN
+    const ip = request.ip;
+
+    console.log(ip);
+    
+    const userAgent = request.headers['user-agent'] ?? null;
+
+    // LLAMAR A SERVICE PARA GENERAR ACCESS + REFRESH TOKEN
+    return this.authService.signIn(user, ip, userAgent);
+  }
+
+  // REFRESH TOKEN ==> OBTENER NUEVO ACCESS TOKEN
+  @Post('/refresh')
+  async refresh(@Body('refreshToken') refreshToken: string): Promise<{ accessToken: string } | null> {
+    // LLAMAR AL SERVICE PARA VALIDAR Y GENERAR NUEVO ACCESS TOKEN
+    return this.authService.refreshAccessToken(refreshToken);
+  }
+
+  // LOGOUT ==> REVOCAR UN REFRESH TOKEN
+  @Post('/logout')
+  async logout(@Body('refreshToken') refreshToken: string): Promise<{ revoked: boolean }> {
+    // LLAMAR AL SERVICE PARA ELIMINAR EL REFRESH TOKEN DE LA DB
+    return this.authService.logout(refreshToken);
+  }
 }

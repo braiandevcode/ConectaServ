@@ -1,5 +1,4 @@
 import { ServicesModule } from './service/services.module';
-import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ExperiencesModule } from './experiences/experiences.module';
 import { WorkAreaModule } from './work-area/workArea.module';
@@ -13,6 +12,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoleModule } from './role/role.module';
+import { CodeModule } from './code/code.module';
+import Joi from 'joi';
+import { ConfigResendModule } from './configResend/config-resend.module';
+import { AuthModule } from './auth/auth.module';
+import { RefreshTokensModule } from './refresh-tokens/refresh-tokens.module';
 
 @Module({
   imports: [
@@ -21,6 +25,36 @@ import { RoleModule } from './role/role.module';
       // CARGA VARIABLES DE ENTORNO DESDE ARCHIVO .ENV
       isGlobal: true, // DISPONIBLE EN TODA LA APP SIN VOLVER A IMPORTAR
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}.local`, // ARCHIVO .ENV SEGUN EL ENTORNO
+
+      //ACTUALIZACIÓN DEL ESQUEMA DE JOI
+      validationSchema: Joi.object({
+        //VARIABLES ENTORNO BASE DE DATOS
+        DB_HOST: Joi.string().required(),
+        DB_PORT: Joi.string().required(),
+        DB_USERNAME: Joi.string().required(),
+        DB_PASSWORD: Joi.string().required(),
+        DB_NAME: Joi.string().required(),
+
+        // JWT VERIFICACION DE EMAIL
+        JWT_SECRET_VERIFICATION_EMAIL:Joi.string().required(),
+
+        // JWT AUTENTICACION DE USUARIO
+        JWT_SECRET_AUTH:Joi.string().required(),
+        //TIEMPO DE EXPIRACION DADO
+        JWT_EXPIRES_AUTH:Joi.string().required(),
+
+        // JWT REFRESH
+        JWT_SECRET_REFRESH:Joi.string().required(),
+
+        JWT_EXPIRES_REFRESH:Joi.string().required(),
+
+
+        RESEND_API_KEY:Joi.string().required(),
+
+        // DOMINIO + PUERTO
+        FE_HOST:Joi.string().required(),
+        FE_PORT:Joi.number().required(),
+      }),
     }),
     // CONECTAR BASE DE DATOS
     TypeOrmModule.forRootAsync({
@@ -36,9 +70,10 @@ import { RoleModule } from './role/role.module';
         password: config.get<string>('DB_PASSWORD'), // PASSWORD DE LA DB
         database: config.get<string>('DB_NAME'), // NOMBRE DE LA BASE DE DATOS
         entities: [__dirname + '/**/*.entity{.ts,.js}'], // ENTIDADES QUE VA A LEER
-        synchronize: false// AUTO SINCRONIZA SCHEMA (EN TRUE NO USAR EN PRODUCCIÓN)
+        synchronize: false, // AUTO SINCRONIZA SCHEMA (EN TRUE NO USAR EN PRODUCCIÓN)
       }),
     }),
+
     ServicesModule,
     AuthModule,
     UserModule,
@@ -51,6 +86,9 @@ import { RoleModule } from './role/role.module';
     LocationsModule,
     CategoryModule,
     RoleModule,
+    CodeModule,
+    ConfigResendModule,
+    RefreshTokensModule,
   ],
 })
 export class AppModule {}
