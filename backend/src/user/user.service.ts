@@ -200,12 +200,6 @@ export class UserService {
 
       // SI HAY RESULTADOS, PERO NO QUIERO RETORNAR EL OBJETO DE DATOS SOLO MENSAJE AL FRONT
       if (resultQuery) {
-        // return {
-        //   message: 'El email ya existe',
-        //   success: false,
-        //   status: HttpStatus.CONFLICT, // 409 PERO NO RETORNAMOS ERROR SOLO ES UN CODIGO AL FRONT
-        // };
-
         throw ErrorManager.createSignatureError('CONFLICT :: El email ya existe')
       }
 
