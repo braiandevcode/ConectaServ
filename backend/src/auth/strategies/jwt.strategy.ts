@@ -13,6 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
+  // VALIDAR PAYLOAD CON ESTRATEGIA DE JWT
   async validate(payload: iJwtPayload) {
     return payload; //LO ASIGNA  request.user AUTOMATICAMENTE
   }
