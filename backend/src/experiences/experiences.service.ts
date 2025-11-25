@@ -21,14 +21,7 @@ export class ExperiencesService {
   ): Promise<Experience[]> {
     const repo: Repository<Experience> = manager ? manager.getRepository(Experience) : this.imageExperienceRepo;
 
-    // ENCONTRAR LA IMAGEN CON EL VALOR MAS ALTO EN LA COLUMNA  ==> 'order'
-    const lastExpImage: Experience | null = await repo.findOne({
-      // AGRUPAR POR idTasker PARA CONTAR SOLO LAS IMAGENES DE ESE USUARIO
-      where: { tasker: { idTasker } },
-      order: { order: 'DESC' }, // ORDENAR DE MAYOR A MENOR
-    });
-
-    // 1.OBTENER TODOS LOS ORDERS EXISTENTES
+    // OBTENER TODOS LOS ORDERS EXISTENTES
     const existingImages = await repo.find({
       where: { tasker: { idTasker } },
       select: ['order'], // ==> TRAER SOLO LA COLUMNA ORDER (OPTIMIZACION)
@@ -46,7 +39,6 @@ export class ExperiencesService {
     let currentOrder = maxOrder + 1;
 
     // SI ENCONTRO UNA ULTIMA IMAGEN EN EL USUARIO TASKER SUMAR UNO SINO ES EL ORDEN PRIMERO
-
     const savedExperiences: Experience[] = []; //ACUMULADOR ARREGLO DE EXPERIENCIAS VACIO
 
     for (const file of files) {
@@ -71,21 +63,5 @@ export class ExperiencesService {
     }
 
     return savedExperiences; // ==> RETORNAR
-  }
-
-  findAll() {
-    return `This action returns all experiences`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} experience`;
-  }
-
-  // update(id: number, updateExperienceDto: UpdateExperienceDto) {
-  //   return `This action updates a #${id} experience`;
-  // }
-
-  remove(id: number) {
-    return `This action removes a #${id} experience`;
   }
 }

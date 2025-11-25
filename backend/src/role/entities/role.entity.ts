@@ -1,4 +1,4 @@
-import { ERoles } from "src/types/enums/enumRoles";
+import { ERoles } from "src/common/enums/enumRoles";
 import { User } from "src/user/entities/user.entity";
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 

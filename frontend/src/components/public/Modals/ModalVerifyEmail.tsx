@@ -5,8 +5,9 @@ import FormVerifyCode from '../Forms/Register/FormVerifyCode';
 import useGlobalModal from '../../../hooks/useGlobalModal';
 
 // MODAL PARA VERIFICAR EMAIL ANTES DE REGISTRARSE
-const ModalVerifyEmail = (): JSX.Element => {
-  const { messageState } = useGlobalModal();
+const ModalVerifyEmail = (): JSX.Element => {  
+  const { messageState} = useGlobalModal();
+
   //RENDERIZA MODAL DE VERIFICACION
   return (
     <>

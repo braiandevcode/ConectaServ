@@ -1,7 +1,7 @@
+import { EServiceGarden } from 'src/common/enums/enumServiceGarden';
+import { EServiceRepair } from 'src/common/enums/enumServiceRepair';
+import { EServiceMoving } from 'src/common/enums/enumServicesMoving';
 import { Tasker } from 'src/tasker/entities/tasker.entity';
-import { EServiceGarden } from 'src/types/enums/enumServiceGarden';
-import { EServiceRepair } from 'src/types/enums/enumServiceRepair';
-import { EServiceMoving } from 'src/types/enums/enumServicesMoving';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('services')

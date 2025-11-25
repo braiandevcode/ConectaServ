@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router';
-import { endPointUser } from '../config/configEndpointRegister';
+import { endPointUser } from '../config/configEndpointUser';
 import type { iEmailUser } from '../interfaces/iEmailUser';
-import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 import { EModalGlobalType } from '../types/enumGlobalModalType';
 import type { TIdentifyEmail } from '../types/typeIdentifyEmail';
 import type { TUser } from '../types/typeUser';
@@ -11,27 +10,26 @@ import useGlobalModal from './useGlobalModal';
 import useMain from './useMain';
 import useRegister from './useRegister';
 import useRegisterModal from './useRegisterModal';
-import { configEmail } from '../config/configCodeEmail';
-import generateRandomNumber from '../utils/generateRandomNumber';
-import type { TVerifyCode } from '../types/typeVerifyCode';
-import { templateParamsEmailjs } from '../config/templateParamsEmailjs';
-import { DATA_EMAILJS } from '../config/configDataIdEmailjs';
-import { EModalRegistersType } from '../types/enumModalRegistersTypes';
 import type { TDataLoginUser } from '../types/typeDataLoginUser';
 import type { TStateLogin } from '../types/typeStateLogin';
 import type { TIdString } from '../types/typeUUID';
 import type { ITaskerData } from '../interfaces/iTaskerData';
 import type { TImageData } from '../types/typeRegisterEndDto';
 import { dataURLtoBlob } from '../utils/dataUrlToBlob';
+import type { iMessageResponseStatus } from '../interfaces/iMessageResponseStatusBack';
+import type { iMessageStatusToken } from '../interfaces/iMessageStatusToken';
+import { EModalRegistersType } from '../types/enumModalRegistersTypes';
+import type { iDataVerifyCode } from '../interfaces/iDataVerifyCode';
+import type { iStatusError } from '../interfaces/iSatatus';
 
-const { USER, AUTH_LOGIN } = endPointUser; //DESESTRUCTURAR ENDPOINT
+const { USER, USER_IDENTIFY, USER_CODE_REQUEST, USER_VERIFY, AUTH_LOGIN } = endPointUser; //DESESTRUCTURAR ENDPOINT
 
 // GANCHO PARA CENTRALIZAR LAS SOLICITUDES A USER Y SUB RUTAS O PARA FILTROS PARAMS DE USER
 const useUserApi = () => {
   const { setLoading } = useMain(); //HOOK QUE USA EL CONTEXTO DE MAIN PRINCIPAL
   const { showError, showSuccess, openGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
   const { openRegisterModal } = useRegisterModal(); //HOOK PARA EL MODAL GLOBAL DE REGISTRO
-  const { updateCodeEmail, updatedIsSendingCode, updatedIsSentCode } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO PARA VERIFICACION DE EMAIL
+  const { updatedIsSendingCode, updatedIsSentCode } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO PARA VERIFICACION DE EMAIL
   const { setIsSending } = useRegister(); //HOOK QUE USA CONTEXTO PARA LOS REGISTROS GENERAL
   // HOOK NAVIGATE DE REACT
   const navigate = useNavigate();
@@ -60,26 +58,87 @@ const useUserApi = () => {
 
 
   // LEER TABLA USERS PARA IDENTIFICAR EL EMAIL SI EXISTE
-  const getIdentifyEmail = async ({ setIsSendingIdentificationEmail }: Pick<TIdentifyEmail, 'setIsSendingIdentificationEmail'>): Promise<TUser[] | null> => {
-    try {
+  const getIdentifyEmail = async ({ setIsSendingIdentificationEmail, emailIdentify }: Pick<TIdentifyEmail, 'emailIdentify' | 'setIsSendingIdentificationEmail'>): Promise<iMessageResponseStatus | null> => {
+    try {      
       setLoading(true); //LOADER EN TRUE
       setIsSendingIdentificationEmail(true); // ==> ENVIANDOSE IDENTIFICACION DE CUENTA
-      const result = await apiRequest<TUser[]>(`${USER}`); //HELPER DE PETICION
-      return result;
+     const result = await apiRequest<Pick<TIdentifyEmail, 'emailIdentify'>>(`${USER_IDENTIFY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ emailIdentify }),
+      }); //HELPER DE PETICION
+    
+      // GUARDO RESPUESTA DEL BACKEND PARA ESTE CASO DONDE SE SU RESPUESTA Y PODER MANEJAR ACA
+      const response = result as unknown as iMessageResponseStatus | null;
+      // NO SE VALIDA ACA, PORQUE SEGUN EL ESTADO EN ALGUNOS CASOS RETORNA Y NO SIGUE SU FLUJO
+      // Y EN OTROS SI.
+
+      return response; //RETORNAR LA RESPUESTA QUE NOS DA EL BACKEND
     } catch (error: unknown) {
+      const err = error as iStatusError;
       openGlobalModal(EModalGlobalType.MODAL_ERROR); //ACTUALIZAR PARA EL NUEVO MODAL DE ERROR
       // SINO DE 500 EN ADELANTE,
       // 5xx o ERROR DE RED O DESCONOCIDO
-      showError('Ups...', 'Tuvimos un inconveniente al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde.');
-      throw error;
+      showError('Ups', 'Tuvimos un inconveniente al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde.');
+    
+      throw err;
+    
     } finally {
       setLoading(false); //LOADING  A FALSE
       setIsSendingIdentificationEmail(false); //ENVIANDO A FALSE
     }
   };
 
+
+    // FUNCION PARA ENVIAR CODIGO
+  const sendCodeToUserEmail = async ({ emailCode }: iEmailUser): Promise<iMessageStatusToken | undefined> => {
+    // INTENTAR ENVIO
+    try {
+      setLoading(true); // ACTIVAR LOADER MIENTRAS SE ENVÍA AL BACKEND
+      updatedIsSendingCode(true); //EL CODIGO ENVIADO AL USUARIO ESTA EN PROGRESO
+    
+      // EL EMAIL LO TOMO DE TUser, YA QUE ES EL EMAIL INGRESADO EN EL CAMPO DEL FORMULARIO
+      const result= await apiRequest<Pick<TUser, 'email'>>(`${USER_CODE_REQUEST}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ emailCode }),
+      }); //HELPER DE 
+
+      const response = result as unknown as iMessageStatusToken;     
+      // SI ES SUCCESS Y EL ESTADO ES 200
+     if (response && response.success) {
+        updatedIsSentCode(true); // ESTADO DE CODIGO ENVIADO A DESTINO
+        showSuccess('¡Codigo enviado!', '¡Codigo de verificacion enviado con exito!, Ingrese el codigo enviado aquí.');
+        openRegisterModal(EModalRegistersType.MODAL_VERIFY);
+      }
+      return response;
+    } catch (error) {
+      const err = error as iStatusError; //FIRMA PERSONALIZADA PARA LOS ESTADOS DEL BACKEND
+
+      // SI EL NOMBRE DE CUENTA DEL EMAIL NO SE ENCUENTRA COMO SERVICIO EXISTENTE
+      if(err.status === 404){
+        updatedIsSentCode(false); // ESTADO DE CODIGO ENVIADO A DESTINO
+        showSuccess('Email inexistente', 'El email no fué encontrado para procesar su codigo. Porfavor, verifique el email ingresado');
+        openRegisterModal(EModalRegistersType.MODAL_VERIFY);
+        return;
+      }
+
+      updatedIsSentCode(false); // EL CODIGO NO FUE ENVIADO
+      let title: string = 'Ups!';
+      let userMessage: string = 'Fallo al enviar el código de verificación. Por favor, revisa tu conexión o intente nuevo mas tarde';
+      openGlobalModal(EModalGlobalType.MODAL_ERROR);
+      showError(title, userMessage);
+
+      throw err;
+    } finally {
+      updatedIsSendingCode(false); //EL ESTADO DE ENVIANDO EL CODIGO AL USUARIO TERMINO
+      setLoading(false);
+    }
+  };
+
+
   // ENVIAR DATOS DEL REGISTRO METODO POST
-  const addUser = async ({ newData }: { newData: TUser }) => {
+  const addUser = async ({ newData }: { newData: TUser }) : Promise<void>=> {
     const fd: FormData = new FormData();  //INSTANCIA DE FORMDATA
     
     let taskerDataWithOutImage: Omit<ITaskerData, 'imageProfileData' | 'imageExperienceData'> | undefined = undefined;
@@ -125,37 +184,38 @@ const useUserApi = () => {
         }
     });
 
-
     // TRY/CATCH
     try {
       setIsSending(true); //ENVIANDO DATOS
       setLoading(true); // ACTIVAR LOADER MIENTRAS SE ENVÍA AL BACKEND
       // PETICION FETCH CON HELPER
-      await apiRequest(`${USER}`, {
+      const result =  await apiRequest(`${USER}`, {
         method: 'POST',
         body: fd,
       });
 
-      showMsgSuccessRegister();
+      if(result){
+        //EXITO O CREADO 200/201
+        showMsgSuccessRegister();
+        return;
+      }
     } catch (error: unknown) {
+      const err = error as iStatusError; //FIRMA PERSONALIZADA PARA LOS ESTADOS DEL BACKEND
+      // SI EL EMAIL YA EXISTE EN ESTE PROCESO 
+      if(err.status === 409){
+        showError('Email ya registrado', 'Por favor usa otro email.');
+        return;
+      }
+
+      if(err.status  && err.status >= 400 && err.status < 500 ){
+        showError('Error al Registrar', 'Verifica tus datos e inténtalo de nuevo.');
+        return;
+      }
       openGlobalModal(EModalGlobalType.MODAL_ERROR); //ACTUALIZAR PARA EL NUEVO MODAL DE ERROR
       setIsSending(false); // ENVIANDO FALSE
-      // CONVERTIR EL TIPO A UN ERROR CONOCIDO O EXTRAER LOS DATOS
-      const apiError = error as { status?: number };
-      const statusCode: number = apiError.status ?? 0; //SI NO HAY NUMERO DE ESTADO ES CERO
-
-      // 409 PARA ESTADOS DE CONFLICTOS ==> EMAIL YA REGISTRADO
-      if (statusCode === 409) {
-        showError('Email ya registrado', 'Por favor usa otro email.');
-      } else if (statusCode && statusCode >= 400 && statusCode < 500) {
-        // SI HAY VALOR Y SI ENTRE 400 Y 499
-        // 4xx: PROBLEMAS DE DATOS DEL USUARIO
-        showError('Error al Registrar', 'Verifica tus datos e inténtalo de nuevo.');
-      } else {
-        // SINO SON DE 500 EN ADELANTE
-        // 5xx o ERROR DE RED O DESCONOCIDO
-        showError('Ups...', 'Tuvimos un inconveniente al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde.');
-      }
+      // SINO SON DE 500 EN ADELANTE
+      // 5xx o ERROR DE RED O DESCONOCIDO
+      showError('Ups!', 'Tuvimos un inconveniente al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde.');
       throw error;
     } finally {
       setLoading(false); //LOADING EN FALSE
@@ -258,46 +318,36 @@ const useUserApi = () => {
     }
   };
 
-  // INICIALIZAR LIBRERIA
-  emailjs.init(configEmail.options); //==> PASO CONFIGURACION
-
-  // FUNCION PARA ENVIAR CODIGO
-  const sendCodeToUserEmail = async ({ emailUser }: iEmailUser): Promise<void> => {
-    const generatedCode: number = generateRandomNumber(); //GENERAR NUMERO RANDOM
-
-    updateCodeEmail(generatedCode.toString()); //ACTUALIZO EN STORAGE Y ESTADO INTERNO DE REACT
-
-    //INVOCO FUNCION DE OBJETO DE CONFIGURACION PARA ENVIO
-    const templateParams: TVerifyCode = templateParamsEmailjs({
-      to_email: emailUser, // ==> CORREO DE DESTINO
-      verification_code: generatedCode, //==> CODIGO GENERADO A LA PLANTILLA
-    });
-
-    const { SERVICE_ID, TEMPLATE_VERIFICATION_ID } = DATA_EMAILJS; //DESESTRUCTURAR
-
+  // ENVIO DE DATOS DE CODIGO AL BACKEND
+  const userVerify = async ({ email, code, token }: iDataVerifyCode): Promise<iMessageResponseStatus | undefined>  =>{
     // INTENTAR ENVIO
     try {
       setLoading(true); // ACTIVAR LOADER MIENTRAS SE ENVÍA AL BACKEND
-      updatedIsSendingCode(true); //EL CODIGO ENVIADO AL USUARIO ESTA EN PROGRESO
-      const response: EmailJSResponseStatus = await emailjs.send(SERVICE_ID, TEMPLATE_VERIFICATION_ID, templateParams);
-      if (response.status === 200) {
-        updatedIsSentCode(true); // ESTADO DE CODIGO ENVIADO A DESTINO
-        showSuccess('¡Codigo enviado!', '¡Codigo de verificacion enviado con exito!, Ingrese el codigo enviado aquí.');
-        openRegisterModal(EModalRegistersType.MODAL_VERIFY);
-      }
-    } catch (err) {
-      updatedIsSentCode(false); // EL CODIGO NO FUE ENVIADO
-      let userMessage: string = 'Fallo al enviar el código de verificación. Por favor, revisa tu conexión o el correo ingresado.';
-      let title: string = 'Ups algo fallo!';
+      const dataCode:iDataVerifyCode= { email, code, token };
+      // EL EMAIL LO TOMO DE TUser, YA QUE ES EL EMAIL INGRESADO EN EL CAMPO DEL FORMULARIO
+      const result= await apiRequest<iMessageResponseStatus>(`${USER_VERIFY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataCode),
+      }); //HELPER DE 
+
+      return result;
+    } catch (error) {
+
+      const err = error as iStatusError;
+      let title: string = 'Ups!';
+      let userMessage: string = 'Ocurrio un error inesperado. Intente de nuevo más tarde.';
       openGlobalModal(EModalGlobalType.MODAL_ERROR);
       showError(title, userMessage);
+
+      throw err;
     } finally {
       updatedIsSendingCode(false); //EL ESTADO DE ENVIANDO EL CODIGO AL USUARIO TERMINO
       setLoading(false);
     }
-  };
+  }
 
-  return { getIdentifyEmail, addUser, signInUser, sendCodeToUserEmail }; // ==> ACA RETORNO TODOS LOS METODOS QUE HACEN REFERNECIA A DATOS DE USUARIOS
+  return { getIdentifyEmail, addUser, signInUser, sendCodeToUserEmail, userVerify }; // ==> ACA RETORNO TODOS LOS METODOS QUE HACEN REFERNECIA A DATOS DE USUARIOS
 };
 
 export default useUserApi;

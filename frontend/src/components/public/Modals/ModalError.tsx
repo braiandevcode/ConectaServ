@@ -12,20 +12,16 @@ const ModalError = () => {
 
   // EFECTO CON TIMMER PARA CERRAR AUTOMATICAMENTE MODAL
   useEffect(() => {
-    let timerId: NodeJS.Timeout | null = null;
-
     // SI HAY UNA CALLBACK GUARDADA UNA ACCION DE REDIRECCION PENDIENTE
     //ACTIVAR TIMMER
-    timerId = setTimeout(() => {
+    const timerId = setTimeout(() => {
       closeGlobalModal(); // EJECUTAR CALLBACK QUE TIENE GUARDADO AL CERRAR MODAL
     }, 2500);
 
     // CLEAN UP(FUNCION PARA LIMPIAR TIMMER)
     return () => {
       // SI HAY UN TIMMER
-      if (timerId) {
-        clearTimeout(timerId); //LIMPIAR
-      }
+      clearTimeout(timerId); //LIMPIAR
     };
   }, [closeGlobalModal]); // DEPENDENCIAS
 

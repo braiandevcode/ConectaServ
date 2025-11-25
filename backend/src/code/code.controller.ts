@@ -3,38 +3,21 @@ import { CodeService } from './code.service';
 // import { UpdateCodeDto } from './dto/update-code.dto';
 import { RequestCodeDto } from './dto/request-code-dto';
 import { VerifyCodeDto } from './dto/verify-code-dto';
+import { iMessageResponseStatus } from 'src/interface/iMessagesResponseStatus';
+import { iMessageStausToken } from 'src/interface/iMessageStatusToken';
 
 @Controller('api')
 export class CodeController {
   constructor(private readonly codeService: CodeService) {}
-
-  @Post('/code/request')
-  requestCode(@Body() createCodeDto: RequestCodeDto): Promise<{ token: string }> {
+ 
+  //PROCESO DE SOLICITUD AL SERVICIO EXTERNO RESEND
+  @Post('/v1/code/request')
+  requestCode(@Body() createCodeDto: RequestCodeDto): Promise<iMessageStausToken> {
     return this.codeService.requestCode(createCodeDto);
   }
-
- @Post('/code/verify')
-  verifyCode(@Body() verifyCodeDto: VerifyCodeDto):Promise<{ success: boolean }> { 
+  //PROCESO DE VERIFICACION DEL CODIGO
+  @Post('/v1/code/verify')
+  verifyCode(@Body() verifyCodeDto: VerifyCodeDto):Promise<iMessageResponseStatus> { 
     return this.codeService.verifyCode(verifyCodeDto); 
-  }
-
-  @Get()
-  findAll() {
-    return this.codeService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.codeService.findOne(+id);
-  }
-
-  @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateCodeDto: UpdateCodeDto) {
-  //   return this.codeService.update(+id, updateCodeDto);
-  // }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.codeService.remove(+id);
   }
 }
