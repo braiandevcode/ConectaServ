@@ -1,4 +1,4 @@
-const DashBoardUser = () => {
+const DashBoard = () => {
     return (
         <>
            <h1>DashBoard</h1>
@@ -6,4 +6,4 @@ const DashBoardUser = () => {
     )
 }
 
-export default DashBoardUser;
+export default DashBoard;

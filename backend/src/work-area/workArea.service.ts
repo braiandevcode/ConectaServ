@@ -1,4 +1,4 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateWorkAreaDto } from './dto/create-work-area.dto';
 import { UpdateContextDto } from './dto/update-work-area.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,8 +10,6 @@ import { VALID_WORK_AREAS } from 'src/common/enums/enum.utils';
 
 @Injectable()
 export class WorkAreaService {
-  // INJECCION DEL REPOSITORIO => BUENA PRACTICA PARA LOGS
-  private readonly logger: Logger = new Logger(WorkAreaService.name);
   constructor(
     @InjectRepository(WorkArea)
     private readonly workAreasRepository: Repository<WorkArea>,
@@ -37,8 +35,6 @@ export class WorkAreaService {
     } catch (error) {
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
-      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
-
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
 

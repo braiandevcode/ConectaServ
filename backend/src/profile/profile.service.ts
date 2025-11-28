@@ -1,4 +1,4 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 // import { UpdateProfileDto } from './dto/update-profile.dto';
 import { EntityManager, Repository } from 'typeorm';
 import { Profile } from './entities/profile.entity';
@@ -9,18 +9,13 @@ import path from 'path'; //MODULO DE NODE
 
 @Injectable()
 export class ProfileService {
-  private readonly logger: Logger = new Logger(ProfileService.name);
-  constructor(
-    @InjectRepository(Profile)
-    private readonly imageProfileRepo: Repository<Profile>,
-  ) {}
+  constructor(@InjectRepository(Profile) private readonly imageProfileRepo: Repository<Profile>) {}
   async create(
     file: Express.Multer.File | null,
     idTasker: string,
     manager?: EntityManager,
   ): Promise<Profile | null> {
     try {
-      this.logger.debug(file);
       // AQUI SE DEFINE CUAL Repository/Manager USAR
       const repo: Repository<Profile> = manager
         ? manager.getRepository(Profile)
@@ -40,15 +35,11 @@ export class ProfileService {
         tasker: { idTasker },
       });
 
-      this.logger.debug(newImageProfile);
-
       const savedImageProfile: Profile = await repo.save(newImageProfile);
 
       return savedImageProfile; //RETORNAR ENTIDAD GUARDADA
     } catch (error) {
       const err = error as HttpException;
-
-      this.logger.error(err.message, err.stack);
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
 

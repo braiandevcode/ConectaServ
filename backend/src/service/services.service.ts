@@ -1,4 +1,4 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,10 +8,10 @@ import { EntityManager, Repository } from 'typeorm';
 import { ErrorManager } from 'src/config/ErrorMannager';
 import { ECategory } from 'src/common/enums/enumCategory';
 import { SERVICES_BY_CATEGORY } from 'src/common/enums/enum.utils';
+import { ESeparatorsMsgErrors } from 'src/common/enums/enumSeparatorMsgErrors';
 
 @Injectable()
 export class ServicesService {
-  private readonly logger: Logger = new Logger(ServicesService.name);
   constructor(
     @InjectRepository(Service) private readonly serviceRepository: Repository<Service>,
     private readonly entityCreatorService: EntityCreatorService,
@@ -30,9 +30,7 @@ export class ServicesService {
       // // SI LA CATEGORIA NO ES VALIDA
       if (!(category in SERVICES_BY_CATEGORY)) {
         // ERROR NO ES VALIDA
-        throw ErrorManager.createSignatureError(
-          `FORBIDDEN :: La categoría no es válida`,
-        );
+        throw ErrorManager.createSignatureError(`FORBIDDEN${ESeparatorsMsgErrors.SEPARATOR}La categoría no es válida`);
       }
 
       // SERVICIO UTILS QUE YA VALIDA INTERNAMENTE
@@ -46,8 +44,6 @@ export class ServicesService {
     } catch (error) {
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
-      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
-
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
 

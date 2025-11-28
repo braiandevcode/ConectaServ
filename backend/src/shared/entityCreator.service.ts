@@ -1,12 +1,10 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable} from '@nestjs/common';
+import { ESeparatorsMsgErrors } from 'src/common/enums/enumSeparatorMsgErrors';
 import { ErrorManager } from 'src/config/ErrorMannager';
 import { FindOptionsWhere, In, Repository } from 'typeorm';
 
 @Injectable()
 export class EntityCreatorService {
-  // INJECCION DEL REPOSITORIO => BUENA PRACTICA PARA LOGS
-  private readonly logger: Logger = new Logger(EntityCreatorService.name);
-
   // EL OBJETIVO DE ESTE METODO ES GARANTIZAR QUE, PARA CADA NOMBRE QUE EL USUARIO ELIGIÓ:
   // - LO BUSQUE.
   // - SI EXISTE LO USE.
@@ -33,7 +31,7 @@ export class EntityCreatorService {
 
       // SI ES MAYOR A CERO NO PERMITIR
       if(invalidNames.length > 0){
-         throw ErrorManager.createSignatureError(`FORBIDDEN :: Los valores: ${invalidNames
+         throw ErrorManager.createSignatureError(`FORBIDDEN${ESeparatorsMsgErrors.SEPARATOR}Los valores: ${invalidNames
           .join(', ')} no estan permitidos`,
         );
       }
@@ -45,36 +43,25 @@ export class EntityCreatorService {
         
         //CLAUSULA In():BUSCA FILAS DONDE EL VALOR DE UNA COLUMNA ESPECIFICA COINCIDA CON CUALQUIERA DE LOS VALORES PROPORCIONADOS EN UN ARRAY.
         where: { [keyName]: In(keyNames) } as unknown as FindOptionsWhere<R>, // INDICA WHERE DEL TIPO QUE VENGA DEL REPO
-        // select: [keyName], //SOLO DEVOLVER DATOS DE LA COLUMNA CON EL NAME QUE SE LE PASE
       });
-
-      this.logger.debug(existingEntities);
 
       // MAPEAR LOS NOMBRES EXISTENTES PARA EVITAR DUPLICADOS
       const allCurrentExixtNames: R[keyof R & string][] = existingEntities.map(
         (entity) => entity[keyName],
       );
 
-      this.logger.debug(allCurrentExixtNames);
-
       // FUNCION QUE RETORNA UN BOOLEAN ==> RETORNA VERDAD SI NO EXISTE EN LA DB SINO FALSE
       const isNotExistingName = (name: string): boolean => !allCurrentExixtNames.includes(name as R[keyof R & string]);
-
-      this.logger.debug(isNotExistingName);
 
       // FILTRAR SOLO LOS QUE SON TRUE ==> NO EXISTEN AUN
       const filterByName: string[] = keyNames.filter((name) =>
         isNotExistingName(name),
       );
 
-      this.logger.debug(filterByName);
-
       // CREAR ARRAY CON ESOS NUEVOS VALORES QUE NO EXISTEN
       const newValuesInEntity: R[] = filterByName.map((name) =>
         repo.create({ [keyName]: name } as R),
       );
-
-      this.logger.debug(newValuesInEntity);
 
       // GUARDAR SOLO SI HAY NUEVOS
       // SI HAY NUEVOS
@@ -87,8 +74,6 @@ export class EntityCreatorService {
     } catch (error) {
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
-      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
-
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
 

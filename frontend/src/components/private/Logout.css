@@ -1,0 +1,4 @@
+.auth-wrapper__logout{
+    color: var( --text-color-primary);
+    font-weight: 400;
+}

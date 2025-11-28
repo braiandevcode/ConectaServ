@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
@@ -16,12 +16,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { QueryRunner } from 'typeorm/browser';
 import { UserIdentifyEmailDto } from './dto/user-identify-email-dto';
 import { iMessageResponseStatus } from 'src/code/interface/iMessagesResponseStatus';
+import { ESeparatorsMsgErrors } from 'src/common/enums/enumSeparatorMsgErrors';
 
 @Injectable()
 export class UserService {
-  // INJECCION DEL REPOSITORIO => BUENA PRACTICA PARA LOGS
-  private readonly logger: Logger = new Logger(UserService.name);
-
   // LO PRIMERO QUE SIEMPRE SE EJECUTARA
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>, // REPOSITORIO DE USUARIOS
@@ -65,15 +63,11 @@ export class UserService {
         },
       );
 
-      this.logger.debug(existingUser);
-
       // SI EMAIL YA EXISTE
       if (existingUser) {
         // SI YA EXISTE, LANZO UN ERROR CONTROLADO
         // ESTO AYUDA A QUE EL FRONTEND PUEDA SABER QUE YA ESTA REGISTRADO  ==> CODIGO 409
-        ErrorManager.createSignatureError(
-          `CONFLICT :: El usuario o email ya está registrado.`,
-        );
+        ErrorManager.createSignatureError(`CONFLICT${ESeparatorsMsgErrors.SEPARATOR}El usuario o email ya está registrado.`,);
       }
 
       // LLAMO AL SERVICIO QUE HACE LA CREACION Y VALIDACION EN SU MODULO PARA SU ENTIDAD
@@ -107,15 +101,8 @@ export class UserService {
 
       //PREGUNTO QUE ROL VIENE, PARA SABER SI DEBE CONTINUAR CON MAS DATOS QUE SE AGREGARIAN EN TASKERS Y SUS RELACIONES
       // O SIMPLEMENTE SON LOS DATOS BASICOS DE UN CLIENTE
-      this.logger.debug(savedUser);
-      this.logger.debug(fileProfile);
-      this.logger.debug(filesExp);
-
       let tasker: Tasker | null = null;
       if (roleData.role === 'tasker' && taskerData) {
-        this.logger.debug(tasker);
-        this.logger.debug(taskerData);
-
         tasker = await this.taskerService.create(
           fileProfile,
           filesExp,
@@ -131,9 +118,7 @@ export class UserService {
 
       // SI E ROL ES TASKER PERO NO VIENEN DATOS NO CONTINUAR
       if (roleData.role === 'tasker' && !taskerData) {
-        ErrorManager.createSignatureError(
-          'INTERNAL_SERVER_ERROR :: El usuario fue registrado con rol "tasker" pero la entidad Tasker no se asoció correctamente.',
-        );
+        ErrorManager.createSignatureError(`INTERNAL_SERVER_ERROR${ESeparatorsMsgErrors.SEPARATOR}El usuario fue registrado con rol "tasker" pero la entidad Tasker no se asoció correctamente.`);
         await queryRunner.rollbackTransaction(); // ROLLBACK: SI ALGO FALLA DESHACE  ==> User y Tasker.
       }
 
@@ -141,16 +126,12 @@ export class UserService {
 
       const userPlain = instanceToPlain(savedUser);
 
-      this.logger.debug(userPlain);
-
       // DEVOLVEMOS EL RESULTADO
       return userPlain;
     } catch (error) {
       await queryRunner.rollbackTransaction(); // ROLLBACK: SI ALGO FALLA DESHACE  ==> User y Tasker.
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
-      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
-
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
       // SI NO, CREO UN ERROR 500 GENERICO CON FIRMA DE ERROR
@@ -177,7 +158,6 @@ export class UserService {
     } catch (error) {
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
-      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
 
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
@@ -186,12 +166,9 @@ export class UserService {
     }
   }
 
-
-  
   // BUSCAR SOLO EL EMAIL EN LA TABLA USERS DE USUARIOS ACTIVOS
   async getUserEmailActive(userIdentifyEmailDto: UserIdentifyEmailDto): Promise<iMessageResponseStatus> {
     try {
-      this.logger.debug(userIdentifyEmailDto.emailIdentify)
       // CONSULTA
       const resultQuery: User | null = await this.userRepository.findOne({
         where: { email:userIdentifyEmailDto.emailIdentify, active: true },
@@ -200,22 +177,19 @@ export class UserService {
 
       // SI HAY RESULTADOS, PERO NO QUIERO RETORNAR EL OBJETO DE DATOS SOLO MENSAJE AL FRONT
       if (resultQuery) {
-        throw ErrorManager.createSignatureError('CONFLICT :: El email ya existe')
+        throw ErrorManager.createSignatureError(`CONFLICT${ESeparatorsMsgErrors.SEPARATOR}El email ya existe`)
       }
 
       return { message: 'Exito', success:true, status:HttpStatus.OK };
     } catch (error) {
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
-      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
-
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
       // SI NO, CREO UN ERROR 500 GENERICO CON FIRMA DE ERROR
       throw ErrorManager.createSignatureError(err.message);
     }
   }
-
 
   // BUSCAR SOLO EL USUARIO EN LA TABLA USERS DE USUARIOS ACTIVOS
   async findByUserNameActiveForAuth({ userName }: { userName: string }): Promise<User | null> {
@@ -231,16 +205,12 @@ export class UserService {
       });
 
       // SI ES NULL RETORNAR NULO LIBRERIA PASSPORT MANEJA ESE CASO
-      if (!resultQuery) {
-        return null;
-      }
-
+      if (!resultQuery) return null;
+    
       return resultQuery;
     } catch (error) {
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
-      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
-
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
       // SI NO, CREO UN ERROR 500 GENERICO CON FIRMA DE ERROR

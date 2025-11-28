@@ -1,4 +1,4 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,12 +7,11 @@ import { EntityManager, Repository } from 'typeorm';
 import { ErrorManager } from 'src/config/ErrorMannager';
 import { ECategory } from 'src/common/enums/enumCategory';
 import { SERVICES_BY_CATEGORY } from 'src/common/enums/enum.utils';
+import { ESeparatorsMsgErrors } from 'src/common/enums/enumSeparatorMsgErrors';
 
 
 @Injectable()
 export class CategoryService {
-  // INJECCION DEL REPOSITORIO => BUENA PRACTICA PARA LOGS
-  private readonly logger: Logger = new Logger(CategoryService.name);
   constructor(
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
   ) {}
@@ -31,27 +30,18 @@ export class CategoryService {
         where: { categoryName: createCategoryDto.category },
       });
 
-      this.logger.debug(categoryEntity);
-
       // PREGUNTAR SI LA CATEGORIA AGREGADA NO EXISTE, SI NO EXISTE ==> CREAMOS Y GUARDAMOS EN ENTIDAD
       if (!categoryEntity) {
         categoryEntity = repo.create({ categoryName: createCategoryDto.category });
-
-        this.logger.debug(categoryEntity.categoryName);
-        this.logger.debug(categoryEntity.taskers);
 
         const categoryName:ECategory = categoryEntity.categoryName;
 
         // VALIDAR QUE LA CATEGORIA SEA UNA PERMITIDA
         if (!(categoryName in SERVICES_BY_CATEGORY)) {
-          ErrorManager.createSignatureError(
-            `FORBIDDEN :: La categoria establecida no es valida.`,
-          );
+          ErrorManager.createSignatureError(`FORBIDDEN${ESeparatorsMsgErrors.SEPARATOR}La categoria establecida no es valida.`);
         }
 
         categoryEntity = await repo.save(categoryEntity);
-
-        this.logger.debug(categoryEntity)
       }
       return categoryEntity;
     } catch (error) {

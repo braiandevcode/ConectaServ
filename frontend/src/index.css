@@ -1,5 +1,4 @@
 /* IMPORTAR ORDENADAMENTE PARA EVITAR PROBLEMAS DE CASCADAS */
-@import url('./styles/header.css');
 @import url('./styles/home.css'); /*HOME*/
 @import url('./styles/services.css'); /*SERVICIOS*/
 @import url('./styles/infoProvider.css'); /*INFO PRESTADOR*/

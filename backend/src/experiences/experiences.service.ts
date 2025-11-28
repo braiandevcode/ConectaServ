@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 // import { UpdateExperienceDto } from './dto/update-experience.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Experience } from './entities/experience.entity';
@@ -8,7 +8,6 @@ import { randomUUID } from 'crypto';
 
 @Injectable()
 export class ExperiencesService {
-  private readonly logger: Logger = new Logger(ExperiencesService.name);
   constructor(
     @InjectRepository(Experience)
     private readonly imageExperienceRepo: Repository<Experience>,

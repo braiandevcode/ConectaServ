@@ -13,9 +13,12 @@ import RegisterTasker from './components/public/Forms/Register/UserTasker/Regist
 import RegisterTaskerLayout from './routes/RegisterTaskerLayout';
 import Services from './pages/Services';
 import InfoTasker from './components/public/InfoTasker';
+import DashBoard from './components/private/DashBoard/DashBoard';
+import ProtectedRoute from './components/private/ProtectedRoute';
 // COMPONENTE APP PRINCIPAL
 export default function App() {
   const [initialLoading, setInitialLoading] = useState(true);
+  
 
   useEffect(() => {
     const timer = setTimeout(() => setInitialLoading(false), 1000); // SIMULA CARGA
@@ -43,8 +46,17 @@ export default function App() {
             </Route>
           </Route>
 
-            <Route path='services' element={<Services />} />
-            <Route path='services/infoTasker' element={<InfoTasker />} />
+          <Route path='services' element={<Services />} />
+          <Route path='services/infoTasker' element={<InfoTasker />} />
+        
+          <Route 
+            path='dashboard' 
+            element={
+              <ProtectedRoute>
+                <DashBoard />
+              </ProtectedRoute>
+            }>
+          </Route>
         </Route>
       </Routes>
     </>

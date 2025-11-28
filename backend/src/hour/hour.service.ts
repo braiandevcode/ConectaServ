@@ -1,4 +1,4 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateHourDto } from './dto/create-hour.dto';
 import { UpdateHourDto } from './dto/update-hour.dto';
 import { Hour } from './entities/hour.entity';
@@ -10,11 +10,7 @@ import { VALID_HOURS } from 'src/common/enums/enum.utils';
 
 @Injectable()
 export class HourService {
-  private readonly logger: Logger = new Logger(HourService.name);
-  constructor(
-    @InjectRepository(Hour) private readonly hourRepository: Repository<Hour>,
-    private readonly entityCreatorService: EntityCreatorService,
-  ) {}
+  constructor(@InjectRepository(Hour) private readonly hourRepository: Repository<Hour>,private readonly entityCreatorService: EntityCreatorService) {}
 
   create(createHourDto: CreateHourDto) {
     return 'This action adds a new hour';
@@ -36,8 +32,6 @@ export class HourService {
     } catch (error) {
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
-      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
-
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
 

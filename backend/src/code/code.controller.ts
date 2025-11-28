@@ -3,8 +3,8 @@ import { CodeService } from './code.service';
 // import { UpdateCodeDto } from './dto/update-code.dto';
 import { RequestCodeDto } from './dto/request-code-dto';
 import { VerifyCodeDto } from './dto/verify-code-dto';
-import { iMessageResponseStatus } from 'src/interface/iMessagesResponseStatus';
-import { iMessageStausToken } from 'src/interface/iMessageStatusToken';
+import { iMessageStausToken } from './interface/iMessageStatusToken';
+import { iMessageResponseStatus } from './interface/iMessagesResponseStatus';
 
 @Controller('api')
 export class CodeController {

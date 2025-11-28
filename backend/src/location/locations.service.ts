@@ -1,4 +1,4 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,14 +6,11 @@ import { EntityManager, Repository } from 'typeorm';
 import { Location } from './entities/location.entity';
 import { ErrorManager } from 'src/config/ErrorMannager';
 import { ELocations } from 'src/common/enums/enumLocations';
+import { ESeparatorsMsgErrors } from 'src/common/enums/enumSeparatorMsgErrors';
 
 @Injectable()
 export class LocationsService {
-  // INJECCION DEL REPOSITORIO => BUENA PRACTICA PARA LOGS
-  private readonly logger: Logger = new Logger(Location.name);
-  constructor(
-    @InjectRepository(Location) private readonly locationRepository: Repository<Location>,
-  ) {}
+  constructor(@InjectRepository(Location) private readonly locationRepository: Repository<Location>) {}
 
   //BUSCAR O CREAR
   async findOrCreate(createLocationDto:CreateLocationDto, manager?:EntityManager): Promise<Location> {
@@ -24,21 +21,14 @@ export class LocationsService {
         where: { cityName: createLocationDto.cityName }, 
       });
 
-      this.logger.debug(locationEntity);
-
       // SI NO EXISTE LA CIUDAD CREARLA
       if (!locationEntity) {
         // EL METODO 'CREATE' SOLO CONSTRUYE UNA INSTANCIA DE LA ENTIDAD EN MEMORIA, APLICANDO DEFAULTS Y PREPARANDO VALIDACIONES, SIN INTERACTUAR CON LA BASE DE DATOS.
         locationEntity = repo.create(createLocationDto);
-   
-        this.logger.debug(locationEntity.cityName);
-        this.logger.debug(locationEntity.user);
-
+  
         // VALIDAR QUE LA CIUDAD SEA UNA PERMITIDA
         if (!Object.values(ELocations).includes(locationEntity.cityName)) {
-          ErrorManager.createSignatureError(
-            `FORBIDDEN :: La ciudad no es una ubicación permitida. 2`,
-          );
+          ErrorManager.createSignatureError(`FORBIDDEN${ESeparatorsMsgErrors.SEPARATOR}La ciudad no es una ubicación permitida. 2`);
         }
         
         // EL METODO 'SAVE' EJECUTA EL COMANDO SQL 'INSERT' EN LA BASE DE DATOS Y DEVUELVE LA ENTIDAD CON SU NUEVO ID.
@@ -48,8 +38,6 @@ export class LocationsService {
     } catch (error) {
        // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
-      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
-
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
 

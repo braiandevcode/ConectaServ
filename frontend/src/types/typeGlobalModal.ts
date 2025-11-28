@@ -5,12 +5,12 @@ import type { EModalGlobalType } from './enumGlobalModalType';
 
 // TIPO PARA PLANTILLA DE MODAL GENERAL
 export type TGlobalModal = {
-  closeGlobalModal: (cb?:() => void) => void; //==> TODOS LOS MODALES CIERRAN PERO LA ACCION PUEDE SER DIFERENTE
+  closeGlobalModal: () => void; //==> TODOS LOS MODALES CIERRAN PERO LA ACCION PUEDE SER DIFERENTE
   openGlobalModal: (modalType: EModalGlobalType, cb?: () => Promise<void> | void) => void; //==> TODOS LOS MODALES ABREN
   setIsGlobalModalOpen: Dispatch<SetStateAction<boolean>>; // ==> TODOS LOS MODALES SETEARAN SU BANDERA
   setCurrentGlobalModal: Dispatch<SetStateAction<EModalGlobalType | null>>; // ==> TODOS LOS MODALES EXISTIRAN O NULL
   setMessageState: Dispatch<SetStateAction<iMessageState>>; // ==> TODOS LOS MODALES TENDRAN UN MENSAJE ESPECIFICO
-  showError: (title: string, text: string, cb?: () => void) => void; 
+  showError: (title: string, text: string) => void; 
   showSuccess: (title: string, text: string, cb?:() => Promise<void> | void) => void; // TODOS MOSTRARAN EL EXITO Y UNA ACCION DIFERENTE O NO
   onCloseCallbackRef: RefObject<(() => Promise<void> | void) | null>;
   messageState: iMessageState; //TODOS TENDRAN SU ESTADO DE MENAJE
