@@ -6,6 +6,8 @@ export interface iEndPointUser {
   USER_VERIFY:string;
   USER_CODE_REQUEST:string;
   USER_CODE_DELETE:string;
+  REFRESH:string;
+  LOGOUT:string;
 }
 
 // INTERFACES PARA URL DE PETICIONES

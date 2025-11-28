@@ -1,19 +1,18 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import {  Injectable } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from 'src/user/user.service';
-import { iJwtPayload } from './interface/jwtPayload';
+import { iJwtPayload } from './interface/iJwtPayload';
 import { RefreshTokenService } from 'src/refresh-tokens/refresh-tokens.service';
-import { ErrorManager } from 'src/config/ErrorMannager';
 import { LoginDto } from './dto/login-dto';
 import argon2 from 'argon2';
 import { User } from 'src/user/entities/user.entity';
-import { RefreshToken } from 'src/refresh-tokens/entities/refresh-token.entity';
+import { ONE_WEEK_IN_MS } from './constants/timeExpiration';
+import { DeleteResult } from 'typeorm';
+import { iAccessToken } from './interface/iAccessToken';
 
 @Injectable()
 export class AuthService {
-  private readonly logger = new Logger(AuthService.name);
-
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
@@ -21,7 +20,7 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  // VALIDAR CREDENCIALES MEDIANTE PASSPORT
+  // VALIDAR CREDENCIALES MEDIANTE PASSPORT ESTE METODO ES LLAMADO EN EL SERCIO DE ESTRATEGIA DE PASSPORT
   async validateUser(loginDto: LoginDto): Promise<iJwtPayload | null> {
     const { userName, password } = loginDto;
 
@@ -34,7 +33,7 @@ export class AuthService {
     // OBTENER LA CONTRASEÑA HASHEADA DEL USUARIO
     const hashedPassword: string = user.password;
 
-    // VERIFICAR CONTRASEÑA CON ARGON2
+    // VERIFICAR (DIGIERE) LA CONTRASEÑA QUE VIENE DE LA DB CON ARGON2
     const isMatch: boolean = await argon2.verify(hashedPassword, password);
 
     // SI LA CONTRASEÑA NO COINCIDE, RETORNAR NULL
@@ -52,133 +51,80 @@ export class AuthService {
     return payload;
   }
 
-  // SIGN IN: GENERA ACCESS + REFRESH Y GUARDA EL REFRESH EN DB
-  async signIn(userPayload: iJwtPayload, ip?: string, userAgent?: string) {
-    try {
+  // SIGN IN: GENERA ACCESS TOKEN + REFRESH Y GUARDA EL REFRESH EN DB
+  async signIn(userPayload: iJwtPayload, ip?: string, userAgent?: string): Promise<{ accessToken: string; refreshToken: string } | null> {
+    // GENERAR ACCESS TOKEN
+    const accessToken: string = this.jwtService.sign(userPayload, { expiresIn: '2m'});
+    
+    // CONFIGURAR REFRESH TOKEN
+    /*
+      - JWT_SECRET_REFRESH  ==> LLAVE SECRETA DISTINTA QUE FIRMARA LOS REFRESH TOKENS. ASI SI ALGUIEN ROBA UN ACCESS TOKEN, NO PUEDE USARLO PARA CREAR REFRESH TOKENS.
+      - JWT_EXPIRES_REFRESH ==>  TIEMPO DE EXPIRACION PARA LOS REFRESH TOKENS. ES MAS LARGO QUE EL ACCESS TOKEN.
+    */
 
-      this.logger.debug(JSON.stringify(userPayload));
+    // LEEMOS VARIABLES PARA GENERAR EL REFRESH TOKEN
+    const refreshSecret: string = this.configService.getOrThrow<string>('JWT_SECRET_REFRESH');
+    const refreshExpires: string = this.configService.getOrThrow<string>('JWT_EXPIRES_REFRESH');
 
-      // GENERAR ACCESS TOKEN
-      const accessToken: string = this.jwtService.sign(userPayload, { expiresIn: '15m' });
-      this.logger.debug(accessToken);
+    // TOMAR SOLO EL SUBJECT
+    const payload: { sub: string } = { sub: userPayload.sub };
 
-      // CONFIGURAR REFRESH TOKEN
-      /*
-        - JWT_SECRET_REFRESH  ==> LLAVE SECRETA DISTINTA QUE FIRMARA LOS REFRESH TOKENS. ASI SI ALGUIEN ROBA UN ACCESS TOKEN, NO PUEDE USARLO PARA CREAR REFRESH TOKENS.
+    // GENERAR REFRESH TOKEN CON JWT MEDIANTE EL METODO SIGN
+    const refreshToken: string = this.jwtService.sign(payload, {
+      secret: refreshSecret,
+      expiresIn: refreshExpires,
+    } as JwtSignOptions);
 
-        - JWT_EXPIRES_REFRESH ==>  TIEMPO DE EXPIRACION PARA LOS REFRESH TOKENS. NORMALMENTE ES MAS LARGO QUE EL ACCESS TOKEN, POR EJEMPLO 7 DÍAS (7D).
-      */
+    // CALCULAR FECHA DE EXPIRACION PARA DB
+    const expiresAt: Date = new Date();
 
-      // LEEMOS VARIABLES PARA GENERAR EL TOKEN
-      const refreshSecret: string = this.configService.getOrThrow<string>('JWT_SECRET_REFRESH');
-      const refreshExpires: string = this.configService.getOrThrow<string>('JWT_EXPIRES_REFRESH');
+    // SETEAR EN EXPIRES AT EL MOMENTO ACTUAL
+    expiresAt.setTime(Date.now() + ONE_WEEK_IN_MS);
 
-      this.logger.debug(refreshSecret);
-      this.logger.debug(refreshExpires);
+    // OBTENER ENTIDAD USER
+    const user: User | null = await this.userService.findByUserNameActiveForAuth({ userName: userPayload.userName });
+    
+    if (!user) return null; //PASSPORT RETORNA EL 401
 
-      const payload: {sub:string} = { sub: userPayload.sub }; 
+    // GUARDAR REFRESH TOKEN EN DB
+    await this.refreshTokenService.create({
+      token: refreshToken,
+      user,
+      expiresAt,
+      ip,
+      userAgent,
+    });
 
-      this.logger.debug(payload)
-      // GENERAR REFRESH TOKEN COMO JWT
-      const refreshTokenJwt: string = this.jwtService.sign(payload, {
-        secret: refreshSecret,
-        expiresIn: refreshExpires,
-      } as JwtSignOptions);
-
-      // CALCULAR FECHA DE EXPIRACION PARA DB
-      const expiresAt: Date = new Date();
-      this.logger.debug(expiresAt);
-
-      // SETEAR EN EXPIRES AT EL MOMENTO ACTUAL + 7 (DONDE SE ASIGNA TERNARIO Y SI DAYS NO ES UN NUMERO SERA 7 SINO DAYS)
-      expiresAt.setDate(expiresAt.getDate() + 7);
-
-      // OBTENER ENTIDAD USER
-      const user: User | null = await this.userService.findByUserNameActiveForAuth({ userName: userPayload.userName });
-
-      this.logger.debug(user);
-
-      if (!user)
-        throw ErrorManager.createSignatureError('NOT_FOUND :: Usuario no encontrado');
-
-      // GUARDAR REFRESH TOKEN EN DB
-      await this.refreshTokenService.create({
-        token: refreshTokenJwt,
-        user,
-        expiresAt,
-        ip,
-        userAgent,
-      });
-
-      return { accessToken, refreshToken: refreshTokenJwt };
-    } catch (error) {
-      const err = error as HttpException;
-      throw ErrorManager.createSignatureError(err.message);
-    }
+    // RETORNAR AMBOS ACCESS Y REFRESH
+    return { accessToken, refreshToken } as {
+      accessToken: string;
+      refreshToken: string;
+    };
   }
 
-  // VALIDAR REFRESH: RECIBE EL TOKEN STRING, BUSCA EN DB Y RETORNA NUEVO ACCESS TOKEN
-  async refreshAccessToken(refreshToken: string):Promise<{accessToken: string } | null> {
-    try {
+  // LA FUNCION RECIBE EL OBJETO USER VALIDADO POR EL GUARD
+  async refreshAccessToken(user: User): Promise<iAccessToken> {
+    // NUEVO PAYLOAD
+    const payload: iJwtPayload = {
+      sub: user.idUser,
+      userName: user.userName,
+      email: user.email,
+      roles: user.rolesData.map((r) => r.nameRole),
+    };
 
-        this.logger.debug(refreshToken);
+    // CREAR NUEVO ACCESS TOKEN
+    const accessToken: string = this.jwtService.sign(payload);
 
-      // BUSCAR EN DB
-      const record: RefreshToken | null = await this.refreshTokenService.findByToken({ token: refreshToken,});
-
-      this.logger.debug(record);
-
-      if (!record) return null;
-
-      this.logger.debug(record.expiresAt);
-      this.logger.debug(new Date());
-      
-      // VALIDAR EXPIRACION
-      // SI YA EXPIRO ELIMINAR
-      if (record.expiresAt <= new Date()) {
-        await this.refreshTokenService.revokeByToken({ token: refreshToken });
-        return null;
-      }
-
-      // VERIFICAR FIRMA JWT DEL REFRESH
-      const refreshSecret:string= this.configService.getOrThrow<string>('JWT_SECRET_REFRESH');
-
-      this.logger.debug(refreshSecret);
-      try {
-        // VERIFICAR EL TOKEN QUE VIENE POR EL TOKEN GUARDADO
-        this.jwtService.verify(refreshToken, { secret: refreshSecret });
-      } catch (err) {
-        // SINO REVOCAR
-        await this.refreshTokenService.revokeByToken({ token: refreshToken });
-        return null;
-      }
-
-      // CREAR NUEVO ACCESS TOKEN
-      const user:User = record.user;
-      // NUEVO PAYLOAD
-      const payload: iJwtPayload = {
-        sub: user.idUser,
-        userName: user.userName,
-        email: user.email,
-        roles: user.rolesData.map((r) => r.nameRole),
-      };
-      // AGREGAMOS NUEVO PAYLOAD A JWT Y LO ALMACENO EN CONSTANTE
-      const accessToken:string= this.jwtService.sign(payload);
-
-      return { accessToken }; //RETORNAR OBJETO CON NUEVO ACCES TOKEN 
-    } catch (error) {
-      const err = error as HttpException;
-      throw ErrorManager.createSignatureError(err.message);
-    }
+    return { accessToken }; //RETORNAR OBJETO CON TOKEN NUEVO
   }
 
   // LOGOUT: BORRAR UN REFRESH TOKEN (RECIBIDO DESDE FRONT)
-  async logout(refreshToken: string):Promise<{revoked: boolean}> {
-    try {
-      await this.refreshTokenService.revokeByToken({ token: refreshToken });
-      return { revoked: true };
-    } catch (error) {
-      const err = error as HttpException;
-      throw ErrorManager.createSignatureError(err.message);
-    }
+  async logout(refreshToken: string):  Promise<void> {
+    return await this.refreshTokenService.revokeByToken({ token: refreshToken });
+  }
+
+  // CERRAR SESION EN TODOS LOS DISPOSITIVOS
+  async logoutAll(idUser: string): Promise<void> {
+    return this.refreshTokenService.revokeAllByUser(idUser);
   }
 }

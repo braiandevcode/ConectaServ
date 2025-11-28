@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 // import { UpdateCodeDto } from './dto/update-code.dto';
 import { TVerifyCode } from 'src/types/typeSendVerifyCode';
 import { ErrorManager } from 'src/config/ErrorMannager';
@@ -24,7 +24,6 @@ import { EStatusVerifyEmail } from 'src/common/enums/enumStatusVerifyEmail';
 
 @Injectable()
 export class CodeService {
-  private readonly logger: Logger = new Logger(CodeService.name);
   private readonly resend: Resend;
 
   constructor(
@@ -92,19 +91,12 @@ export class CodeService {
 
       // VALIDAR RESPUESTA BASICA
       if (!responseService || !responseService.data || !responseService.data.id) {
-        // LOG Y RETORNO
-        this.logger.debug(responseService);
         throw ErrorManager.createSignatureError(`INTERNAL_SERVER_ERROR :: El servicio no pudo concretar el envio, por un problema desconocido`);
       }
-
-      // LOG Y RETORNO (MANTENGO USO DE LOGGER COMO EN TU ORIGINAL)
-      this.logger.debug(responseService);
       return responseService;
     } catch (error) {
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
-      this.logger.error(err?.message ?? String(error), err.stack); // LOG PARA DEPURACION
-
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
       // SI NO, CREO UN ERROR 500 GENERICO CON FIRMA DE ERROR
@@ -117,13 +109,9 @@ export class CodeService {
     const { emailCode } = requestCodeDto; //DESESTRUCTURO EL CUERPO
     let code: number; // AUX PARA ALMACENAR EN MOMORIA NUMERO DE CODIGO GENERADO
     let token: string; // AUX PARA ALMACENAR EN MOMORIA EL TOKEN GENERADO
-
-    this.logger.debug(emailCode);
     try {
       // LLAMAR AL SERVICIO QUE SE ENCARGA DE LA CONSULTA A LA TABLA USUARIOS Y FILTRA POR EL EMAIL QUE SE LE PASA
       const resultUserService: User | null = await this.userService.getUserEmail({ email: emailCode});
-
-      this.logger.debug(resultUserService);
 
       // SI YA EXISTE 
       if (resultUserService) {        
@@ -148,15 +136,12 @@ export class CodeService {
         // CALCULAR EXPIRACION
         const sendTime = new Date(resendResponse.headers.date); // MOMENTO REAL DEL ENVIO POR LIBRERIA RESEND
         expiresAt = new Date(sendTime.getTime() + 5 * 60 * 1000); // 5 MINUTOS DESDE EL ENVIO REAL
-        this.logger.debug('ANTES', expiresAt);
       }
 
       // SI NO VIENE FECHA ERROR
       if(expiresAt === null){
         throw ErrorManager.createSignatureError(`INTERNAL_SERVER_ERROR :: El servicio no pudo concretar el envio, por un problema desconocido`);
       }
-
-      this.logger.debug('SUMADO A 5M', expiresAt);
 
       const newValues = {
         code: code.toString(), // CONVERSIÓN A STRING
@@ -177,20 +162,14 @@ export class CodeService {
           toEmail: emailCode,
           ...newValues,
         });
-        this.logger.debug('NEWRECORDCODE', newCodeRecordCode);
-
         // GUARDAR EN DB DATOS DEL CODIGO
         await this.codeRepository.save(newCodeRecordCode);
       }
-
-      this.logger.debug({ token, sussess: true, expiresAt  });
 
       return { token, success:true, expiresAt:expiresAt }; // RETORNAR DATOS QUE EL FRONTEND NECESITARA
     } catch (error){
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
-
-     this.logger.error(err?.message ?? String(error), (err as any)?.stack); // LOG PARA DEPURACION
 
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
@@ -206,8 +185,6 @@ export class CodeService {
     // VERIFICAR EL JWT VERIFICAR FIRMA Y EXPIRACION DEL TOKEN
     try {
       const payload: iPayloadTokenVerifyEmail = this.jwtService.verify(token); // JWT VERIFICA FIRMA QUE VIENE DEL FRONTEND
-
-      this.logger.debug('PAYLOAD', payload);
       // SI EL EMAIL DEL TOKEN NO COINCIDE CON EL EMAIL DEL CUERPO
       if (payload.email !== email || payload.type !== ETokenType.EMAIL_VERIFY) {
         // EL TOKEN NO CORRESPONDE A ESTE EMAIL/FLUJO

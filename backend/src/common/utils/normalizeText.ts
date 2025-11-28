@@ -9,12 +9,15 @@ const normalizeText = (value: string): string => {
   // LUEGO REEMPLAZO LOS CARACTERES DE TILDE CON UN REGEX
 
   //normalize ==> https://developer.mozilla.org/
-  const withoutAccents = value.normalize("NFD").replace(/[\u0300-\u036f]/g, '');
+  // GRACIAS A NORMALIZE, LOS CARACTERES ACENTUADOS SE DESCOMPONEN
+  // POR EJEMPLO, "Á" SE CONVIERTE INTERNAMENTE EN "A" + UN CARÁCTER DE ACENTO SEPARADO
+  // LUEGO, CON REPLACE(/[\u0300-\u036F]/G, ''), SE ELIMINAN TODOS LOS ACENTOS Y DIACRÍTICOS
+  const withoutAccents:string = value.normalize("NFD").replace(/[\u0300-\u036f]/g, '');
 
-  // PASO TODO A MINÚSCULAS PARA ESTANDARIZAR
-  const lower = withoutAccents.toLowerCase();
+  // PASO TODO A MINUSCULAS PARA ESTANDARIZAR
+  const lower:string = withoutAccents.toLowerCase();
 
-  // CAPITALIZO LA PRIMERA LETRA PARA QUE QUEDE BONITO
+  // CAPITALIZO LA PRIMERA LETRA
   return lower.charAt(0).toUpperCase() + lower.slice(1);
 }
 

@@ -8,3 +8,4 @@ conectaServ-react/**/db
 **/mockDb
 .env
 .env.*
+!.env.example

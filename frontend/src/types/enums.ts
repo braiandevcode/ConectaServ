@@ -67,7 +67,9 @@ export enum EEndpoint {
   USER_CODE_DELETE= '/api/v1/code',
   USER_IDENTIFY='/api/v1/users/identify',
   CODE_VERIFY ='/api/v1/code/verify',
-  AUTH= '/api/v1/auth',
+  AUTH= '/api/v1/auth/login',
+  REFRESH= '/api/v1/auth/refresh',
+  LOGOUT= '/api/v1/auth/logout',
 }
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA

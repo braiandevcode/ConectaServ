@@ -9,5 +9,7 @@ export const endPointUser: iEndPointUser= {
   USER_VERIFY:`${BASE_BACK_URL}${EEndpoint.CODE_VERIFY}`,
   USER_CODE_DELETE:`${BASE_BACK_URL}${EEndpoint.USER_CODE_DELETE}`,
   USER_IDENTIFY: `${BASE_BACK_URL}${EEndpoint.USER_IDENTIFY}`,
-  AUTH_LOGIN: `${BASE_BACK_URL}${EEndpoint.AUTH}` 
+  AUTH_LOGIN: `${BASE_BACK_URL}${EEndpoint.AUTH}`,
+  REFRESH:`${BASE_BACK_URL}${EEndpoint.REFRESH}`,
+  LOGOUT:`${BASE_BACK_URL}${EEndpoint.LOGOUT}`,
 };

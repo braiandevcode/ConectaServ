@@ -2,6 +2,7 @@ import { Request } from 'express';
 import { HttpException } from '@nestjs/common';
 import { ErrorManager } from '../config/ErrorMannager';
 import { memoryStorage, Options } from 'multer';
+import { ESeparatorsMsgErrors } from 'src/common/enums/enumSeparatorMsgErrors';
 
 /*
   ESTA FUNCION ES UN MIDDLEWARE DE VALIDACION QUE MULTER EJECUTA,
@@ -15,9 +16,7 @@ export const imageFileFilter = (
   // TU LÓGICA DE VALIDACIÓN DE TIPO DE ARCHIVO AHORA ESTÁ AQUÍ
   if (!file.mimetype.match(/(image\/jpg|jpeg|png|webp)$/)) {
     return callback(
-      ErrorManager.createSignatureError(
-        'UNSUPPORTED_MEDIA_TYPE :: Tipo de archivo no soportado.',
-      ),
+      ErrorManager.createSignatureError(`UNSUPPORTED_MEDIA_TYPE${ESeparatorsMsgErrors.SEPARATOR}Tipo de archivo no soportado.`),
       false,
     );
   }

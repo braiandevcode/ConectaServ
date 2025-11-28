@@ -1,4 +1,4 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateTaskerDto } from './dto/create-tasker.dto';
 import { UpdateTaskerDto } from './dto/update-tasker.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -28,8 +28,6 @@ import { ECategory } from 'src/common/enums/enumCategory';
 
 @Injectable()
 export class TaskersService {
-  // INJECCION DEL REPOSITORIO => BUENA PRACTICA PARA LOGS
-  private readonly logger: Logger = new Logger(TaskersService.name);
   constructor(
     @InjectRepository(Tasker) private readonly taskerRepo: Repository<Tasker>,
     private readonly categoryService: CategoryService,
@@ -159,8 +157,6 @@ export class TaskersService {
           mannager,
         )) ?? null;
 
-      this.logger.debug(imageProfile);
-
       // LLAMO A SERVICIO DE CREACION Y ALMACENAMIENTO DE IMAGENES DEL EXPERIENCIAS
       const imagesExperiences: Experience[] =
         (await this.imageExpService.create(
@@ -169,11 +165,7 @@ export class TaskersService {
           mannager,
         )) ?? [];
 
-      this.logger.debug(imagesExperiences);
-
       const taskerPlain = instanceToPlain(savedDataTasker) as Tasker;
-
-      this.logger.debug(taskerPlain);
 
       return {
         ...taskerPlain,
@@ -182,10 +174,8 @@ export class TaskersService {
       } as TaskerResponse;
     } catch (error) {
       const err = error as HttpException;
-
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
-
       // SI NO, CREO UN ERROR 500 GENÉRICO CON FIRMA DE ERROR
       throw ErrorManager.createSignatureError(err.message);
     }

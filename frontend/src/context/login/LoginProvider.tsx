@@ -5,29 +5,30 @@ import useMain from '../../hooks/useMain';
 import { isLengthValid } from '../../utils/validateFieldUtils';
 import useUserApi from '../../hooks/useUserApi';
 import useGlobalModal from '../../hooks/useGlobalModal';
+import type { TFormRole } from '../../types/typeFormRole';
 
 // PROVEEDOR DE LOS ESTADOS, FUNCIONALIDAD Y LOGICA DEL LOGIN
 const LoginProvider = ({ children }: { children: ReactNode }) => {
-  const { client } = useMain();
+  const { client, setAccessToken, setIsAuth } = useMain();
   const { isGlobalModalOpen } = useGlobalModal();
   const [error, setError] = useState<string>('');
-  const [isAuth, setIsAuth] = useState<boolean>(false);
   const [password, setPassword] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
 
-  const initialRole: 'client' | 'tasker' | null = client === null ? null : client ? 'client' : 'tasker';
+  // ESTADO INICIAL
+  const initialRole: TFormRole | null = client === null ? null : client ? 'client' : 'tasker';
 
-  const [role, setRole] = useState<'client' | 'tasker' | null>(initialRole);
+  const [role, setRole] = useState<TFormRole | null>(initialRole);
 
   const [isValid, setIsValid] = useState<boolean>(false);
 
-  const { signInUser } = useUserApi();
-
+  const { signIn } = useUserApi(); //HOOK DE PETICIONES API DE USUARIO
+  
   useEffect(() => {
     if (isGlobalModalOpen) {
       setIsValid(validateFieldsLogin());
     }
-  }, [isGlobalModalOpen, validateFieldsLogin]);
+  }, [validateFieldsLogin]);
 
   // OBSERVAR client
   useEffect(() => setRole(initialRole), [client]); // ==> CLIENT ES ESTADO EXTERNO
@@ -46,16 +47,18 @@ const LoginProvider = ({ children }: { children: ReactNode }) => {
     setIsValid(validateFieldsLogin) // ==> REVALIDAR EN CADA CAMBIO DE USERNAME
   };
 
+  // AUNQUE SE QUE NESTJS VALIDA ESTAS COSAS, YA CON ESO EVITO ENVIAR AL BACKEND DATOS ERRONEOS
+  //DE ESTA MANERA NO GASTO RECURSOS DE PETICIONES INNECESARIAS AL BACKEND.
   function validateFieldsLogin() {
     // SE CONSIDERA VALIDO SI LOS VALORES DE LOS CAMPOS TIENEN UNA LONGITUD MAYOR A 2
-    let isValid = isLengthValid({ text: password, num: 3 }) && isLengthValid({ text: userName, num: 3 });
+    let isValid:boolean = isLengthValid({ text: password, num: 3 }) && isLengthValid({ text: userName, num: 3 });
     return isValid;
   }
 
-  // EVENTO DE CAMBIO EN PASSWORD
+  // SUBMIT PARA LOGIN
   const submitLogin = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    await signInUser({ password, userName, setError, setIsAuth })
+    await signIn({ password, userName, setError, setIsAuth, setAccessToken });
   };
 
   // OBJETO DE ESTADOS ACTUALIZADOS PARA EL CONTEXTO
@@ -63,7 +66,6 @@ const LoginProvider = ({ children }: { children: ReactNode }) => {
     isValid,
     role,
     error,
-    isAuth,
     password,
     userName,
     validateFieldsLogin,
@@ -71,7 +73,6 @@ const LoginProvider = ({ children }: { children: ReactNode }) => {
     setIsValid,
     handlePassword,
     handleUserName,
-    setIsAuth,
     setPassword,
     setUserName,
     setError,
