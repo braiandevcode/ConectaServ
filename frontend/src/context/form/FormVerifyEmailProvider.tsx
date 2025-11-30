@@ -13,7 +13,6 @@ import useRegister from '../../hooks/useRegister';
 import useUserApi from '../../hooks/useUserApi';
 import type { iFormStateValidationClient } from '../../interfaces/iFormStateValidationClient';
 import type { iFormStateValidationTask } from '../../interfaces/iFormStateValidationTask';
-import type { iStatusError } from '../../interfaces/iSatatus';
 
 // PROVIDER DE MODAL DE VERIFICACION DE CODIGO DE EMAIL
 const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
@@ -22,8 +21,8 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
 
   // -----------------------CUSTOM HOOKS-------------------------------//
   const codeValidator: CodeValidator = new CodeValidator(); // ==> INSTANCIA DE VALIDACION DE ENTRADA DE CODIGO
-  const { showError, showSuccess, openGlobalModal } = useGlobalModal(); // ==> HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
-  const { closeRegisterModal, isRegisterModalOpen } = useRegisterModal(); // ==> HOOK QUE USA EL CONTEXTO DE MODAL EN REGISTRO
+  const { showSuccess, openGlobalModal, setErrorText } = useGlobalModal(); // ==> HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
+  const { isRegisterModalOpen } = useRegisterModal(); // ==> HOOK QUE USA EL CONTEXTO DE MODAL EN REGISTRO
   const { setIsSuccefullyVerified, timerRef, setTime,isSuccefullyVerified } = useRegister(); // ==> HOOK QUE CONSUME EL CONTEXTO DE REGISTRO GENERAL
   const { userVerify} = useUserApi(); //CUSTOM HOOK API USUARIO
 
@@ -86,6 +85,7 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
     setFormState((prev) => ({ ...prev, emailCode: validate }));
   };
 
+  // ACTUALIZAR ESTADO DE VERIFICACION EXITOSA
   const updatedIsSuccefullyVerified = (isVerifiedSuccess: boolean) => {
     setIsSuccefullyVerified(isVerifiedSuccess); //VERIFICADO SATISFACTORIO
   };
@@ -213,32 +213,27 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
     e.preventDefault(); //PREVENIR COMPORTAMIENTO POR DEFECTO
     // "GUARDRAIL"
     if (expired) return; //SI EXPIRO NO ACCIONAR NADA
-    setIsVerifyingCode(true); //PROCESO DE VERIFICACION DE CODIGO EN PROGRESO
+    const fieldState = formState[fieldName] as TFieldState; //SEGUN EL NAME DE LA INTERFACE
+    
+    // COMENZAR VERIFICACION
+    const result = await userVerify({ 
+      email:(fieldState.value as string), 
+      token, 
+      code:fullCode, 
+      setErrorText,
+      setIsCodeSent,
+      updatedIsSuccefullyVerified,
+      setIsVerifyingCode 
+    });
 
-    try {
-      const fieldState = formState[fieldName] as TFieldState; //SEGUN EL NAME DE LA INTERFACE
-      setOtp(Array(NUM_DIGITS).fill('')); //LIMPIAR CAMPOS
-      setIsVerifyingCode(false); // ==> LA VERIFICACION DEL CODIGO YA NO ESTA EN PROGRESO
-      setIsCodeVerified(true); // INDICA QUE TERMINO LA VERIFICACION
-      const result = await userVerify({ email:(fieldState.value as string), token, code:fullCode });
-
-      if (result?.success) {
-        updatedIsSuccefullyVerified(true);
-        showSuccess('¡Correo Verificado!', '¡Su correo fue verificado con exito!');
-        openGlobalModal(EModalGlobalType.MODAL_SUCCESS);
-      } else {
-        updatedIsSuccefullyVerified(false);
-        setIsCodeSent(false);
-        showError('Código incorrecto', 'El código ingresado no es valido.');
-        openGlobalModal(EModalGlobalType.MODAL_ERROR);
-      }
-    } catch (error: unknown) {
-      const err = error as iStatusError;
-      openGlobalModal(EModalGlobalType.MODAL_ERROR);
-      showError('Error inesperado', 'Intente de nuevo más tarde.');
-      throw err;
-    }finally{
-      closeRegisterModal(); //CERRAR MODAL ACTUAL AUTOMATICAMENTE LUEGO DEL EVENTO
+    setOtp(Array(NUM_DIGITS).fill('')); //LIMPIAR CAMPOS
+    setIsVerifyingCode(false); // ==> LA VERIFICACION DEL CODIGO YA NO ESTA EN PROGRESO
+    setIsCodeVerified(true); // INDICA QUE TERMINO LA VERIFICACION
+    
+    if (result?.success) {
+      updatedIsSuccefullyVerified(true);
+      showSuccess('¡Correo Verificado!', '¡Su correo fue verificado con exito!');
+      openGlobalModal(EModalGlobalType.MODAL_SUCCESS);
     } 
   };
 

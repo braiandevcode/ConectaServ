@@ -1,5 +1,7 @@
 // IMPORTACIONES
-import type { TStoredImage } from '../types/typePersistanceDataImage.js';
+
+import type { TImageData } from "../types/typeRegisterEndDto";
+
 
 // ----------------METODOS AUXILIARES PARA FOMULARIOS--------------------//
 // SI UN CAMPO TIENE CONTENIDO
@@ -13,6 +15,6 @@ export const validateWithRegex = ({ pattern, text }: { pattern: RegExp; text: st
 };
 
 //ASEGURO DE QUE SI EXISTE EL OBJETO Y NO ESTA VACIO ES TRUE ==> SINO FALSE
-export const verifyMetaDataImage = (imgObj: TStoredImage | null): boolean => Boolean(imgObj && Object.keys(imgObj).length > 0);
+export const verifyMetaDataImage = (imgObj: TImageData | null): boolean => Boolean(imgObj && Object.keys(imgObj).length > 0);
 
 export const verifyDataObject = (obj:unknown): boolean => Boolean(obj && Object.keys(obj).length > 0);

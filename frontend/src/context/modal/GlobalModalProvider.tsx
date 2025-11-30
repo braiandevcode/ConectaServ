@@ -6,9 +6,10 @@ import { EModalGlobalType } from '../../types/enumGlobalModalType';
 
 // PROVIDER DE MODAL GLOBAL
 const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
+  // ---------------------ESTADOS--------------------------------------//
   // ESTADO DE BANDERA PARA DETERMINAR SI UN MODAL ESTA ABIERTO
   const [isGlobalModalOpen, setIsGlobalModalOpen] = useState<boolean>(false);
-
+  const [errorText, setErrorText] = useState<string>('') //ESTADO DE MENSAJES DE ERROR TEXTUALES
   // ESTADO PARA AGREGAR O QUITAR U MODAL
   const [currentGlobalModal, setCurrentGlobalModal] = useState<EModalGlobalType | null>(null);
   //ESTADO PARA MENSAJES EN MODALES
@@ -16,7 +17,11 @@ const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
 
   //REF QUE DETERMINA LA EJECUCION DE UNA CALLBACK
   const onCloseCallbackRef = useRef<(() => Promise<void> | void) | null>(null);
-  // ----------------------EVENTOS--------------------------------------------------//
+
+   const [passwordLogin, setPasswordLogin] = useState<string>(''); //ESTADO DEL CAMPO DE CONTRASEÑA
+  
+  
+  // ----------------------FUNCIONES--------------------------------------------//
   //FUNCION PARA CERRAR UN MODAL ==> ACEPTA UNA CALLBACK OPCIONAL PARA EJECUTAR UNA ACCION DESPUES
   const closeGlobalModal = async (): Promise<void> => {
     setIsGlobalModalOpen(false); // ==> CIERRA EL MODAL PRIMERO
@@ -50,7 +55,7 @@ const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const valueGlobalModalContext: TGlobalModal = {
-    onCloseCallbackRef,
+    setErrorText,
     closeGlobalModal,
     openGlobalModal,
     setCurrentGlobalModal,
@@ -58,6 +63,10 @@ const GlobalModalProvider = ({ children }: { children: ReactNode }) => {
     setMessageState,
     showError,
     showSuccess,
+    setPasswordLogin,
+    passwordLogin,
+    onCloseCallbackRef,
+    errorText,
     currentGlobalModal,
     isGlobalModalOpen,
     messageState,

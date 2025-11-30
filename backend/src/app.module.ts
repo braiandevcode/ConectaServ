@@ -19,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
 import { RefreshTokensModule } from './refresh-tokens/refresh-tokens.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -27,7 +28,6 @@ import { join } from 'path';
       // CARGA VARIABLES DE ENTORNO DESDE ARCHIVO .ENV
       isGlobal: true, // DISPONIBLE EN TODA LA APP SIN VOLVER A IMPORTAR
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}.local`, // ARCHIVO .ENV SEGUN EL ENTORNO
-
       //ACTUALIZACIÓN DEL ESQUEMA DE JOI
       validationSchema: Joi.object({
         //VARIABLES ENTORNO BASE DE DATOS
@@ -36,23 +36,16 @@ import { join } from 'path';
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
-
         // JWT VERIFICACION DE EMAIL
         JWT_SECRET_VERIFICATION_EMAIL:Joi.string().required(),
-
         // JWT AUTENTICACION DE USUARIO
         JWT_SECRET_AUTH:Joi.string().required(),
         //TIEMPO DE EXPIRACION DADO
         JWT_EXPIRES_AUTH:Joi.string().required(),
-
         // JWT REFRESH
         JWT_SECRET_REFRESH:Joi.string().required(),
-
         JWT_EXPIRES_REFRESH:Joi.string().required(),
-
-
         RESEND_API_KEY:Joi.string().required(),
-
         // DOMINIO + PUERTO
         FE_HOST:Joi.string().required(),
         FE_PORT:Joi.number().required(),
@@ -72,12 +65,15 @@ import { join } from 'path';
         password: config.get<string>('DB_PASSWORD'), // PASSWORD DE LA DB
         database: config.get<string>('DB_NAME'), // NOMBRE DE LA BASE DE DATOS
         entities: [__dirname + '/**/*.entity{.ts,.js}'], // ENTIDADES QUE VA A LEER
-        synchronize: true, // AUTO SINCRONIZA SCHEMA (EN TRUE NO USAR EN PRODUCCIÓN)
+        synchronize: false // AUTO SINCRONIZA SCHEMA (EN TRUE NO USAR EN PRODUCCIÓN)
       }),
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'assets')
     }),
+    //CROS INICIALIZA EL PLANIFICADOR. 
+    // REGISTRA CUALQUIER CRON JOB TIMEOUT O INTERVALO QUE EXISTA DENTRO DE LA APP.
+    ScheduleModule.forRoot(),
     ServicesModule,
     AuthModule,
     UserModule,

@@ -1,4 +1,4 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateDayDto } from './dto/create-day.dto';
 import { UpdateDayDto } from './dto/update-day.dto';
 import { Day } from './entities/day.entity';
@@ -10,11 +10,7 @@ import { VALID_DAYS } from 'src/common/enums/enum.utils';
 
 @Injectable()
 export class DayService {
-  private readonly logger: Logger = new Logger(DayService.name);
-  constructor(
-    @InjectRepository(Day) private readonly dayRepository: Repository<Day>,
-    private readonly entityCreatorService: EntityCreatorService,
-  ) {}
+  constructor(@InjectRepository(Day) private readonly dayRepository: Repository<Day>,private readonly entityCreatorService: EntityCreatorService) {}
 
   create(createDayDto: CreateDayDto) {
     return 'This action adds a new day';
@@ -36,8 +32,6 @@ export class DayService {
     } catch (error) {
       // CAPTURAMOS CUALQUIER ERROR NO CONTROLADO
       const err = error as HttpException;
-      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
-
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
 

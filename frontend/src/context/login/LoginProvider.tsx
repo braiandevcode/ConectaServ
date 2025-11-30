@@ -1,28 +1,38 @@
-import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
+import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import LoginContext from './LoginContext';
 import type { TAuthLogin } from '../../types/typeAuthLogin';
 import useMain from '../../hooks/useMain';
 import { isLengthValid } from '../../utils/validateFieldUtils';
 import useUserApi from '../../hooks/useUserApi';
 import useGlobalModal from '../../hooks/useGlobalModal';
+import type { TFormRole } from '../../types/typeFormRole';
 
 // PROVEEDOR DE LOS ESTADOS, FUNCIONALIDAD Y LOGICA DEL LOGIN
 const LoginProvider = ({ children }: { children: ReactNode }) => {
-  const { client } = useMain();
+  // ---------CUSTOM HOOKS--------------------//
+  const { setErrorText, passwordLogin, setPasswordLogin } = useGlobalModal();
+  const { client, setAccessToken, setIsAuth } = useMain();
   const { isGlobalModalOpen } = useGlobalModal();
-  const [error, setError] = useState<string>('');
-  const [isAuth, setIsAuth] = useState<boolean>(false);
-  const [password, setPassword] = useState<string>('');
-  const [userName, setUserName] = useState<string>('');
 
-  const initialRole: 'client' | 'tasker' | null = client === null ? null : client ? 'client' : 'tasker';
+  // -------------------------ESTADOS--------------------------//
+  const [userName, setUserName] = useState<string>(''); //ESTADO DEL CAMPO DE USUARIO
+  const [interactedSession, setInteractedSession] = useState<boolean>(false);
+  // GUARDAR ESTADO INICIAL
+  const initialRole: TFormRole | null = client === null ? null : client ? 'client' : 'tasker';
+  const [role, setRole] = useState<TFormRole | null>(initialRole); //ESTADO DE ROL ELEGIDO
+ 
+  const [isValid, setIsValid] = useState<boolean>(false); //ESTAADO DE VALIDACION
 
-  const [role, setRole] = useState<'client' | 'tasker' | null>(initialRole);
+  const { signIn } = useUserApi(); //HOOK DE PETICIONES API DE USUARIO
 
-  const [isValid, setIsValid] = useState<boolean>(false);
+  //FUNCION MEMOIZADA NO SE RECREA EN CADA RENDER
+  const validateFieldsLogin = useCallback(() => {
+    // AUNQUE SE QUE NESTJS VALIDA ESTAS COSAS,
+    // YA CON ESTO EVITO ENVIAR AL BACKEND DATOS ERRONEOS
+    return isLengthValid({ text: passwordLogin, num: 3 }) && isLengthValid({ text: userName, num: 3 });
+  }, [passwordLogin, userName]); //DEPENDENCIAS
 
-  const { signInUser } = useUserApi();
-
+  //-------------------- EFECTOS---------------------------------//
   useEffect(() => {
     if (isGlobalModalOpen) {
       setIsValid(validateFieldsLogin());
@@ -32,49 +42,41 @@ const LoginProvider = ({ children }: { children: ReactNode }) => {
   // OBSERVAR client
   useEffect(() => setRole(initialRole), [client]); // ==> CLIENT ES ESTADO EXTERNO
 
+  // ---------------------FUNCIONES----------------------------------------//
   // EVENTO DE CAMBIO EN PASSWORD
   const handlePassword = (e: FormEvent<HTMLInputElement>) => {
     const value: string = e.currentTarget.value;
-    setPassword(value);
-    setIsValid(validateFieldsLogin) // ==> REVALIDAR EN CADA CAMBIO DE PASSWORD
+    setPasswordLogin(value);
+    setIsValid(validateFieldsLogin); // ==> REVALIDAR EN CADA CAMBIO DE PASSWORD
   };
 
   // EVENTO DE CAMBIO EN USERNAME
   const handleUserName = (e: FormEvent<HTMLInputElement>) => {
     const value: string = e.currentTarget.value;
     setUserName(value);
-    setIsValid(validateFieldsLogin) // ==> REVALIDAR EN CADA CAMBIO DE USERNAME
+    setIsValid(validateFieldsLogin); // ==> REVALIDAR EN CADA CAMBIO DE USERNAME
   };
 
-  function validateFieldsLogin() {
-    // SE CONSIDERA VALIDO SI LOS VALORES DE LOS CAMPOS TIENEN UNA LONGITUD MAYOR A 2
-    let isValid = isLengthValid({ text: password, num: 3 }) && isLengthValid({ text: userName, num: 3 });
-    return isValid;
-  }
-
-  // EVENTO DE CAMBIO EN PASSWORD
+  // SUBMIT PARA LOGIN
   const submitLogin = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    await signInUser({ password, userName, setError, setIsAuth })
+    setInteractedSession(true);
+    await signIn({ passwordLogin, setPasswordLogin, userName, setErrorText, setIsAuth, setAccessToken });
   };
 
   // OBJETO DE ESTADOS ACTUALIZADOS PARA EL CONTEXTO
   const valuesDefaultLoginAuth: TAuthLogin = {
     isValid,
     role,
-    error,
-    isAuth,
-    password,
     userName,
+    interactedSession,
+    setInteractedSession,
     validateFieldsLogin,
     submitLogin,
     setIsValid,
     handlePassword,
     handleUserName,
-    setIsAuth,
-    setPassword,
     setUserName,
-    setError,
   };
 
   return <LoginContext.Provider value={valuesDefaultLoginAuth}>{children}</LoginContext.Provider>;

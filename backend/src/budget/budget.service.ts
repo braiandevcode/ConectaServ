@@ -1,4 +1,4 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateBudgetDto } from './dto/create-budget.dto';
 import { UpdateBudgetDto } from './dto/update-budget.dto';
 import { Budget } from './entities/budget.entity';
@@ -9,7 +9,6 @@ import { ECategory } from 'src/common/enums/enumCategory';
 
 @Injectable()
 export class BudgetService {
-  private readonly logger: Logger = new Logger(BudgetService.name);
   constructor(
     @InjectRepository(Budget)
     private readonly budgetRepository: Repository<Budget>,
@@ -26,7 +25,6 @@ export class BudgetService {
       
       let budgeTasker: Budget | null = null;
 
-      this.logger.debug(category);
       // SI CATEGORIA ES REPARACION Y MANTENIMIENTO
       if (category === ECategory.REPAIR) {
         // SI VIENEN DATOS DE PRESUPUESTO
@@ -36,18 +34,11 @@ export class BudgetService {
           reinsertSelected,
           budgeSelected,
         });
-
-        this.logger.debug(budgeTasker);
-
-        // budgeTasker = await repo.save(budgeTasker);
       }
 
       return budgeTasker;
     } catch (error) {
       const err = error as HttpException;
-
-      this.logger.error(err.message, err.stack);
-
       // SI EL ERROR YA FUE MANEJADO POR ERRORMANAGER, LO RELANZO TAL CUAL
       if (err instanceof ErrorManager) throw err;
 

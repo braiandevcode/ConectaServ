@@ -1,4 +1,4 @@
-import { IsIn, IsNotEmpty, IsNumber, IsOptional, Max } from 'class-validator';
+import { IsIn, IsNotEmpty, IsNumber, Max } from 'class-validator';
 
 export class CreateBudgetDto {
   @IsNumber({}, { message: 'El valor del monto debe ser numerico' })

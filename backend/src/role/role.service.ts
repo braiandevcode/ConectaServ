@@ -1,17 +1,15 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { ErrorManager } from 'src/config/ErrorMannager';
 import { ERoles } from 'src/common/enums/enumRoles';
+import { ESeparatorsMsgErrors } from 'src/common/enums/enumSeparatorMsgErrors';
 
 @Injectable()
 export class RoleService {
-  private readonly logger: Logger = new Logger(RoleService.name);
-  constructor(
-    @InjectRepository(Role) private readonly roleRepository: Repository<Role>,
-  ) {}
+  constructor(@InjectRepository(Role) private readonly roleRepository: Repository<Role>) {}
 
   // METODO PARA BUSCAR O CREAR
   async findOrCreate(role: ERoles, manager?:EntityManager): Promise<Role[]> {
@@ -23,20 +21,15 @@ export class RoleService {
         where: { nameRole: role},
       });
 
-      this.logger.debug(roleEntity);
-
       // SI NO ENCUENTRA
       if (!roleEntity) {
         // SI NO EXISTE EL ROL, LO CREO NUEVO
         roleEntity = this.roleRepository.create({ nameRole: role }); //DEVUELVE UN OBJETO SIN ID NI DATOS GENERADOS.
 
-        this.logger.debug(roleEntity.nameRole);
-        this.logger.debug(roleEntity.users);
-
         // VALIDAR QUE EL ROL SEA UNO PERMITIDO
         // NO PERMITO QUE UN USUARIO SE CREE CON ROLES RESERVADOS EJEMPLO "ADMIN"
         if (!Object.values(ERoles).includes(roleEntity.nameRole)) {
-          ErrorManager.createSignatureError(`FORBIDDEN :: El role elegido no está permitido.`);
+          ErrorManager.createSignatureError(`FORBIDDEN${ESeparatorsMsgErrors.SEPARATOR}El role elegido no está permitido.`);
         }
 
         // GUARDO EL NUEVO ROL EN LA BASE DE DATOS
@@ -46,9 +39,7 @@ export class RoleService {
       return [roleEntity];
     } catch (error) {
       const err = error as HttpException;
-      this.logger.error(err.message, err.stack); // LOG PARA DEPURACION
       if(err instanceof ErrorManager) throw err;
-
       // SI NO, CREO UN ERROR 500 GENERICO CON FIRMA DE ERROR
       throw ErrorManager.createSignatureError(err.message);
     }

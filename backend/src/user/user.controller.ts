@@ -8,8 +8,9 @@ import {
   Delete,
   UseInterceptors,
   UploadedFiles,
-  Logger,
   ValidationPipe,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,15 +19,17 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/shared/multer.options';
 import { TotalSizeValidationPipe } from 'src/shared/pipes/total-size-validation.pipe';
 import { ParseJsonPipe } from 'src/shared/pipes/parse-json.pipe';
-import { iMessageResponseStatus } from 'src/interface/iMessagesResponseStatus';
 import { UserIdentifyEmailDto } from './dto/user-identify-email-dto';
+import { iMessageResponseStatus } from 'src/code/interface/iMessagesResponseStatus';
+import { AuthGuard } from '@nestjs/passport';
+import { iJwtPayload } from 'src/auth/interface/iJwtPayload';
+import { TDataPayloadUser } from 'src/types/typeDataPayloadProfile';
 
-@Controller('api')
+@Controller('api/v1')
 export class UserController {
-  private readonly logger: Logger = new Logger(UserController.name);
   constructor(private readonly userService: UserService) {}
 
-  @Post('/v1/users')
+  @Post('/users')
   // INTERCEPTAR AMBOS CAMPOS
   @UseInterceptors(FileFieldsInterceptor([
         { name: 'imageProfile', maxCount: 1 }, // EL CAMPO DEL PERFIL
@@ -52,21 +55,13 @@ export class UserController {
     )
     createUserDto: CreateUserDto,
   ) {
-    this.logger.error(files);
 
     const profileFile: Express.Multer.File | null =
       files.imageProfile?.[0] || null;
     const experienceFiles: Express.Multer.File[] = files.imageExperiences || [];
 
-    this.logger.debug(profileFile);
-    this.logger.debug(experienceFiles);
-
     // EXTRAER Y APLICAR EL PIPE SOLO EN IMAGENES DE EXPERIENCIAS
-    const validatedExperienceFiles: Express.Multer.File[] =
-      new TotalSizeValidationPipe().transform(experienceFiles);
-
-    this.logger.debug(validatedExperienceFiles);
-
+    const validatedExperienceFiles: Express.Multer.File[] = new TotalSizeValidationPipe().transform(experienceFiles);
     //LLAMAR AL SERVICIO
     return this.userService.create(
       profileFile, //ARCHIVO PERFIL
@@ -74,33 +69,43 @@ export class UserController {
       createUserDto,
     );
   }
+  
+  @Get('users/taskers')
+  @UseGuards(AuthGuard('jwt'))
+  async getTaskers(@Req() req: Request & { user: iJwtPayload }): Promise<TDataPayloadUser[]> {
+    const userId: string = req.user.sub;
+    console.log(userId);
+    return await this.userService.getActiveUsers(userId);
+  }
+
+  // IDENTIFICAR UN USUARIO POR SU EMAIL
+  @Post('/users/identify')
+  async getUserEmailActive(@Body() userIdentifyEmailDto: UserIdentifyEmailDto): Promise<iMessageResponseStatus> {
+    return await this.userService.getUserEmailActive(userIdentifyEmailDto);
+  }
 
   // LEER TODOS LOS USUARIOS (SIN IMPLEMENTAR)
-  @Get('/v1/users')
+  @Get('/users')
   findAll() {
     return this.userService.findAll();
   }
 
   // BUSCAR USUARIO POR ID (SIN IMPLEMENTAR)
-  @Get('/v1/users/:id')
+  @Get('/users/:id')
+  @UseGuards(AuthGuard('jwt'))
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
 
-  // IDENTIFICAR UN USUARIO POR SU EMAIL
-  @Post('/v1/users/identify')
-  async getUserEmailActive(@Body() userIdentifyEmailDto: UserIdentifyEmailDto): Promise<iMessageResponseStatus> {
-    return await this.userService.getUserEmailActive(userIdentifyEmailDto);
-  }
 
   // EDITAR DATOS DE UN USUARIO (SIN IMPLEMENTAR)
-  @Patch('/v1/users/:id')
+  @Patch('/users/:id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
   }
 
   // ELIMNAR DE FORMA FISICA UN USUARIO SIN IMPLEMENTAR
-  @Delete('/v1/users/:id')
+  @Delete('/users/:id')
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
   }

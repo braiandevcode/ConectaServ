@@ -8,6 +8,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -30,15 +31,15 @@ export class Tasker {
   @PrimaryGeneratedColumn('uuid', { name: 'id_tasker' })
   idTasker: string;
 
-  @Column({ name: 'description',type:'varchar', length: 350, default:'' })
-  description:string;
+  @Column({ name: 'description', type: 'varchar', length: 350, default: '' })
+  description: string;
 
   @Exclude()
-  @Column({ name: 'id_category', type: 'uuid', nullable: false }) 
+  @Column({ name: 'id_category', type: 'uuid', nullable: false })
   idCategory: string;
 
   //RELACIONES MUCHOS A UNO => MUCHOS TASKERS TENDRAN UNA MISMA CATEGORIA
-  @ManyToOne(() => Category, (category) => category.taskers, { nullable:false })
+  @ManyToOne(() => Category, category => category.taskers, { nullable: false })
   @JoinColumn(
     JoinMannager.manyToOneConfig({
       current: {
@@ -51,7 +52,7 @@ export class Tasker {
   categoryData: Category;
 
   // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS SERVICIOS ELEGIDOS
-  @ManyToMany(() => Service, (services) => services.taskers, { cascade: true })
+  @ManyToMany(() => Service, services => services.taskers, { cascade: true })
   @JoinTable(
     JoinMannager.manyToManyConfig({
       //CLASE CONFIGURATIVA PERSONAL
@@ -70,7 +71,7 @@ export class Tasker {
   servicesData: Service[];
 
   // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS HABITOS DE TRABAJO ELEGIDOS
-  @ManyToMany(() => WorkArea, (works) => works.tasker, { cascade: true })
+  @ManyToMany(() => WorkArea, works => works.tasker, { cascade: true })
   @JoinTable(
     JoinMannager.manyToManyConfig({
       //CLASE CONFIGURATIVA PERSONAL
@@ -89,7 +90,7 @@ export class Tasker {
   workAreasData: WorkArea[];
 
   // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS DIAS ELEGIDOS
-  @ManyToMany(() => Day, (day) => day.taskers)
+  @ManyToMany(() => Day, day => day.taskers)
   @JoinTable(
     JoinMannager.manyToManyConfig({
       //CLASE CONFIGURATIVA PERSONAL
@@ -108,7 +109,7 @@ export class Tasker {
   daysData: Day[];
 
   // REALACION  N:M UN TASKER PUEDE TENER UNO O MUCHOS HORARIOS ELEGIDOS
-  @ManyToMany(() => Hour, (hours) => hours.users)
+  @ManyToMany(() => Hour, hours => hours.users)
   @JoinTable(
     JoinMannager.manyToManyConfig({
       //CLASE CONFIGURATIVA PERSONAL
@@ -127,16 +128,15 @@ export class Tasker {
   hoursData: Hour[];
 
   // RELACION  1:1 UN TASKER SOLO ESTA ASOCIADO A UN REGISTRO DE DETALLES DE SU PERFIL
-  @OneToOne(() => Profile, (image) => image.tasker)
+  @OneToOne(() => Profile, image => image.tasker)
   imageProfile: Profile;
 
-
-  @OneToOne(() => Experience, (images) => images.tasker)
+  @OneToMany(() => Experience, experience => experience.tasker)
   imageExperience: Experience[];
 
   // RELACION 1:1 UN TASKER SOLO TENDRA CERO O UN REGISTRO DE PRESUPUESTO
-  @OneToOne(() => Budget, (budget) => budget.tasker, { cascade: true, nullable:true })
-   @JoinColumn(
+  @OneToOne(() => Budget, budget => budget.tasker, { onDelete:'CASCADE', cascade: true, nullable: true })
+  @JoinColumn(
     JoinMannager.manyToOneConfig({
       current: {
         name: 'id_budget',
@@ -145,7 +145,7 @@ export class Tasker {
       },
     }),
   )
-  budgetData:Budget | null;
+  budgetData: Budget | null;
 
   //BORRADO LOGICO PARA INTEGRIDAD, AUDITORIA O RECUPERACION
   @Column({
@@ -157,7 +157,7 @@ export class Tasker {
   active: boolean;
 
   // RELACION 1:1 UN TASKER SOLO PODRA ESTAR ASOCIADO A UN USUARIO
-  @OneToOne(() => User, (user) => user.taskerData)
+  @OneToOne(() => User, user => user.taskerData)
   user: User;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })

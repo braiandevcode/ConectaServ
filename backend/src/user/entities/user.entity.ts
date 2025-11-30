@@ -98,7 +98,7 @@ export class User {
   rolesData: Role[];
 
   // RELACION 1:1 UN USUARIO SOLO PODRA SER UN UNICO TASKER
-  @OneToOne(() => Tasker, (tasker) => tasker.user, { cascade:true, nullable:true })
+  @OneToOne(() => Tasker, (tasker) => tasker.user, { onDelete:'CASCADE', cascade:true, nullable:true })
    @JoinColumn(
     JoinMannager.manyToOneConfig({
       current: {
