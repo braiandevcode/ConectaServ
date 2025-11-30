@@ -8,8 +8,8 @@ import { LoginDto } from './dto/login-dto';
 import argon2 from 'argon2';
 import { User } from 'src/user/entities/user.entity';
 import { ONE_WEEK_IN_MS } from './constants/timeExpiration';
-import { DeleteResult } from 'typeorm';
 import { iAccessToken } from './interface/iAccessToken';
+import { TDataPayloadUser } from 'src/types/typeDataPayloadProfile';
 
 @Injectable()
 export class AuthService {
@@ -54,7 +54,7 @@ export class AuthService {
   // SIGN IN: GENERA ACCESS TOKEN + REFRESH Y GUARDA EL REFRESH EN DB
   async signIn(userPayload: iJwtPayload, ip?: string, userAgent?: string): Promise<{ accessToken: string; refreshToken: string } | null> {
     // GENERAR ACCESS TOKEN
-    const accessToken: string = this.jwtService.sign(userPayload, { expiresIn: '2m'});
+    const accessToken: string = this.jwtService.sign(userPayload, { expiresIn: '15m'});
     
     // CONFIGURAR REFRESH TOKEN
     /*
@@ -85,7 +85,7 @@ export class AuthService {
     const user: User | null = await this.userService.findByUserNameActiveForAuth({ userName: userPayload.userName });
     
     if (!user) return null; //PASSPORT RETORNA EL 401
-
+    
     // GUARDAR REFRESH TOKEN EN DB
     await this.refreshTokenService.create({
       token: refreshToken,
@@ -100,6 +100,11 @@ export class AuthService {
       accessToken: string;
       refreshToken: string;
     };
+  }
+
+  // VER DATOS DEL USUARIO LOGEADO
+  async getUserData(payload: iJwtPayload):Promise<TDataPayloadUser| null> {
+    return await this.userService.getUserData(payload);
   }
 
   // LA FUNCION RECIBE EL OBJETO USER VALIDADO POR EL GUARD

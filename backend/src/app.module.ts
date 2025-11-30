@@ -28,7 +28,6 @@ import { ScheduleModule } from '@nestjs/schedule';
       // CARGA VARIABLES DE ENTORNO DESDE ARCHIVO .ENV
       isGlobal: true, // DISPONIBLE EN TODA LA APP SIN VOLVER A IMPORTAR
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}.local`, // ARCHIVO .ENV SEGUN EL ENTORNO
-
       //ACTUALIZACIÓN DEL ESQUEMA DE JOI
       validationSchema: Joi.object({
         //VARIABLES ENTORNO BASE DE DATOS
@@ -37,23 +36,16 @@ import { ScheduleModule } from '@nestjs/schedule';
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
-
         // JWT VERIFICACION DE EMAIL
         JWT_SECRET_VERIFICATION_EMAIL:Joi.string().required(),
-
         // JWT AUTENTICACION DE USUARIO
         JWT_SECRET_AUTH:Joi.string().required(),
         //TIEMPO DE EXPIRACION DADO
         JWT_EXPIRES_AUTH:Joi.string().required(),
-
         // JWT REFRESH
         JWT_SECRET_REFRESH:Joi.string().required(),
-
         JWT_EXPIRES_REFRESH:Joi.string().required(),
-
-
         RESEND_API_KEY:Joi.string().required(),
-
         // DOMINIO + PUERTO
         FE_HOST:Joi.string().required(),
         FE_PORT:Joi.number().required(),

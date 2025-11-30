@@ -10,6 +10,8 @@ export const endPointUser: iEndPointUser= {
   USER_CODE_DELETE:`${BASE_BACK_URL}${EEndpoint.USER_CODE_DELETE}`,
   USER_IDENTIFY: `${BASE_BACK_URL}${EEndpoint.USER_IDENTIFY}`,
   AUTH_LOGIN: `${BASE_BACK_URL}${EEndpoint.AUTH}`,
+  AUTH_ME:`${BASE_BACK_URL}${EEndpoint.AUTH_ME}`,
+  ALL_TASKERS: `${BASE_BACK_URL}${EEndpoint.ALL_TASKERS}`,
   REFRESH:`${BASE_BACK_URL}${EEndpoint.REFRESH}`,
   LOGOUT:`${BASE_BACK_URL}${EEndpoint.LOGOUT}`,
 };

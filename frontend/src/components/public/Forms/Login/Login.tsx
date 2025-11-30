@@ -8,10 +8,12 @@ import useHeader from '../../../../hooks/useHeader';
 import './Login.css';
 import useMain from '../../../../hooks/useMain';
 import LoaderBtn from '../../../LoaderBtn';
+import useGlobalModal from '../../../../hooks/useGlobalModal';
 
 const Login = () => {
-  const { password, userName, error, submitLogin, handlePassword, handleUserName, isValid } = useLogin();
-  const {loading } = useMain()
+  const { errorText, passwordLogin:password } = useGlobalModal();
+  const { userName, interactedSession, submitLogin, handlePassword, handleUserName, isValid} = useLogin();
+  const { loading } = useMain()
   const { openRole } = useHeader(); // ==> HOOK PARA EL HEADER
   
   return (
@@ -34,11 +36,11 @@ const Login = () => {
               <span>Contraseña</span>
             </span>
           </label>
-          <input type='password' id='password' autoComplete='off' className={`form-basic__input`} aria-label='Contrasena' placeholder='***********' value={password} onChange={handlePassword} required />
+          <input type='password' id='password' name='password_login_temp' autoComplete='new-password' className={`form-basic__input`} aria-label='Contrasena' placeholder='***********' value={password} onChange={handlePassword} required />
         </div>
 
         <div>
-          <p className='has-error'>{error && error}</p>
+          <p className='has-error'>{errorText && errorText}</p>
         </div>
 
         <div className='loginForm__textActionForgotPassword c-flex c-flex-items-center gap-2'>
@@ -48,7 +50,7 @@ const Login = () => {
         </div>
         <div className='mb-6'>
           {
-            loading ? (
+            interactedSession && loading ? (
               <LoaderBtn />
             ) : (
               <BtnSubmit disabled={!isValid} variant='btn btn__submit' text='Iniciar Sesión' />

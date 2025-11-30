@@ -1,0 +1,9 @@
+// COMO SE REPETIRAN EN LA MAYORIA DE CASOS EL METODO INCLUDES DE ARRRAY
+// FUNCION QUE ESPERA UNA LISTA DE CADENA DE TEXTO REFERENTE A LOS VALORES  A EVALUAR
+// ESTE METODO RETORNARA UN BOOLEAN
+const isIncludesValues = (paths:string[], pathname:string): boolean => {
+    // SI ALGUNOS DE LOS VALORES EN EL ARRRAY COMIENZAN CON LA CADENA RECORRIDA ESRA TRUE
+    return paths.some((p) => pathname.startsWith(p)); //EVALUAR EL pathname DEL HOOK DE REACT
+}
+
+export default isIncludesValues;

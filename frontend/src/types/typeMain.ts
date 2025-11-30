@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { TRole } from './typeModalRole';
+import type { TDataPayloadUser } from './typeDataPayloadUser';
 
 // INTERFACE QUE DEFINE ESTADOS A NIVEL MAIN, PARA MODALES, LOADER Y MAS
 export type TMain = TRole & {
@@ -8,6 +9,10 @@ export type TMain = TRole & {
   setIsAuth: Dispatch<SetStateAction<boolean>>;
   setIsSessionChecked:  Dispatch<SetStateAction<boolean>>;
   setIsLogout:  Dispatch<SetStateAction<boolean>>;
+  setUserData: Dispatch<SetStateAction<TDataPayloadUser | null>>,
+  setTaskerData:Dispatch<SetStateAction<TDataPayloadUser[]>>
+  taskerData:TDataPayloadUser[], 
+  userData:TDataPayloadUser | null,
   isLogout:boolean,
   isSessionChecked:boolean;
   isAuth: boolean;

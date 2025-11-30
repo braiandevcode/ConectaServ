@@ -9,6 +9,8 @@ import {
   UseInterceptors,
   UploadedFiles,
   ValidationPipe,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +21,9 @@ import { TotalSizeValidationPipe } from 'src/shared/pipes/total-size-validation.
 import { ParseJsonPipe } from 'src/shared/pipes/parse-json.pipe';
 import { UserIdentifyEmailDto } from './dto/user-identify-email-dto';
 import { iMessageResponseStatus } from 'src/code/interface/iMessagesResponseStatus';
+import { AuthGuard } from '@nestjs/passport';
+import { iJwtPayload } from 'src/auth/interface/iJwtPayload';
+import { TDataPayloadUser } from 'src/types/typeDataPayloadProfile';
 
 @Controller('api/v1')
 export class UserController {
@@ -65,7 +70,14 @@ export class UserController {
     );
   }
   
-  
+  @Get('users/taskers')
+  @UseGuards(AuthGuard('jwt'))
+  async getTaskers(@Req() req: Request & { user: iJwtPayload }): Promise<TDataPayloadUser[]> {
+    const userId: string = req.user.sub;
+    console.log(userId);
+    return await this.userService.getActiveUsers(userId);
+  }
+
   // IDENTIFICAR UN USUARIO POR SU EMAIL
   @Post('/users/identify')
   async getUserEmailActive(@Body() userIdentifyEmailDto: UserIdentifyEmailDto): Promise<iMessageResponseStatus> {
@@ -80,6 +92,7 @@ export class UserController {
 
   // BUSCAR USUARIO POR ID (SIN IMPLEMENTAR)
   @Get('/users/:id')
+  @UseGuards(AuthGuard('jwt'))
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }

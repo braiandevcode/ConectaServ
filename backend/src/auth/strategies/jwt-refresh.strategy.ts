@@ -46,7 +46,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
 
     // SI NO EXISTE O EXPIRO EN LA DB NO AUTORIZADO
     if (!record || record.expiresAt <= new Date()) {
-      throw ErrorManager.createSignatureError(`UNAUTHORIZED${ESeparatorsMsgErrors.SEPARATOR}Sesión revocada o token expirado en la base de datos.`)
+      throw ErrorManager.createSignatureError(`UNAUTHORIZED${ESeparatorsMsgErrors.SEPARATOR}Sesión revocada.`)
     }
     
     // SI TODO ESTA BIEN DEVOLVER EL REGISTRO

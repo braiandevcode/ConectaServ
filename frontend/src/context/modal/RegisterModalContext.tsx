@@ -6,7 +6,7 @@ const defaultRegisterModalContext: TRegisterModal = {
   setCurrentRegisterModal: () => {},
   setIsRegisterModalOpen: () => {},
   openRegisterModal: () => {},
-  closeRegisterModal: () => {},
+  closeRegisterModal: async () => {},
   currentRegisterModal: null,
   isRegisterModalOpen: false,
 };

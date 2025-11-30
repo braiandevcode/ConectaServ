@@ -1,10 +1,7 @@
 import { Injectable, Req } from '@nestjs/common';
 import { RefreshTokenService } from './refresh-tokens.service';
-import { Cron, Interval } from '@nestjs/schedule';
+import { Interval } from '@nestjs/schedule';
 import { ONE_WEEK_IN_MS } from 'src/auth/constants/timeExpiration';
-import { AuthService } from 'src/auth/auth.service';
-import type { Request } from 'express';
-import { User } from 'src/user/entities/user.entity';
 
 // https://docs.nestjs.com/techniques/task-scheduling
 // PARA ENTENDER PATRON

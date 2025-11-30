@@ -1,4 +1,4 @@
-import {  useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import MainContext from './MainContext';
 import { ENamesOfKeyLocalStorage, EPathPage } from '../../types/enums';
@@ -10,13 +10,17 @@ import { EModalGlobalType } from '../../types/enumGlobalModalType';
 import type { iStatusError } from '../../interfaces/iSatatus';
 import apiRequest from '../../utils/apiRequestUtils';
 import { endPointUser } from '../../config/configEndpointUser';
+import useUserApi from '../../hooks/useUserApi';
+import type { TDataPayloadUser } from '../../types/typeDataPayloadUser';
 
 // PROVEEMOS LOGICA Y ESTADOS AL CONTEXTO PRINCIPAL
 const MainProvider = ({ children }: { children: ReactNode }) => {
   // CUSTOM HOOKS
-  const { closeGlobalModal, showError, openGlobalModal } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
-  const { REFRESH } = endPointUser  
-  
+  const { closeGlobalModal, showError, openGlobalModal, setErrorText, setPasswordLogin } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
+  const { getDataUser} = useUserApi();
+
+  const { REFRESH } = endPointUser;
+
   const stored = localStorage.getItem(ENamesOfKeyLocalStorage.ROLE) as TFormRole | null;
 
   // ESTADO PARA SABER SI EL USUARIO ES CLIENTE (TRUE), PRO (FALSE), O NULO SI NO HAY ROL
@@ -26,42 +30,16 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   const [isSessionChecked, setIsSessionChecked] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
 
+  const fetchedRef = useRef(false); //REF PARA EVITAR LLAMADAD DUPLICADAS
+  const intervalRef = useRef<number | null>(null); // REF PARA GUARDAR EL INTERVAL Y PODER LIMPIARLO
+
   // ------------------HOOKS DE REACT-------------------------//
   const { pathname, state } = useLocation(); //==> LOCATION DE RACT
   const navigate = useNavigate(); //==> NAVIGATE DE RACT
   const [loading, setLoading] = useState(false); // ==> BANDERA DEL PROCESO DE LOADER
-
-  // REF PARA GUARDAR EL INTERVAL Y PODER LIMPIARLO
-  const intervalRef = useRef<number | null>(null);
-
-  // REFRESH TOKEN
-  const refreshToken = async (): Promise<void | null>=> {
-    try {
-      setLoading(true);
-      const resultRefresh = await apiRequest<{ accessToken: string }>(`${REFRESH}`, {
-        method: 'POST',
-        credentials: 'include', //PERMITIR LEER Y OBTENER COOKIE
-      });
-      if (!resultRefresh) return null;
-
-      setAccessToken(resultRefresh.accessToken);
-      setIsAuth(true);
-      setIsSessionChecked(true); // ==> ESTADO PARA COMPONENTE QUE PROTEJE RUTAS
-    } catch (error) {      
-      setAccessToken(null);
-      setIsAuth(false);
-      setIsSessionChecked(true); // ==> ESTADO PARA COMPONENTE QUE PROTEJE RUTAS
-      const err = error as iStatusError;
-      if(err.status === 500 && !isLogout){
-        openGlobalModal(EModalGlobalType.MODAL_ERROR); //ACTUALIZAR PARA EL NUEVO MODAL DE ERROR
-        showError('Ups', 'Ocurrió un error inesperado, intente nuevamente más tarde');
-      }
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  const [userData, setUserData] = useState<TDataPayloadUser| null>(null); //DATOS DE USUARIO LOGEADO
+  const [taskerData, setTaskerData] = useState<TDataPayloadUser[]>([]); // DATOS DE TASKERS EXCLUIDO USUARIO LOGEADO
+  
   // ----------------------useEffects----------------------------------//
   // INTERVAL PARA REFRESCAR ACCESS TOKEN CADA 14 MINUTOS
   useEffect(() => {
@@ -78,7 +56,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     // FUNCION PARA INICIAR EL INTERVAL
     const startInterval = () => {
       // 14 MINUTOS EN MS ANTES DE EXPIRO DEL ACCESS TOKEN
-      const REFRESH_INTERVAL:number = 1 * 60 * 1000;
+      const REFRESH_INTERVAL: number = 1 * 60 * 1000;
 
       // SI YA EXISTE UN INTERVAL, LO LIMPIAMOS
       if (intervalRef.current) {
@@ -106,6 +84,19 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [isLogout]);
 
+  // TRAER DATOS NI BIEN SE LOGEA USUARIO
+  useEffect(() => {
+    if (!accessToken || fetchedRef.current) return; // SI NO HAY TOKEN Y SI EL REF YA ES TRUE
+
+    fetchedRef.current = true; //PASAR A TRUE EN ESTE INSTANTE
+
+    const fetchData = async () => {
+      const data = await getDataUser({ accessToken });
+      setUserData(data);
+    };
+
+    fetchData();
+  }, [accessToken]);
 
   useEffect(() => {
     handleRoleAndFormNavigation();
@@ -116,16 +107,46 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     // OBJETO DE ESTADO DE NAVIGATE CON PROPIEDAD "showwLogin" BOOLEANO PARA INDICAR MUESTRE EL MODAL LUEGO DE NAVEGAR
     // SI ESTA EN TRUE
     if (state?.showLogin) {
-      openGlobalModal(EModalGlobalType.MODAL_LOGIN); // ==> MOSTRAR MODAL
-
+      openGlobalModal(EModalGlobalType.MODAL_LOGIN, clearTextsLogin); // ==> MOSTRAR MODAL
 
       // LIMPIAR ESTADO INMEDIATAMENTE
       navigate(location.pathname, { replace: true, state: {} });
     }
-
   }, [state, openGlobalModal]);
 
+  const clearTextsLogin = () => {
+    setErrorText('');
+    setPasswordLogin('');
+  };
+
   // -------------------------------FUNCIONES-----------------------------------//
+  // REFRESH TOKEN
+  const refreshToken = async (): Promise<void | null> => {
+    try {
+      setLoading(true);
+      const resultRefresh = await apiRequest<{ accessToken: string }>(`${REFRESH}`, {
+        method: 'POST',
+        credentials: 'include', //PERMITIR LEER Y OBTENER COOKIE
+      });
+      if (!resultRefresh) return null;
+
+      setAccessToken(resultRefresh.accessToken);
+      setIsAuth(true);
+      setIsSessionChecked(true); // ==> ESTADO PARA COMPONENTE QUE PROTEJE RUTAS
+    } catch (error) {
+      setAccessToken(null);
+      setIsAuth(false);
+      setIsSessionChecked(true); // ==> ESTADO PARA COMPONENTE QUE PROTEJE RUTAS
+      const err = error as iStatusError;
+      if (err.status === 500 && !isLogout) {
+        openGlobalModal(EModalGlobalType.MODAL_ERROR); //ACTUALIZAR PARA EL NUEVO MODAL DE ERROR
+        showError('Ups', 'Ocurrió un error inesperado, intente nuevamente más tarde');
+      }
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // MANEJA TODA LA LOGICA DE FORM + ROLE + NAVEGACION
   const handleRoleAndFormNavigation = async () => {
@@ -134,7 +155,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
       try {
         await clearPersistence();
       } catch (error: unknown) {
-        showError('No pudimos borrar algunos datos','No te preocupes, podés continuar sin problemas. Si vuelve a aparecer, recargá la página.');
+        showError('No pudimos borrar algunos datos', 'No te preocupes, podés continuar sin problemas. Si vuelve a aparecer, recargá la página.');
       }
     };
 
@@ -167,7 +188,6 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     closeGlobalModal();
   };
 
-
   // FUNCION QUE SE EJECUTA CUANDO EL USUARIO ELIGE CLIENTE
   const handleClientClick = () => {
     localStorage.setItem(ENamesOfKeyLocalStorage.ROLE, 'client');
@@ -190,6 +210,10 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     setAccessToken,
     setIsAuth,
     setIsSessionChecked,
+    setUserData,
+    setTaskerData,
+    taskerData,
+    userData,
     isLogout,
     isSessionChecked,
     isAuth,

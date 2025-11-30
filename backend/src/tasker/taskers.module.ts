@@ -11,6 +11,8 @@ import { WorkAreaModule } from 'src/work-area/workArea.module';
 import { CategoryModule } from 'src/category/category.module';
 import { ProfileModule } from 'src/profile/profile.module';
 import { ExperiencesModule } from 'src/experiences/experiences.module';
+import { UserModule } from 'src/user/user.module';
+import { UserService } from 'src/user/user.service';
 
 @Module({
   imports: [
@@ -27,5 +29,6 @@ import { ExperiencesModule } from 'src/experiences/experiences.module';
   controllers: [TaskersController],
   providers: [TaskersService],
   exports: [TaskersService],
+
 })
 export class TaskersModule {}

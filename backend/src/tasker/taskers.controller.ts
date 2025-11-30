@@ -1,40 +1,25 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { TaskersService } from './taskers.service';
 import { UpdateTaskerDto } from './dto/update-tasker.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { Tasker } from './entities/tasker.entity';
+import { Request } from 'express';
+import { iJwtPayload } from 'src/auth/interface/iJwtPayload';
+import { UserService } from 'src/user/user.service';
+import { TDataPayloadUser } from 'src/types/typeDataPayloadProfile';
 
-@Controller('categories')
+@Controller('/api/v1/')
 export class TaskersController {
-  constructor(private readonly taskersService: TaskersService) {}
+  constructor(
+    private readonly taskersService: TaskersService,
+  ) {}
 
-  //   @Get(':category/taskers')
-  //   async getByCategory(@Param('category')category:string): Promise<Tasker[]>{
-  //     return this.taskersService.findByCategory(category);
-  //   }
-
-  // @Get('services/:serviceName/taskers')
-  // async getByServiceName(
-  //   @Param('serviceName') serviceName: string,
-  // ): Promise<Tasker[]> {
-  //   return this.taskersService.findByServiceName(serviceName);
+  // @Get('taskers')
+  // @UseGuards(AuthGuard('jwt'))
+  // async getTaskers(@Req() req: Request & { user: iJwtPayload }): Promise<TDataPayloadUser[]> {
+  //   const userId: string = req.user.sub;
+  //   return await this.userService.getActiveTaskers(userId);
   // }
-
-  // @Post()
-  // create(@Body() createTaskerDto: CreateTaskerDto) {
-  //   return this.taskersService.create(createTaskerDto);
-  // }
-
-  @Get()
-  findAll() {
-    return this.taskersService.findAll();
-  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

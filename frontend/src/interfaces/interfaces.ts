@@ -8,6 +8,8 @@ export interface iEndPointUser {
   USER_CODE_DELETE:string;
   REFRESH:string;
   LOGOUT:string;
+  AUTH_ME:string;
+  ALL_TASKERS:string;
 }
 
 // INTERFACES PARA URL DE PETICIONES

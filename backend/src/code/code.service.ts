@@ -207,7 +207,7 @@ export class CodeService {
     // SI NO EXISTE EN LA BUSQUEDA
     if (!verificationRecord) {
       // EL CODIGO NO COINCIDE, YA FUE USADO, O NO EXISTE
-      ErrorManager.createSignatureError(`NOT_FOUND :: Código de verificación incorrecto.`);
+      ErrorManager.createSignatureError(`BAD_REQUEST :: Código de verificación incorrecto.`);
     }
 
     // ACTUALIZAR ESTADO (MARCAR COMO USADO)
@@ -219,4 +219,24 @@ export class CodeService {
     // ENVIAR BOOLEAN DE EXITO
     return { message: 'Verificado con exito', success: true, status: HttpStatus.OK } as iMessageResponseStatus;
   }
+
+
+  // LIMPIAR TODOS LOS TOKENS DE VERIFICACION QUE ESTEN EN USO Y EXPIRADOS
+  // LIMPIAR TOKENS EXPIRADOS (USAR EN JOB/Cron)
+  async removeExpiredAndUsed() {
+    try {
+      const now:Date = new Date(); //INSTANCIAR EL TIEMPO ACTUAL
+      return this.codeRepository.createQueryBuilder()
+      .delete() //BORRAR TODO
+      .from(Code) //DE LA ENTIDAD "Code"
+      .where('expires_at <= :now', { now }) //DONDE SE CUMPLA CON EL CRITERIO EN QUE EL TIEMPO ACTUAL SEA MENOR O IGUAL AL DE EXPIRACION, ES DECIR YA PASO
+      .andWhere('status = :status', { status: 'USED' })
+      .execute(); //EJECUTA EL DELETE
+    } catch (error) {
+      const err = error as HttpException;
+      if (err instanceof ErrorManager) throw err;
+      throw ErrorManager.createSignatureError(err.message);
+    }
+  }
+
 }

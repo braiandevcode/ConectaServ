@@ -9,3 +9,4 @@ conectaServ-react/**/db
 .env
 .env.*
 !.env.example
+.prettierrc.js

@@ -7,6 +7,7 @@ import { UserModule } from 'src/user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigResendModule } from 'src/configResend/config-resend.module';
+import { CleanCodeVerifyService } from './clean-code-verify.service';
 
 @Module({
   imports: [
@@ -26,6 +27,6 @@ import { ConfigResendModule } from 'src/configResend/config-resend.module';
     UserModule, //MODULO DE USERSERVICE
   ],
   controllers: [CodeController],
-  providers: [CodeService],
+  providers: [CodeService, CleanCodeVerifyService],
 })
 export class CodeModule {}
