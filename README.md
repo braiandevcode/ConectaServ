@@ -116,6 +116,7 @@ backend/
         services/    - LOGICA DE NEGOCIO
         dtos/        - OBJETOS DE TRANSFERENCIA DE DATOS
         modules/     - MODULOS DE NESTJS
+        templates    - PLANTILLAS PARA RESPUESTA A EMAILS
         common/      - FUNCIONES Y CLASES GENERALES
         shared/      - RECURSOS COMPARTIDOS
         config/      - CONFIGURACIONES DEL SISTEMA
