@@ -10,6 +10,8 @@ export interface iEndPointUser {
   LOGOUT:string;
   AUTH_ME:string;
   ALL_TASKERS:string;
+  IMAGE_PROFILE:string;
+  IMAGES_EXP:string;
 }
 
 // INTERFACES PARA URL DE PETICIONES

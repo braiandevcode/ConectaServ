@@ -72,6 +72,8 @@ export enum EEndpoint {
   REFRESH= '/api/v1/auth/refresh',
   LOGOUT= '/api/v1/auth/logout',
   ALL_TASKERS='/api/v1/users/taskers',
+  IMAGE_PROFILE='/api/v1/profile',
+  IMAGES_EXP='/api/v1/experiences'
 }
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA

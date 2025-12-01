@@ -19,7 +19,9 @@ export type TDataPayloadUser = {
   worksArea: string[];
   category: string | null;
   budget?: TBudgetData | null;
-  profileImage: string | null;
   description: string | null;
-  experienceImages: string[];
+  
+  // IDs  DE IMAGENES
+  profileImageId: string | null;
+  experienceImageIds: string[] | null;
 }
