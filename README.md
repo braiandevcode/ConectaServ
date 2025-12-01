@@ -11,7 +11,6 @@
 4. [Instalación](#instalación)
 5. [Estructura del proyecto](#estructura-del-proyecto)
 6. [Uso](#uso)
-7. [Variables de entorno](#variables-de-entorno)
 8. [Contribución](#contribución)
 9. [Ejemplos de uso / Endpoints](#ejemplos-de-uso--endpoints)
 10. [Licencia](#licencia)
@@ -134,3 +133,49 @@ frontend/
         types/      - TIPOS GLOBALES
         utils/      - FUNCIONES UTILES
         config/     - CONFIGURACION DEL FRONTEND
+```
+
+
+## Ejemplos de uso / Endpoints
+
+A continuación se listan los endpoints principales de la API:
+
+### Usuarios
+- `GET /api/v1/users`
+- `POST /api/v1/users/identify`
+- `POST /api/v1/users/verify`
+- `GET /api/v1/users/taskers`
+
+### Códigos de verificación
+- `POST /api/v1/code/request`
+- `POST /api/v1/code`
+- `POST /api/v1/code/verify`
+
+### Autenticación
+- `POST /api/v1/auth/login`
+- `GET /api/v1/auth/me`
+- `POST /api/v1/auth/refresh`
+- `POST /api/v1/auth/logout`
+
+## Licencia
+
+**All Rights Reserved**
+Todos los derechos reservados.  
+No se permite el uso, copia, modificación, distribución ni reutilización del código sin autorización previa del autor.
+
+## Contribución
+
+Este proyecto fue desarrollado con fines educativos y forma parte de un trabajo académico.  
+Actualmente **no se aceptan contribuciones externas**.  
+El repositorio se mantiene únicamente para demostración, estudio y revisión del código.
+
+---
+## Créditos
+
+Proyecto desarrollado por:
+
+- **Braian Palacios** – Desarrollo Full Stack
+- **Nazarena Vázquez** – Desarrollo Full Stack
+
+Trabajo realizado en equipo como parte del desarrollo del MVP.
+
