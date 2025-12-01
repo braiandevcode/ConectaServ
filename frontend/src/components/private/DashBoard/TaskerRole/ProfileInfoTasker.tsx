@@ -18,7 +18,7 @@ const ProfileInfoTasker = () => {
           <div className='profile__header'>
             <div className='profile__info c-flex c-flex-items-center gap-1'>
               <div className='profile__avatar position-relative'>
-                <img src={userData.profileImage ?? `${HOST}${QUERY_NAME}=${userData.fullName}&${QUERY_BG_RANDOM}`} alt='avatar' />
+                <img src={userData.profileImageId ?? `${HOST}${QUERY_NAME}=${userData.fullName}&${QUERY_BG_RANDOM}`} alt='avatar' />
 
                 {/* ICONO EDITAR AVATAR */}
                 <Button type='button' variant='btn btn__success' className='profile_image position-absolute to-right c-flex c-flex-items-center cursor-pointer' style={{ top: '0.5rem', right: '0.5rem' }}>
@@ -63,8 +63,8 @@ const ProfileInfoTasker = () => {
             </div>
 
             <div className='w-full gallery'>
-              {userData.experienceImages.length > 0 ? (
-                userData.experienceImages.map((img, index) => (
+              {userData.experienceImageIds && userData.experienceImageIds.length > 0 ? (
+                userData.experienceImageIds.map((img, index) => (
                   <div key={index} className='gallery__item w-full c-flex c-flex-items-center gap-2 position-relative'>
                     <img src={img} alt={`exp-${index}`} className='w-full' />
 
