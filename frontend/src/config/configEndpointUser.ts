@@ -14,4 +14,6 @@ export const endPointUser: iEndPointUser= {
   ALL_TASKERS: `${BASE_BACK_URL}${EEndpoint.ALL_TASKERS}`,
   REFRESH:`${BASE_BACK_URL}${EEndpoint.REFRESH}`,
   LOGOUT:`${BASE_BACK_URL}${EEndpoint.LOGOUT}`,
+  IMAGE_PROFILE: `${BASE_BACK_URL}${EEndpoint.IMAGE_PROFILE}`,
+  IMAGES_EXP: `${BASE_BACK_URL}${EEndpoint.IMAGES_EXP}`,
 };

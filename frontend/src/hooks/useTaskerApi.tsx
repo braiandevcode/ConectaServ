@@ -7,7 +7,7 @@ import useGlobalModal from './useGlobalModal';
 import useMain from './useMain';
 
 const useTaskerApi = () => {
-  const { ALL_TASKERS } = endPointUser;
+  const { ALL_TASKERS, IMAGE_PROFILE, IMAGES_EXP, } = endPointUser;
   const { showError, openGlobalModal } = useGlobalModal();
   const { setLoading, setTaskerData } = useMain();
 
@@ -20,7 +20,7 @@ const useTaskerApi = () => {
 
         // SI EL TASKER TIENE UNA IMAGEN
         if (t.profileImageId) {
-          const img = await apiRequest<{mimeType:string, base64:string }>(`${ALL_TASKERS}/images/${t.profileImageId}`, {
+          const img = await apiRequest<{mimeType:string, base64:string }>(`${IMAGE_PROFILE}/${t.profileImageId}`, {
             headers: { Authorization: `Bearer ${accessToken}` },
           });
 
@@ -30,7 +30,7 @@ const useTaskerApi = () => {
         if (t.experienceImageIds && t.experienceImageIds.length > 0) {
           const imgs = await Promise.all(
             t.experienceImageIds.map(async (id) => {
-              const img = await apiRequest<{ mimeType:string, base64:string }>(`${ALL_TASKERS}/experiences/images/${id}`, {
+              const img = await apiRequest<{ mimeType:string, base64:string }>(`${IMAGES_EXP}${id}`, {
                 headers: { Authorization: `Bearer ${accessToken}` },
               });
               
