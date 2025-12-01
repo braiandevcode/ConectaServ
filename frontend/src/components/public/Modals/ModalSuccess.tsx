@@ -9,7 +9,7 @@ const ModalSuccess = (): JSX.Element => {
 
   // EFECTO CON TIMMER PARA CERRAR AUTOMATICAMENTE MODAL
   useEffect(() => {
-    let timerId: NodeJS.Timeout | null = null;
+    let timerId: ReturnType<typeof setTimeout> | null = null;
 
     // SI HAY UNA CALLBACK GUARDADA UNA ACCION DE REDIRECCION PENDIENTE
     //ACTIVAR TIMMER
