@@ -21,7 +21,6 @@ import { EModalRegistersType } from '../types/enumModalRegistersTypes';
 import type { iDataVerifyCode } from '../interfaces/iDataVerifyCode';
 import type { iStatusError } from '../interfaces/iSatatus';
 import type { TDataPayloadUser } from '../types/typeDataPayloadUser';
-import useTaskerApi from './useTaskerApi';
 
 const { USER, USER_IDENTIFY, USER_CODE_REQUEST, USER_VERIFY, AUTH_LOGIN, LOGOUT, AUTH_ME } = endPointUser; //DESESTRUCTURAR ENDPOINT
 
@@ -32,7 +31,7 @@ const useUserApi = () => {
   const { openRegisterModal, closeRegisterModal } = useRegisterModal(); //HOOK PARA EL MODAL GLOBAL DE REGISTRO
   const { updatedIsSendingCode, updatedIsSentCode } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO PARA VERIFICACION DE EMAIL
   const { setIsSending } = useRegister(); //HOOK QUE USA CONTEXTO PARA LOS REGISTROS GENERAL
- const { loadTaskerImages } = useTaskerApi();
+  
   // HOOK NAVIGATE DE REACT
   const navigate = useNavigate();
   // ACCION DE REDIRECCION
@@ -49,7 +48,7 @@ const useUserApi = () => {
   // ACCION DE REDIRECCION AL DASHBOARD AL LOGEARSE
   const redirectToDashBoard = async () => {
     // SI ES CLIENTE
-    !userData?.isTasker ? navigate('/service/all', { replace: true }) : navigate('/profile/info', { replace: true });
+    !userData?.isTasker ? navigate('/service/all', { replace: true }) : navigate('/profile/info', { replace: true })
   };
 
   // LEER TABLA USERS PARA IDENTIFICAR EL EMAIL SI EXISTE
@@ -260,7 +259,7 @@ const useUserApi = () => {
           Authorization: `Bearer ${accessToken}`,
         },
         credentials: 'include',
-      });
+      }); 
       return userData;
     } catch (error) {
       let title: string = 'Ups';
@@ -279,7 +278,7 @@ const useUserApi = () => {
     try {
       setIsSending(true);
       setLoading(true);
-
+      
       // PETICION AL ENDPOINT PARA AUTENTICACION
       const result = await apiRequest<{ accessToken: string }>(`${AUTH_LOGIN}`, {
         method: 'POST',
@@ -287,23 +286,16 @@ const useUserApi = () => {
           'Content-Type': 'application/json',
         },
         credentials: 'include', //PERMITIR LEER Y OBTENER COOKIE
-        body: JSON.stringify({ userName, password: passwordLogin }),
+        body: JSON.stringify({ userName, password:passwordLogin }),
       });
-
+      
       // SI HAY TOKEN Y REFRESH TOKEN
       if (result.accessToken) {
         setIsAuth(true); //AUTENTICADO EN TRUE
         setAccessToken(result.accessToken);
         setErrorText('');
         //PEDIR DATOS NECESARIOS EN ESTE MOMENTO
-        const userData: TDataPayloadUser = await getDataUser({ accessToken: result.accessToken });
-
-        // CARGAR IMAGENES QUE YA ESTAN PARA CARGAR DATOS DE TASKERS
-        const userWithImages:TDataPayloadUser[] = await loadTaskerImages([userData], result.accessToken);
-
-        // TOMAR EL PRIMERO
-        setUserData(userWithImages[0]);
-
+        const userData:TDataPayloadUser = await getDataUser({ accessToken: result.accessToken});
         setUserData(userData);
         redirectToDashBoard(); //REDIRECCIONAR AL DASHBOARD
       }

@@ -20,7 +20,7 @@ const useTaskerApi = () => {
 
         // SI EL TASKER TIENE UNA IMAGEN
         if (t.profileImageId) {
-          const img = await apiRequest<{mimeType:string, base64:string }>(`${IMAGE_PROFILE}/${t.profileImageId}`, {
+          const img = await apiRequest<{mimeType:string, base64:string }>(`${IMAGE_PROFILE}/images/${t.profileImageId}`, {
             headers: { Authorization: `Bearer ${accessToken}` },
           });
 
