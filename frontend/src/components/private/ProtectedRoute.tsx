@@ -17,24 +17,20 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 
   // SI NO ESTA AUTENTICADO MANDAR
   if (!isAuth) {
-    return <Navigate to='/' replace  state={{ showLogin: true }}/>; 
+    return <Navigate to='/' replace state={{ showLogin: true }} />;
   }
 
   if (userData) {
     // CLIENTE
     if (!userData.isTasker) {
-      const allowed: boolean = isIncludesValues(['/services'], pathname);
-      if (!allowed) {
-        return <Navigate to='/services/all' replace />;
-      }
+      const allowed: boolean = isIncludesValues(['/services', '/to/chats'], pathname);
+      if (!allowed) return <Navigate to='/services/all' replace />;
     }
 
     // TASKER
     if (userData.isTasker) {
-      const allowed: boolean = isIncludesValues(['/profile'], pathname);
-      if (!allowed) {
-        return <Navigate to='/profile/info' replace />;
-      }
+      const allowed: boolean = isIncludesValues(['/profile', '/to/chats'], pathname);
+      if (!allowed) return <Navigate to='/profile/info' replace />;
     }
   }
 

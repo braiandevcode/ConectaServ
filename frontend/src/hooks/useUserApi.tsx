@@ -45,11 +45,12 @@ const useUserApi = () => {
     setLoading(true);
     let profileImage: string | null = null;
     let experienceImages: string[] = [];
-
+    let idImageProfile:string ='';
+    let idImageExp:string[]=[];
     // PERFIL
     if (userData.profileImageUrl) {
       const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${userData.profileImageUrl}`, { headers: { Authorization: `Bearer ${accessToken}` } });
-
+      idImageProfile = img.id;
       if (img?.base64 && img.base64.data.length > 0) {
         const base64Str:string = bufferToBase64(img.base64.data);
         profileImage = `data:${img.mimeType};base64,${base64Str}`;
@@ -59,14 +60,12 @@ const useUserApi = () => {
     // EXPERIENCIAS
     const urls: string[] = Array.isArray(userData.experienceImagesUrl) ? userData.experienceImagesUrl : userData.experienceImagesUrl ? [userData.experienceImagesUrl] : [];
 
-    // SI VIENEN URLS7
-    console.log('Longitud de urls: ', urls.length );
-    
+    // SI VIENEN URLS
     if (urls.length > 0) {
       const imgs = await Promise.all(
         urls.map(async (url) => {
           const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${url}`, { headers: { Authorization: `Bearer ${accessToken}` } });
-          console.log('Resultado de la API para la imagen:', img); // <-- Añade est
+          idImageExp.push(img.id)
           if (img?.base64 && img.base64.data.length > 0) {
             const base64Str:string = bufferToBase64(img.base64.data);
             return `data:${img.mimeType};base64,${base64Str}`;
@@ -78,7 +77,7 @@ const useUserApi = () => {
       experienceImages = imgs.filter(Boolean); //EVITAR VACIOS
     }
     
-    return { ...userData, imageExpBase64: experienceImages, imageProfileBase64: profileImage } as TDataPayloadUser;
+    return { ...userData, imageExpBase64: experienceImages, imageProfileBase64: profileImage, idImageProfile, idImageExp } as TDataPayloadUser;
   };
 
   // FUNCION PARA CUANDO EL REGISTRO ES EXITOSO

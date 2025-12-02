@@ -1,7 +1,7 @@
 import useGlobalModal from './useGlobalModal';
 import { EModalGlobalType } from '../types/enumGlobalModalType';
 import type { iHeader } from '../interfaces/iHeader';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import type { iRulesHeader } from '../interfaces/iRulesHeder';
 import NavLoginAndRegister from '../components/public/NavLoginAndRegister';
@@ -12,11 +12,13 @@ import useMain from './useMain';
 import useLogin from './useLogin';
 import NavProfile from '../components/private/DashBoard/NavProfile';
 import NavService from '../components/private/DashBoard/NavService';
+import NavLinkChats from '../components/private/Chat/NavLinkChat';
+import { FiArrowLeft } from 'react-icons/fi';
 
 // CUSTOM HOOK PARA LOGICA EN HEADER DE PAGINA
 const useHeader = () => {
   //------------------------CUSTOM HOOOKS--------------------------------//
-  const { openGlobalModal, setErrorText, setPasswordLogin } = useGlobalModal(); //HOOK QUE USA CONTEXTO DE MODAL GLOBAL
+  const { openGlobalModal, isGlobalModalOpen, setErrorText, setPasswordLogin } = useGlobalModal(); //HOOK QUE USA CONTEXTO DE MODAL GLOBAL
   const { isAuth, userData } = useMain(); //HOOK QUE USA CONTEXTO DEL MAIN
 
   const { setUserName } = useLogin(); //HOOO QUE USA CONTEXTO LOGIN
@@ -41,6 +43,20 @@ const useHeader = () => {
   // FUNCION QUE SOLO INDICA ABRIR MODAL DE ROL A ELEGUIR
   const openRole = (): void => openGlobalModal(EModalGlobalType.MODAL_ROLE, cleanError); // ==> PASO EL TIPO DE MODAL A ABRIR
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+
+  // FUNCION PARA ALTERNAR EL ESTADO MEDIANTE CLICK EN FLECHA
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen); //GUARDA EL ESTADO CONTRARIO
+  };
+
+  // EFECTO PARA CONTROLAR CUANDO SE ABRE UN MODAL GLOBAL
+  useEffect(() => {
+    if(!isGlobalModalOpen) return; //SI EL GLOBAL ESTA CERRADO ESTE NO EJECUTA
+    // SINO VUELVE A ALTERNAR AL ESTADO  DEL isMobileMenuOpen
+    setIsMobileMenuOpen(!isGlobalModalOpen)
+  }, [isGlobalModalOpen]);
+
   /*
     COMO PODRIA HABER VARIOS ENLACES A MANEJAR DEPENDIENDO DE RUTAS O AUTENTICACION
     SE CREO UNA LOGICA PARA SIMPLEMENTE MAPEAR Y RETORNAR EL COMPONENTE EN CUESTION
@@ -54,8 +70,22 @@ const useHeader = () => {
       condition: !isAuth && pathname === '/',
       component: () => (
         <>
-          <div className='c-flex c-flex-items-center gap-1 auth-wrapper'>
-            <NavLoginAndRegister />
+          <div className='header__content'>
+            <div className='containerNavAndLogin'>
+              <NavLoginAndRegister />
+            </div>
+
+            <div className='mobileNavIcon' onClick={toggleMobileMenu}>
+              <FiArrowLeft />
+            </div>
+
+            <div className={`mobileNavAndLogin ${isMobileMenuOpen ? 'open' : ''}`}>
+              <div className='mobileMenuCloseIcon' onClick={toggleMobileMenu}>
+                <FiArrowLeft />
+              </div>
+
+              <NavLoginAndRegister />
+            </div>
           </div>
         </>
       ),
@@ -69,8 +99,9 @@ const useHeader = () => {
             <FaList />
           </button>
 
-          <div className='c-flex c-flex-items-center gap-1/2'>
-            {pathname !==  '/profile/info' &&  <NavProfile />}
+          <div className='c-flex c-flex-items-center gap-2'>
+            {pathname !== '/profile/info' && <NavProfile />}
+            <NavLinkChats />
             <NavCategory menuChildOpen={menuOpen} />
             {pathname !== '/profile/info' && pathname !== '/' && (
               <>
@@ -94,11 +125,11 @@ const useHeader = () => {
             <FaList />
           </button>
 
-          <div className='c-flex c-flex-items-center gap-1/2'>
+          <div className='c-flex c-flex-items-center gap-2'>
             <h3 className='c-flex c-flex-items-center gap-1/2'>
               <FaUser /> {userData?.userName}
             </h3>
-
+            <NavLinkChats />
             <NavCategory menuChildOpen={menuOpen} />
             {pathname !== '/services/all' && <NavService />}
             <NavLogout />

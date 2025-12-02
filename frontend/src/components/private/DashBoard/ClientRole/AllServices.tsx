@@ -16,7 +16,7 @@ const AllSevices = () => {
   const fetchedRef = useRef<boolean>(false);
 
   const navigate = useNavigate();
-  const { taskerData, accessToken } = useMain(); // agregamos setTaskerData
+  const { taskerData, accessToken } = useMain();
   const { getTaskers } = useTaskerApi();
   const { HOST, QUERY_BG_RANDOM, QUERY_NAME } = configApiAvatarImage;
 
