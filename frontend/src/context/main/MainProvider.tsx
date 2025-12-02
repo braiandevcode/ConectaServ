@@ -18,7 +18,7 @@ import type { TActiveTaskerUser } from '../../types/typeActiveTaskUser';
 const MainProvider = ({ children }: { children: ReactNode }) => {
   // CUSTOM HOOKS
   const { closeGlobalModal, showError, openGlobalModal, setErrorText, setPasswordLogin } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
-  const { getDataUser} = useUserApi();
+  const { getDataUser } = useUserApi();
 
   const { REFRESH } = endPointUser;
 
@@ -33,38 +33,38 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchedRef = useRef(false); //REF PARA EVITAR LLAMADAD DUPLICADAS
   const intervalRef = useRef<number | null>(null); // REF PARA GUARDAR EL INTERVAL Y PODER LIMPIARLO
-
+  const firstRefresh = useRef<boolean>(true);
   // ------------------HOOKS DE REACT-------------------------//
   const { pathname, state } = useLocation(); //==> LOCATION DE RACT
   const navigate = useNavigate(); //==> NAVIGATE DE RACT
   const [loading, setLoading] = useState(false); // ==> BANDERA DEL PROCESO DE LOADER
-  const [userData, setUserData] = useState<TDataPayloadUser| null>(null); //DATOS DE USUARIO LOGEADO
+  const [userData, setUserData] = useState<TDataPayloadUser | null>(null); //DATOS DE USUARIO LOGEADO
   const [taskerData, setTaskerData] = useState<TActiveTaskerUser[]>([]); // DATOS DE TASKERS EXCLUIDO USUARIO LOGEADO
-  
+
   // ----------------------useEffects----------------------------------//
   // INTERVAL PARA REFRESCAR ACCESS TOKEN CADA 14 MINUTOS
   useEffect(() => {
+    if (isLogout) return;
     // SI ESTAMOS HACIENDO LOGOUT, LIMPIAR EL INTERVAL Y NO HACER REFRESH TOKEN
-    if (isLogout) {
-      // LIMPIAR INTERVAL SI EXISTE
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
+
+    // LIMPIAR INTERVAL SI EXISTE
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
       return; //NO SEGUIR
     }
 
     // FUNCION PARA INICIAR EL INTERVAL
     const startInterval = () => {
       // 14 MINUTOS EN MS ANTES DE EXPIRO DEL ACCESS TOKEN
-      const REFRESH_INTERVAL: number = 1 * 60 * 1000;
+      const REFRESH_INTERVAL: number = 14 * 60 * 1000;
 
       // SI YA EXISTE UN INTERVAL, LO LIMPIAMOS
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
 
-      // CREAR NUEVO INTERVAL
+      // CREAR NUEVO INTERVAL Y ALMACENAR EN REF
       intervalRef.current = setInterval(() => {
         refreshToken(); // LLAMAR AL REFRESH TOKEN AUTOMATICO
       }, REFRESH_INTERVAL);
@@ -72,6 +72,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
 
     // PRIMER REFRESH AL MONTAR ==> SOLO SI NO ESTAMOS EN LOGOUT
     refreshToken().finally(() => {
+      firstRefresh.current = false;
       // INICIAR INTERVAL DESPUES DEL PRIMER REFRESH
       startInterval();
     });
@@ -135,10 +136,19 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
       setIsAuth(true);
       setIsSessionChecked(true); // ==> ESTADO PARA COMPONENTE QUE PROTEJE RUTAS
     } catch (error) {
+      const err = error as iStatusError;
       setAccessToken(null);
       setIsAuth(false);
       setIsSessionChecked(true); // ==> ESTADO PARA COMPONENTE QUE PROTEJE RUTAS
-      const err = error as iStatusError;
+
+      // BANDERA SI ES PRIMER REFRESH Y EL ESTADO ES 401
+      if (firstRefresh.current && err.status === 401) {
+        // IGNORAR PRIMER REFRESH SOLO LIMPIAR
+        setIsAuth(false);
+        setAccessToken(null);
+        return;
+      }
+
       if (err.status === 500 && !isLogout) {
         openGlobalModal(EModalGlobalType.MODAL_ERROR); //ACTUALIZAR PARA EL NUEVO MODAL DE ERROR
         showError('Ups', 'Ocurrió un error inesperado, intente nuevamente más tarde');

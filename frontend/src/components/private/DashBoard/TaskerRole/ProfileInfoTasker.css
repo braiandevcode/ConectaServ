@@ -1,22 +1,96 @@
-.gallery__item {
-  width: 100px;
-  height: 100px;
-  background-color: transparent;
+/* profile.css */
+
+/* CARD PRINCIPAL */
+.profile {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  gap: 2rem;
 }
 
-.btn__edit{
-    top: 0.5rem;
-    right: 0.5rem ;
+/* HEADER */
+.profile__header {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #ccc;
 }
 
-.image__profile {
-    width: 150px; 
-    height: 150px; 
-    aspect-ratio: 1 / 1; /* GARANTIZA LA PROPORSION CUADRADA */
-    object-fit: cover; /* LA IMAGEN SE LLENA MANTENIENDO SUS PROPORSIONES (RECORTA BORDES)*/
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    border: 1px solid #e0e0e0;
-    display: block; 
-    margin: 10px;
+.profile__avatar img {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* NOMBRE Y EDITAR */
+.profile__info h2 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.btn__edit {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.9rem;
+  height: auto;
+}
+
+/* SECCIONES */
+.profile__section {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.profile__section h3 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.profile__text {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.taskerExperiences {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.taskerExperiences > div {
+  position: relative;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  flex: 1 1 48%; /* ancho flexible */
+  max-width: 48%;
+  height: 200px; /* altura fija para todas */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.taskerExperiences img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* corta para que encaje en la tarjeta */
+  display: block;
+  border-radius: 0.5rem;
+}
+
+/* BOTON EDITAR IMAGEN */
+.taskerExperiences .btn__edit {
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+/* RESPONSIVE */
+@media screen and (max-width: 768px) {
+  .taskerExperiences > div {
+    max-width: 100%;
+  }
+  
+  .profile__info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
 }

@@ -18,6 +18,7 @@ import Profile from './components/private/DashBoard/ProfileTasker';
 import ProfileInfoTasker from './components/private/DashBoard/TaskerRole/ProfileInfoTasker';
 import AllSevices from './components/private/DashBoard/ClientRole/AllServices';
 import NotFound from './components/NotFound';
+import Chat from './components/private/Chat/Chat';
 // COMPONENTE APP PRINCIPAL
 export default function App() {
   const [initialLoading, setInitialLoading] = useState(true);
@@ -44,33 +45,59 @@ export default function App() {
             {/* ANIDAMIENTO DE RUTAS DESDE TASKER */}
             <Route element={<RegisterTaskerLayout />}>
               <Route path='tasker' element={<RegisterTasker />} />
-               <Route path='*' element={<NotFound />}></Route>
+              <Route path='*' element={<NotFound />}></Route>
             </Route>
             {/* ANIDAMIENTO DE RUTAS DESDE CLIENTE*/}
             <Route element={<RegisterClientLayout />}>
               <Route path='client' element={<RegisterClient />} />
-               <Route path='*' element={<NotFound />}></Route>
+              <Route path='*' element={<NotFound />}></Route>
             </Route>
-             <Route path='*' element={<NotFound />}></Route>
+            <Route path='*' element={<NotFound />}></Route>
           </Route>
 
-
           {/* PARTE PRIVADA A PROTEGER */}
-          <Route element={<ProtectedRoute><Profile /></ProtectedRoute>}> 
-            <Route path='profile/info' element={<ProfileInfoTasker />}/>
-             <Route path='*' element={<NotFound />}></Route>
+          <Route
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }>
+            <Route path='profile/info' element={<ProfileInfoTasker />} />
+            <Route
+              path='/to/chats'
+              element={
+                <ProtectedRoute>
+                  <Chat />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route path='*' element={<NotFound />}></Route>
           </Route>
 
           {/* SOLO CON PROTEGER RUTA PADRE SUS HIJOS TAMBIEN ESTAN PROTEGIDOS */}
-          <Route element={<ProtectedRoute><Services /></ProtectedRoute>}>
+          <Route
+            element={
+              <ProtectedRoute>
+                <Services />
+              </ProtectedRoute>
+            }>
             {/* RUTAS HIJAS */}
-            <Route path='services/infoTasker' element={<InfoTasker />}/>
-            <Route path='services/all' element={<AllSevices />}/>
+            <Route path='services/infoTasker' element={<InfoTasker />} />
+            <Route path='services/all' element={<AllSevices />} />
             <Route path='*' element={<NotFound />}></Route>
           </Route>
-           <Route path='*' element={<NotFound />}></Route>
+          <Route
+            path='/to/chats'
+            element={
+              <ProtectedRoute>
+                <Chat />
+              </ProtectedRoute>
+            }
+          />
+          <Route path='*' element={<NotFound />}></Route>
         </Route>
-         <Route path='*' element={<NotFound />}></Route>
+        <Route path='*' element={<NotFound />}></Route>
       </Routes>
     </>
   );

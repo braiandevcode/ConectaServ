@@ -1,0 +1,9 @@
+.btn__chats {
+  color: var(--btn-info);
+}
+
+.btn__chats:hover {
+  transform: scale(1.1);
+  color:var(--btn-text-secondary);
+  transition: transform 0.5s ease-in linear, color 0.5s ease-in linear;
+}

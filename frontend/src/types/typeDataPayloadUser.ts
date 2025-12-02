@@ -25,5 +25,8 @@ export type TDataPayloadUser = {
 
   imageProfileBase64:string | null;
   imageExpBase64:string[];
+
+  idImageExp:string[];
+  idImageProfile:string;
 };
 
