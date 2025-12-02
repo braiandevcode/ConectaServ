@@ -33,7 +33,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchedRef = useRef(false); //REF PARA EVITAR LLAMADAD DUPLICADAS
   const intervalRef = useRef<number | null>(null); // REF PARA GUARDAR EL INTERVAL Y PODER LIMPIARLO
-  const firstRefresh = useRef<boolean>(true);
+
   // ------------------HOOKS DE REACT-------------------------//
   const { pathname, state } = useLocation(); //==> LOCATION DE RACT
   const navigate = useNavigate(); //==> NAVIGATE DE RACT
@@ -44,14 +44,13 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   // ----------------------useEffects----------------------------------//
   // INTERVAL PARA REFRESCAR ACCESS TOKEN CADA 14 MINUTOS
   useEffect(() => {
-    if (isLogout) return;
     // SI ESTAMOS HACIENDO LOGOUT, LIMPIAR EL INTERVAL Y NO HACER REFRESH TOKEN
-
-    // LIMPIAR INTERVAL SI EXISTE
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-      return; //NO SEGUIR
+    if (isLogout) {
+      // LIMPIAR INTERVAL SI EXISTE
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     }
 
     // FUNCION PARA INICIAR EL INTERVAL
@@ -72,7 +71,6 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
 
     // PRIMER REFRESH AL MONTAR ==> SOLO SI NO ESTAMOS EN LOGOUT
     refreshToken().finally(() => {
-      firstRefresh.current = false;
       // INICIAR INTERVAL DESPUES DEL PRIMER REFRESH
       startInterval();
     });
@@ -140,20 +138,10 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
       setAccessToken(null);
       setIsAuth(false);
       setIsSessionChecked(true); // ==> ESTADO PARA COMPONENTE QUE PROTEJE RUTAS
-
-      // BANDERA SI ES PRIMER REFRESH Y EL ESTADO ES 401
-      if (firstRefresh.current && err.status === 401) {
-        // IGNORAR PRIMER REFRESH SOLO LIMPIAR
-        setIsAuth(false);
-        setAccessToken(null);
-        return;
-      }
-
       if (err.status === 500 && !isLogout) {
         openGlobalModal(EModalGlobalType.MODAL_ERROR); //ACTUALIZAR PARA EL NUEVO MODAL DE ERROR
         showError('Ups', 'Ocurrió un error inesperado, intente nuevamente más tarde');
       }
-      throw err;
     } finally {
       setLoading(false);
     }
