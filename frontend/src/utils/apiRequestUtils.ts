@@ -1,36 +1,52 @@
 import type { iStatusError } from "../interfaces/iSatatus";
 
-// FUNCION REUTILIZABLE PARA TODO TIPO DE ACCIONES CON FETCH
+// FUNCION REUTILIZABLE PARA TODAS LAS PETICIONES FETCH
 const apiRequest = async <T>(url: string, options: RequestInit = {}): Promise<T> => {
   try {
-    const response = await fetch(url, options); //CONSULTA
+    // --- HACER LA PETICION ---
+    const response = await fetch(url, options);
 
-    // SI FALLO ALGO
+    // --- VERIFICAR SI HUBO ERROR HTTP ---
     if (!response.ok) {
-      // INTENTA LEER EL CUERPO JSON DEL ERROR
-      const errorBody: any = await response.json().catch(() => ({}));
-      //LANZA UNA NUEVA EXCEPCION USANDO EL ESTADO REAL DE LA RESPUESTA,
-      // ESTO ASEGURA QUE EL ERROR CAPTURADO EN EL CATCH DEL HOOK TENGA LA ESTRUCTURA CORRECTA.
+      // LEER EL BODY PARA TRATAR DE OBTENER MENSAJE DE ERROR
+      const contentType = response.headers.get('content-type') || '';
+      let errorBody: any = {};
+
+      if (contentType.includes('application/json')) {
+        errorBody = await response.json().catch(() => ({}));
+      } else {
+        const text = await response.text().catch(() => '');
+        errorBody = { message: text };
+      }
+
+      // ARMAR OBJETO DE ERROR CONSISTENTE
       const errorToThrow: iStatusError = {
-        statusCode: errorBody.statusCode, 
-        status: errorBody.statusCode || response.status, 
-        message: errorBody.message || 'Error de servidor desconocido',
+        statusCode: errorBody.statusCode || response.status,
+        status: errorBody.statusCode || response.status,
+        message: errorBody.message || 'ERROR DE SERVIDOR DESCONOCIDO',
       };
 
       throw errorToThrow;
     }
-  
-    // LEER EL BODY COMO TEXTO PRIMERO
+
+    // --- LEER BODY COMO TEXTO ---
     const text = await response.text();
 
-    // SI EL BODY ESTA VACIO (EJ: LOGOUT 204 NO CONTENT) RETORNAR UNDEFINED
+    // --- SI NO HAY CONTENIDO (EJ: 204 NO CONTENT) DEVOLVER UNDEFINED ---
     if (!text) return undefined as any;
 
-    // PARSEAR A FORMATO JSON SI HAY CONTENIDO
-    return JSON.parse(text) as T;
+    // --- SI EL BODY ES JSON, PARSEARLO ---
+    const contentType = response.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      return JSON.parse(text) as T;
+    }
+
+    // --- SI NO ES JSON, DEVOLVER TEXTO CRUDO ---
+    return text as unknown as T;
+
   } catch (error: unknown) {
+    // --- CUALQUIER OTRO ERROR → RE-LANZAR ---
     const err = error as iStatusError;
-    // CUALQUIER OTRO ERROR → RE-LANZAR
     throw err;
   }
 };
