@@ -145,7 +145,7 @@ A continuación se listan los endpoints principales de la API:
 - `GET /api/v1/users`
 - `POST /api/v1/users/identify`
 - `POST /api/v1/users/verify`
-- `GET /api/v1/users/taskers`
+- `GET /api/v1/users/active`
 
 ### Códigos de verificación
 - `POST /api/v1/code/request`
