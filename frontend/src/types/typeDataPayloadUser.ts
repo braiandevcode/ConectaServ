@@ -1,8 +1,8 @@
-type TBudgetData ={
-  amountBudget:number;
-  budgeSelected:string;
-  reinsert:string;
-}
+type TBudgetData = {
+  amountBudget: number;
+  budgeSelected: string;
+  reinsert: string;
+};
 
 export type TDataPayloadUser = {
   sub: string;
@@ -12,7 +12,6 @@ export type TDataPayloadUser = {
   roles: string[];
   isTasker: boolean;
 
-  // SOLO SI ES TASKER, siempre arrays (vacíos si no hay datos)
   days: string[];
   hours: string[];
   services: string[];
@@ -20,8 +19,11 @@ export type TDataPayloadUser = {
   category: string | null;
   budget?: TBudgetData | null;
   description: string | null;
-  
-  // IDs  DE IMAGENES
-  profileImageId: string | null;
-  experienceImageIds: string[] | null;
-}
+
+  profileImageUrl: string | null;
+  experienceImagesUrl: string[];
+
+  imageProfileBase64:string | null;
+  imageExpBase64:string[];
+};
+

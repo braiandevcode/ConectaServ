@@ -12,6 +12,7 @@ import apiRequest from '../../utils/apiRequestUtils';
 import { endPointUser } from '../../config/configEndpointUser';
 import useUserApi from '../../hooks/useUserApi';
 import type { TDataPayloadUser } from '../../types/typeDataPayloadUser';
+import type { TActiveTaskerUser } from '../../types/typeActiveTaskUser';
 
 // PROVEEMOS LOGICA Y ESTADOS AL CONTEXTO PRINCIPAL
 const MainProvider = ({ children }: { children: ReactNode }) => {
@@ -38,7 +39,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate(); //==> NAVIGATE DE RACT
   const [loading, setLoading] = useState(false); // ==> BANDERA DEL PROCESO DE LOADER
   const [userData, setUserData] = useState<TDataPayloadUser| null>(null); //DATOS DE USUARIO LOGEADO
-  const [taskerData, setTaskerData] = useState<TDataPayloadUser[]>([]); // DATOS DE TASKERS EXCLUIDO USUARIO LOGEADO
+  const [taskerData, setTaskerData] = useState<TActiveTaskerUser[]>([]); // DATOS DE TASKERS EXCLUIDO USUARIO LOGEADO
   
   // ----------------------useEffects----------------------------------//
   // INTERVAL PARA REFRESCAR ACCESS TOKEN CADA 14 MINUTOS

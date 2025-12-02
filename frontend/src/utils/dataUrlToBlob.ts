@@ -28,3 +28,16 @@ export const dataURLtoBlob = (dataurl: string) => {
   }
   return new Blob([u8arr], { type: mime });
 };
+
+// CONVERTIR DE BINARIO A BASE64
+// FUNCION PARA CONVERTIR UN BUFFER (ARRAY DE NÚMEROS) A STRING BASE64
+// SE USA CUANDO EL BACKEND TE DEVUELVE imageBase64 COMO Buffer, NO COMO STRING
+export const bufferToBase64 = (buffer: number[]): string => {
+  let binary: string = ''; // STRING VACÍO PARA CONSTRUIR LOS CARACTERES BINARIOS
+  const bytes: Uint8Array<ArrayBuffer> = new Uint8Array(buffer); // CREAR UN TIPO ARRAY DE BYTES
+  const len: number = bytes.byteLength; // LARGO DEL BUFFER
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]); // CONVERTIR CADA BYTE A CARÁCTER
+  }
+  return btoa(binary); // CONVERTIR EL STRING BINARIO A BASE64
+};
