@@ -1,4 +1,22 @@
-.profile_image{
+.gallery__item {
+  width: 100px;
+  height: 100px;
+  background-color: transparent;
+}
+
+.btn__edit{
     top: 0.5rem;
     right: 0.5rem ;
+}
+
+.image__profile {
+    width: 150px; 
+    height: 150px; 
+    aspect-ratio: 1 / 1; /* GARANTIZA LA PROPORSION CUADRADA */
+    object-fit: cover; /* LA IMAGEN SE LLENA MANTENIENDO SUS PROPORSIONES (RECORTA BORDES)*/
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    border: 1px solid #e0e0e0;
+    display: block; 
+    margin: 10px;
 }

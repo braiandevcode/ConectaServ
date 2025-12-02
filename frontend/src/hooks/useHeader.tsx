@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useLocation } from 'react-router';
 import type { iRulesHeader } from '../interfaces/iRulesHeder';
 import NavLoginAndRegister from '../components/public/NavLoginAndRegister';
-import { FaList } from 'react-icons/fa';
+import { FaList, FaUser } from 'react-icons/fa';
 import NavCategory from '../components/public/NavCategory';
 import NavLogout from '../components/private/DashBoard/Logout';
 import useMain from './useMain';
@@ -70,8 +70,15 @@ const useHeader = () => {
           </button>
 
           <div className='c-flex c-flex-items-center gap-1/2'>
+            {pathname !==  '/profile/info' &&  <NavProfile />}
             <NavCategory menuChildOpen={menuOpen} />
-            {pathname !== '/profile/info' && <NavProfile />}
+            {pathname !== '/profile/info' && pathname !== '/' && (
+              <>
+                <h3 className='c-flex c-flex-items-center gap-1/2'>
+                  <FaUser /> {userData?.userName}
+                </h3>
+              </>
+            )}
             <NavLogout />
           </div>
         </div>
@@ -88,8 +95,12 @@ const useHeader = () => {
           </button>
 
           <div className='c-flex c-flex-items-center gap-1/2'>
+            <h3 className='c-flex c-flex-items-center gap-1/2'>
+              <FaUser /> {userData?.userName}
+            </h3>
+
             <NavCategory menuChildOpen={menuOpen} />
-            {pathname !== '/services/all' &&  <NavService />}
+            {pathname !== '/services/all' && <NavService />}
             <NavLogout />
           </div>
         </div>

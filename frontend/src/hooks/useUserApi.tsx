@@ -14,13 +14,15 @@ import type { TDataLoginUser } from '../types/typeDataLoginUser';
 import type { TStateAuth } from '../types/typeStateAuth';
 import type { ITaskerData } from '../interfaces/iTaskerData';
 import type { TImageData } from '../types/typeRegisterEndDto';
-import { dataURLtoBlob } from '../utils/dataUrlToBlob';
+import { bufferToBase64, dataURLtoBlob } from '../utils/dataUrlToBlob';
 import type { iMessageResponseStatus } from '../interfaces/iMessageResponseStatusBack';
 import type { iMessageStatusToken } from '../interfaces/iMessageStatusToken';
 import { EModalRegistersType } from '../types/enumModalRegistersTypes';
 import type { iDataVerifyCode } from '../interfaces/iDataVerifyCode';
 import type { iStatusError } from '../interfaces/iSatatus';
 import type { TDataPayloadUser } from '../types/typeDataPayloadUser';
+import type { TTaskerImage } from '../types/typeTaskerImage';
+import { BASE_BACK_URL } from '../config/configBaseBackUrl';
 
 const { USER, USER_IDENTIFY, USER_CODE_REQUEST, USER_VERIFY, AUTH_LOGIN, LOGOUT, AUTH_ME } = endPointUser; //DESESTRUCTURAR ENDPOINT
 
@@ -31,12 +33,52 @@ const useUserApi = () => {
   const { openRegisterModal, closeRegisterModal } = useRegisterModal(); //HOOK PARA EL MODAL GLOBAL DE REGISTRO
   const { updatedIsSendingCode, updatedIsSentCode } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO PARA VERIFICACION DE EMAIL
   const { setIsSending } = useRegister(); //HOOK QUE USA CONTEXTO PARA LOS REGISTROS GENERAL
-  
   // HOOK NAVIGATE DE REACT
   const navigate = useNavigate();
   // ACCION DE REDIRECCION
   const redirectToHome = () => {
     navigate('/', { state: { showLogin: true } });
+  };
+
+  // CARGAR IMÁGENES POR URL QUE VIENE DEL BACKEND
+  const loadTaskerImagesProfile = async (userData: TDataPayloadUser, accessToken: string): Promise<TDataPayloadUser> => {
+    setLoading(true);
+    let profileImage: string | null = null;
+    let experienceImages: string[] = [];
+
+    // PERFIL
+    if (userData.profileImageUrl) {
+      const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${userData.profileImageUrl}`, { headers: { Authorization: `Bearer ${accessToken}` } });
+
+      if (img?.base64 && img.base64.data.length > 0) {
+        const base64Str:string = bufferToBase64(img.base64.data);
+        profileImage = `data:${img.mimeType};base64,${base64Str}`;
+      }
+    }
+
+    // EXPERIENCIAS
+    const urls: string[] = Array.isArray(userData.experienceImagesUrl) ? userData.experienceImagesUrl : userData.experienceImagesUrl ? [userData.experienceImagesUrl] : [];
+
+    // SI VIENEN URLS7
+    console.log('Longitud de urls: ', urls.length );
+    
+    if (urls.length > 0) {
+      const imgs = await Promise.all(
+        urls.map(async (url) => {
+          const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${url}`, { headers: { Authorization: `Bearer ${accessToken}` } });
+          console.log('Resultado de la API para la imagen:', img); // <-- Añade est
+          if (img?.base64 && img.base64.data.length > 0) {
+            const base64Str:string = bufferToBase64(img.base64.data);
+            return `data:${img.mimeType};base64,${base64Str}`;
+          }
+          return ''; // SI NO HAY IMAGEN
+        }),
+      );
+
+      experienceImages = imgs.filter(Boolean); //EVITAR VACIOS
+    }
+    
+    return { ...userData, imageExpBase64: experienceImages, imageProfileBase64: profileImage } as TDataPayloadUser;
   };
 
   // FUNCION PARA CUANDO EL REGISTRO ES EXITOSO
@@ -48,7 +90,7 @@ const useUserApi = () => {
   // ACCION DE REDIRECCION AL DASHBOARD AL LOGEARSE
   const redirectToDashBoard = async () => {
     // SI ES CLIENTE
-    !userData?.isTasker ? navigate('/service/all', { replace: true }) : navigate('/profile/info', { replace: true })
+    !userData?.isTasker ? navigate('/service/all', { replace: true }) : navigate('/profile/info', { replace: true });
   };
 
   // LEER TABLA USERS PARA IDENTIFICAR EL EMAIL SI EXISTE
@@ -259,8 +301,14 @@ const useUserApi = () => {
           Authorization: `Bearer ${accessToken}`,
         },
         credentials: 'include',
-      }); 
-      return userData;
+      });
+
+      if (!userData.isTasker) {
+        return userData;
+      }
+      const newTasker = await loadTaskerImagesProfile(userData, accessToken);
+
+      return newTasker;
     } catch (error) {
       let title: string = 'Ups';
       let userMessage: string = 'Ocurrio un error inesperado. Intente de nuevo más tarde.';
@@ -278,7 +326,7 @@ const useUserApi = () => {
     try {
       setIsSending(true);
       setLoading(true);
-      
+
       // PETICION AL ENDPOINT PARA AUTENTICACION
       const result = await apiRequest<{ accessToken: string }>(`${AUTH_LOGIN}`, {
         method: 'POST',
@@ -286,16 +334,16 @@ const useUserApi = () => {
           'Content-Type': 'application/json',
         },
         credentials: 'include', //PERMITIR LEER Y OBTENER COOKIE
-        body: JSON.stringify({ userName, password:passwordLogin }),
+        body: JSON.stringify({ userName, password: passwordLogin }),
       });
-      
+
       // SI HAY TOKEN Y REFRESH TOKEN
       if (result.accessToken) {
         setIsAuth(true); //AUTENTICADO EN TRUE
         setAccessToken(result.accessToken);
         setErrorText('');
         //PEDIR DATOS NECESARIOS EN ESTE MOMENTO
-        const userData:TDataPayloadUser = await getDataUser({ accessToken: result.accessToken});
+        const userData: TDataPayloadUser = await getDataUser({ accessToken: result.accessToken });
         setUserData(userData);
         redirectToDashBoard(); //REDIRECCIONAR AL DASHBOARD
       }

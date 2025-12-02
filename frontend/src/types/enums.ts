@@ -71,7 +71,7 @@ export enum EEndpoint {
   AUTH_ME='/api/v1/auth/me',
   REFRESH= '/api/v1/auth/refresh',
   LOGOUT= '/api/v1/auth/logout',
-  ALL_TASKERS='/api/v1/users/taskers',
+  ALL_TASKERS='/api/v1/users/actives',
   IMAGE_PROFILE='/api/v1/profile',
   IMAGES_EXP='/api/v1/experiences'
 }

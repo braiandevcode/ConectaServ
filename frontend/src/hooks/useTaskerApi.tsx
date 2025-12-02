@@ -1,67 +1,79 @@
+import { BASE_BACK_URL } from '../config/configBaseBackUrl';
 import { endPointUser } from '../config/configEndpointUser';
 import type { iStatusError } from '../interfaces/iSatatus';
 import { EModalGlobalType } from '../types/enumGlobalModalType';
-import type { TDataPayloadUser } from '../types/typeDataPayloadUser';
+import type { TActiveTaskerUser } from '../types/typeActiveTaskUser';
+import type { TTaskerImage } from '../types/typeTaskerImage';
 import apiRequest from '../utils/apiRequestUtils';
+import { bufferToBase64 } from '../utils/dataUrlToBlob';
 import useGlobalModal from './useGlobalModal';
 import useMain from './useMain';
 
 const useTaskerApi = () => {
-  const { ALL_TASKERS, IMAGE_PROFILE, IMAGES_EXP, } = endPointUser;
+  const { ALL_TASKERS } = endPointUser; // ahora solo necesitás este
   const { showError, openGlobalModal } = useGlobalModal();
   const { setLoading, setTaskerData } = useMain();
 
-  // ESPERAR A CARGAR FUNCIONES
-  const loadTaskerImages = async (taskers: TDataPayloadUser[], accessToken: string): Promise<TDataPayloadUser[]> => {
-    const updatedTaskers = await Promise.all(
+  // CARGAR IMAGENES POR URL QUE VIENE DEL BACKEND
+  const loadTaskerImages = async (taskers: TActiveTaskerUser[], accessToken: string): Promise<TActiveTaskerUser[]> => {
+    setLoading(true)
+    return Promise.all(
       taskers.map(async (t) => {
-        let profileImage = null;
+        let profileImage: string | null = null;
         let experienceImages: string[] = [];
 
-        // SI EL TASKER TIENE UNA IMAGEN
-        if (t.profileImageId) {
-          const img = await apiRequest<{mimeType:string, base64:string }>(`${IMAGE_PROFILE}/${t.profileImageId}`, {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          });
-
-          profileImage = `data:${img.mimeType};base64,${img.base64}`;
+        // PERFIL
+        if (t.profileImageUrl) {
+          const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${t.profileImageUrl}`, { headers: { Authorization: `Bearer ${accessToken}` } });
+          
+          // SI  VIENE IMAGEN Y SU LONGITUD ES MAYOR QUE CERO
+          if (img?.base64 && img.base64.data.length > 0) {
+            const base64Str:string = bufferToBase64(img.base64.data);
+            profileImage = `data:${img.mimeType};base64,${base64Str}`;
+          }
         }
 
-        if (t.experienceImageIds && t.experienceImageIds.length > 0) {
+        // EXPERIENCIAS
+        const urls: string[] = Array.isArray(t.experienceImagesUrl) ? t.experienceImagesUrl : t.experienceImagesUrl ? [t.experienceImagesUrl] : [];
+
+        // SI VIENEN URLS
+        if (urls.length > 0) { 
           const imgs = await Promise.all(
-            t.experienceImageIds.map(async (id) => {
-              const img = await apiRequest<{ mimeType:string, base64:string }>(`${IMAGES_EXP}${id}`, {
-                headers: { Authorization: `Bearer ${accessToken}` },
-              });
-              
-              if(img){
-                return `data:${img.mimeType};base64,${img.base64}`;
+            urls.map(async (url) => {
+              const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${url}`, { headers: { Authorization: `Bearer ${accessToken}` } });
+              if (img?.base64 && img.base64.data.length > 0) {
+                const base64Str:string = bufferToBase64(img.base64.data);
+                return `data:${img.mimeType};base64,${base64Str}`;
               }
-              return null;
+              return ''; // SI NO HAY IMAGEN
             }),
           );
-          experienceImages = imgs.filter(Boolean) as string[];
+          experienceImages = imgs.filter(Boolean); //EVITAR VACIOS
         }
-
-        return { ...t, profileImage, experienceImages };
+        return { ...t, imageExpBase64:experienceImages, imageProfileBase64:profileImage } as TActiveTaskerUser;
       }),
     );
-
-    return updatedTaskers;
   };
 
   const getTaskers = async ({ accessToken }: { accessToken: string }): Promise<void> => {
+    setLoading(true)
     try {
-      const taskers = await apiRequest<TDataPayloadUser[]>(`${ALL_TASKERS}`, {
+      const taskers: TActiveTaskerUser[] = await apiRequest<TActiveTaskerUser[]>(ALL_TASKERS, {
         method: 'GET',
         headers: { Authorization: `Bearer ${accessToken}` },
         credentials: 'include',
       });
 
-      // PIDO IMAGENES USANDO EL ID
-      const taskersWithImages = await loadTaskerImages(taskers, accessToken);
+      // SI NO ES UN ARREGLO
+      if (!Array.isArray(taskers)) {
+        console.error('Respuesta de API inválida:', taskers);
+        throw new Error('La API no devolvió un array.');
+      }
 
-      setTaskerData(taskersWithImages);
+      // TASKERS CON IMAGENES
+      const taskersWithImages: TActiveTaskerUser[] = await loadTaskerImages(taskers, accessToken);
+
+      setTaskerData(taskersWithImages); //GUARDAR TASKERS
     } catch (error) {
       const err = error as iStatusError;
       openGlobalModal(EModalGlobalType.MODAL_ERROR);
