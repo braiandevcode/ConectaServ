@@ -24,7 +24,10 @@ const useTaskerApi = () => {
 
         // PERFIL
         if (t.profileImageUrl) {
-          const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${t.profileImageUrl}`, { headers: { Authorization: `Bearer ${accessToken}` } });
+          const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${t.profileImageUrl}`, { 
+            headers: { Authorization: `Bearer ${accessToken}` },
+            credentials: "include",
+          });
           
           // SI  VIENE IMAGEN Y SU LONGITUD ES MAYOR QUE CERO
           if (img?.base64 && img.base64.data.length > 0) {
@@ -40,7 +43,7 @@ const useTaskerApi = () => {
         if (urls.length > 0) { 
           const imgs = await Promise.all(
             urls.map(async (url) => {
-              const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${url}`, { headers: { Authorization: `Bearer ${accessToken}` } });
+              const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${url}`, { headers: { Authorization: `Bearer ${accessToken}` },  credentials: "include", });
               if (img?.base64 && img.base64.data.length > 0) {
                 const base64Str:string = bufferToBase64(img.base64.data);
                 return `data:${img.mimeType};base64,${base64Str}`;
