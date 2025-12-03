@@ -31,6 +31,32 @@ const AllSevices = () => {
     fetchData();
   }, [accessToken]);
 
+  // FILTRAR TASKERS SEGUN LO SELECCIONADO
+  let filteredTaskers = taskerData;
+
+  // FILTRAR POR SERVICIO
+  if (selectedService) {
+    filteredTaskers = filteredTaskers.filter((tasker) =>
+      tasker.services.some((service) =>
+        service.includes(selectedService)
+      )
+    );
+  }
+
+  // FILTRAR POR DIAS
+  if (selectedDays.length > 0) {
+    filteredTaskers = filteredTaskers.filter((tasker) =>
+      selectedDays.some((day) => tasker.days.includes(day))
+    );
+  }
+
+  // FILTRAR POR HORARIOS
+  if (selectedHours.length > 0) {
+    filteredTaskers = filteredTaskers.filter((tasker) =>
+      selectedHours.some((hour) => tasker.hours.includes(hour))
+    );
+  }
+
   return (
     <>
     {taskerData.length === 0 ? <Loader /> :
@@ -91,17 +117,17 @@ const AllSevices = () => {
         </div>
         <section className='cards w-full'>
           <h2>{selectedService ? `Resultados para: ${selectedService}` : 'Todos los profesionales'}</h2>
-          {taskerData.length === 0 ? (
+          {filteredTaskers.length === 0 ? (
             <p>No se encontraron profesionales para este servicio.</p>
           ) : (
-            taskerData.map((service) => (
+            filteredTaskers.map((service) => (
               <div key={service.idUser} className='card w-full'>
                 <div className='card__content'>
                   <div className='card__info-container'>
                     <img src={service.imageProfileBase64 ?? `${HOST}${QUERY_NAME}=${service.fullName}&${QUERY_BG_RANDOM}`} className='card__img' alt={`Imagen de perfil de ${service.fullName}`} />
                     <div className='card__info'>
                       <h3>{service.fullName}</h3>
-                      <p>{service.roles.map((r) => r.nameRole).join(' ')}</p>
+                      <p>{service.roles.map((r) => r.nameRole).join(', ')}</p>
                     </div>
                   </div>
                   <div className='card__description'>

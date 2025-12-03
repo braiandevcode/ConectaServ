@@ -4,7 +4,7 @@ export type TActiveTaskerUser = {
   userName: string;
 
   roles: {
-    idRole: string;     
+    idRole: string;
     nameRole: string;
   }[];
 
@@ -13,6 +13,12 @@ export type TActiveTaskerUser = {
     description: string;
     idCategory: string;
   };
+
+  days: string[];
+  hours: string[];
+  services: string[];
+  worksArea: string[];
+  category: string;
 
   profileImageUrl: string | null;
   experienceImagesUrl: string[];
