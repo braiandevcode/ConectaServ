@@ -23,6 +23,7 @@ import type { iStatusError } from '../interfaces/iSatatus';
 import type { TDataPayloadUser } from '../types/typeDataPayloadUser';
 import type { TTaskerImage } from '../types/typeTaskerImage';
 import { BASE_BACK_URL } from '../config/configBaseBackUrl';
+import { ERoles } from '../types/enumRoles';
 
 const { USER, USER_IDENTIFY, USER_CODE_REQUEST, USER_VERIFY, AUTH_LOGIN, LOGOUT, AUTH_ME } = endPointUser; //DESESTRUCTURAR ENDPOINT
 
@@ -33,6 +34,7 @@ const useUserApi = () => {
   const { openRegisterModal, closeRegisterModal } = useRegisterModal(); //HOOK PARA EL MODAL GLOBAL DE REGISTRO
   const { updatedIsSendingCode, updatedIsSentCode } = useFormVerifyEmailCode(); //HOOK QUE USA CONTEXTO PARA VERIFICACION DE EMAIL
   const { setIsSending } = useRegister(); //HOOK QUE USA CONTEXTO PARA LOS REGISTROS GENERAL
+
   // HOOK NAVIGATE DE REACT
   const navigate = useNavigate();
   // ACCION DE REDIRECCION
@@ -45,14 +47,14 @@ const useUserApi = () => {
     setLoading(true);
     let profileImage: string | null = null;
     let experienceImages: string[] = [];
-    let idImageProfile:string ='';
-    let idImageExp:string[]=[];
+    let idImageProfile: string = '';
+    let idImageExp: string[] = [];
     // PERFIL
     if (userData.profileImageUrl) {
-      const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${userData.profileImageUrl}`, { headers: { Authorization: `Bearer ${accessToken}` },  credentials: "include", });
+      const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${userData.profileImageUrl}`, { headers: { Authorization: `Bearer ${accessToken}` }, credentials: 'include' });
       idImageProfile = img.id;
       if (img?.base64 && img.base64.data.length > 0) {
-        const base64Str:string = bufferToBase64(img.base64.data);
+        const base64Str: string = bufferToBase64(img.base64.data);
         profileImage = `data:${img.mimeType};base64,${base64Str}`;
       }
     }
@@ -64,10 +66,10 @@ const useUserApi = () => {
     if (urls.length > 0) {
       const imgs = await Promise.all(
         urls.map(async (url) => {
-          const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${url}`, { headers: { Authorization: `Bearer ${accessToken}` },  credentials: "include" });
-          idImageExp.push(img.id)
+          const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${url}`, { headers: { Authorization: `Bearer ${accessToken}` }, credentials: 'include' });
+          idImageExp.push(img.id);
           if (img?.base64 && img.base64.data.length > 0) {
-            const base64Str:string = bufferToBase64(img.base64.data);
+            const base64Str: string = bufferToBase64(img.base64.data);
             return `data:${img.mimeType};base64,${base64Str}`;
           }
           return ''; // SI NO HAY IMAGEN
@@ -76,7 +78,7 @@ const useUserApi = () => {
 
       experienceImages = imgs.filter(Boolean); //EVITAR VACIOS
     }
-    
+
     return { ...userData, imageExpBase64: experienceImages, imageProfileBase64: profileImage, idImageProfile, idImageExp } as TDataPayloadUser;
   };
 
@@ -344,6 +346,8 @@ const useUserApi = () => {
         //PEDIR DATOS NECESARIOS EN ESTE MOMENTO
         const userData: TDataPayloadUser = await getDataUser({ accessToken: result.accessToken });
         setUserData(userData);
+
+        localStorage.setItem(ERoles.IS_TASKER, userData.isTasker ? '1' : '0');
         redirectToDashBoard(); //REDIRECCIONAR AL DASHBOARD
       }
     } catch (error: unknown) {
@@ -376,6 +380,8 @@ const useUserApi = () => {
         method: 'POST',
         credentials: 'include', //PERMITIR LEER Y OBTENER COOKIE
       });
+
+      localStorage.removeItem(ERoles.IS_TASKER); //ELIMINAR CLAVE EN STORAGE
 
       setIsAuth(false); //AUTENTICADO EN FALSE
       setAccessToken(null);
