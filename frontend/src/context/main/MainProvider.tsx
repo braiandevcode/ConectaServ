@@ -7,8 +7,6 @@ import type { TMain } from '../../types/typeMain';
 import type { TFormRole } from '../../types/typeFormRole';
 import useGlobalModal from '../../hooks/useGlobalModal';
 import { EModalGlobalType } from '../../types/enumGlobalModalType';
-import type { iStatusError } from '../../interfaces/iSatatus';
-import apiRequest from '../../utils/apiRequestUtils';
 import { endPointUser } from '../../config/configEndpointUser';
 import useUserApi from '../../hooks/useUserApi';
 import type { TDataPayloadUser } from '../../types/typeDataPayloadUser';
@@ -124,25 +122,32 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   const refreshToken = async (): Promise<void | null> => {
     try {
       setLoading(true);
-      const resultRefresh = await apiRequest<{ accessToken: string }>(`${REFRESH}`, {
+      const response = await fetch(REFRESH, {
         method: 'POST',
-        credentials: 'include', //PERMITIR LEER Y OBTENER COOKIE
+        credentials: 'include', // ENVIAR COOKIE
       });
-      if (!resultRefresh) return null;
 
-      setAccessToken(resultRefresh.accessToken);
+      if (!response.ok) {
+        // COOKIE INVALIDA O REFRESH EXPIRADO
+        setAccessToken(null);
+        setIsAuth(false);
+        setIsSessionChecked(true);
+        return null;
+      }
+
+      const data = await response.json();
+
+      // TOKEN REFRESCADO CORRECTAMENTE
+      setAccessToken(data.accessToken);
       setIsAuth(true);
-      setIsSessionChecked(true); // ==> ESTADO PARA COMPONENTE QUE PROTEJE RUTAS
+      setIsSessionChecked(true);
     } catch (error) {
-      const err = error as iStatusError;
+      // ERROR DE RED O BACKEND CAIDO
       setAccessToken(null);
       setIsAuth(false);
-      setIsSessionChecked(true); // ==> ESTADO PARA COMPONENTE QUE PROTEJE RUTAS
-      if (err.status === 500 && !isLogout) {
-        openGlobalModal(EModalGlobalType.MODAL_ERROR); //ACTUALIZAR PARA EL NUEVO MODAL DE ERROR
-        showError('Ups', 'Ocurrió un error inesperado, intente nuevamente más tarde');
-      }
+      setIsSessionChecked(true);
     } finally {
+      // FIN DE PROCESO DE REFRESH
       setLoading(false);
     }
   };
