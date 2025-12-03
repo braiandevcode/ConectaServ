@@ -16,7 +16,6 @@ const useTaskerApi = () => {
 
   // CARGAR IMAGENES POR URL QUE VIENE DEL BACKEND
   const loadTaskerImages = async (taskers: TActiveTaskerUser[], accessToken: string): Promise<TActiveTaskerUser[]> => {
-    setLoading(true)
     return Promise.all(
       taskers.map(async (t) => {
         let profileImage: string | null = null;
@@ -26,7 +25,6 @@ const useTaskerApi = () => {
         if (t.profileImageUrl) {
           const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${t.profileImageUrl}`, { 
             headers: { Authorization: `Bearer ${accessToken}` },
-            credentials: "include",
           });
           
           // SI  VIENE IMAGEN Y SU LONGITUD ES MAYOR QUE CERO
@@ -43,7 +41,7 @@ const useTaskerApi = () => {
         if (urls.length > 0) { 
           const imgs = await Promise.all(
             urls.map(async (url) => {
-              const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${url}`, { headers: { Authorization: `Bearer ${accessToken}` },  credentials: "include", });
+              const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${url}`, { headers: { Authorization: `Bearer ${accessToken}` } });
               if (img?.base64 && img.base64.data.length > 0) {
                 const base64Str:string = bufferToBase64(img.base64.data);
                 return `data:${img.mimeType};base64,${base64Str}`;
@@ -64,12 +62,10 @@ const useTaskerApi = () => {
       const taskers: TActiveTaskerUser[] = await apiRequest<TActiveTaskerUser[]>(ALL_TASKERS, {
         method: 'GET',
         headers: { Authorization: `Bearer ${accessToken}` },
-        credentials: 'include',
       });
 
       // SI NO ES UN ARREGLO
       if (!Array.isArray(taskers)) {
-        console.error('Respuesta de API inválida:', taskers);
         throw new Error('La API no devolvió un array.');
       }
 
