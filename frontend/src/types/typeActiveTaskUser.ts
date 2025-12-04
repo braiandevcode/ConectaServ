@@ -24,5 +24,4 @@ export type TActiveTaskerUser = {
   experienceImagesUrl: string[];
 
   imageProfileBase64:string | null;
-  imageExpBase64:string[];
 };

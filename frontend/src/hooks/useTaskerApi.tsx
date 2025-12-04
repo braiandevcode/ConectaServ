@@ -15,12 +15,11 @@ const useTaskerApi = () => {
   const { setLoading, setTaskerData } = useMain();
 
   // CARGAR IMAGENES POR URL QUE VIENE DEL BACKEND
-  const loadTaskerImages = async (taskers: TActiveTaskerUser[], accessToken: string): Promise<TActiveTaskerUser[]> => {
+  const loadTaskerImagesProfile = async (taskers: TActiveTaskerUser[], accessToken: string): Promise<TActiveTaskerUser[]> => {
     return Promise.all(
       taskers.map(async (t) => {
         let profileImage: string | null = null;
-        let experienceImages: string[] = [];
-
+  
         // PERFIL
         if (t.profileImageUrl) {
           const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${t.profileImageUrl}`, { 
@@ -33,25 +32,7 @@ const useTaskerApi = () => {
             profileImage = `data:${img.mimeType};base64,${base64Str}`;
           }
         }
-
-        // EXPERIENCIAS
-        const urls: string[] = Array.isArray(t.experienceImagesUrl) ? t.experienceImagesUrl : t.experienceImagesUrl ? [t.experienceImagesUrl] : [];
-
-        // SI VIENEN URLS
-        if (urls.length > 0) { 
-          const imgs = await Promise.all(
-            urls.map(async (url) => {
-              const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${url}`, { headers: { Authorization: `Bearer ${accessToken}` } });
-              if (img?.base64 && img.base64.data.length > 0) {
-                const base64Str:string = bufferToBase64(img.base64.data);
-                return `data:${img.mimeType};base64,${base64Str}`;
-              }
-              return ''; // SI NO HAY IMAGEN
-            }),
-          );
-          experienceImages = imgs.filter(Boolean); //EVITAR VACIOS
-        }
-        return { ...t, imageExpBase64:experienceImages, imageProfileBase64:profileImage } as TActiveTaskerUser;
+        return { ...t, imageProfileBase64:profileImage } as TActiveTaskerUser;
       }),
     );
   };
@@ -70,7 +51,7 @@ const useTaskerApi = () => {
       }
 
       // TASKERS CON IMAGENES
-      const taskersWithImages: TActiveTaskerUser[] = await loadTaskerImages(taskers, accessToken);
+      const taskersWithImages: TActiveTaskerUser[] = await loadTaskerImagesProfile(taskers, accessToken);
 
       setTaskerData(taskersWithImages); //GUARDAR TASKERS
     } catch (error) {
@@ -83,7 +64,7 @@ const useTaskerApi = () => {
     }
   };
 
-  return { getTaskers, loadTaskerImages };
+  return { getTaskers, loadTaskerImagesProfile };
 };
 
 export default useTaskerApi;
