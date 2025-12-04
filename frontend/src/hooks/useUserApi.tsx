@@ -295,10 +295,6 @@ const useUserApi = () => {
   const getDataUser = async ({ accessToken }: { accessToken: string }): Promise<TDataPayloadUser> => {
     //PEDIR DATOS NECESARIOS EN ESTE MOMENTO
     try {
-
-      console.warn({ accessToken });
-      
-
       const userData: TDataPayloadUser = await apiRequest<TDataPayloadUser>(`${AUTH_ME}`, {
         method: 'GET',
         headers: {
