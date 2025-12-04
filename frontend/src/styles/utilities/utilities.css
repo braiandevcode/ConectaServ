@@ -235,6 +235,12 @@
   flex: 1;
 }
 
+/*  */
+
+.c-flex-align-baseline{
+  align-content: baseline;
+}
+
 /* MARGENES ABAJO UNIDADES REM*/
 .mb-1\/2 {
   margin-bottom: .5rem;

@@ -1,0 +1,53 @@
+.footer__navLoginAndRegister {
+  background: #eeecec;
+  border-radius: 10px;
+  opacity: 0.9;
+  padding: 1rem;
+  max-width: 350px;
+}
+
+.footer__links h4,
+.footer__links ul {
+  max-width: 100%;
+}
+
+.footer__logoAndLinks {
+  align-items: center;
+}
+
+/* ESCRITORIO MAYO A 768PX */
+@media (min-width: 768px) {
+  .footer__columns {
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  /* COLUMNA 1 OCUPAR EL 30% DEL ESPACIO */
+  .footer__logoAndLinks {
+    width: 30%;
+    text-align: left; 
+    align-items: flex-start; 
+  }
+  .footer__logoAndLinks .c-flex-justify-center {
+    justify-content: flex-start;  /*ALINEA A LA IZQUIERDA*/
+  }
+
+  /* COLUMNA 2 OCUPA ESPACIO RESTANTE */
+  .footer__custom {
+    width: 65%;
+    flex-direction: row;
+    justify-content: flex-end; 
+    text-align: right; 
+    gap: 4rem;
+  }
+
+  .footer__navLoginAndRegister.centered {
+    margin-right: 0; 
+    margin-left: auto;
+  }
+
+  /* QUE EN ESCRITORIO NO SE CENTRE LA COLUMNA 1 */
+  .footer__logoAndLinks .footer__links {
+    align-items: flex-start;
+  }
+}

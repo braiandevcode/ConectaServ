@@ -1,5 +1,5 @@
 .loaderContainer {
-  background: rgba(0, 0, 0, 0.966);
+  background-color: #fff;
 }
 
 .lds-spinner,
@@ -79,6 +79,10 @@
   animation-delay: -1.1s;
   top: 51.52px;
   left: 62.29579px;
+}
+
+.no-scroll{
+  overflow: hidden;
 }
 @keyframes lds-spinner {
   0%,

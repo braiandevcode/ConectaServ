@@ -1,18 +1,18 @@
 .modal {
-  transform: scale(1);
-  opacity: 1;
-  visibility: visible;
+  display: block;
   width: 90%;
-  max-width: 600px;
+  max-width: 480px;
   max-height: min-content;
   background-color: var(--bg-primary);
   border-radius: 12px;
   padding: 1.1rem;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.4s linear, opacity 0.3s linear, visibility 0.3s linear;
   z-index: 10;
 }
 
-.modal--hide{
+.modal--hide {
   display: none;
+}
+.no-scroll {
+  overflow: hidden;
 }

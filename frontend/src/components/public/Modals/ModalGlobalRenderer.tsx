@@ -30,7 +30,7 @@ const ModalGlobalRenderer = (): JSX.Element | null => {
   const ModalComponent = MODAL_COMPONENTS[currentGlobalModal];
 
   return (
-    <ModalWrapper className={`${!isGlobalModalOpen ? 'modal modal--hide' : 'modal'}`} ariaHidden={!isGlobalModalOpen} onClose={closeGlobalModal}>
+    <ModalWrapper className={`${!isGlobalModalOpen ? 'modal modal--hide' : 'modal no-scroll'}`} ariaHidden={!isGlobalModalOpen} onClose={closeGlobalModal}>
       <ModalComponent oncloseModal={closeGlobalModal} />
     </ModalWrapper>
   );

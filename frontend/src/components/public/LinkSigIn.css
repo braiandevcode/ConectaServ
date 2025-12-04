@@ -5,6 +5,7 @@
 
 .text__sigIn {
   font-size: 0.9rem;
+  color: var(--text-color-primary);
 }
 
 @media (min-width: 720px) {
