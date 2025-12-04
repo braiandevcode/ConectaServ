@@ -1,12 +1,20 @@
-.modalLoginHeader{
-    padding: 1rem;
-}
-
-.modalLoginHeader__title{
-    font-size: larger;
-    color: var(--text-color-primary);
+.modalLoginHeader {
+  padding: 1rem;
 }
 
 .modalLoginHeader__btnClose {
   right: 0.3rem;
+}
+
+.modalLogin {
+  max-width: 80%;
+}
+.modalLoginHeader {
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+@media (min-width: 768px) {
+  .modalLogin {
+    max-width: 400px;
+  }
 }

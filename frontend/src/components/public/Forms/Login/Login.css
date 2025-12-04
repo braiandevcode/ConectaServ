@@ -9,3 +9,11 @@
   color: var(--link-color-secondary);
 }
 
+/* ESTILO ICONOS */
+.fa_envelope,
+.fa_look{
+  color: var(--link-color-secondary);
+}
+
+
+

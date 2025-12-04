@@ -23,7 +23,6 @@ import type { iStatusError } from '../interfaces/iSatatus';
 import type { TDataPayloadUser } from '../types/typeDataPayloadUser';
 import type { TTaskerImage } from '../types/typeTaskerImage';
 import { BASE_BACK_URL } from '../config/configBaseBackUrl';
-import { ERoles } from '../types/enumRoles';
 
 const { USER, USER_IDENTIFY, USER_CODE_REQUEST, USER_VERIFY, AUTH_LOGIN, LOGOUT, AUTH_ME } = endPointUser; //DESESTRUCTURAR ENDPOINT
 
@@ -296,6 +295,10 @@ const useUserApi = () => {
   const getDataUser = async ({ accessToken }: { accessToken: string }): Promise<TDataPayloadUser> => {
     //PEDIR DATOS NECESARIOS EN ESTE MOMENTO
     try {
+
+      console.warn({ accessToken });
+      
+
       const userData: TDataPayloadUser = await apiRequest<TDataPayloadUser>(`${AUTH_ME}`, {
         method: 'GET',
         headers: {
@@ -344,8 +347,6 @@ const useUserApi = () => {
         //PEDIR DATOS NECESARIOS EN ESTE MOMENTO
         const userData: TDataPayloadUser = await getDataUser({ accessToken: result.accessToken });
         setUserData(userData);
-
-        localStorage.setItem(ERoles.IS_TASKER, userData.isTasker ? '1' : '0');
         redirectToDashBoard(); //REDIRECCIONAR AL DASHBOARD
       }
     } catch (error: unknown) {
@@ -371,7 +372,6 @@ const useUserApi = () => {
   const logout = async (setter: Omit<TStateAuth, 'setErrorText'>): Promise<void> => {
     const { setIsAuth, setAccessToken } = setter;
     try {
-      setIsSending(true);
       setLoading(true);
       // PETICION AL ENDPOINT PARA  CERRAR SESSION
       await apiRequest(`${LOGOUT}`, {
@@ -379,17 +379,17 @@ const useUserApi = () => {
         credentials: 'include', //PERMITIR LEER Y OBTENER COOKIE
       });
 
-      localStorage.removeItem(ERoles.IS_TASKER); //ELIMINAR CLAVE EN STORAGE
-
       setIsAuth(false); //AUTENTICADO EN FALSE
       setAccessToken(null);
       redirectToHome();
     } catch (error: unknown) {
       const err = error as iStatusError;
-      let title: string = 'Ups';
-      let userMessage: string = 'Ocurrio un error inesperado. Intente de nuevo más tarde.';
-      openGlobalModal(EModalGlobalType.MODAL_ERROR);
-      showError(title, userMessage);
+      if(err.status === 500){
+        let title: string = 'Ups';
+        let userMessage: string = 'Ocurrio un error inesperado. Intente de nuevo más tarde.';
+        openGlobalModal(EModalGlobalType.MODAL_ERROR);
+        showError(title, userMessage);
+      }
       throw err;
     } finally {
       setLoading(false);

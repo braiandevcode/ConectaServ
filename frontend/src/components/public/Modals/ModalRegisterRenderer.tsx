@@ -22,7 +22,7 @@ const ModalRegisterRenderer = (): JSX.Element | null => {
   const ModalComponent = MODAL_COMPONENTS[currentRegisterModal];
 
   return (
-    <ModalWrapper className={`${!isRegisterModalOpen ? 'modal modal--hiden' : 'modal'}`} ariaHidden={!isRegisterModalOpen} onClose={closeRegisterModal}>
+    <ModalWrapper className={`${!isRegisterModalOpen ? 'modal modal--hiden' : 'modal no-scroll'}`} ariaHidden={!isRegisterModalOpen} onClose={closeRegisterModal}>
       <ModalComponent />
     </ModalWrapper>
   );

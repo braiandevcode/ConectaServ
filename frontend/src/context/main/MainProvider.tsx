@@ -11,7 +11,6 @@ import { endPointUser } from '../../config/configEndpointUser';
 import useUserApi from '../../hooks/useUserApi';
 import type { TDataPayloadUser } from '../../types/typeDataPayloadUser';
 import type { TActiveTaskerUser } from '../../types/typeActiveTaskUser';
-import { ERoles } from '../../types/enumRoles';
 
 // PROVEEMOS LOGICA Y ESTADOS AL CONTEXTO PRINCIPAL
 const MainProvider = ({ children }: { children: ReactNode }) => {
@@ -40,19 +39,16 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   const [userData, setUserData] = useState<TDataPayloadUser | null>(null); //DATOS DE USUARIO LOGEADO
   const [taskerData, setTaskerData] = useState<TActiveTaskerUser[]>([]); // DATOS DE TASKERS EXCLUIDO USUARIO LOGEADO
 
-  const storedRoleUser = localStorage.getItem(ERoles.IS_TASKER);
   // ----------------------useEffects----------------------------------//
   // INTERVAL PARA REFRESCAR ACCESS TOKEN CADA 14 MINUTOS
   useEffect(() => {
-    if(storedRoleUser === null) return;
     // SI ESTAMOS HACIENDO LOGOUT, LIMPIAR EL INTERVAL Y NO HACER REFRESH TOKEN
+    // LIMPIAR INTERVAL SI EXISTE
     if (isLogout) {
-      // LIMPIAR INTERVAL SI EXISTE
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-      return;
     }
 
     // FUNCION PARA INICIAR EL INTERVAL
@@ -155,7 +151,6 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     }
   };
-
   // MANEJA TODA LA LOGICA DE FORM + ROLE + NAVEGACION
   const handleRoleAndFormNavigation = async () => {
     // LIMPIAR PERSISTENCIA SI ES NECESARIO
