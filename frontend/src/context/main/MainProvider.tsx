@@ -11,6 +11,7 @@ import { endPointUser } from '../../config/configEndpointUser';
 import useUserApi from '../../hooks/useUserApi';
 import type { TDataPayloadUser } from '../../types/typeDataPayloadUser';
 import type { TActiveTaskerUser } from '../../types/typeActiveTaskUser';
+import type { TDataPayloadTaskerSingle } from '../../types/typeDataPayloadTaskerSingle';
 
 // PROVEEMOS LOGICA Y ESTADOS AL CONTEXTO PRINCIPAL
 const MainProvider = ({ children }: { children: ReactNode }) => {
@@ -28,6 +29,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isSessionChecked, setIsSessionChecked] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
+  const [selectedTaskerProfile, setSelectedTaskerProfile] = useState<TDataPayloadTaskerSingle | undefined>(undefined);
 
   const fetchedRef = useRef(false); //REF PARA EVITAR LLAMADAD DUPLICADAS
   const intervalRef = useRef<number | null>(null); // REF PARA GUARDAR EL INTERVAL Y PODER LIMPIARLO
@@ -86,7 +88,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!accessToken || fetchedRef.current) return; // SI NO HAY TOKEN Y SI EL REF YA ES TRUE
 
-    fetchedRef.current = true; //PASAR A TRUE EN ESTE INSTANTE
+    fetchedRef.current = true; //PASAR A TRUE
 
     const fetchData = async () => {
       const data = await getDataUser({ accessToken });
@@ -112,6 +114,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [state, openGlobalModal]);
 
+  // LIMPIAR TEXTO EN LOGIN
   const clearTextsLogin = () => {
     setErrorText('');
     setPasswordLogin('');
@@ -215,6 +218,8 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     setIsSessionChecked,
     setUserData,
     setTaskerData,
+    setSelectedTaskerProfile,
+    selectedTaskerProfile,
     taskerData,
     userData,
     isLogout,

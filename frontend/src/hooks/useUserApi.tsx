@@ -23,6 +23,7 @@ import type { iStatusError } from '../interfaces/iSatatus';
 import type { TDataPayloadUser } from '../types/typeDataPayloadUser';
 import type { TTaskerImage } from '../types/typeTaskerImage';
 import { BASE_BACK_URL } from '../config/configBaseBackUrl';
+import type { TDataPayloadTaskerSingle } from '../types/typeDataPayloadTaskerSingle';
 
 const { USER, USER_IDENTIFY, USER_CODE_REQUEST, USER_VERIFY, AUTH_LOGIN, LOGOUT, AUTH_ME } = endPointUser; //DESESTRUCTURAR ENDPOINT
 
@@ -42,7 +43,7 @@ const useUserApi = () => {
   };
 
   // CARGAR IMGENES POR URL QUE VIENE DEL BACKEND
-  const loadTaskerImagesProfile = async (userData: TDataPayloadUser, accessToken: string): Promise<TDataPayloadUser> => {
+  const loadTaskerImagesProfile= async <T extends TDataPayloadUser | TDataPayloadTaskerSingle>(userData:T, accessToken: string): Promise<T> => {
     setLoading(true);
     let profileImage: string | null = null;
     let experienceImages: string[] = [];
@@ -51,7 +52,7 @@ const useUserApi = () => {
     // PERFIL
     if (userData.profileImageUrl) {
       const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${userData.profileImageUrl}`, { headers: { Authorization: `Bearer ${accessToken}` } });
-      idImageProfile = img.id;
+      idImageProfile = img?.id;
       if (img?.base64 && img.base64.data.length > 0) {
         const base64Str: string = bufferToBase64(img.base64.data);
         profileImage = `data:${img.mimeType};base64,${base64Str}`;
@@ -66,7 +67,7 @@ const useUserApi = () => {
       const imgs = await Promise.all(
         urls.map(async (url) => {
           const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${url}`, { headers: { Authorization: `Bearer ${accessToken}` } });
-          idImageExp.push(img.id);
+          idImageExp.push(img?.id);
           if (img?.base64 && img.base64.data.length > 0) {
             const base64Str: string = bufferToBase64(img.base64.data);
             return `data:${img.mimeType};base64,${base64Str}`;
@@ -78,7 +79,7 @@ const useUserApi = () => {
       experienceImages = imgs.filter(Boolean); //EVITAR VACIOS
     }
 
-    return { ...userData, imageExpBase64: experienceImages, imageProfileBase64: profileImage, idImageProfile, idImageExp } as TDataPayloadUser;
+    return { ...userData, imageExpBase64: experienceImages, imageProfileBase64: profileImage, idImageProfile, idImageExp } as T;
   };
 
   // FUNCION PARA CUANDO EL REGISTRO ES EXITOSO
@@ -305,7 +306,7 @@ const useUserApi = () => {
       if (!userData.isTasker) {
         return userData;
       }
-      const newTasker = await loadTaskerImagesProfile(userData, accessToken);
+      const newTasker = await loadTaskerImagesProfile<TDataPayloadUser>(userData, accessToken);
 
       return newTasker;
     } catch (error) {
@@ -392,7 +393,7 @@ const useUserApi = () => {
     }
   };
 
-  return { getIdentifyEmail, addUser, signIn, sendCodeToUserEmail, userVerify, logout, getDataUser }; // ==> ACA RETORNO TODOS LOS METODOS QUE HACEN REFERNECIA A DATOS DE USUARIOS
+  return { getIdentifyEmail, addUser, signIn, loadTaskerImagesProfile, sendCodeToUserEmail, userVerify, logout, getDataUser }; // ==> ACA RETORNO TODOS LOS METODOS QUE HACEN REFERNECIA A DATOS DE USUARIOS
 };
 
 export default useUserApi;

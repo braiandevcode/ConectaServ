@@ -1,0 +1,128 @@
+.profile {
+  max-width: 900px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.profile__avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profile__avatar img {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.profile__rating,
+.review__rating {
+  color: #fbbf24;
+  font-size: 1.2rem;
+}
+
+.profile__section {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.profile__price {
+  background-color: #f3f4f6;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+.profile__text {
+  color: #4b5563;
+}
+
+.gallery {
+  width: 100%;
+  max-width: 700px; /* Si quieres un límite máximo general */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.gallery__item {
+  width: 100%;
+  max-width: 380px;
+  background-color: #d1d5db;
+}
+
+.gallery__item img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.review {
+  border-top: 1px solid #e5e7eb;
+}
+
+.review__user {
+  padding-bottom: 0px;
+}
+
+.review__text {
+  color: #4b5563;
+}
+
+.profileSection-details-budget__reinsert-title,
+.profileSection-details-budget-title,
+.profileSection-details-budget__price-title,
+.profile__userNameAndMsg {
+  color: var(--btn-text-gray);
+}
+
+.profile__userNameAndMsg {
+  letter-spacing: 1px;
+}
+
+.profile__cityAndStart-cityText,
+.profileSection-details-budget {
+  color: var(--text-color-primary);
+}
+
+.profile__categoryText {
+  color: var(--link-color-secondary);
+}
+
+.profile__userNameAndMsg-userName {
+  font-size: 0.9rem;
+}
+
+.profileSection-details-budget__price-amount,
+.profileSection-details-budget-option,
+.profileSection-details-budget__reinsert-option,
+.profile__categoryText{
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* 768px > */
+@media (min-width: 768px) {
+  .profile__info {
+    width: 100%;
+  }
+
+  .profile__details_budge{
+    margin-right: auto;
+  }
+
+  .profile__userNameAndMsg-userName {
+    font-size: 1.2rem;
+    width: 90%;
+  }
+ 
+  .profile__imageProfile {
+    flex-direction: row;
+    gap: 2rem;
+    width: 80%;
+  }
+}
