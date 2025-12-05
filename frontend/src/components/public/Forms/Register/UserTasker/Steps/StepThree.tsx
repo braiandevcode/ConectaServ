@@ -7,13 +7,15 @@ import { renderFieldError, styleBorderFieldError } from '../../../../../../utils
 // ICONOS DE REACT ICONS
 import { GiIdCard } from 'react-icons/gi';
 import { FaCircleDollarToSlot } from 'react-icons/fa6';
-import { BsFillInfoSquareFill } from 'react-icons/bs';
 import { RiMoneyDollarCircleFill } from 'react-icons/ri';
 import { IoArrowUndoCircle } from 'react-icons/io5';
+import { formatMontoWithCurrency } from '../../../../../../utils/parsedAndFormatValuesUtils';
 
+// CSS
+import './StepThree.css';
 export default function StepThree() {
   const { amountFieldFormat, formState, isBudgeMountDisabled, isReinsertDisabled, stepData } = useRegisterTasker(); //HOOK QUE USA CONTEXTO NIVEL REGISTRO PROFESIONAL
-  const { onFocusAmount, onBlurAmount, onChangeIsReinsert, onChangeIsBudge, handleBudgeAmount } = useStepThree(); //HOOK QUE USA CONTEXTO NIVEL PASO 3 DEL FORMULARIO
+  const { onChangeIsReinsert, onChangeIsBudge, handleBudgeAmount } = useStepThree(); //HOOK QUE USA CONTEXTO NIVEL PASO 3 DEL FORMULARIO
   const storedBudgeSelected: TYesOrNo = stepData[EKeyDataByStep.THREE]?.budgeSelected ?? 'no';
   const storedReinsertSelected: TYesOrNo = stepData[EKeyDataByStep.THREE]?.reinsert ?? 'no';
   return (
@@ -26,16 +28,12 @@ export default function StepThree() {
           </h3>
         </div>
 
-        <div className='c-flex c-flex-column gap-2'>
+        <div className='c-flex c-flex-column gap-1'>
           <div className='c-flex c-flex-column gap-1/2'>
             <h4 className='c-flex c-flex-items-center gap-1/2 form-groupBudget__label'>
               <FaCircleDollarToSlot size={20} />
               <span>¿Cobrás el presupuesto?</span>
             </h4>
-            <div className='c-flex c-flex-items-center gap-1/2 container-textInfo'>
-              <BsFillInfoSquareFill size={20} />
-              <small className='container-textInfo__message'>Acción no modificable</small>
-            </div>
           </div>
 
           <div className='c-flex c-flex-items-center gap-1/2 radio-group'>
@@ -52,33 +50,34 @@ export default function StepThree() {
 
         <div className='c-flex c-flex-column gap-2'>
           <div className='c-flex c-flex-column' data-message='amountBudge'>
-            <h4 className='c-flex c-flex-items-center gap-1/2 form-groupBudget__label'>
-              <div className='c-flex c-flex-column c-flex-items- gap-1/2'>
+            <h4 className='c-flex c-flex-items-center c-flex-column-reverse gap-2 form-groupBudget__label'>
+              <div className='containerPreviewMount c-flex c-flex-self-start gap-1/2'>
+                <div className='c-flex c-flex-items-center gap-1/2'>
+                  <span className='containerPreviewMount__amount'>{formatMontoWithCurrency(amountFieldFormat)}</span>
+                </div>
+              </div>
+              <div className='c-flex c-flex-column c-flex-items-center gap-1/2 to-left'>
                 <div className='c-flex-self-start c-flex c-flex-items-center gap-1/2'>
                   <RiMoneyDollarCircleFill size={20} />
                   <span>Precio fijo del presupuesto</span>
                 </div>
-                <small className='text-muted'>(solo números enteros, sin decimales ni símbolos)</small>
+                <small className='text-muted'>(Ej: 600.60. Utiliza el punto para decimales)</small>
               </div>
             </h4>
 
             <div className='c-flex c-flex-column gap-1/2'>
-              <input type='text' name='amountBudge' placeholder='$15000' className={`w-1/2 form-groupBudget__field ${amountFieldFormat !== '' && styleBorderFieldError(formState, 'amountBudge')}`} disabled={isBudgeMountDisabled} value={amountFieldFormat} onFocus={onFocusAmount} onChange={handleBudgeAmount} onBlur={onBlurAmount} />
+              <input type='text' name='amountBudge' placeholder='600.60' className={`w-1/2 form-groupBudget__field ${amountFieldFormat !== '' && styleBorderFieldError(formState, 'amountBudge')}`} disabled={isBudgeMountDisabled} value={amountFieldFormat} onChange={handleBudgeAmount} />
               {amountFieldFormat !== '' && renderFieldError(formState, 'amountBudge')}
             </div>
           </div>
         </div>
 
-        <div className='c-flex c-flex-column gap-2'>
+        <div className='c-flex c-flex-column gap-1'>
           <div className='c-flex c-flex-column gap-1/2'>
             <h4 className='c-flex c-flex-items-center gap-1/2 form-groupBudget__label'>
               <IoArrowUndoCircle size={20} />
               <span>¿Reintegro si te eligen?</span>
             </h4>
-            <div className='c-flex c-flex-items-center gap-1/2 container-textInfo'>
-              <BsFillInfoSquareFill size={20} />
-              <small className='form-professionalBudget__info'>Acción no modificable</small>
-            </div>
           </div>
 
           <div className='mb-2 c-flex c-flex-items-center gap-1/2 form-groupBudget__radioGroup radio-group'>

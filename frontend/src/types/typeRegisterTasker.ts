@@ -7,8 +7,8 @@ import type { TStepDataTasker } from './typeStepData';
 
 // TIPOS DE ESTRUCTURA GENERAL DEL REGISTRO DEL PROFESIONAL
 export type TRegisterTasker = Omit<TStepOneProps, 'handleChangeSelected' | 'handleCheckboxChange' | 'titleRef'> &
-  Omit<TStepTwoProps, 'handleDescriptionInput' | 'handleDescriptionBlur' | 'handleImageExperiencesChange' | 'handleImageProfileChange'> &
-  Omit<TStepThreeProps, 'handleBudgeAmount' | 'onBlurAmount' | 'onChangeIsBudge' | 'onChangeIsReinsert' | 'onFocusAmount'> & {
+  Omit<TStepTwoProps, 'handleDescriptionInput' | 'loadImg' | 'setLoadImg' | 'setLoadImgExp' | 'loadImgExp'| 'handleDescriptionBlur' | 'handleImageExperiencesChange' | 'handleImageProfileChange'> &
+  Omit<TStepThreeProps, 'handleBudgeAmount' | 'onChangeIsBudge' | 'onChangeIsReinsert'> & {
     validateCurrentStep: () => boolean;
     setHasInteracted: (hasInteracted: boolean) => void;
     setStep: (step: number) => void;

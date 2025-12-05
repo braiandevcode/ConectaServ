@@ -40,6 +40,7 @@ const useTaskerApi = () => {
     );
   };
 
+  // LEER INFO DE UN TASKER
   const getDetailsTasker = async ({ accessToken, idTasker }: { accessToken: string; idTasker:string }): Promise<TDataPayloadTaskerSingle | null> => {
     try {
       setLoading(true);
@@ -66,12 +67,14 @@ const useTaskerApi = () => {
     }
   };
 
+  // MOSTRAR VISTAS PREVIAS DE TODOS LOS TASKERS
   const getTaskers = async ({ accessToken }: { accessToken: string }): Promise<TActiveTaskerUser[]> => {
     setLoading(true);
     try {
       const taskers: TActiveTaskerUser[] = await apiRequest<TActiveTaskerUser[]>(ALL_TASKERS, {
         method: 'GET',
         headers: { Authorization: `Bearer ${accessToken}` },
+        credentials:'include'
       });
 
       // SI NO ES UN ARREGLO

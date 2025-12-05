@@ -1,7 +1,8 @@
-type TBudgetData = {
-  amountBudget: number;
-  budgeSelected: string;
-  reinsert: string;
+export type TBudgetData = {
+  idBudget: string | undefined | null;
+  budgeSelected: string | undefined | null;
+  reinsertSelected: string | undefined | null;
+  amount: number;
 };
 
 export type TDataPayloadUser = {

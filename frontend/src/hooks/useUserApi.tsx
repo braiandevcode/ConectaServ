@@ -301,6 +301,7 @@ const useUserApi = () => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        credentials:'include',
       });
 
       if (!userData.isTasker) {

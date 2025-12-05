@@ -7,15 +7,16 @@ import { deleteImageFromIndexedDB } from '../../../utils/storageUtils';
 import DescriptionValidator from '../../../modules/validators/DescriptionValidator';
 import loadImage from '../../../utils/loadImage';
 import loadImages from '../../../utils/loadImages';
-import savedProfile from '../../../utils/savedProfile';
 import { verifyMetaDataImage } from '../../../utils/validateFieldUtils';
-import savedExperiences from '../../../utils/savedExperiences';
 import type { TIdString } from '../../../types/typeUUID';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TTypeContextStepTwo } from '../../../types/typeContextStepTwo';
 import ImageProfileValidator from '../../../modules/validators/ImageProfileValidator';
 import ImageExperiencesValidator from '../../../modules/validators/ImageExperiencesValidator';
-import type { TImageData } from '../../../types/typeRegisterEndDto';
+import type { TImageData, TImageDataStored } from '../../../types/typeRegisterEndDto';
+import useImages from '../../../hooks/useImages';
+import useGlobalModal from '../../../hooks/useGlobalModal';
+import { EModalGlobalType } from '../../../types/enumGlobalModalType';
 
 const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
   const descriptionValidator: DescriptionValidator = new DescriptionValidator();
@@ -24,6 +25,8 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
 
   // HOOK REGISTER PROFESIONAL
   const { validateCurrentStep, setStepData, stepData, formState, setFormState, setIsStepValid, step, setIsParsed } = useRegisterPro();
+  const { savedExperiences, savedProfile } = useImages();
+  const { openGlobalModal, showError } = useGlobalModal();
 
   // -----------------------------------------------useRef------------------------------------------------------//
   const countImagesExp = useRef<number>(0); // ==> REF PARA ALMACENAR CANTIDAD DE IMAGENES ALMACENADA
@@ -33,35 +36,29 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
   const [src, setSrc] = useState<string | null>(null); //ESTADO PARA SOURCE DE IMAGEN
   const [srcVector, setSrcVector] = useState<string[]>([]); //ESTADO PARA SOURCE DE IMAGENES
 
+  const [loadImg, setLoadImg] = useState<boolean>(false);
+  const [loadImgExp, setLoadImgExp] = useState<boolean>(false);
   // EFECTO PARA CARGAR IMAGEN DE PERFIL
   useEffect(() => {
-    if (stepData[EKeyDataByStep.TWO].imageProfileData) {
-      // CARGAR EL SOURCE DE IMAGEN MEDIANTE FUNCION INVOCADA
-      loadImage({ setSrc, storedImage: stepData[EKeyDataByStep.TWO].imageProfileData });
-    }
-
-    const isEveryDataImageExp: boolean = stepData[EKeyDataByStep.TWO].imageExperienceData.every((imageObj) => verifyMetaDataImage(imageObj)); //SI TODOS LOS OBJETOS DEL ARREGLO TIENEN DATOS
-
-    // SI HAY DATOS EN TODOS LOS ELEMENTOS
-    if (isEveryDataImageExp) {
-      // CARGAR EL SOURCE DE CADA IMAGEN MEDIANTE FUNCION INVOCADA
-      loadImages({ setSrcVector, storedImages: stepData[EKeyDataByStep.TWO].imageExperienceData as TImageData[], countImagesExp }); // INVOCAR FUNCION ASINCRONA
-    }
-
+    upLoadImgExp();
     setIsStepValid(validateCurrentStep()); // ==> REVALIDAR
-
     // CLEANUP AL DESMONTAR RESETEO
     return () => {
       countImagesExp.current = 0; // RESETEAR CONTADOR REF
       setSrcVector([]); // LIMPIAR ESTADO DE IMAGENES RENDERIZADAS
       setSrc(''); //RESETEAR AL DESMONTAR
     };
-  }, [step, stepData[EKeyDataByStep.TWO].imageProfileData, stepData[EKeyDataByStep.TWO].imageExperienceData]); // SOLO DEPENDE DE ESA PARTE
+  }, [step, stepData[EKeyDataByStep.TWO].imageExperienceData]); // SOLO DEPENDE DE ESA PARTE
+
+  useEffect(() => {
+    uploadImgProfile();
+    setIsStepValid(validateCurrentStep()); // ==> REVALIDAR
+  }, [step, stepData[EKeyDataByStep.TWO].imageProfileData]);
 
   // ------------------------------------- EVENTOS------------------------------------------------//
   // HANDLER PARA ELIMINAR IMAGEN DE PERFIL PASO 2
   const onDeleteProfile = async () => {
-    const storedImage: TImageData| null = stepData[EKeyDataByStep.TWO].imageProfileData;
+    const storedImage: TImageDataStored | null = stepData[EKeyDataByStep.TWO].imageProfileData;
     if (storedImage) {
       // ==> ELIMINAR IMAGEN DE INDEXEDDB POR ID
       await deleteImageFromIndexedDB(storedImage.idImage, ENamesOfKeyLocalStorage.IMAGE_INDEXED_DB);
@@ -90,6 +87,41 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
         imageExperienceData: prev[EKeyDataByStep.TWO].imageExperienceData.filter((img) => img.idImage !== idImage), //PISAR NCON UEVO VALOR A NULL
       },
     }));
+  };
+
+  // SUBIDA DE IMAGEN DE EXPERIENCIAS
+  const upLoadImgExp = async () => {
+    try {
+      setLoadImgExp(true);
+      //SI TODOS LOS OBJETOS DEL ARREGLO TIENEN DATOS
+      const isEveryDataImageExp: boolean = stepData[EKeyDataByStep.TWO].imageExperienceData.every((imageObj) => verifyMetaDataImage(imageObj));
+      // SI HAY DATOS EN TODOS LOS ELEMENTOS
+      if (isEveryDataImageExp) {
+        // CARGAR EL SOURCE DE CADA IMAGEN MEDIANTE FUNCION INVOCADA
+        await loadImages({ setSrcVector, storedImages: stepData[EKeyDataByStep.TWO].imageExperienceData as TImageData[], countImagesExp }); // INVOCAR FUNCION ASINCRONA
+      }
+    } catch (error) {
+      openGlobalModal(EModalGlobalType.MODAL_ERROR);
+      showError('ERROR', 'Ocurrió un error inesperado, intente de nuevo más tarde.');
+    } finally {
+      setLoadImgExp(false);
+    }
+  };
+
+  // SUBIDA DE IMAGEn DEL PEFIL
+  const uploadImgProfile = async () => {
+    try {
+      setLoadImg(true);
+      if (stepData[EKeyDataByStep.TWO].imageProfileData) {
+        // CARGAR EL SOURCE DE IMAGEN MEDIANTE FUNCION INVOCADA
+        await loadImage({ setSrc, storedImage: stepData[EKeyDataByStep.TWO].imageProfileData });
+      }
+    } catch (error) {
+      openGlobalModal(EModalGlobalType.MODAL_ERROR);
+      showError('ERROR', 'Ocurrió un error inesperado, intente de nuevo más tarde.');
+    } finally {
+      setLoadImg(false);
+    }
   };
 
   // EVENTO INPUT A DESCRIPCION PASO 2
@@ -153,7 +185,14 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     // SETEAR ESTADO GLOBAL DE PASOS
-    savedProfile({ formState, listFiles, setStepData }); //INVOCAR Y GUARDAR
+    savedProfile({
+      formState: {
+        ...formState, // LO VIEJO
+        imageProfileData: result, //LO NUEVO
+      },
+      listFiles,
+      setStepData,
+    });
 
     // VALIDAR PASO
     setIsStepValid(result.isValid); // GUARDO EL RESULTADO FINAL DE LA VALIDACION DEL PASO
@@ -162,7 +201,7 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
   // EVENTO ONCHANGE A EXPERIENCIAS PASO 2
   const handleImageExperiencesChange = (e: ChangeEvent<HTMLInputElement>) => {
     listFiles.current = e.target.files as FileList; // ==> GUARDO VALOR EN REFERENCIA
-    const storedImages: TImageData[] = stepData[EKeyDataByStep.TWO].imageExperienceData;
+    const storedImages: TImageDataStored[] = stepData[EKeyDataByStep.TWO].imageExperienceData;
 
     // SUMO EL PESO TOTAL DE TODAS LAS IMAGENES EXISTENTES ==> TIPO ESPECIAL TStoredImage[]
     const existingTotalSize: number = storedImages?.reduce((acc, img) => acc + img.size, 0) ?? 0; // POR DEFAULT 0
@@ -184,8 +223,21 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
       }, 2500);
     }
 
-    // SETEAR Y GUARDAR DATOS DE IMAGEN EN ESTADO GLOBAL DE PASOS
-    savedExperiences({ formState, listFiles, setStepData }); //INVOCAR Y GUARDAR
+    // ACTUALIZAR ESTADO EN REACT, NO ES INMEDIATO
+    setFormState((prev) => ({
+      ...prev,
+      imageExperienceData: result,
+    }));
+
+    // ESTADO ACTUAL
+    savedExperiences({
+      formState: {
+        ...formState, // LO ACTUAL
+        imageExperienceData: result, //LO NUEVO
+      },
+      listFiles,
+      setStepData,
+    });
     setIsStepValid(result.isValid);
   };
 
@@ -198,6 +250,10 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
     onDeleteProfile,
     setSrc,
     setSrcVector,
+    setLoadImgExp,
+    setLoadImg,
+    loadImgExp,
+    loadImg,
     src,
     srcVector,
   };
