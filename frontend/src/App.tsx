@@ -12,11 +12,10 @@ import RegisterClient from './components/public/Forms/Register/UserClient/Regist
 import RegisterTasker from './components/public/Forms/Register/UserTasker/RegisterTasker';
 import RegisterTaskerLayout from './routes/RegisterTaskerLayout';
 import Services from './pages/Services';
-import InfoTasker from './components/public/InfoTasker';
+// import InfoTasker from './components/public/InfoTasker';
 import ProtectedRoute from './components/private/ProtectedRoute';
-import Profile from './components/private/DashBoard/ProfileTasker';
-import ProfileInfoTasker from './components/private/DashBoard/TaskerRole/ProfileInfoTasker';
-import AllSevices from './components/private/DashBoard/ClientRole/AllServices';
+import Profile from './routes/ProfileTasker';
+import AllSevices from './components/private/DashBoard/AllServices';
 import NotFound from './components/NotFound';
 import Chat from './components/private/Chat/Chat';
 // COMPONENTE APP PRINCIPAL
@@ -62,7 +61,6 @@ export default function App() {
                 <Profile />
               </ProtectedRoute>
             }>
-            <Route path='profile/info' element={<ProfileInfoTasker />} />
             <Route
               path='/to/chats'
               element={
@@ -83,7 +81,6 @@ export default function App() {
               </ProtectedRoute>
             }>
             {/* RUTAS HIJAS */}
-            <Route path='services/infoTasker' element={<InfoTasker />} />
             <Route path='services/all' element={<AllSevices />} />
             <Route path='*' element={<NotFound />}></Route>
           </Route>

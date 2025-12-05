@@ -1,0 +1,1 @@
+export type TCategoryTasker = "Reparación y Mantenimiento" | "Jardinería" | "Mudanzas y Transportes" | undefined

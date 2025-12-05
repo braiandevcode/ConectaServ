@@ -12,6 +12,8 @@ const defaultMainContext: TMain = {
   setIsAuth: () => {},
   setIsSessionChecked: () => {},
   setTaskerData: () => {},
+  setSelectedTaskerProfile: async  () => {},
+  selectedTaskerProfile:undefined,
   taskerData:[],
   userData:null,
   isLogout:false,
