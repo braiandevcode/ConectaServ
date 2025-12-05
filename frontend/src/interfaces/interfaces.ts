@@ -12,6 +12,7 @@ export interface iEndPointUser {
   ALL_TASKERS:string;
   IMAGE_PROFILE:string;
   IMAGES_EXP:string;
+  TASKER_INFO:string;
 }
 
 // INTERFACES PARA URL DE PETICIONES

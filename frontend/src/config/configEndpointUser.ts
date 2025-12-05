@@ -16,4 +16,5 @@ export const endPointUser: iEndPointUser= {
   LOGOUT:`${BASE_BACK_URL}${EEndpoint.LOGOUT}`,
   IMAGE_PROFILE: `${BASE_BACK_URL}${EEndpoint.IMAGE_PROFILE}`,
   IMAGES_EXP: `${BASE_BACK_URL}${EEndpoint.IMAGES_EXP}`,
+  TASKER_INFO:`${BASE_BACK_URL}${EEndpoint.TASKER_INFO}`,
 };
