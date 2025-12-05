@@ -12,7 +12,7 @@ import useMain from './useMain';
 import useUserApi from './useUserApi';
 
 const useTaskerApi = () => {
-  const { ALL_TASKERS } = endPointUser;
+  const { ALL_TASKERS, TASKER_INFO } = endPointUser;
   const { showError, openGlobalModal } = useGlobalModal();
   const { setLoading, setTaskerData } = useMain();
   const { loadTaskerImagesProfile: loadImageTaskerSingle } = useUserApi();
@@ -43,7 +43,7 @@ const useTaskerApi = () => {
   const getDetailsTasker = async ({ accessToken, idTasker }: { accessToken: string; idTasker:string }): Promise<TDataPayloadTaskerSingle | null> => {
     try {
       setLoading(true);
-      const tasker = await apiRequest<TDataPayloadTaskerSingle | null>(`http://localhost:4000/api/v1/users/tasker/${idTasker}/details`, {
+      const tasker = await apiRequest<TDataPayloadTaskerSingle | null>(`${TASKER_INFO}/${idTasker}/details`, {
         method: 'GET',
         headers: { Authorization: `Bearer ${accessToken}` },
       });
