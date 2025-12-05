@@ -1,7 +1,7 @@
-import type { TImageData } from "./typeRegisterEndDto";
+import type { TImageDataStored } from "./typeRegisterEndDto";
 // TIPO PASO 2 (para guardar en STEP_DATA en localStorage)
 export type TStepTwo = {
   description:string;
-  imageProfileData:TImageData | null;
-  imageExperienceData:TImageData[];
+  imageProfileData:TImageDataStored | null;
+  imageExperienceData:TImageDataStored[];
 };

@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import useRegisterPro from '../../../hooks/useRegisterTasker';
 import { StepThreeContext } from './StepThreeContext';
 import { EKeyDataByStep } from '../../../types/enums';
-import { formatMontoWithCurrency, parseMontoToNumber } from '../../../utils/parsedAndFormatValuesUtils';
 import BudgeValidator from '../../../modules/validators/BudgeValidator';
 import type { TYesOrNo } from '../../../types/typeRadioYesOrNo';
 import type { TFieldState } from '../../../types/typeStateFields';
@@ -14,7 +13,7 @@ import type { TStepDataTasker } from '../../../types/typeStepData';
 const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
   const budgeValidator: BudgeValidator = new BudgeValidator(); // INSTANCIA VALIDADOR DE MONTO
   // HOOK QUE USA CONTEXTO A NIVEL REGISTRO DE PROFESIONAL
-  const { formState, isFocus, stepData, setStepData , amountFieldFormat, step, validateCurrentStep, setIsFocus, setIsBudgeMountDisabled, setIsReinsertDisabled, setAmountFieldFormat, setFormState, setIsStepValid } = useRegisterPro();
+  const {  stepData, setStepData , amountFieldFormat, step, validateCurrentStep, setIsFocus, setIsBudgeMountDisabled, setIsReinsertDisabled, setAmountFieldFormat, setFormState, setIsStepValid } = useRegisterPro();
 
   const storedAmount: number = stepData[EKeyDataByStep.THREE]?.amountBudge ?? 0;
   const storedBudgeSelected: TYesOrNo = stepData[EKeyDataByStep.THREE]?.budgeSelected ?? 'no';
@@ -26,16 +25,11 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
     // REVALIDAR EL PASO EN CADA RENDER RELEVANTE
     setIsStepValid(validateCurrentStep());
 
-    // SI EL USUARIO NO COBRA PRESUPUESTO Y ESTÁ EN FOCO => NO CONTINUAR
-    if (storedBudgeSelected === 'no' && isFocus) return;
-
     // SI EL USUARIO DIJO "YES" => ASEGURAR CAMPO HABILITADO Y REINTEGRO HABILITADO
     if (storedBudgeSelected === 'yes') {
       setIsBudgeMountDisabled(false);
       setIsReinsertDisabled(false);
     }
-    // OBTENER VALOR NUMÉRICO ACTUAL DEL FORMSTATE (FUENTE DE VERDAD PARA CÁLCULOS)
-    const currentAmount: number = (formState.amountBudge.value as string).trim() !== '' ? parseMontoToNumber(formState.amountBudge.value as string) : parseMontoToNumber('0');
 
     // SI EN PERSISTENCIA DICE "NO" Y EL  PERSISTIDO ACTUAL ES 0 => DESHABILITAR CAMPO Y MARCAR PASO VÁLIDO
     if (storedBudgeSelected === 'no' && storedAmount === 0) {
@@ -45,28 +39,9 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    // SI NO HAY MONTO ALMACENADO => SALIR (NO HAY NADA QUE FORMATEAR)
-    if (storedAmount === 0) return;
+    setIsBudgeMountDisabled(false); 
+  }, [step,  storedBudgeSelected, storedAmount]); // DEPENDENCIAS: PASO, FOCO Y SELECCIÓN DE PRESUPUESTO
 
-    // SI EN PERSISTENCIA DICE "NO" PERO EN PERSISTENCIA HAY MONTO => PASO NO VALIDO
-    if (storedBudgeSelected === 'no' && currentAmount > 0) {
-      setIsStepValid(false); // PASO NO VALIDO
-      return;
-    }
-
-    // FUENTE DE LA VERDAD PARA UI: STRING DEL MONTO ACTUAL
-    const storedAmountString: string = currentAmount.toString();
-
-    // SI EXISTE VALOR EN LA CADENA, SETEAR FORMATO EN EL INPUT SEGÚN FOCO (SOLO DÍGITOS EN FOCO, SINO FORMATO MONEDA)
-    if (storedAmountString) {
-      const amount: string = isFocus ? storedAmountString : formatMontoWithCurrency(storedAmountString);
-      setAmountFieldFormat(amount); // SETEAR VALOR FORMATEADO EN EL INPUT
-      return;
-    }
-
-    setIsBudgeMountDisabled(false); // DESHABILITAR CAMPO DE MONTO
-    setAmountFieldFormat(''); // DEJAR CAMPO VISUALMENTE VACIO
-  }, [step, isFocus, storedBudgeSelected]); // DEPENDENCIAS: PASO, FOCO Y SELECCIÓN DE PRESUPUESTO
 
   //-----------------------------------------------EVENTOS -------------------------------------//
 
@@ -86,7 +61,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
         }) as TStepDataTasker,
     );
 
-    // DETERMINAR SI EL PASO ES VALIDO SEGUN SELECCION Y MONTO
+    // // DETERMINAR SI EL PASO ES VALIDO SEGUN SELECCION Y MONTO
     const isValid = (value === 'no' && storedAmount === 0) || (value === 'yes' && amountFieldFormat !== '' && storedAmount > 0);
 
     // ACTUALIZAR ESTADO LOCAL DE VALIDACIÓN DEL RADIO
@@ -132,14 +107,13 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
 
     // SI EL MONTO ES VALIDO => ACTUALIZAR STORAGE CON EL VALOR NUMERICO
     if (result.isValid) {
-      setIsFocus(false); //FOCO EN FALSE
       setStepData(
         (prev) =>
           ({
             ...prev,
             [EKeyDataByStep.THREE]: {
               ...prev[EKeyDataByStep.THREE],
-              amountBudge: parseMontoToNumber(result.value as string),
+              amountBudge: parseFloat(result.value as string),
             },
           }) as TStepDataTasker,
       );
@@ -179,7 +153,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
               ...prev,
               [EKeyDataByStep.THREE]: {
                 ...prev[EKeyDataByStep.THREE],
-                amountBudge: parseMontoToNumber(result.value as string),
+                amountBudge: parseFloat(result.value as string),
               },
             }) as TStepDataTasker,
         );
@@ -205,7 +179,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
 
     // SI EL USUARIO NO COBRA PRESUPUESTO ("no")
     if (storedBudgeSelected === 'no') {
-      const numericVal: number = parseMontoToNumber(val); // ALMACENAR MONTO PARSEADO
+      const numericVal: number = parseFloat(val); // ALMACENAR MONTO PARSEADO
 
       // SI EL MONTO ES 0 => PASO VALIDO
       if (numericVal === 0) {
@@ -227,54 +201,54 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  // EVENTO ONBLUR DEL CAMPO MONTO EN EL PASO 3
-  const onBlurAmount = () => {
-    // SI EL MONTO NO ES VÁLIDO => MANTENER FOCUS Y NO FORMATEAR
-    if (!formState.amountBudge.isValid) {
-      setIsFocus(true);
-      return;
-    }
+  // // EVENTO ONBLUR DEL CAMPO MONTO EN EL PASO 3
+  // const onBlurAmount = () => {
+  //   // SI EL MONTO NO ES VÁLIDO => MANTENER FOCUS Y NO FORMATEAR
+  //   if (!formState.amountBudge.isValid) {
+  //     setIsFocus(true);
+  //     return;
+  //   }
 
-    setIsFocus(false); // QUITAR FOCUS
+  //   setIsFocus(false); // QUITAR FOCUS
 
-    // SI HAY MONTO ALMACENADO
-    if (storedAmount > 0) {
-      const storedMountString: string = storedAmount.toString();
+  //   // SI HAY MONTO ALMACENADO
+  //   if (storedAmount > 0) {
+  //     const storedMountString: string = storedAmount.toString();
 
-      // FORMATEAR MONTO CON MONEDA PARA MOSTRAR EN INPUT
-      if (storedMountString) {
-        setAmountFieldFormat(formatMontoWithCurrency(storedMountString));
-      } else {
-        setAmountFieldFormat(''); // CAMPO VACÍO SI NO HAY MONTO
-      }
-    }
-  };
+  //     // FORMATEAR MONTO CON MONEDA PARA MOSTRAR EN INPUT
+  //     if (storedMountString) {
+  //       setAmountFieldFormat(formatMontoWithCurrency(storedMountString));
+  //     } else {
+  //       setAmountFieldFormat(''); // CAMPO VACÍO SI NO HAY MONTO
+  //     }
+  //   }
+  // };
 
-  // EVENTO ONFOCUS DEL CAMPO MONTO EN EL PASO 3
-  const onFocusAmount = () => {
-    // SI EL MONTO NO ES VÁLIDO => MANTENER FOCUS Y NO FORMATEAR
-    if (!formState.amountBudge.isValid) {
-      setIsFocus(true);
-      return;
-    }
+  // // EVENTO ONFOCUS DEL CAMPO MONTO EN EL PASO 3
+  // const onFocusAmount = () => {
+  //   // SI EL MONTO NO ES VÁLIDO => MANTENER FOCUS Y NO FORMATEAR
+  //   if (!formState.amountBudge.isValid) {
+  //     setIsFocus(true);
+  //     return;
+  //   }
 
-    setIsFocus(true); // MARCAR FOCUS
+  //   setIsFocus(true); // MARCAR FOCUS
 
-    // SI HAY MONTO ALMACENADO => MOSTRAR SOLO NÚMEROS (SIN FORMATO)
-    if (storedAmount > 0) {
-      const storedAmountString: string = storedAmount.toString();
-      if (storedAmountString) {
-        setAmountFieldFormat(storedAmountString);
-      }
-      return;
-    }
+  //   // SI HAY MONTO ALMACENADO => MOSTRAR SOLO NÚMEROS (SIN FORMATO)
+  //   if (storedAmount > 0) {
+  //     const storedAmountString: string = storedAmount.toString();
+  //     if (storedAmountString) {
+  //       setAmountFieldFormat(storedAmountString);
+  //     }
+  //     return;
+  //   }
 
-    // CASO: NO COBRA PRESUPUESTO Y MONTO 0 => CAMPO VACÍO Y PASO VÁLIDO
-    if (storedBudgeSelected === 'no' && storedAmount === 0) {
-      setAmountFieldFormat('');
-      setIsStepValid(true);
-    }
-  };
+  //   // CASO: NO COBRA PRESUPUESTO Y MONTO 0 => CAMPO VACÍO Y PASO VÁLIDO
+  //   if (storedBudgeSelected === 'no' && storedAmount === 0) {
+  //     setAmountFieldFormat('');
+  //     setIsStepValid(true);
+  //   }
+  // };
 
   // EVENTO ONCHANGE DEL RADIO "REINTEGRO" EN EL PASO 3
   const onChangeIsReinsert = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -295,10 +269,8 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
 
   const contextValueStepThree: TTypeContextStepThree = {
     handleBudgeAmount,
-    onBlurAmount,
     onChangeIsBudge,
     onChangeIsReinsert,
-    onFocusAmount,
   };
 
   return <StepThreeContext.Provider value={contextValueStepThree}>{children}</StepThreeContext.Provider>;

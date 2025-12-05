@@ -11,6 +11,13 @@ export type TImageData = {
   dataUrl: string;
 };
 
+export type TImageDataStored = {
+  size: number;
+  name: string;
+  type: string;
+  idImage: TIdString,
+};
+
 export type TRoleData = {
   role: ERoles | null; 
 };

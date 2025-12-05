@@ -80,6 +80,22 @@
   display: none;
 }
 
+.form-professional__groupImagesExperiences,
+.form-groupProfile__containerImageProfile {
+  position: relative;
+  min-height: 400px;
+}
+
+.fixed-content-area {
+  min-height: 250px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+
 /* ASEGURAR QUE LOS EVENTOS DE HOVER SEAN PRECISOS 
 SOLO PARA TABLET Y ESCRITORIO (INVESTIGADO) 
 */

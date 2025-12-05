@@ -1,18 +1,44 @@
 //----------------------------------------------FUNCIONES DE PARSEOS Y FORMATO DE NUMEROS---------------------------------------//
 // FUNCION PARA PARSEAR MONTO
-// CONVERTIR A NUMERO FLOTANTE CON DECIMALES Y REEMPLAZA DE FORMA GLOBAL(ES DECIR, LA EXPREXION REGULAR INDICA RECORRER TODO EL TEXTO) UN NUMERO COMO  1000 A 1000.00
 export const parseMontoToNumber = (value: string): number => {
-  return parseFloat(value.replace(/\./g, '').replace(',', '.')) || 0;
+  const v:string = value.trim();
+
+  // SI TIENE COMA ==> LA COMA ES DECIMAL Y LOS PUNTOS SON MILES
+  if (v.includes(',')) {
+    return parseFloat(v.replace(/\./g, '').replace(',', '.')) || 0;
+  }
+
+  // SI NO HAY COMA Y HAY SOLO UN PUNTO ==> PUNTO DECIMAL.
+  const parts:string[] = v.split('.');
+  // SI LA LONGITUD ES 2 ES PORQUE SOLO HAY UN PUNTO
+  if (parts.length === 2) {
+    return parseFloat(v) || 0;
+  }
+
+  // SI HAY VARIOS PUNTOS  ==> PUNTOS DE MILES DECIMAL NO EXISTE
+  if (parts.length > 2) {
+    return parseFloat(v.replace(/\./g, '')) || 0;
+  }
+
+  // SINO GENERAL
+  return parseFloat(v) || 0;
 };
 
-// FUNCION PARA FORMATEAR VISUALMENTE COMO "10.000,00"
-export const formatMontoOnlyNumber = (value: string): string => {
-  const numericValue = typeof value === 'number' ? value : parseMontoToNumber(value); // PARSEAR EL VALOR SI NO ES TIPO NUMERO
-  if (isNaN(numericValue)) return ''; //SI EL VALOR ES NO UN NUMERO VALIDO RETORNAR CADENA VACIA
+// FUNCION PARA PARSEAR DATOS DE LA DB (FFORMATO INTERNACIONAL 1000.00)
+export const parseDbMonto = (value: string): number => {
+  return parseFloat(value) || 0;
+};
 
-  return numericValue.toLocaleString('es-ES', {
-    minimumFractionDigits: 2, //FRACCION MINIMA DE DIGITOS
-    maximumFractionDigits: 2, //FRACCION MAXIMA DE DIGITOS
+// FUNCION BASE:SIEMPRE ES es-AR
+export const formatNumberBase = (numericValue: number, style: 'decimal' | 'currency' = 'decimal', currency = 'ARS'): string => {
+  if (isNaN(numericValue)) return '';
+
+  return numericValue.toLocaleString('es-AR', {
+    // ¡Usamos SIEMPRE es-AR!
+    style: style,
+    currency: currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   });
 };
 
@@ -24,13 +50,13 @@ export const formatMontoOnlyNumber = (value: string): string => {
 // FUNCION PARA FORMATEAR CON SIMMBOLO "ARS"
 export const formatMontoWithCurrency = (value: string | number): string => {
   const numericValue = typeof value === 'number' ? value : parseMontoToNumber(value);
-  if (isNaN(numericValue)) return '';
-  return numericValue.toLocaleString('es-AR', {
-    style: 'currency',
-    currency: 'ARS',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  return formatNumberBase(numericValue, 'currency');
+};
+
+// FUNCION PARA FORMATEAR VISUALMENTE COMO "10.000,00"
+export const formatMontoOnlyNumber = (value: string | number): string => {
+  const numericValue = typeof value === 'number' ? value : parseMontoToNumber(value);
+  return formatNumberBase(numericValue, 'decimal');
 };
 
 // -----------------------AUXILIAR PARA CONVERTIR MEGABYTES A BYTES----------------------------------------//

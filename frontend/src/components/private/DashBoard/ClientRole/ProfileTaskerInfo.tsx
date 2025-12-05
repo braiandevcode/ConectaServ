@@ -3,7 +3,7 @@ import { configApiAvatarImage } from '../../../../config/configApiAvatarImage';
 import Button from '../../../Button';
 import useMain from '../../../../hooks/useMain';
 import Loader from '../../../Loader';
-import { formatMontoWithCurrency } from '../../../../utils/parsedAndFormatValuesUtils';
+import { parseDbMonto } from '../../../../utils/parsedAndFormatValuesUtils';
 import BtnBack from '../../../public/Forms/Register/UserTasker/Buttons/BtnBack';
 import { ECategoryKey } from '../../../../types/enums';
 import type { TCategoryTasker } from '../../../../types/typeCategoryTasker';
@@ -17,8 +17,6 @@ import { IoSend } from 'react-icons/io5';
 const ProfileTaskerInfo = ({ onBackToList }: iProfileInfoTaskerProps) => {
   const { selectedTaskerProfile } = useMain();
   const { HOST, QUERY_NAME, QUERY_BG_RANDOM } = configApiAvatarImage;
-
-  console.log('PRESUPUESTO: ', selectedTaskerProfile?.budget?.amountBudget);
 
   //ABREVIAR
   const C: string | null | undefined = selectedTaskerProfile?.category;
@@ -39,7 +37,7 @@ const ProfileTaskerInfo = ({ onBackToList }: iProfileInfoTaskerProps) => {
               <div className='w-full profile__imageProfile c-flex c-flex c-flex-column c-flex-items-center gap-1'>
                 <div className='w-full c-flex c-flex-column c-flex-items-center gap-1 '>
                   <div className='profile__avatar'>
-                    <img src={selectedTaskerProfile.imageProfileBase64 ?? `${HOST}${QUERY_NAME}=${selectedTaskerProfile.fullName}&${QUERY_BG_RANDOM}`} alt='avatar' />
+                    <img src={selectedTaskerProfile.imageProfileBase64 ?? `${HOST}${QUERY_NAME}=${selectedTaskerProfile.fullName}&${QUERY_BG_RANDOM}`} alt='avatar' id={selectedTaskerProfile.idImageProfile} />
                   </div>
 
                   <div className='profile__userNameAndMsg w-3/4 c-flex  c-flex-items-center c-flex-column gap-1/2'>
@@ -74,7 +72,7 @@ const ProfileTaskerInfo = ({ onBackToList }: iProfileInfoTaskerProps) => {
                 <div className='profileSection-details-budget c-flex c-flex-column gap-2'>
                   <p className='profileSection-details-budget__reinsert c-flex c-flex-column c-flex-items-center gap-1/2'>
                     <span className='profileSection-details-budget__reinsert-title'>¿Reintegro por contratación?:</span>
-                    <span className='profileSection-details-budget__reinsert-option'>{selectedTaskerProfile.budget?.reinsert === 'yes' ? 'Si' : 'No'}</span>
+                    <span className='profileSection-details-budget__reinsert-option'>{selectedTaskerProfile.budget?.reinsertSelected === 'yes' ? 'Si' : 'No'}</span>
                   </p>
 
                   <p className='profileSection-details-budget__reinsert  c-flex c-flex-column c-flex-items-center gap-1/2'>
@@ -83,7 +81,7 @@ const ProfileTaskerInfo = ({ onBackToList }: iProfileInfoTaskerProps) => {
                   </p>
                   <p className='profileSection-details-budget__price  c-flex c-flex-column c-flex-items-center gap-1/2'>
                     <span className='profileSection-details-budget__price-title'>Costo de visita para presupuesto:</span>
-                    <span className='profileSection-details-budget__price-amount'>{`${formatMontoWithCurrency(String(selectedTaskerProfile.budget?.amountBudget))}`}</span>
+                    <span className='profileSection-details-budget__price-amount'>{`$${parseDbMonto(String(selectedTaskerProfile.budget?.amount))}`}</span>
                   </p>
                 </div>
               )}
@@ -100,8 +98,8 @@ const ProfileTaskerInfo = ({ onBackToList }: iProfileInfoTaskerProps) => {
             <div className='gallery profile__imagesExperience-gallery'>
               {selectedTaskerProfile.imageExpBase64 && selectedTaskerProfile.imageExpBase64.length > 0 ? (
                 selectedTaskerProfile.imageExpBase64.map((img, i) => (
-                  <div key={i} className='gallery__item  w-full'>
-                    <img src={img} alt={`Experiencia ${i}`} className='w-full' />
+                  <div key={selectedTaskerProfile.idImageExp[i]} className='gallery__item  w-full'>
+                    <img src={img} alt={`Experiencia ${i}`} className='w-full' id={selectedTaskerProfile.idImageExp[i]}/>
                   </div>
                 ))
               ) : (

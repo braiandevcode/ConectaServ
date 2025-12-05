@@ -1,7 +1,7 @@
 import useRegisterTasker from '../../../../../hooks/useRegisterTasker';
 import useStepTwo from '../../../../../hooks/useStepTwo';
 import { EKeyDataByStep } from '../../../../../types/enums';
-import type { TImageData } from '../../../../../types/typeRegisterEndDto';
+import type { TImageDataStored } from '../../../../../types/typeRegisterEndDto';
 import BtnDeleteImage from './Buttons/BtnDeleteImage';
 
 // CSS
@@ -15,7 +15,7 @@ const ExperienceImagesPreview = () => {
   // SI NO HAY IMAGENES PROCESADAS, NO RENDERIZAR
   if (!srcVector || srcVector.length === 0) return null;
 
-  const storedImages: TImageData[] = stepData[EKeyDataByStep.TWO].imageExperienceData;
+  const storedImages: TImageDataStored[] = stepData[EKeyDataByStep.TWO].imageExperienceData;
   return (
     <>
       {storedImages.length > 0 &&
