@@ -1,4 +1,3 @@
-import type { iProfileInfoTaskerProps } from '../../../../interfaces/iProfileInfoTaskerPropos';
 import { configApiAvatarImage } from '../../../../config/configApiAvatarImage';
 import Button from '../../../Button';
 import useMain from '../../../../hooks/useMain';
@@ -7,16 +6,22 @@ import { parseDbMonto } from '../../../../utils/parsedAndFormatValuesUtils';
 import BtnBack from '../../../public/Forms/Register/UserTasker/Buttons/BtnBack';
 import { ECategoryKey } from '../../../../types/enums';
 import type { TCategoryTasker } from '../../../../types/typeCategoryTasker';
-import { Link } from 'react-router';
+import { Link, useParams, useNavigate } from 'react-router';
+import { IoSend } from 'react-icons/io5';
+import { useEffect, useRef, useState } from 'react';
+import useTaskerApi from '../../../../hooks/useTaskerApi';
 
 // CSS
 import './ProfileTaskerInfo.css';
-import { IoSend } from 'react-icons/io5';
 
 // PERFIL DE INFO DE TASKER
-const ProfileTaskerInfo = ({ onBackToList }: iProfileInfoTaskerProps) => {
-  const { selectedTaskerProfile } = useMain();
+const ProfileTaskerInfo = () => {
+  const { selectedTaskerProfile, onBackToList, accessToken, setSelectedTaskerProfile } = useMain();
+  const { getDetailsTasker } = useTaskerApi();
   const { HOST, QUERY_NAME, QUERY_BG_RANDOM } = configApiAvatarImage;
+
+  // ESTADO DE LOADING LOCAL
+  const [loadingProfileTasker, setLoadingProfileTasker] = useState<boolean>(false)
 
   //ABREVIAR
   const C: string | null | undefined = selectedTaskerProfile?.category;
@@ -24,13 +29,35 @@ const ProfileTaskerInfo = ({ onBackToList }: iProfileInfoTaskerProps) => {
   // DEPENDIENDO DE CATEGORIA PASAR A FORMATO LEGIBLE AL USUARIO FINAL
   const category: TCategoryTasker = C === ECategoryKey.REPAIR ? 'Reparación y Mantenimiento' : C === ECategoryKey.GARDEN ? 'Jardinería' : C === ECategoryKey.MOVE ? 'Mudanzas y Transportes' : undefined;
 
+  // USEREF
+  const fetchedRef = useRef<boolean>(false);
+
+  const navigate = useNavigate(); //==> NAVIGATE DE REACT
+  const { idTasker } = useParams(); //LEER ID EN LA URL SI RECARGA EN MISMA RUTA
+  
+  // EFECTO PARA TRAER DATOS UN TASKER ESPECIFICO AL MONTARSE COMPONENTE
+  useEffect(() => {
+    if (!accessToken || fetchedRef.current || !idTasker) return;
+    fetchedRef.current = true; //SI YA HIZO FETCH
+    const fetchData = async () => {
+      setLoadingProfileTasker(true); //MOSTAR LOADER LOCAL
+      const tasker = await getDetailsTasker({ accessToken, idTasker });
+      setLoadingProfileTasker(false);// QUITAR LOADER LOCAL
+      if(!tasker) return;
+      setSelectedTaskerProfile(tasker);
+      navigate(`/services/tasker/${idTasker}`);
+    };
+
+    fetchData();
+  }, [accessToken, idTasker]); // ==> DEPENDEN DEL ACCESSTOKEN
+
   return (
     <>
-      {!selectedTaskerProfile ? (
+      {!selectedTaskerProfile || loadingProfileTasker ? (
         <Loader />
       ) : (
         <div className='profile c-flex c-flex-column mb-2 p-1 w-full'>
-          <BtnBack handleBtnBack={onBackToList ? onBackToList : () => {}} />
+          <BtnBack handleBtnBack={onBackToList} />
 
           <div className='profile__header c-flex c-flex-justify-between c-flex-items-center c-flex-wrap gap-1'>
             <div className='profile__info w-full c-flex c-flex-items-center c-flex-column'>
@@ -99,7 +126,7 @@ const ProfileTaskerInfo = ({ onBackToList }: iProfileInfoTaskerProps) => {
               {selectedTaskerProfile.imageExpBase64 && selectedTaskerProfile.imageExpBase64.length > 0 ? (
                 selectedTaskerProfile.imageExpBase64.map((img, i) => (
                   <div key={selectedTaskerProfile.idImageExp[i]} className='gallery__item  w-full'>
-                    <img src={img} alt={`Experiencia ${i}`} className='w-full' id={selectedTaskerProfile.idImageExp[i]}/>
+                    <img src={img} alt={`Experiencia ${i}`} className='w-full' id={selectedTaskerProfile.idImageExp[i]} />
                   </div>
                 ))
               ) : (

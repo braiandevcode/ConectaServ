@@ -14,6 +14,7 @@ export type TMain = TRole & {
   setUserData: Dispatch<SetStateAction<TDataPayloadUser| null>>,
   setTaskerData:Dispatch<SetStateAction<TActiveTaskerUser[]>>
   setSelectedTaskerProfile: Dispatch<SetStateAction<TDataPayloadTaskerSingle | undefined>>;
+  onBackToList: () => void;
   selectedTaskerProfile:TDataPayloadTaskerSingle | undefined;
   taskerData:TActiveTaskerUser[], 
   userData:TDataPayloadUser | null,

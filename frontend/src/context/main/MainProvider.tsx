@@ -36,7 +36,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
 
   // ------------------HOOKS DE REACT-------------------------//
   const { pathname, state } = useLocation(); //==> LOCATION DE RACT
-  const navigate = useNavigate(); //==> NAVIGATE DE RACT
+  const navigate = useNavigate(); //==> NAVIGATE DE REACT
   const [loading, setLoading] = useState(false); // ==> BANDERA DEL PROCESO DE LOADER
   const [userData, setUserData] = useState<TDataPayloadUser | null>(null); //DATOS DE USUARIO LOGEADO
   const [taskerData, setTaskerData] = useState<TActiveTaskerUser[]>([]); // DATOS DE TASKERS EXCLUIDO USUARIO LOGEADO
@@ -86,25 +86,15 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
 
   // TRAER DATOS NI BIEN SE LOGEA USUARIO
   useEffect(() => {
-    console.log('TOKEN DE ACCESO: ',accessToken);
-    console.log('ES FETCHED ANTES? ',fetchedRef.current);
+    if (!accessToken || fetchedRef.current) return; // SI NO HAY TOKEN Y SI EL REF YA ES TRUE
 
-    
+    fetchedRef.current = true; //PASAR A TRUE ==> YA HIZO EL FETCH UNA VEZ, QUE NO LO HAGA DE NUEVO
+    const fetchData = async () => {
+      const data: TDataPayloadUser = await getDataUser({ accessToken });
+      setUserData(data);
+    };
 
-    // if (!accessToken || fetchedRef.current) return; // SI NO HAY TOKEN Y SI EL REF YA ES TRUE
-
-    if(accessToken){
-      // fetchedRef.current = true; //PASAR A TRUE
-  
-        console.log('ES FETCHED DESPUES? ',fetchedRef.current);
-      const fetchData = async () => {
-        const data:TDataPayloadUser = await getDataUser({ accessToken });
-        setUserData(data);
-      };
-  
-      fetchData();
-    }
-
+    fetchData();
   }, [accessToken]);
 
   useEffect(() => {
@@ -117,8 +107,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     // SI ESTA EN TRUE
     if (state?.showLogin) {
       openGlobalModal(EModalGlobalType.MODAL_LOGIN, clearTextsLogin); // ==> MOSTRAR MODAL
-
-      // LIMPIAR ESTADO INMEDIATAMENTE
+      // LIMPIO ESTADO INMEDIATAMENTE
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [state, openGlobalModal]);
@@ -163,6 +152,12 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     }
   };
+
+  const onBackToList = () => {
+    setSelectedTaskerProfile(undefined);
+    navigate('/services/all', { replace: true });
+  };
+
   // MANEJA TODA LA LOGICA DE FORM + ROLE + NAVEGACION
   const handleRoleAndFormNavigation = async () => {
     // LIMPIAR PERSISTENCIA SI ES NECESARIO
@@ -228,6 +223,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     setUserData,
     setTaskerData,
     setSelectedTaskerProfile,
+    onBackToList,
     selectedTaskerProfile,
     taskerData,
     userData,
