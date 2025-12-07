@@ -56,7 +56,7 @@ const useTaskerApi = () => {
       // TASKERS CON IMAGENES
       const taskerSingleWithImages: TDataPayloadTaskerSingle = await loadImageTaskerSingle<TDataPayloadTaskerSingle>(tasker, accessToken);
 
-      const taskerInfo = {...tasker, ...taskerSingleWithImages  } as TDataPayloadTaskerSingle;  
+      const taskerInfo: TDataPayloadTaskerSingle = {...tasker, ...taskerSingleWithImages  };  
       return taskerInfo;
       
     } catch (error) {

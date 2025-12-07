@@ -16,6 +16,7 @@ import Profile from './routes/ProfileTasker';
 import AllSevices from './components/private/DashBoard/AllServices';
 import NotFound from './components/NotFound';
 import Chat from './components/private/Chat/Chat';
+import ProfileTaskerInfo from './components/private/DashBoard/ClientRole/ProfileTaskerInfo';
 // COMPONENTE APP PRINCIPAL
 export default function App() {
   const [initialLoading, setInitialLoading] = useState(true);
@@ -80,6 +81,7 @@ export default function App() {
             }>
             {/* RUTAS HIJAS */}
             <Route path='services/all' element={<AllSevices />} />
+            <Route path='services/tasker/:idTasker' element={<ProfileTaskerInfo />} />
             <Route path='*' element={<NotFound />}></Route>
           </Route>
           <Route
