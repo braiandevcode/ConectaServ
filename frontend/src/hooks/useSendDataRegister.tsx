@@ -11,7 +11,7 @@ import useUserApi from './useUserApi';
 import useFormVerifyEmailCode from './useFormVerifyEmailCode';
 import type { TFormRole } from '../types/typeFormRole';
 import type { ITaskerData } from '../interfaces/iTaskerData';
-import type { TImageData, TImageDataStored } from '../types/typeRegisterEndDto';
+import type {TImageDataStored } from '../types/typeRegisterEndDto';
 
 // HOOK QUE SE ENCARGA DEL PROCESO DE ENVIO DE DATOS AL BACKEND
 const useSendDataRegister = () => {
@@ -60,7 +60,7 @@ const useSendDataRegister = () => {
    const dataExperienceOutId: Omit<TImageDataStored, "idImage"> [] = imageExperienceData.reduce((vectorAcc, { idImage, ...rest }): Omit<TImageDataStored, 'idImage'>[] => {
       vectorAcc.push(rest);
       return vectorAcc
-    },[] as Omit<TImageData, 'idImage'>[]);
+    },[] as Omit<TImageDataStored, 'idImage'>[]);
 
  
     // VERIFICAR EL ROLE QUE EL USUARIO ELIGUIO PARA EL REGISTRO Y GUARDARLO
