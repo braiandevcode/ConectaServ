@@ -11,7 +11,7 @@ import useUserApi from './useUserApi';
 import useFormVerifyEmailCode from './useFormVerifyEmailCode';
 import type { TFormRole } from '../types/typeFormRole';
 import type { ITaskerData } from '../interfaces/iTaskerData';
-import type { TImageData } from '../types/typeRegisterEndDto';
+import type { TImageData, TImageDataStored } from '../types/typeRegisterEndDto';
 
 // HOOK QUE SE ENCARGA DEL PROCESO DE ENVIO DE DATOS AL BACKEND
 const useSendDataRegister = () => {
@@ -48,7 +48,7 @@ const useSendDataRegister = () => {
     const { valueSelected: valueSelectedAlias, ...res } = stepData[EKeyDataByStep.ONE];
     const {imageExperienceData, imageProfileData } = stepData[EKeyDataByStep.TWO];
 
-    let dataProfileOutId:Omit<TImageData, 'idImage'> | null = null;
+    let dataProfileOutId:Omit<TImageDataStored, 'idImage'> | null = null;
 
     // SI TRAE DATOS DE IMAGEN DE PERFIL
     if(imageProfileData){
@@ -57,7 +57,7 @@ const useSendDataRegister = () => {
     }
 
     // PREGUNTO SI VIENE CON ELEMENTOS Y SI DENTRO DE CADA OBJETO NO ESTA VACIO
-   const dataExperienceOutId: Omit<TImageData, "idImage"> [] = imageExperienceData.reduce((vectorAcc, { idImage, ...rest }): Omit<TImageData, 'idImage'>[] => {
+   const dataExperienceOutId: Omit<TImageDataStored, "idImage"> [] = imageExperienceData.reduce((vectorAcc, { idImage, ...rest }): Omit<TImageDataStored, 'idImage'>[] => {
       vectorAcc.push(rest);
       return vectorAcc
     },[] as Omit<TImageData, 'idImage'>[]);

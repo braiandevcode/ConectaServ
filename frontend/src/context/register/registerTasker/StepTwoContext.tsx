@@ -11,6 +11,10 @@ const defaultStepTwoContext: TTypeContextStepTwo = {
   setSrc: () => {},
   setSrcVector: () => {},
   handleDescriptionBlur: () => {},
+  setLoadImg: () => {},
+  setLoadImgExp: () => {},
+  loadImg: false,
+  loadImgExp:false,
   src: '',
   srcVector: [],
 };

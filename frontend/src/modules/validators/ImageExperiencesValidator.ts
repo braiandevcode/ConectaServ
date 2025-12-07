@@ -1,11 +1,11 @@
 import type { IValidator } from '../../interfaces/iValidator.js';
-import type { TImageData } from '../../types/typeRegisterEndDto.js';
+import type { TImageDataStored } from '../../types/typeRegisterEndDto.js';
 import type { TFieldState } from '../../types/typeStateFields.js';
 import { convertBytes } from '../../utils/parsedAndFormatValuesUtils.js';
 
 // VALIDACION ENTRADA IMAGEN DE EXPERIENCIAS
 export default class ImageExperiencesValidator implements IValidator {
-  public validate(files: FileList | TImageData[] | null, existingCount: number = 0, existingTotalSize: number = 0): TFieldState {
+  public validate(files: FileList | TImageDataStored[] | null, existingCount: number = 0, existingTotalSize: number = 0): TFieldState {
     const allowedTypes: string[] = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     const maxSizeMB: number = 5;
     const maxImages: number = 10;
