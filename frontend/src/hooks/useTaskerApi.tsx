@@ -27,6 +27,7 @@ const useTaskerApi = () => {
         if (t.profileImageUrl) {
           const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${t.profileImageUrl}`, {
             headers: { Authorization: `Bearer ${accessToken}` },
+            credentials:'include'
           });
 
           // SI  VIENE IMAGEN Y SU LONGITUD ES MAYOR QUE CERO
@@ -47,6 +48,7 @@ const useTaskerApi = () => {
       const tasker = await apiRequest<TDataPayloadTaskerSingle | null>(`${TASKER_INFO}/${idTasker}/details`, {
         method: 'GET',
         headers: { Authorization: `Bearer ${accessToken}` },
+        credentials:'include'
       });
 
       if (!tasker) return null;

@@ -58,7 +58,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
       // 14 MINUTOS EN MS ANTES DE EXPIRO DEL ACCESS TOKEN
       const REFRESH_INTERVAL: number = 14 * 60 * 1000;
 
-      // SI YA EXISTE UN INTERVAL, LO LIMPIAMOS
+      // SI YA EXISTE UN INTERVAL
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
@@ -86,16 +86,25 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
 
   // TRAER DATOS NI BIEN SE LOGEA USUARIO
   useEffect(() => {
-    if (!accessToken || fetchedRef.current) return; // SI NO HAY TOKEN Y SI EL REF YA ES TRUE
+    console.log('TOKEN DE ACCESO: ',accessToken);
+    console.log('ES FETCHED ANTES? ',fetchedRef.current);
 
-    fetchedRef.current = true; //PASAR A TRUE
+    
 
-    const fetchData = async () => {
-      const data = await getDataUser({ accessToken });
-      setUserData(data);
-    };
+    // if (!accessToken || fetchedRef.current) return; // SI NO HAY TOKEN Y SI EL REF YA ES TRUE
 
-    fetchData();
+    if(accessToken){
+      // fetchedRef.current = true; //PASAR A TRUE
+  
+        console.log('ES FETCHED DESPUES? ',fetchedRef.current);
+      const fetchData = async () => {
+        const data:TDataPayloadUser = await getDataUser({ accessToken });
+        setUserData(data);
+      };
+  
+      fetchData();
+    }
+
   }, [accessToken]);
 
   useEffect(() => {
