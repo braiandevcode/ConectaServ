@@ -11,6 +11,10 @@ export type TRegister = Omit<TStepFourProps, 'handleChangeLocation' | 'handleCon
   setTerms: Dispatch<SetStateAction<boolean>>;
   setIsSending: Dispatch<SetStateAction<boolean>>;
   setIsSuccefullyVerified: Dispatch<SetStateAction<boolean>>;
+  setTime: Dispatch<SetStateAction<iTimeExpire>>;
+  setExpiresAt: Dispatch<SetStateAction<number | null>>
+  setResendEmail: Dispatch<SetStateAction<iEmailUser>>;
+  expiresAt:number | null;
   isSuccefullyVerified: boolean; // INDICA SI LA VALIDACION DEL CODIGO FUE EXITOSA O NO
   isSending: boolean;
   interactedPassword: boolean;
@@ -19,8 +23,4 @@ export type TRegister = Omit<TStepFourProps, 'handleChangeLocation' | 'handleCon
   resendEmail: iEmailUser;
   timerRef: RefObject<ReturnType<typeof setInterval> | null>;
   time: iTimeExpire;
-  setTime: Dispatch<SetStateAction<iTimeExpire>>;
-  expiresAt:number | null;
-  setExpiresAt: Dispatch<SetStateAction<number | null>>
-  setResendEmail: Dispatch<SetStateAction<iEmailUser>>;
 };

@@ -201,55 +201,6 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  // // EVENTO ONBLUR DEL CAMPO MONTO EN EL PASO 3
-  // const onBlurAmount = () => {
-  //   // SI EL MONTO NO ES VÁLIDO => MANTENER FOCUS Y NO FORMATEAR
-  //   if (!formState.amountBudge.isValid) {
-  //     setIsFocus(true);
-  //     return;
-  //   }
-
-  //   setIsFocus(false); // QUITAR FOCUS
-
-  //   // SI HAY MONTO ALMACENADO
-  //   if (storedAmount > 0) {
-  //     const storedMountString: string = storedAmount.toString();
-
-  //     // FORMATEAR MONTO CON MONEDA PARA MOSTRAR EN INPUT
-  //     if (storedMountString) {
-  //       setAmountFieldFormat(formatMontoWithCurrency(storedMountString));
-  //     } else {
-  //       setAmountFieldFormat(''); // CAMPO VACÍO SI NO HAY MONTO
-  //     }
-  //   }
-  // };
-
-  // // EVENTO ONFOCUS DEL CAMPO MONTO EN EL PASO 3
-  // const onFocusAmount = () => {
-  //   // SI EL MONTO NO ES VÁLIDO => MANTENER FOCUS Y NO FORMATEAR
-  //   if (!formState.amountBudge.isValid) {
-  //     setIsFocus(true);
-  //     return;
-  //   }
-
-  //   setIsFocus(true); // MARCAR FOCUS
-
-  //   // SI HAY MONTO ALMACENADO => MOSTRAR SOLO NÚMEROS (SIN FORMATO)
-  //   if (storedAmount > 0) {
-  //     const storedAmountString: string = storedAmount.toString();
-  //     if (storedAmountString) {
-  //       setAmountFieldFormat(storedAmountString);
-  //     }
-  //     return;
-  //   }
-
-  //   // CASO: NO COBRA PRESUPUESTO Y MONTO 0 => CAMPO VACÍO Y PASO VÁLIDO
-  //   if (storedBudgeSelected === 'no' && storedAmount === 0) {
-  //     setAmountFieldFormat('');
-  //     setIsStepValid(true);
-  //   }
-  // };
-
   // EVENTO ONCHANGE DEL RADIO "REINTEGRO" EN EL PASO 3
   const onChangeIsReinsert = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value as TYesOrNo; // VALOR SELECCIONADO ("yes" O "no")

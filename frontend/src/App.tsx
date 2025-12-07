@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router';
-// import LoginModal from './components/public/Modals/ModalLogin';
 import MainLayout from './routes/MainLayout';
 import PrivacyPolicy from './components/public/PrivacyPolicy';
 import TermsAndConditions from './components/public/TermsAndConditions';
@@ -12,7 +11,6 @@ import RegisterClient from './components/public/Forms/Register/UserClient/Regist
 import RegisterTasker from './components/public/Forms/Register/UserTasker/RegisterTasker';
 import RegisterTaskerLayout from './routes/RegisterTaskerLayout';
 import Services from './pages/Services';
-// import InfoTasker from './components/public/InfoTasker';
 import ProtectedRoute from './components/private/ProtectedRoute';
 import Profile from './routes/ProfileTasker';
 import AllSevices from './components/private/DashBoard/AllServices';
