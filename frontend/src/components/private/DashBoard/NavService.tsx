@@ -7,7 +7,7 @@ const NavService= () => {
     return (
         <>
         <div>
-           <Link to={'/client/services'} onClick={() => scrolledTop()} className="service__link c-flex c-flex-items-center gap-1/2"><FaBriefcase/>Servicios</Link>
+           <Link to={'/client/services'} onClick={() => scrolledTop()} className="service__link c-flex c-flex-items-center gap-1/2"><FaBriefcase/><p>Servicios</p></Link>
         </div>
         </>
     )

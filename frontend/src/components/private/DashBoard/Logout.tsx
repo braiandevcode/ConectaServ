@@ -18,7 +18,7 @@ const LinkLogout = () => {
 
     return (
         <>
-            <div className='cursor-pointer c-flex c-flex-items-center gap-1/2' onClick={logoutSession}><LuLogOut size={20} />Salir</div>
+            <div className='cursor-pointer c-flex c-flex-items-center gap-1/2' onClick={logoutSession}><LuLogOut color={'#1e5da3'} size={20} />Salir</div>
         </>
     )
 }

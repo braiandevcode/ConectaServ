@@ -1,3 +1,9 @@
 .service__link{
-    color: #1e5ca3b2;
+    color: var(--bg-secondary);
+    text-decoration: none;
+}
+
+.service__link > p{
+    font-weight: 500;
+    color: var(--text-color-primary);
 }

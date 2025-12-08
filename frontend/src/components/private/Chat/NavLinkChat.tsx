@@ -12,7 +12,7 @@ const NavLinkChats = () => {
   return (
     <>
       <Link to={`${role}/to/chats`} onClick={() => scrolledTop()}>
-        <IoChatbubbles size={20} className='btn__chats cursor-pointer' />
+        <IoChatbubbles color={'#1e5da3'} size={20} className='btn__chats cursor-pointer' />
       </Link>
     </>
   );

@@ -10,7 +10,7 @@ const NavProfile = () => {
       <div>
         <Link to={'/tasker/profile'} className='profile__link  c-flex c-flex-items-center gap-1/2'>
           <FaUser />
-          Perfil
+          <p>Perfil</p>
         </Link>
       </div>
     </>

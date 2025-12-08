@@ -20,7 +20,6 @@ const useHeader = () => {
   //------------------------CUSTOM HOOOKS--------------------------------//
   const { openGlobalModal, isGlobalModalOpen, setErrorText, setPasswordLogin } = useGlobalModal(); //HOOK QUE USA CONTEXTO DE MODAL GLOBAL
   const { isAuth, userData } = useMain(); //HOOK QUE USA CONTEXTO DEL MAIN
-
   const { setUserName } = useLogin(); //HOOO QUE USA CONTEXTO LOGIN
 
   // -----------------ESTADOS-------------------------------------------//
@@ -52,9 +51,9 @@ const useHeader = () => {
 
   // EFECTO PARA CONTROLAR CUANDO SE ABRE UN MODAL GLOBAL
   useEffect(() => {
-    if(!isGlobalModalOpen) return; //SI EL GLOBAL ESTA CERRADO ESTE NO EJECUTA
+    if (!isGlobalModalOpen) return; //SI EL GLOBAL ESTA CERRADO ESTE NO EJECUTA
     // SINO VUELVE A ALTERNAR AL ESTADO  DEL isMobileMenuOpen
-    setIsMobileMenuOpen(!isGlobalModalOpen)
+    setIsMobileMenuOpen(!isGlobalModalOpen);
   }, [isGlobalModalOpen]);
 
   /*
@@ -96,18 +95,18 @@ const useHeader = () => {
       component: () => (
         <div className='w-full c-flex c-flex-items-center c-flex-justify-between'>
           <button className='menu-toggle' onClick={() => setMenuOpen(true)}>
-            <FaList />
+            <FaList color={'#1e5da3'} />
           </button>
 
           <div className='c-flex c-flex-items-center gap-2'>
-            {pathname !== '/tasker/profile' && <NavProfile />}
-            <NavLinkChats />
             <NavCategory menuChildOpen={menuOpen} />
-            {pathname !== '/tasker/profile' && pathname !== '/' && (
+            {pathname !== '/tasker/profile' && <NavProfile />}
+            {pathname === '/tasker/profile' && (
               <>
-                <h3 className='c-flex c-flex-items-center gap-1/2'>
-                  <FaUser /> {userData?.userName}
-                </h3>
+                <p className='c-flex c-flex-items-center gap-1/2'>
+                  <FaUser color={'#1e5da3'}/> {userData?.userName}
+                </p>
+                <NavLinkChats />
               </>
             )}
             <NavLogout />
@@ -122,16 +121,20 @@ const useHeader = () => {
       component: () => (
         <div className='w-full c-flex c-flex-items-center c-flex-justify-between'>
           <button className='menu-toggle' onClick={() => setMenuOpen(true)}>
-            <FaList />
+            <FaList color={'#1e5da3'}/>
           </button>
 
           <div className='c-flex c-flex-items-center gap-2'>
-            <h3 className='c-flex c-flex-items-center gap-1/2'>
-              <FaUser /> {userData?.userName}
-            </h3>
-            <NavLinkChats />
             <NavCategory menuChildOpen={menuOpen} />
             {pathname !== '/client/services' && <NavService />}
+            {pathname === '/client/services' && (
+              <>
+                <p className='c-flex c-flex-items-center gap-1/2'>
+                  <FaUser color={'#1e5da3'} /> {userData?.userName}
+                </p>
+                <NavLinkChats />
+              </>
+            )}
             <NavLogout />
           </div>
         </div>
