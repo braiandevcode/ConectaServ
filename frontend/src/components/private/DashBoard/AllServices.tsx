@@ -8,6 +8,11 @@ import Loader from '../../Loader';
 import type { TActiveTaskerUser } from '../../../types/typeActiveTaskUser';
 import type { TDataPayloadTaskerSingle } from '../../../types/typeDataPayloadTaskerSingle';
 import LoaderBtn from '../../LoaderBtn';
+import { ECategoryKey, EYesOrNo } from '../../../types/enums';
+
+// CSS
+import './AllServices.css';
+import { valueCategoryUI } from '../../../utils/valueCategoryUI';
 
 // TODOS LOS SERVICIOS
 const AllSevices = () => {
@@ -71,7 +76,7 @@ const AllSevices = () => {
     setLoadingTaskerId(null);
     if (!tasker) return;
     setSelectedTaskerProfile(tasker);
-    navigate(`/services/tasker/${tasker.taskerId}`);
+    navigate(`/client/services/tasker/${tasker.taskerId}`);
   };
 
   return (
@@ -146,7 +151,26 @@ const AllSevices = () => {
                       <img src={service.imageProfileBase64 ?? `${HOST}${QUERY_NAME}=${service.fullName}&${QUERY_BG_RANDOM}`} className='card__img' alt={`Imagen de perfil de ${service.fullName}`} />
                       <div className='card__info'>
                         <h3>{service.fullName}</h3>
-                        <p>{service.roles.map((r) => r.nameRole).join(', ')}</p>
+                        {service.category === ECategoryKey.REPAIR ? (
+                          <div className='c-flex c-flex-items-center c-flex-column gap-1/2'>
+                            <div className='c-flex c-flex-items-center gap-1/2'>
+                            <p>Tasker</p>
+                            <small>-</small>
+                            <p className='card__text-budget'>{`${service.budget?.budgeSelected === EYesOrNo.YES ? 'Con Presupuesto' : 'Sin Presupuesto'}`}</p>
+                            </div>
+                            <div>
+                              <p className='card__text-category'>{service.category ? valueCategoryUI(service.category) : 'Sin categoría' }</p>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className='c-flex c-flex-items-center gap-1/2'>
+                            <p>Tasker</p>
+                            <small>-</small>
+                            <div>
+                              <p className='card__text-category'>{service.category ? valueCategoryUI(service.category) : 'Sin categoría' }</p>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className='card__description'>

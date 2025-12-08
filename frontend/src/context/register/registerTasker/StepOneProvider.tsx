@@ -1,20 +1,24 @@
 import React, { useEffect, useRef, type ChangeEvent } from 'react';
 import { ECategoryKey, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../../types/enums';
 import { StepOneContext } from './StepOneContext';
-import useRegisterPro from '../../../hooks/useRegisterTasker';
+import useRegisterTasker from '../../../hooks/useRegisterTasker';
 import SelectedValidator from '../../../modules/validators/SelectedValidator';
 import { useVerifyGroup } from '../../../hooks/useVerifyGroup';
 import type { TCategoryKey } from '../../../types/typeCategory';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TEntitie } from '../../../types/typeOptionsWork';
 import type { TTypeContextStepOne } from '../../../types/typeContextStepOne';
-
+import useTasker from '../../../hooks/useTasker';
 
 // PROVIDER PARA EL PASO  ==> 1
 const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
   const selectedCategoryValidator: SelectedValidator = new SelectedValidator(); //==> INSTANCIAR VALIDADOR DE SELECT
 
-  const { hasBudge, hasWorkArea, setStepData, stepData, setIsStepValid, setFormState, setHasInteracted, setValueSelected, setHasBudge, setHasWorkArea, setIsResetDetailsWork, validateCurrentStep } = useRegisterPro();
+  // CUSTOM HOOK QUE USA CONTEXTO DE TASKER GENERAL
+  const { setStepData, stepData, setFormState, setIsStepValid } = useTasker();
+
+  // CUSTOM HOOK QUE USA CONTEXTO DE REGISTRO DE TASKERS
+  const { hasBudge, hasWorkArea, setHasInteracted, setValueSelected, setHasBudge, setHasWorkArea, setIsResetDetailsWork, validateCurrentStep } = useRegisterTasker();
   const { verifyGroup } = useVerifyGroup(); //HOOK PARA MANEJAR LOGICA DE ELECCION DE DETALLES DE TRABAJO
 
   const titleRef = useRef<HTMLSelectElement>(null); // ==> REF PARA ACCEDER AL VALOR ACTUAL DE ELEMENTOS SELECT DEL DOM
@@ -42,7 +46,7 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
 
   // EFECTO PARA OBSERVAR SI CONTIENE O NO GRUPO CONTEXT Y REVALIDAR
   useEffect(() => {
-    // SI NO HAY GRUO DE CHECKS DE CONTEXTO (HABITOS)
+    // SI NO HAY GRUPO DE CHECKS DE CONTEXTO (HABITOS)
     if (!hasWorkArea) {
       // SETEAR DATA GLOBAL EN STORAGE
       setStepData((prev) => {
@@ -86,8 +90,8 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
       ...prev,
       [EKeyDataByStep.ONE]: {
         ...prev[EKeyDataByStep.ONE],
-        categoryData:{
-          category: value
+        categoryData: {
+          category: value,
         },
         valueSelected: selectedOptionText,
       },
@@ -98,22 +102,24 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
   //HANDLER DE EVENTO CHANGE CHECKBOXES
   // MANEJA EL CAMBIO DE LOS CHECKBOXES EN LOS DIFERENTES GRUPOS (service, context, day, hour)
   // ACTUALIZA EL ESTADO CORRESPONDIENTE AGREGANDO O REMOVIENDO EL VALOR SEGUN SI ESTA CHECKEADO O NO
-  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>, entitie:TEntitie) => {
+  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>, entitie: TEntitie) => {
     setIsResetDetailsWork(false); //NO RESETEAR
     const updatedValues: string[] = verifyGroup({ e, entitie }); //==> INVOCAR FUNCION DE HOOK PARA VERFICAR CHECKSBOXES
 
     // ----------------------VALIDACION INSTANTANEA-----------------------//
     // ARMAR LISTA DE GRUPOS A VALIDAR
-    const groups = [entitie === 'serviceData' ? updatedValues : (stepData[EKeyDataByStep.ONE].serviceData['service'] ?? []), entitie === 'dayData' ? updatedValues : (stepData[EKeyDataByStep.ONE].dayData['day'] ?? []), entitie === 'hourData' ? updatedValues : (stepData[EKeyDataByStep.ONE].hourData['hour'] ?? [])];
+    const groups = [entitie === 'serviceData' ? updatedValues : stepData[EKeyDataByStep.ONE].serviceData['service'] ?? [], entitie === 'dayData' ? updatedValues : stepData[EKeyDataByStep.ONE].dayData['day'] ?? [], entitie === 'hourData' ? updatedValues : stepData[EKeyDataByStep.ONE].hourData['hour'] ?? []];
 
-    // AGREGAR context[] SOLO SI EXISTE
+    // // AGREGAR workArea[] SOLO SI EXISTE
     if (hasWorkArea) {
-      groups.push(entitie === 'workAreaData' ? updatedValues : (stepData[EKeyDataByStep.ONE]?.workAreaData?.workArea ?? []));
+      groups.push(entitie === 'workAreaData' ? updatedValues : stepData[EKeyDataByStep.ONE].workAreaData?.workArea ?? []);
     }
 
     // VALIDAR QUE TODOS LOS GRUPOS TENGAN AL MENOS UN CHECK
     const isValidGroups = groups.every((arr) => arr.length > 0);
     setIsStepValid(isValidGroups); // ACTUALIZA VALIDACION DEL PASO INSTANTANEAMENTE
+
+    console.log((isValidGroups));
   };
 
   const contextStepOneValue: TTypeContextStepOne = {

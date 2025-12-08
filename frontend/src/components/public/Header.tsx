@@ -4,6 +4,7 @@ import useHeader from '../../hooks/useHeader';
 
 // CSS
 import './Header.css';
+import scrolledTop from '../../utils/scrollTop';
 const Header = () => {
   const { ComponentToRender } = useHeader(); // CUSTOM HOOK DEL HEADER
 
@@ -11,7 +12,7 @@ const Header = () => {
     <header className='w-full header mb-2'>
       <div className='header__content c-flex c-flex-items-center c-flex-justify-between'>
         <div className='card-logo'>
-          <Link to='/' className='card-logo__logo'>
+          <Link to='/' onClick={() => scrolledTop()} className='card-logo__logo'>
             <div className='card-logo__icon'>
               <FaHandsHelping />
             </div>

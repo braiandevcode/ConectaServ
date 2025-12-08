@@ -1,6 +1,5 @@
 import type React from 'react';
-import { useEffect } from 'react';
-import useRegisterPro from '../../../hooks/useRegisterTasker';
+import { useEffect, useRef } from 'react';
 import { StepThreeContext } from './StepThreeContext';
 import { EKeyDataByStep } from '../../../types/enums';
 import BudgeValidator from '../../../modules/validators/BudgeValidator';
@@ -8,17 +7,31 @@ import type { TYesOrNo } from '../../../types/typeRadioYesOrNo';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TTypeContextStepThree } from '../../../types/typeContextStepThree';
 import type { TStepDataTasker } from '../../../types/typeStepData';
+import useTasker from '../../../hooks/useTasker';
+import useRegisterTasker from '../../../hooks/useRegisterTasker';
 
 // PROVIDER PASO TRES
 const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
   const budgeValidator: BudgeValidator = new BudgeValidator(); // INSTANCIA VALIDADOR DE MONTO
+  
+  // CUSTOM HOOK QUE USA CONTEXTO DE TASKER GENERAL
+  const { stepData, setStepData, setFormState, setIsStepValid } = useTasker();
+  
   // HOOK QUE USA CONTEXTO A NIVEL REGISTRO DE PROFESIONAL
-  const {  stepData, setStepData , amountFieldFormat, step, validateCurrentStep, setIsFocus, setIsBudgeMountDisabled, setIsReinsertDisabled, setAmountFieldFormat, setFormState, setIsStepValid } = useRegisterPro();
-
+  const { amountFieldFormat, step, isBudgeMountDisabled, validateCurrentStep, setIsBudgeMountDisabled, setIsReinsertDisabled, setAmountFieldFormat } = useRegisterTasker();
+  
   const storedAmount: number = stepData[EKeyDataByStep.THREE]?.amountBudge ?? 0;
   const storedBudgeSelected: TYesOrNo = stepData[EKeyDataByStep.THREE]?.budgeSelected ?? 'no';
-
+  
+  const amountRef = useRef<HTMLInputElement | null>(null); // REF
   // ---------------------------------------------------EFECTOS----------------------------------------------------------------//
+
+  // EFECTO SOLO PARA FOCO EN INPUT
+  useEffect(() => {
+    if (!isBudgeMountDisabled) {
+      amountRef.current?.focus();
+    }
+  }, [isBudgeMountDisabled]);
 
   // FORMATEAR VISUALMENTE EL CAMPO DEL MONTO Y REVALIDAR EL PASO
   useEffect(() => {
@@ -39,9 +52,8 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    setIsBudgeMountDisabled(false); 
-  }, [step,  storedBudgeSelected, storedAmount]); // DEPENDENCIAS: PASO, FOCO Y SELECCIÓN DE PRESUPUESTO
-
+    setIsBudgeMountDisabled(false);
+  }, [step, storedBudgeSelected, storedAmount]); // DEPENDENCIAS: PASO, FOCO Y SELECCIÓN DE PRESUPUESTO
 
   //-----------------------------------------------EVENTOS -------------------------------------//
 
@@ -58,7 +70,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
             ...prev[EKeyDataByStep.THREE],
             budgeSelected: value,
           },
-        }) as TStepDataTasker,
+        } as TStepDataTasker),
     );
 
     // // DETERMINAR SI EL PASO ES VALIDO SEGUN SELECCION Y MONTO
@@ -83,7 +95,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
               amountBudge: 0, //PISO CON VALOR NUEVO EL PRESUPUESTO
               reinsert: 'no', //PISO CON VALOR NUEVO EL REINTEGRO
             },
-          }) as TStepDataTasker,
+          } as TStepDataTasker),
       );
 
       // RESETEAR VALIDACION LOCAL DEL CAMPO MONTO
@@ -115,7 +127,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
               ...prev[EKeyDataByStep.THREE],
               amountBudge: parseFloat(result.value as string),
             },
-          }) as TStepDataTasker,
+          } as TStepDataTasker),
       );
     }
 
@@ -132,7 +144,6 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
 
     // ACTUALIZAR INPUT VISUAL CON EL VALOR ORIGINAL
     setAmountFieldFormat(val);
-    setIsFocus(true); // MARCAR FOCUS PORQUE EL USUARIO ESTÁ ESCRIBIENDO
 
     // SI EL USUARIO COBRA PRESUPUESTO ("yes")
     if (storedBudgeSelected === 'yes') {
@@ -155,7 +166,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
                 ...prev[EKeyDataByStep.THREE],
                 amountBudge: parseFloat(result.value as string),
               },
-            }) as TStepDataTasker,
+            } as TStepDataTasker),
         );
         setIsReinsertDisabled(false); // HABILITAR REINTEGRO
       } else {
@@ -169,7 +180,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
                 ...prev[EKeyDataByStep.THREE],
                 amountBudge: 0,
               },
-            }) as TStepDataTasker,
+            } as TStepDataTasker),
         );
         setIsStepValid(false);
         setIsReinsertDisabled(true); // DESHABILITAR REINTEGRO
@@ -214,7 +225,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
             ...prev[EKeyDataByStep.THREE],
             reinsert: value,
           },
-        }) as TStepDataTasker,
+        } as TStepDataTasker),
     );
   };
 
@@ -222,6 +233,7 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
     handleBudgeAmount,
     onChangeIsBudge,
     onChangeIsReinsert,
+    amountRef,
   };
 
   return <StepThreeContext.Provider value={contextValueStepThree}>{children}</StepThreeContext.Provider>;

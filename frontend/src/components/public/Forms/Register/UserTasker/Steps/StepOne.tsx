@@ -1,5 +1,6 @@
 import useRegisterTasker from "../../../../../../hooks/useRegisterTasker";
 import useStepOne from "../../../../../../hooks/useStepOne";
+import useTasker from "../../../../../../hooks/useTasker";
 import { ECategoryKey, EKeyDataByStep } from "../../../../../../types/enums";
 import { renderFieldError, styleBorderFieldError } from "../../../../../../utils/formUtils";
 import CheckboxGroupsContainer from "../CheckBoxGroupContainer";
@@ -10,7 +11,8 @@ import './StepOne.css'; // CSS
 import { GiIdCard } from 'react-icons/gi';
 import { IoLayers } from 'react-icons/io5';
 export default function StepOne() {
-  const { formState, hasInteracted, stepData} = useRegisterTasker();
+  const { formState, stepData } = useTasker()
+  const { hasInteracted } = useRegisterTasker();
   const { handleChangeSelected, titleRef } = useStepOne();
   return (
     <>

@@ -4,36 +4,33 @@ import useStepOne from '../../../../../hooks/useStepOne';
 import type { TWorkGroupOption } from '../../../../../types/typeWorkGoupOptions';
 import type { TEntitie } from '../../../../../types/typeOptionsWork';
 import { EEntitiesGroup, EKeyDataByStep } from '../../../../../types/enums';
-import useRegisterTasker from '../../../../../hooks/useRegisterTasker';
+import useTasker from '../../../../../hooks/useTasker';
 
 // COMPONENTE DE CHECKS
-const CheckBox = ({ opt, i, type, entitie }: { opt: TOptionItem; i: number, entitie:TEntitie } & Pick<TWorkGroupOption, 'type'>): ReactNode => {
-  const { handleCheckboxChange } = useStepOne();//HOOK PERSONALIZADO QUE USA CONTEXTO  NIVEL PASO UNO
-  const { stepData } = useRegisterTasker(); // //HOOK PERSONALIZADO QUE USA CONTEXTO  NIVEL REGISTRO PROFESIONAL
+const CheckBox = ({ opt, i, type, entitie }: { opt: TOptionItem; i: number; entitie: TEntitie } & Pick<TWorkGroupOption, 'type'>): ReactNode => {
+  const { handleCheckboxChange } = useStepOne(); //HOOK PERSONALIZADO QUE USA CONTEXTO  NIVEL PASO UNO
+  const { stepData } = useTasker(); // //HOOK PERSONALIZADO QUE USA CONTEXTO  NIVEL REGISTRO PROFESIONAL
   // OBTENER LOS VALORES SELECCIONADOS DESDE STEPDATA
-  const getSelectedValues = (entitie: TEntitie): string[] => { 
-     let currentStoredValues: string[] = [];
-    
-        // const updatedValues: string[] = updater(currentStoredValues, checked, value);
-    
-        //  SEGUN ENTITIE PARA QUE TS RECONOZCA EL ACCESO ==> DENOMINADO NARROWING
-        switch (entitie) {
-          case EEntitiesGroup.SERVICE_DATA:
-            currentStoredValues = stepData[EKeyDataByStep.ONE].serviceData.service;
-            break;
-          case EEntitiesGroup.WORK_AREA_DATA:
-            currentStoredValues = stepData[EKeyDataByStep.ONE]?.workAreaData?.workArea ?? [];
-            break;
-          case EEntitiesGroup.DAY_DATA:
-            currentStoredValues = stepData[EKeyDataByStep.ONE].dayData.day;
-            break;
-          case EEntitiesGroup.HOUR_DATA:
-            currentStoredValues = stepData[EKeyDataByStep.ONE].hourData.hour;
-            break;
-        }
-    
-        return currentStoredValues;
-        // return stepData[EKeyDataByStep.ONE][`${type}`] ?? [];
+  const getSelectedValues = (entitie: TEntitie): string[] => {
+    let currentStoredValues: string[] = [];
+
+    // SEGUN ENTITIE PARA QUE TS RECONOZCA EL ACCESO ==> DENOMINADO NARROWING
+    switch (entitie) {
+      case EEntitiesGroup.SERVICE_DATA:
+        currentStoredValues = stepData[EKeyDataByStep.ONE].serviceData.service;
+        break;
+      case EEntitiesGroup.WORK_AREA_DATA:
+        currentStoredValues = stepData[EKeyDataByStep.ONE]?.workAreaData?.workArea ?? [];
+        break;
+      case EEntitiesGroup.DAY_DATA:
+        currentStoredValues = stepData[EKeyDataByStep.ONE].dayData.day;
+        break;
+      case EEntitiesGroup.HOUR_DATA:
+        currentStoredValues = stepData[EKeyDataByStep.ONE].hourData.hour;
+        break;
+    }
+
+    return currentStoredValues;
   };
 
   return (

@@ -8,7 +8,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { readExistingData } from '../../../utils/storageUtils';
 import { EDataClient, ENamesOfKeyLocalStorage } from '../../../types/enums';
 import SelectedValidator from '../../../modules/validators/SelectedValidator';
-import useRegister from '../../../hooks/useRegister';
+import useRegister from '../../../hooks/useTasker';
 import type { TDataClient } from '../../../types/typeDataClient';
 import type { iFormStateValidationClient } from '../../../interfaces/iFormStateValidationClient';
 import type { TRegisterClient } from '../../../types/typeRegisterClient';

@@ -8,7 +8,7 @@ import apiRequest from '../utils/apiRequestUtils';
 import useFormVerifyEmailCode from './useFormVerifyEmailCode';
 import useGlobalModal from './useGlobalModal';
 import useMain from './useMain';
-import useRegister from './useRegister';
+import useRegister from './useTasker';
 import useRegisterModal from './useRegisterModal';
 import type { TDataLoginUser } from '../types/typeDataLoginUser';
 import type { TStateAuth } from '../types/typeStateAuth';
@@ -91,7 +91,7 @@ const useUserApi = () => {
   // ACCION DE REDIRECCION AL DASHBOARD AL LOGEARSE
   const redirectToDashBoard = async () => {
     // SI ES CLIENTE
-    !userData?.isTasker ? navigate('/service/all', { replace: true }) : navigate('/profile/info', { replace: true });
+    !userData?.isTasker ? navigate('/client/services', { replace: true }) : navigate('/tasker/profile', { replace: true });
   };
 
   // LEER TABLA USERS PARA IDENTIFICAR EL EMAIL SI EXISTE

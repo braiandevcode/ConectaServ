@@ -4,8 +4,6 @@ import useMain from '../../../../hooks/useMain';
 import Loader from '../../../Loader';
 import { parseDbMonto } from '../../../../utils/parsedAndFormatValuesUtils';
 import BtnBack from '../../../public/Forms/Register/UserTasker/Buttons/BtnBack';
-import { ECategoryKey } from '../../../../types/enums';
-import type { TCategoryTasker } from '../../../../types/typeCategoryTasker';
 import { Link, useParams, useNavigate } from 'react-router';
 import { IoSend } from 'react-icons/io5';
 import { useEffect, useRef, useState } from 'react';
@@ -13,6 +11,8 @@ import useTaskerApi from '../../../../hooks/useTaskerApi';
 
 // CSS
 import './ProfileTaskerInfo.css';
+import { valueCategoryUI } from '../../../../utils/valueCategoryUI';
+import { EYesOrNo } from '../../../../types/enums';
 
 // PERFIL DE INFO DE TASKER
 const ProfileTaskerInfo = () => {
@@ -21,20 +21,18 @@ const ProfileTaskerInfo = () => {
   const { HOST, QUERY_NAME, QUERY_BG_RANDOM } = configApiAvatarImage;
 
   // ESTADO DE LOADING LOCAL
-  const [loadingProfileTasker, setLoadingProfileTasker] = useState<boolean>(false)
+  const [loadingProfileTasker, setLoadingProfileTasker] = useState<boolean>(false);
 
   //ABREVIAR
   const C: string | null | undefined = selectedTaskerProfile?.category;
 
-  // DEPENDIENDO DE CATEGORIA PASAR A FORMATO LEGIBLE AL USUARIO FINAL
-  const category: TCategoryTasker = C === ECategoryKey.REPAIR ? 'Reparación y Mantenimiento' : C === ECategoryKey.GARDEN ? 'Jardinería' : C === ECategoryKey.MOVE ? 'Mudanzas y Transportes' : undefined;
-
+  
   // USEREF
   const fetchedRef = useRef<boolean>(false);
 
   const navigate = useNavigate(); //==> NAVIGATE DE REACT
   const { idTasker } = useParams(); //LEER ID EN LA URL SI RECARGA EN MISMA RUTA
-  
+
   // EFECTO PARA TRAER DATOS UN TASKER ESPECIFICO AL MONTARSE COMPONENTE
   useEffect(() => {
     if (!accessToken || fetchedRef.current || !idTasker) return;
@@ -42,14 +40,22 @@ const ProfileTaskerInfo = () => {
     const fetchData = async () => {
       setLoadingProfileTasker(true); //MOSTAR LOADER LOCAL
       const tasker = await getDetailsTasker({ accessToken, idTasker });
-      setLoadingProfileTasker(false);// QUITAR LOADER LOCAL
-      if(!tasker) return;
+      setLoadingProfileTasker(false); // QUITAR LOADER LOCAL
+      if (!tasker) return;
       setSelectedTaskerProfile(tasker);
-      navigate(`/services/tasker/${idTasker}`);
+      navigate(`/client/services/tasker/${idTasker}`);
     };
 
     fetchData();
   }, [accessToken, idTasker]); // ==> DEPENDEN DEL ACCESSTOKEN
+
+  // CLASES SECCION RESEÑAS Y DETALLES PRESUPUESTO
+  const CLASSES_STARS_BUDGET: string = `${
+    selectedTaskerProfile && selectedTaskerProfile.isRepair ? 'w-3/4 profile__section profile__section-starstAndBudget c-flex-justify-center centered c-flex gap-2 p-2' : selectedTaskerProfile && !selectedTaskerProfile.isRepair ? 'profile__section profile__section-starsAndBudget centered c-flex p-2' : 'profile__section profile__section-starsAndBudget centered c-flex p-2'
+  }`;
+
+  // SI EXISTE PERFIL Y ES REPARACION HAY DATOS DE PRESUPUESTO
+  const isBudget:boolean= Boolean(selectedTaskerProfile && selectedTaskerProfile.isRepair);
 
   return (
     <>
@@ -70,7 +76,7 @@ const ProfileTaskerInfo = () => {
                   <div className='profile__userNameAndMsg w-3/4 c-flex  c-flex-items-center c-flex-column gap-1/2'>
                     <h2 className='profile__userNameAndMsg-userName text-center w-1/2'>{selectedTaskerProfile.fullName}</h2>
                     {/* ACA PODRIA SER ENDPOIN DE api/v1/to/chast/:idTasker */}
-                    <Link to={'/to/chats'}>
+                    <Link to={'/client/to/chats'}>
                       <Button variant='btn btn__success' className='btn__message'>
                         <IoSend />
                         Enviar Mensaje
@@ -78,33 +84,33 @@ const ProfileTaskerInfo = () => {
                     </Link>
                   </div>
                 </div>
-                <div className='c-flex c-flex-column c-flex-items-center gap-1/2'>
-                  <div className='p-1 c-flex c-flex-items-center gap-1/2'>
-                    <p className='profile__categoryText text-center'>{category}</p>
-                  </div>
-
-                  <div className='profile__cityAndStart c-flex c-flex-items-center gap-1'>
-                    <div className='c-flec c-flex-column gap-1'>
-                      <p className='profile__cityAndStart-cityText'>{selectedTaskerProfile.city}</p>
-                      <h4 className='profile__cityAndStartRole text-center'>Tasker</h4>
-                    </div>
-                  </div>
-                  <div className='cursor-pointer profile__rating'>★★★★☆</div>
-                </div>
               </div>
             </div>
 
-            <section className='centered profile__details_budget profile__section p-2'>
-              {selectedTaskerProfile.isRepair && (
+            <section className={CLASSES_STARS_BUDGET}>
+              <div className='c-flex c-flex-column c-flex-items-center gap-1/2'>
+                <div className='p-1 c-flex c-flex-items-center gap-1/2'>
+                  <p className='profile__categoryText text-center'>{C ? valueCategoryUI(C) : 'Sin Categoría'}</p>
+                </div>
+
+                <div className='profile__cityAndStart c-flex c-flex-items-center gap-1'>
+                  <div className='c-flec c-flex-column gap-1'>
+                    <p className='profile__cityAndStart-cityText'>{selectedTaskerProfile.city}</p>
+                    <h4 className='profile__cityAndStartRole text-center'>Tasker</h4>
+                  </div>
+                </div>
+                <div className='cursor-pointer profile__rating'>★★★★☆</div>
+              </div>
+              {isBudget && (
                 <div className='profileSection-details-budget c-flex c-flex-column gap-2'>
                   <p className='profileSection-details-budget__reinsert c-flex c-flex-column c-flex-items-center gap-1/2'>
                     <span className='profileSection-details-budget__reinsert-title'>¿Reintegro por contratación?:</span>
-                    <span className='profileSection-details-budget__reinsert-option'>{selectedTaskerProfile.budget?.reinsertSelected === 'yes' ? 'Si' : 'No'}</span>
+                    <span className='profileSection-details-budget__reinsert-option'>{selectedTaskerProfile.budget?.reinsertSelected === EYesOrNo.YES ? 'Si' : 'No'}</span>
                   </p>
 
                   <p className='profileSection-details-budget__reinsert  c-flex c-flex-column c-flex-items-center gap-1/2'>
                     <span className='profileSection-details-budget-title'>¿Cobro Presupuesto?:</span>
-                    <span className='profileSection-details-budget-option'>{selectedTaskerProfile.budget?.budgeSelected === 'yes' ? 'Si' : 'No'}</span>
+                    <span className='profileSection-details-budget-option'>{selectedTaskerProfile.budget?.budgeSelected === EYesOrNo.YES ? 'Si' : 'No'}</span>
                   </p>
                   <p className='profileSection-details-budget__price  c-flex c-flex-column c-flex-items-center gap-1/2'>
                     <span className='profileSection-details-budget__price-title'>Costo de visita para presupuesto:</span>

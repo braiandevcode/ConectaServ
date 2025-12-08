@@ -5,7 +5,7 @@ import TermsAndConditions from './components/public/TermsAndConditions';
 import RegisterClientLayout from './routes/RegisterClientLayout';
 import { useEffect, useState } from 'react';
 import Loader from './components/Loader';
-import RegisterLayout from './routes/RegisterLayout';
+import TaskerLayout from './routes/TaskerLayout';
 import Home from './components/public/Home';
 import RegisterClient from './components/public/Forms/Register/UserClient/RegisterClient';
 import RegisterTasker from './components/public/Forms/Register/UserTasker/RegisterTasker';
@@ -17,6 +17,7 @@ import AllSevices from './components/private/DashBoard/AllServices';
 import NotFound from './components/NotFound';
 import Chat from './components/private/Chat/Chat';
 import ProfileTaskerInfo from './components/private/DashBoard/ClientRole/ProfileTaskerInfo';
+import ProfileTasker from './components/private/DashBoard/TaskerRole/ProfileTasker';
 // COMPONENTE APP PRINCIPAL
 export default function App() {
   const [initialLoading, setInitialLoading] = useState(true);
@@ -36,65 +37,81 @@ export default function App() {
         <Route path='/' element={<MainLayout />}>
           {/* PARTE PUBLICA */}
           <Route path='/' element={<Home />} />
-          {/* PARTE PUBLICA RUTAS ANIDAS DESDE REGISTRO */}
-          <Route path='register' element={<RegisterLayout />}>
-            <Route path='privacity' element={<PrivacyPolicy />} />
-            <Route path='terms' element={<TermsAndConditions />} />
-            {/* ANIDAMIENTO DE RUTAS DESDE TASKER */}
-            <Route element={<RegisterTaskerLayout />}>
-              <Route path='tasker' element={<RegisterTasker />} />
-              <Route path='*' element={<NotFound />}></Route>
-            </Route>
-            {/* ANIDAMIENTO DE RUTAS DESDE CLIENTE*/}
-            <Route element={<RegisterClientLayout />}>
-              <Route path='client' element={<RegisterClient />} />
-              <Route path='*' element={<NotFound />}></Route>
-            </Route>
-            <Route path='*' element={<NotFound />}></Route>
-          </Route>
-
-          {/* PARTE PRIVADA A PROTEGER */}
-          <Route
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }>
+          <Route path='tasker' element={<TaskerLayout />}>
+            {/* /tasker */}
+            {/* PARTE PRIVADA A PROTEGER HAMBITO DE TASKERS*/}
             <Route
-              path='/to/chats'
+              path='profile'
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }>
+              <Route index element={<ProfileTasker />} />
+              {/* /tasker/profile */}
+              <Route path='*' element={<NotFound />} /> {/* ==> /tasker/profile/404*/}
+            </Route>
+            <Route
+              path='to/chats'
+              element={
+                <ProtectedRoute>
+    
+                  <Chat />
+                </ProtectedRoute>
+              }>
+
+              {/* /tasker/to/chats */}
+              <Route path='*' element={<NotFound />} /> {/* ==> /tasker/to/chats/404*/}
+            </Route>
+            {/* ANIDAMIENTO DE RUTAS DESDE TASKER PARTE PUBLICA */}
+            <Route path='register' element={<RegisterTaskerLayout />}>
+
+              {/*/tasker/register*/}
+              <Route index element={<RegisterTasker />} /> {/* ==> /tasker/register */}
+              <Route path='privacity' element={<PrivacyPolicy />} /> {/* /tasker/register/privacity */}
+              <Route path='terms' element={<TermsAndConditions />} /> {/* /tasker/register/terms */}
+              <Route path='*' element={<NotFound />} /> {/* ==> /tasker/register/404 */}
+            </Route>
+            <Route path='*' element={<NotFound />} /> {/* ==> /tasker/404 */}
+          </Route>
+          {/* ANIDAMIENTO DE RUTAS DESDE CLIENTE PUBLICO*/}
+          <Route path='client' element={<RegisterClientLayout />}>
+            {/* ANIDAMIENTO DE RUTAS DESDE CLIENT PARTE PUBLICA */}
+            <Route path='register' element={<RegisterClient />} /> {/* ==> /client/register */}
+            <Route path='/client/register/privacity' element={<PrivacyPolicy />} /> {/* /client/register/privacity */}
+            <Route path='/client/register/terms' element={<TermsAndConditions />} /> {/* /client/register/terms */}
+            <Route path='*' element={<NotFound />} /> {/* ==> /client/register/404 */}
+            
+            {/* PARTE PRIVADA A PROTEGER HAMBITO DE CLIENTES*/}
+            <Route
+              path='services'
+              element={
+                <ProtectedRoute>
+                  <Services />
+                </ProtectedRoute>
+              }>
+
+              {/* /client/services */}
+              <Route index element={<AllSevices />} /> {/* ==> /client/services/ */}
+              <Route path='tasker/:idTasker' element={<ProfileTaskerInfo />} /> {/* ==> /client/services/tasker/:idTasker*/}
+              <Route path='*' element={<NotFound />} /> {/* ==> /client/services/404 */}
+            </Route>
+            <Route
+              path='to/chats'
               element={
                 <ProtectedRoute>
                   <Chat />
                 </ProtectedRoute>
-              }
-            />
+              }>
 
-            <Route path='*' element={<NotFound />}></Route>
+              {/* /client/to/chats */}
+              <Route path='*' element={<NotFound />} /> {/* ==> /client/to/chats/404 */}
+            </Route>
+            <Route path='*' element={<NotFound />} /> {/* ==> /client/404 */}
           </Route>
-
-          {/* SOLO CON PROTEGER RUTA PADRE SUS HIJOS TAMBIEN ESTAN PROTEGIDOS */}
-          <Route
-            element={
-              <ProtectedRoute>
-                <Services />
-              </ProtectedRoute>
-            }>
-            {/* RUTAS HIJAS */}
-            <Route path='services/all' element={<AllSevices />} />
-            <Route path='services/tasker/:idTasker' element={<ProfileTaskerInfo />} />
-            <Route path='*' element={<NotFound />}></Route>
-          </Route>
-          <Route
-            path='/to/chats'
-            element={
-              <ProtectedRoute>
-                <Chat />
-              </ProtectedRoute>
-            }
-          />
-          <Route path='*' element={<NotFound />}></Route>
+          {/* CULAQUIER PATH QUE NO COINCIDA DESDE EL HOME 404 */}
+          <Route path='*' element={<NotFound />} /> {/* ==> /404 */}
         </Route>
-        <Route path='*' element={<NotFound />}></Route>
       </Routes>
     </>
   );

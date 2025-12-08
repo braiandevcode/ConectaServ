@@ -4,10 +4,12 @@ import type { TEntitie, TOptionWork } from '../types/typeOptionsWork';
 import type { TStepOne } from '../types/typeStepOne';
 import useRegisterTasker from './useRegisterTasker';
 import { ENTITY_TO_GROUP } from '../config/configGroupsByNameChekboxTasker';
+import useTasker from './useTasker';
 
 // CUSTOM HOOK
 export const useVerifyGroup = () => {
-  const { stepData, setStepData, step, formState, setFormState, isResetDetailsWork } = useRegisterTasker(); //HOOK PERSONALIZADO QUE USA CONTEXTO REGISTRO PROFESIONAL
+  const {stepData, setStepData, formState, setFormState, } = useTasker();
+  const { step, isResetDetailsWork } = useRegisterTasker(); //HOOK PERSONALIZADO QUE USA CONTEXTO REGISTRO PROFESIONAL
 
   // EFECTO PARA RESETEAR DETALLES DE TRABAJO CUANDO CAMBIA CATEGORÍA
   useEffect(() => {
@@ -86,7 +88,7 @@ export const useVerifyGroup = () => {
         },
       }));
 
-      // === ACTUALIZAR STEP DATA ===
+      //ACTUALIZAR STEP DATA
       setStepData((prev) => ({
         ...prev,
         [EKeyDataByStep.ONE]: {

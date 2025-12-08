@@ -13,6 +13,5 @@ export type TStepOneProps = {
   titleRef: RefObject<HTMLSelectElement | null>;
   hasWorkArea: boolean;
   hasBudge: boolean;
-  isStepValid: boolean;
   valueSelected: string;
 };

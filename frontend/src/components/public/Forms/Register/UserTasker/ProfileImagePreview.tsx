@@ -1,5 +1,5 @@
-import useRegisterTasker from '../../../../../hooks/useRegisterTasker';
 import useStepTwo from '../../../../../hooks/useStepTwo';
+import useTasker from '../../../../../hooks/useTasker';
 import { EKeyDataByStep } from '../../../../../types/enums';
 import type { TImageDataStored } from '../../../../../types/typeRegisterEndDto';
 import type { TIdString } from '../../../../../types/typeUUID';
@@ -10,7 +10,7 @@ import './ProfileImagePreview.css';
 
 // COMPONENTE DE VISTA PREVIA PERFIL
 const ProfileImagePreview = () => {
-  const { stepData } = useRegisterTasker(); //HOOK PERSONALIZADO QUE USA CONTEXTO NIVEL PASO DOS
+  const { stepData } = useTasker(); //HOOK PERSONALIZADO QUE USA CONTEXTO NIVEL PASO DOS
   const { src, onDeleteProfile } = useStepTwo();
   if (!src) return; //SI NO HAY SRC NO SEGUIR
   const profile: TImageDataStored | null = stepData[EKeyDataByStep.TWO].imageProfileData;

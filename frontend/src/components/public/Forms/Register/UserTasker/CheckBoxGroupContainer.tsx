@@ -1,5 +1,5 @@
 import { categoryConfigs } from '../../../../../config/configCategoryTasker'; //DE LA CONSTANTE CONFIGURATIVA
-import useRegisterTasker from '../../../../../hooks/useRegisterTasker';
+import useTasker from '../../../../../hooks/useTasker';
 import { EKeyDataByStep, type ECategoryKey } from '../../../../../types/enums';
 import type { TCategoryKey } from '../../../../../types/typeCategory';
 import type { TCategoryConfig } from '../../../../../types/typeConfigCategory';
@@ -7,7 +7,7 @@ import CheckboxGroup from './CheckBoxGroup';
 
 // COMPONENTE CONTENEDOR QUE CONTIENE TODOS LOS GRUPOS SEGUN CATEGORIA
 const CheckboxGroupsContainer = () => {
-  const { stepData } = useRegisterTasker(); // ==> //HOOK PERSONALIZADO QUE USA CONTEXTO NIVEL REGISTRO PROFESIONAL
+  const { stepData } = useTasker(); // ==> //HOOK PERSONALIZADO QUE USA CONTEXTO NIVEL REGISTRO PROFESIONAL
 
   // EXCLUYO AL NONE EN TIPADO
   const config: TCategoryConfig = categoryConfigs[stepData[EKeyDataByStep.ONE].categoryData.category as Exclude<TCategoryKey, ECategoryKey.NONE>];

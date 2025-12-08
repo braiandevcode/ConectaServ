@@ -1,9 +1,10 @@
+import scrolledTop from "../../../../utils/scrollTop";
 import Button from "../../../Button";
 
 const NavInfoTasker = () => {
     return(
         <>
-            <Button type="button" variant="btn btn__info">Ver Información</Button>
+            <Button type="button" variant="btn btn__info" onClick={() => scrolledTop()}>Ver Información</Button>
         </>
     )
 }

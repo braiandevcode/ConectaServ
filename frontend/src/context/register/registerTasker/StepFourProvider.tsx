@@ -1,5 +1,5 @@
 import { useEffect, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
-import useRegisterPro from '../../../hooks/useRegisterTasker';
+import useRegisterTasker from '../../../hooks/useRegisterTasker';
 import FullNameValidator from '../../../modules/validators/FullNameValidator';
 import UserNameValidator from '../../../modules/validators/UserNameValidator';
 import EmailValidator from '../../../modules/validators/EmailValidator';
@@ -8,10 +8,11 @@ import ConfirmPasswordValidator from '../../../modules/validators/ConfirmPasswor
 import { EKeyDataByStep } from '../../../types/enums';
 import SelectedValidator from '../../../modules/validators/SelectedValidator';
 import { StepFourContext } from './StepFourContext';
-import useRegister from '../../../hooks/useRegister';
+import useRegister from '../../../hooks/useTasker';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TLocationKey } from '../../../types/typeLocation';
 import type { TTypeContextBasic } from '../../../types/typeContextBasic';
+import useTasker from '../../../hooks/useTasker';
 
 const StepFourProvider = ({ children }: { children: ReactNode }) => {
   const fullNameValidator: FullNameValidator = new FullNameValidator();
@@ -22,9 +23,11 @@ const StepFourProvider = ({ children }: { children: ReactNode }) => {
   const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordValidator();
   
   const { password, terms,  confirmPassword, isSuccefullyVerified, setPassword, setConfirmPassword, setInteractedPassword, setInteractedConfirmPassword } = useRegister(); //HOOK QUE USA CONTEXTO  A NIVEL REGISTRO GENERALES
-  const { validateCurrentStep, setStepData, setIsStepValid, step, setFormState } = useRegisterPro(); // //HOOK QUE USA CONTEXTO A NIVEL REGISTRO PROFESIONAL
-
-  //--------------------------------------------------------------EFECTOS PASO 4 -----------------------------------------------------------------------//
+  
+  const { setStepData, setFormState, setIsStepValid } = useTasker(); //CUSTOM HOOK QUE USA CONTEXTO TASKER GENERAL
+  
+  // CUSTOM HOOK QUE USA CONTEXTO REGISTRO DE TASKER
+  const { validateCurrentStep, step } = useRegisterTasker(); // //HOOK QUE USA CONTEXTO A NIVEL REGISTRO PROFESIONAL
 
   // --------------------------------------------------- EFECTO VALIDACION DE PASO 4 --------------------------------------------------- //
   // EFECTO PARA VALIDACION DE CAMPOS PASO 2

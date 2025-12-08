@@ -9,7 +9,7 @@ import type { iFormValidationVerifyEmail } from '../../interfaces/iFormValidatio
 import CodeValidator from '../../modules/validators/CodeValidator';
 import type { TFieldState } from '../../types/typeStateFields';
 import { validateWithRegex } from '../../utils/validateFieldUtils';
-import useRegister from '../../hooks/useRegister';
+import useRegister from '../../hooks/useTasker';
 import useUserApi from '../../hooks/useUserApi';
 import type { iFormStateValidationClient } from '../../interfaces/iFormStateValidationClient';
 import type { iFormStateValidationTask } from '../../interfaces/iFormStateValidationTask';

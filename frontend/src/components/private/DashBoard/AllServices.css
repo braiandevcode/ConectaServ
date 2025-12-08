@@ -1,0 +1,13 @@
+.card__content {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.card__text-budget {
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.card__text-category {
+  color: var(--text-color-primary);
+}

@@ -6,6 +6,11 @@ export enum ECategoryKey {
   NONE = 'none',
 }
 
+export enum EYesOrNo {
+  YES = 'yes',
+  NO = 'no',
+}
+
 // TIPO DE LOCALIDADES VALIDAS
 export enum ELocationKey {
   OLAVARRIA = 'olavarría',
@@ -56,33 +61,35 @@ export enum ENamesOfKeyLocalStorage {
   CURRENT_STEP = 'currentStep',
   IMAGE_INDEXED_DB = 'images',
   INTERACTED = 'interacted',
-  IS_VERIFY_CODE = 'isVerified'
+  IS_VERIFY_CODE = 'isVerified',
 }
 
 //ENUM PARA LA CONFIGURACION DE LAS RUTAS DE PETICIONES ENDPOINTS
 export enum EEndpoint {
-  USER= '/api/v1/users',
-  USER_CODE_REQUEST='/api/v1/code/request',
-  USER_VERIFY='/api/v1/users/verify',
-  USER_CODE_DELETE= '/api/v1/code',
-  USER_IDENTIFY='/api/v1/users/identify',
-  CODE_VERIFY ='/api/v1/code/verify',
-  AUTH= '/api/v1/auth/login',
-  AUTH_ME='/api/v1/auth/me',
-  REFRESH= '/api/v1/auth/refresh',
-  LOGOUT= '/api/v1/auth/logout',
-  ALL_TASKERS='/api/v1/users/actives',
-  IMAGE_PROFILE='/api/v1/profile',
-  IMAGES_EXP='/api/v1/experiences',
-  TASKER_INFO ='/api/v1/users/tasker'
+  USER = '/api/v1/users',
+  USER_CODE_REQUEST = '/api/v1/code/request',
+  USER_VERIFY = '/api/v1/users/verify',
+  USER_CODE_DELETE = '/api/v1/code',
+  USER_IDENTIFY = '/api/v1/users/identify',
+  CODE_VERIFY = '/api/v1/code/verify',
+  AUTH = '/api/v1/auth/login',
+  AUTH_ME = '/api/v1/auth/me',
+  REFRESH = '/api/v1/auth/refresh',
+  LOGOUT = '/api/v1/auth/logout',
+  ALL_TASKERS = '/api/v1/users/actives',
+  IMAGE_PROFILE = '/api/v1/profile',
+  IMAGES_EXP = '/api/v1/experiences',
+  TASKER_INFO = '/api/v1/users/tasker',
 }
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA
 export enum EPathPage {
-  PATH_FORM_CLIENT = '/register/client',
-  PATH_FORM_TASKER = '/register/tasker',
-  PATH_TERMS = '/register/terms',
-  PATH_PRIVACY = '/register/privacity',
+  PATH_FORM_CLIENT = '/client/register',
+  PATH_FORM_TASKER = '/tasker/register',
+  PATH_TERMS_CLIENT = '/client/register/terms',
+  PATH_PRIVACY_CLIENT = '/client/register/privacity',
+  PATH_TERMS_TASKER = '/tasker/register/terms',
+  PATH_PRIVACY_TASKER = '/tasker/register/privacity',
 }
 
 // ENUM PARA TIPOS DE INPUTS

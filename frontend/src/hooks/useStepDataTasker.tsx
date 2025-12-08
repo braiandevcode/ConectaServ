@@ -14,7 +14,7 @@ import UserNameValidator from '../modules/validators/UserNameValidator';
 import { EKeyDataByStep, ENamesOfKeyLocalStorage } from '../types/enums';
 import type { TStepDataTasker } from '../types/typeStepData';
 import { readExistingData } from '../utils/storageUtils';
-import useRegister from './useRegister';
+import useRegister from './useTasker';
 
 // INSTANCIO VALIDACIONES NECESARIAS
 const descriptionValidator: DescriptionValidator = new DescriptionValidator();

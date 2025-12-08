@@ -1,3 +1,5 @@
+import type { TBudgetData } from "./typeDataPayloadUser";
+
 export type TActiveTaskerUser = {
   idUser: string;
   fullName: string;
@@ -13,6 +15,8 @@ export type TActiveTaskerUser = {
     description: string;
     idCategory: string;
   };
+
+  budget:TBudgetData | null;
 
   days: string[];
   hours: string[];

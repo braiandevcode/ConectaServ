@@ -8,7 +8,7 @@ import ConfirmPasswordValidator from '../../../modules/validators/ConfirmPasswor
 import useRegisterClient from '../../../hooks/useRegisterClient';
 import { EDataClient, ENamesOfKeyLocalStorage } from '../../../types/enums';
 import { FieldsClientContext } from './FieldsClientContext';
-import useRegister from '../../../hooks/useRegister';
+import useRegister from '../../../hooks/useTasker';
 import useMain from '../../../hooks/useMain';
 import type { TLocationKey } from '../../../types/typeLocation';
 import type { TFieldState } from '../../../types/typeStateFields';

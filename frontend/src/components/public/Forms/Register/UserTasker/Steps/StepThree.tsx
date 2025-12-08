@@ -1,6 +1,6 @@
 import useRegisterTasker from '../../../../../../hooks/useRegisterTasker';
 import useStepThree from '../../../../../../hooks/useStepThree';
-import { EKeyDataByStep } from '../../../../../../types/enums';
+import { EKeyDataByStep, EYesOrNo } from '../../../../../../types/enums';
 import type { TYesOrNo } from '../../../../../../types/typeRadioYesOrNo';
 import { renderFieldError, styleBorderFieldError } from '../../../../../../utils/formUtils';
 
@@ -13,11 +13,16 @@ import { formatMontoWithCurrency } from '../../../../../../utils/parsedAndFormat
 
 // CSS
 import './StepThree.css';
+import useTasker from '../../../../../../hooks/useTasker';
 export default function StepThree() {
-  const { amountFieldFormat, formState, isBudgeMountDisabled, isReinsertDisabled, stepData } = useRegisterTasker(); //HOOK QUE USA CONTEXTO NIVEL REGISTRO PROFESIONAL
-  const { onChangeIsReinsert, onChangeIsBudge, handleBudgeAmount } = useStepThree(); //HOOK QUE USA CONTEXTO NIVEL PASO 3 DEL FORMULARIO
+  const { formState, stepData } = useTasker(); // CUSTOM HOOK TASKER GENERAL
+
+  const { isBudgeMountDisabled, amountFieldFormat, isReinsertDisabled } = useRegisterTasker(); //HOOK QUE USA CONTEXTO NIVEL REGISTRO PROFESIONAL
+  const { onChangeIsReinsert, onChangeIsBudge, handleBudgeAmount, amountRef } = useStepThree(); //HOOK QUE USA CONTEXTO NIVEL PASO 3 DEL FORMULARIO
   const storedBudgeSelected: TYesOrNo = stepData[EKeyDataByStep.THREE]?.budgeSelected ?? 'no';
   const storedReinsertSelected: TYesOrNo = stepData[EKeyDataByStep.THREE]?.reinsert ?? 'no';
+  const amount: number = stepData[EKeyDataByStep.THREE]?.amountBudge ?? 0;
+
   return (
     <>
       <div className='mb-2 c-flex c-flex-column gap-1'>
@@ -38,11 +43,11 @@ export default function StepThree() {
 
           <div className='c-flex c-flex-items-center gap-1/2 radio-group'>
             <label className='c-flex c-flex-items-center gap-1/2 cursor-pointer form-groupBudget__radioGroup radio-option'>
-              <input type='radio' name='budgeSelected' value='yes' checked={storedBudgeSelected === 'yes'} className='c-flex c-flex-items-center c-flex-justify-center cursor-pointer form-groupBudget__radioGroup__input radio-option__input' onChange={onChangeIsBudge} />
+              <input type='radio' name='budgeSelected' value='yes' checked={storedBudgeSelected === EYesOrNo.YES} className='c-flex c-flex-items-center c-flex-justify-center cursor-pointer form-groupBudget__radioGroup__input radio-option__input' onChange={onChangeIsBudge} />
               <span className='radio-option__label'>Sí</span>
             </label>
             <label className='c-flex c-flex-items-center gap-1/2 cursor-pointer form-groupBudget__radioGroup radio-option'>
-              <input type='radio' name='budgeSelected' value='no' checked={storedBudgeSelected === 'no'} className='c-flex c-flex-items-center c-flex-justify-center cursor-pointer form-groupBudget__radioGroup__input radio-option__input' onChange={onChangeIsBudge} />
+              <input type='radio' name='budgeSelected' value='no' checked={storedBudgeSelected === EYesOrNo.NO} className='c-flex c-flex-items-center c-flex-justify-center cursor-pointer form-groupBudget__radioGroup__input radio-option__input' onChange={onChangeIsBudge} />
               <span className='radio-option__label'>No</span>
             </label>
           </div>
@@ -53,7 +58,7 @@ export default function StepThree() {
             <h4 className='c-flex c-flex-items-center c-flex-column-reverse gap-2 form-groupBudget__label'>
               <div className='containerPreviewMount c-flex c-flex-self-start gap-1/2'>
                 <div className='c-flex c-flex-items-center gap-1/2'>
-                  <span className='containerPreviewMount__amount'>{formatMontoWithCurrency(amountFieldFormat)}</span>
+                  <span className='containerPreviewMount__amount'>{formatMontoWithCurrency(amount)}</span>
                 </div>
               </div>
               <div className='c-flex c-flex-column c-flex-items-center gap-1/2 to-left'>
@@ -66,7 +71,7 @@ export default function StepThree() {
             </h4>
 
             <div className='c-flex c-flex-column gap-1/2'>
-              <input type='text' name='amountBudge' placeholder='600.60' className={`w-1/2 form-groupBudget__field ${amountFieldFormat !== '' && styleBorderFieldError(formState, 'amountBudge')}`} disabled={isBudgeMountDisabled} value={amountFieldFormat} onChange={handleBudgeAmount} />
+              <input ref={amountRef} type='text' name='amountBudge' placeholder='600.60' className={`w-1/2 form-groupBudget__field ${amountFieldFormat !== '' && styleBorderFieldError(formState, 'amountBudge')}`} disabled={isBudgeMountDisabled} value={amount === 0 ? '' : amount.toString()} onChange={handleBudgeAmount} />
               {amountFieldFormat !== '' && renderFieldError(formState, 'amountBudge')}
             </div>
           </div>

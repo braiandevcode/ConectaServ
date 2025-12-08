@@ -1,5 +1,5 @@
 import type { iFormStateValidationClient } from '../interfaces/iFormStateValidationClient';
-import useRegister from './useRegister';
+import useRegister from './useTasker';
 
 const useValidateClient = ({ formState }: { formState: iFormStateValidationClient }) => {
   const { terms, isSuccefullyVerified } = useRegister(); //HOOK QUE USA EL CONTEXTO DE REGISTRO GENERAL

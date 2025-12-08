@@ -8,7 +8,7 @@ const NavProfile = () => {
   return (
     <>
       <div>
-        <Link to={'/profile/info'} className='profile__link  c-flex c-flex-items-center gap-1/2'>
+        <Link to={'/tasker/profile'} className='profile__link  c-flex c-flex-items-center gap-1/2'>
           <FaUser />
           Perfil
         </Link>

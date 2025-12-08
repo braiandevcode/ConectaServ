@@ -5,7 +5,7 @@ import useValidateStep from '../../../../../hooks/useValidateStep';
 // CSS
 import '../RegisterBase.css'; // ==> BASE PARA AMBOS RESGISTROS CON ESTILOS EN COMUN Y EVITAR REPETIR ESTILOS
 import useRegisterTasker from '../../../../../hooks/useRegisterTasker';
-import useRegister from '../../../../../hooks/useRegister';
+import useRegister from '../../../../../hooks/useTasker';
 
 // **MACHETE PARA RESPETAR Y ENTENDER REACT EN PROCESO DE DESARROLLO**//
 

@@ -1,16 +1,16 @@
 import useRegisterTasker from '../../../../../../hooks/useRegisterTasker';
 import BtnNext from './BtnNext';
-import useRegister from '../../../../../../hooks/useRegister';
 import LoaderBtn from '../../../../../LoaderBtn';
 import BtnSubmit from '../../../../../BtnSubmit';
 import useValidateStep from '../../../../../../hooks/useValidateStep';
 import { MdSend } from 'react-icons/md';
+import useTasker from '../../../../../../hooks/useTasker';
 
 // BOTONES PARA RENDERIZAR EN REGISTRO DE PROFESIONAL
 const BtnsRegisterTasker = () => {
   const { isLastStep } = useValidateStep(); //HOOK PARA VALIDAR PASO
-  const { isSending } = useRegister(); //HOOK QUE USA CONTEXTO DE REGISTRO GENERAL
-  const { isStepValid, handleClickNext } = useRegisterTasker(); //HOOK QUE USA CONTEXTO DE REGISTRO PROFESIONAL
+  const { isSending, isStepValid } = useTasker(); //HOOK QUE USA CONTEXTO DE REGISTRO GENERAL
+  const { handleClickNext} = useRegisterTasker(); //HOOK QUE USA CONTEXTO DE REGISTRO PROFESIONAL
 
   return (
     <>

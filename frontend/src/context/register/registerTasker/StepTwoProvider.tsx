@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
+import React, { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { StepTwoContext } from './StepTwoContext';
-import useRegisterPro from '../../../hooks/useRegisterTasker';
-import { formatTextArea } from '../../../utils/parsedAndFormatValuesUtils';
+import useRegisterTasker from '../../../hooks/useRegisterTasker';
+// import { formatTextArea } from '../../../utils/parsedAndFormatValuesUtils';
 import { EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../../types/enums';
 import { deleteImageFromIndexedDB } from '../../../utils/storageUtils';
-import DescriptionValidator from '../../../modules/validators/DescriptionValidator';
+// import DescriptionValidator from '../../../modules/validators/DescriptionValidator';
 import loadImage from '../../../utils/loadImage';
 import loadImages from '../../../utils/loadImages';
 import { verifyMetaDataImage } from '../../../utils/validateFieldUtils';
@@ -17,14 +17,18 @@ import type { TImageData, TImageDataStored } from '../../../types/typeRegisterEn
 import useImages from '../../../hooks/useImages';
 import useGlobalModal from '../../../hooks/useGlobalModal';
 import { EModalGlobalType } from '../../../types/enumGlobalModalType';
+import useTasker from '../../../hooks/useTasker';
 
 const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
-  const descriptionValidator: DescriptionValidator = new DescriptionValidator();
+  // const descriptionValidator: DescriptionValidator = new DescriptionValidator();
   const imageProfileDataValidator: ImageProfileValidator = new ImageProfileValidator();
   const imageExperienceDataValidator: ImageExperiencesValidator = new ImageExperiencesValidator();
 
-  // HOOK REGISTER PROFESIONAL
-  const { validateCurrentStep, setStepData, stepData, formState, setFormState, setIsStepValid, step, setIsParsed } = useRegisterPro();
+  // CUSTOM HOOK DE TASKER GENERAL
+  const { setStepData, stepData, formState, setFormState, setIsStepValid } = useTasker();
+
+  // CUSTOM HOOK REGISTER PROFESIONAL
+  const { validateCurrentStep, step } = useRegisterTasker();
   const { savedExperiences, savedProfile } = useImages();
   const { openGlobalModal, showError } = useGlobalModal();
 
@@ -108,7 +112,7 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  // SUBIDA DE IMAGEn DEL PEFIL
+  // SUBIDA DE IMAGEN DEL PEFIL
   const uploadImgProfile = async () => {
     try {
       setLoadImg(true);
@@ -124,45 +128,7 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  // EVENTO INPUT A DESCRIPCION PASO 2
-  const handleDescriptionInput = (e: FormEvent<HTMLTextAreaElement>) => {
-    setIsParsed(false); //EN CADA EVENTO DE INPUT EN DESCRIPCION SERA FALSE ==> NO SE PARSEA
-    const value: string = (e.target as HTMLTextAreaElement).value;
-    const result: TFieldState = descriptionValidator.validate(value); //==>  VALIDAR ENTRADA
-    setFormState((prevState) => ({ ...prevState, description: result })); //==> PASAR OBJETO(RESULTADO) DE VALIDACION AL formState.
-
-    // GUARDAR EN STE DATA
-    setStepData((prev) => ({
-      ...prev, //==> COPIAR TODO LO PREVIO DEL OBJETO GLOBAL
-      [EKeyDataByStep.TWO]: {
-        // ==>  EN ATRIBUTO 2
-        ...prev[EKeyDataByStep.TWO], // MANTENER EL RESTO DE LOS VALORES EXISTENTES EN SUBOBJETO
-        description: value, //ACTUALIZAR EL descriptionUser
-      },
-    }));
-
-    setIsStepValid(result.isValid); //SETEAR AL MOMENTO ASEGURANDO LA UNICA FUENTE DE LA VERDAD
-  };
-
-  // EVENTO AL HACER BLUR EN DESCRIPCION
-  const handleDescriptionBlur = () => {
-    // SI EL ESTADO REAL ACTUAL ES VALIDO
-    if (formState.description.isValid) {
-      setIsParsed(true); // ==> INDICAR PARSEO
-
-      // SETEAR ESTADO GLOBAL EN STORAGE
-      setStepData((prev) => ({
-        ...prev, //==> COPIAR TODO LO PREVIO DEL OBJETO GLOBAL
-        [EKeyDataByStep.TWO]: {
-          // ==>  EN SUBOBJETO DEL PASO 2
-          ...prev[EKeyDataByStep.TWO], // MANTENER EL RESTO DE LOS VALORES EXISTENTES EN SUBOBJETO PASO 2
-          description: formatTextArea(formState.description.value as string), // ACTUALIZAR CON FORMATO
-        },
-      }));
-    }
-  };
-
-  // EVENTO CHANGE A PERFIL
+  // EVENTO ONCHANGE A PERFIL
   const handleImageProfileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0 && e.target.files[0]) {
       listFiles.current = e.target.files[0]; //ALMACENAR EL REF
@@ -198,7 +164,7 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
     setIsStepValid(result.isValid); // GUARDO EL RESULTADO FINAL DE LA VALIDACION DEL PASO
   };
 
-  // EVENTO ONCHANGE A EXPERIENCIAS PASO 2
+  // EVENTO ONCHANGE A EXPERIENCIAS
   const handleImageExperiencesChange = (e: ChangeEvent<HTMLInputElement>) => {
     listFiles.current = e.target.files as FileList; // ==> GUARDO VALOR EN REFERENCIA
     const storedImages: TImageDataStored[] = stepData[EKeyDataByStep.TWO].imageExperienceData;
@@ -242,10 +208,10 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const contextValueStepTwo: TTypeContextStepTwo = {
-    handleDescriptionInput,
+    // handleDescriptionInput,
     handleImageProfileChange,
     handleImageExperiencesChange,
-    handleDescriptionBlur,
+    // handleDescriptionBlur,
     onDeleteExperience,
     onDeleteProfile,
     setSrc,
