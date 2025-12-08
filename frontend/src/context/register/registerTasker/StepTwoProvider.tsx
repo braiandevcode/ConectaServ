@@ -128,6 +128,7 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+
   // EVENTO ONCHANGE A PERFIL
   const handleImageProfileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0 && e.target.files[0]) {
