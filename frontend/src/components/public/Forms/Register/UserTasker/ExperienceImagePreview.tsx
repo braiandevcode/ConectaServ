@@ -1,15 +1,12 @@
-import useRegisterTasker from '../../../../../hooks/useRegisterTasker';
 import useStepTwo from '../../../../../hooks/useStepTwo';
+import useTasker from '../../../../../hooks/useTasker';
 import { EKeyDataByStep } from '../../../../../types/enums';
 import type { TImageDataStored } from '../../../../../types/typeRegisterEndDto';
 import BtnDeleteImage from './Buttons/BtnDeleteImage';
-
 // CSS
-import './ExperienceImagePreview.css';
-
-// COMPONENTE PARA IMAGENES PREVIAS DE EXPERIENCIAS
+import './ExperienceImagePreview.css';// COMPONENTE PARA IMAGENES PREVIAS DE EXPERIENCIAS
 const ExperienceImagesPreview = () => {
-  const { stepData } = useRegisterTasker(); //HOOK PERSONALIZADO QUE USA CONTEXTO  NIVEL REGISTRO PROFESIONAL
+  const { stepData } = useTasker(); //HOOK PERSONALIZADO QUE USA CONTEXTO  NIVEL REGISTRO PROFESIONAL
   const { srcVector, onDeleteExperience } = useStepTwo(); //HOOK PERSONALIZADO QUE USA CONTEXTO  NIVEL PASO DOS
 
   // SI NO HAY IMAGENES PROCESADAS, NO RENDERIZAR

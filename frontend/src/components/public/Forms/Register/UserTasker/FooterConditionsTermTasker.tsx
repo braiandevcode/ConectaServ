@@ -1,18 +1,13 @@
 import { Link } from 'react-router';
-import useTasker from '../../../../hooks/useTasker';
-import useMain from '../../../../hooks/useMain';
 
 // IMPORTACION DEL CSS
-import './FooterConditionsTerm.css';
-import { EPathPage } from '../../../../types/enums';
+import '../FooterConditionsTerm.css'
+import useTasker from '../../../../../hooks/useTasker';
+import { EPathPage } from '../../../../../types/enums';
+
 // COMPONENTE FOOTER DE FORMULARIO TERMINOS Y CONDICIONES
-const FooterConditionsTerm = () => {
+const FooterConditionsTermTasker = () => {
   const { onChangeTerms, isSending } = useTasker(); //HOOK REGISTRO GENERAL
-
-  const { client } = useMain();
-
-  const role:string= client === null  ? 'client' : client ? 'client' : 'tasker';
-  const isClient: boolean = role === 'client';
 
   //RENDER DE TERMINOS Y CONDICIONES + CHECKS DE ACEPTAR O NO
   return (
@@ -22,11 +17,11 @@ const FooterConditionsTerm = () => {
           <input id='terms' name='terms' disabled={isSending} type='checkbox' className='c-flex c-flex-items-center c-flex-justify-center form__checkbox-input' onChange={onChangeTerms} required />
           <label htmlFor='terms' className='form__checkbox-label'>
             Acepto los
-            <Link to={isClient ? EPathPage.PATH_TERMS_CLIENT : EPathPage.PATH_TERMS_TASKER} className='form__link'>
+            <Link to={EPathPage.PATH_TERMS_TASKER} className='form__link'>
               Términos y Condiciones
             </Link>
             y la
-            <Link to={isClient ? EPathPage.PATH_PRIVACY_CLIENT : EPathPage.PATH_PRIVACY_TASKER} className='form__link'>
+            <Link to={EPathPage.PATH_PRIVACY_TASKER} className='form__link'>
               Política de Privacidad
             </Link>
             de ConectaServ
@@ -36,4 +31,4 @@ const FooterConditionsTerm = () => {
     </>
   );
 };
-export default FooterConditionsTerm;
+export default FooterConditionsTermTasker;

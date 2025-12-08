@@ -6,19 +6,20 @@ import { renderFieldError, styleBorderFieldError } from '../../../../utils/formU
 import LoaderBtn from '../../../LoaderBtn';
 import useIdentifyEmail from '../../../../hooks/useIdentifyEmail';
 import useUserApi from '../../../../hooks/useUserApi';
-import useRegister from '../../../../hooks/useRegister';
+import useRegister from '../../../../hooks/useTasker';
 import { EModalGlobalType } from '../../../../types/enumGlobalModalType';
 import useGlobalModal from '../../../../hooks/useGlobalModal';
 import BtnSendCode from './Buttons/BtnSendCode';
 
-// CSS
-import './FormVerifyCode.css';
 import type { iMessageStatusToken } from '../../../../interfaces/iMessageStatusToken';
 import useMain from '../../../../hooks/useMain';
 import useRegisterClient from '../../../../hooks/useRegisterClient';
-import useRegisterTasker from '../../../../hooks/useRegisterTasker';
 import type { iStatusError } from '../../../../interfaces/iSatatus';
 import type { iMessageResponseStatus } from '../../../../interfaces/iMessageResponseStatusBack';
+import useTasker from '../../../../hooks/useTasker';
+// CSS
+import './FormVerifyCode.css';
+
 const NUM_DIGITS: number = 6; //GUARDAR EN MEMORIA VALOR DE DIGITOS
 // COMPONENTE FORMULARIO DE VERIFICACION
 
@@ -31,7 +32,7 @@ const FormVerifyCode: FC = () => {
   const { resendEmail, time } = useRegister();
   const { getIdentifyEmail, sendCodeToUserEmail } = useUserApi();
   const { formState:formStateClient } = useRegisterClient();
-  const { formState: formStateTasker} = useRegisterTasker();
+  const {formState: formStateTasker} = useTasker();
  
   const { client } = useMain()
 

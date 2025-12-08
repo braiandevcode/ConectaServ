@@ -5,10 +5,10 @@ import Loader from '../../../Loader';
 import { configApiAvatarImage } from '../../../../config/configApiAvatarImage';
 import Button from '../../../Button';
 
+// CSS
+import './ProfileTasker.css'
 
-import './MyProfileInfoTasker.css'
-
-const ProfileTaskerBase = () => {
+const ProfileTasker = () => {
   const { userData } = useMain();
   const { HOST, QUERY_NAME, QUERY_BG_RANDOM } = configApiAvatarImage;
   return (
@@ -43,8 +43,10 @@ const ProfileTaskerBase = () => {
                 <RiEdit2Line />
               </Button>
             </div>
-
             <p className='profile__text'>{userData.description ?? 'Aún no has agregado una descripción.'}</p>
+            {/* <form>
+              
+            </form> */}
           </section>
 
           {/* EXPERIENCIA */}
@@ -77,4 +79,4 @@ const ProfileTaskerBase = () => {
     </>
   );
 };
-export default ProfileTaskerBase;
+export default ProfileTasker;

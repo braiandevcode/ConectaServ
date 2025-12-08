@@ -1,16 +1,16 @@
 import { EKeyDataByStep } from '../types/enums';
 import type { TImageData, TImageDataStored } from '../types/typeRegisterEndDto';
-import type { TRegisterTasker } from '../types/typeRegisterTasker';
 import type { TSavedImage } from '../types/typeSavedImages';
+import type { TTasker } from '../types/typeTasker';
 import type { TIdString } from '../types/typeUUID';
 import { fileToStoredImage } from '../utils/storageUtils';
 
 const useImages = () => {
   // TIPADO INTERNO
-  type TSavedExperiences = Pick<TRegisterTasker, 'setStepData'> & TSavedImage;
+  type TSavedExperiences = Pick<TTasker, 'setStepData'> & TSavedImage;
 
   // TIPADO ENCADENANDO PROPIEDADES DE OTROS TIPOS EXISTENTES
-  type TSavedProfile = Pick<TRegisterTasker, 'setStepData'> & TSavedImage;
+  type TSavedProfile = Pick<TTasker, 'setStepData'> & TSavedImage;
 
   // FUNCION ASINCRONA PARA GUARDAR IMAGENES DE EXPERIENCIAS
   const savedExperiences = async ({ formState, listFiles, setStepData }: TSavedExperiences) => {

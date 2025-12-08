@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { ECategoryKey, EDefaultSelected, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../../types/enums';
-import useRegister from '../../../hooks/useRegister';
 import type { TRegisterTasker } from '../../../types/typeRegisterTasker';
 import Loader from '../../../components/Loader';
-import { TaskerContext } from './TaskerContext';
-import type { iFormStateValidationTask } from '../../../interfaces/iFormStateValidationTask';
+// import type { iFormStateValidationTask } from '../../../interfaces/iFormStateValidationTask';
 import useValidateTasker from '../../../hooks/useValidateTasker';
 import scrolledTop from '../../../utils/scrollTop';
-import type { TStepDataTasker } from '../../../types/typeStepData';
-import useStepDataTasker from '../../../hooks/useStepDataTasker';
+// import type { TStepDataTasker } from '../../../types/typeStepData';
+// import useStepDataTasker from '../../../hooks/useStepDataTasker';
+import { TaskerRegisterContext } from './TaskerRegisterContext';
+import useTasker from '../../../hooks/useTasker';
 
 /*
 ****EXPLICACION DEL FLUJO ENTRE VALIDAR Y ALMACENAR EN STRORAGE:*****
@@ -19,15 +19,13 @@ import useStepDataTasker from '../../../hooks/useStepDataTasker';
 */
 
 // PROVIDER ES QUIEN NOS PROVEE LOS ESTADOS Y FUNCIONES DE COMPONENTES
-const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
-  const { STEP_DATA_TASKER, initialFormState } = useStepDataTasker(); //GANCHO PARA TRAER EL OBJETO DE DATOS DE LOS PASOS DE REGISTRO
+const TaskerRegisterProvider = ({ children }: { children: React.ReactNode }) => {
+  // const { STEP_DATA_TASKER, initialFormState } = useStepDataTasker(); //GANCHO PARA TRAER EL OBJETO DE DATOS DE LOS PASOS DE REGISTRO
 
-  // OBJETO GENERAL DE PASOS CON VALORES POR DEFECTO Y PARA ALMACENAR EN STROAGE
-  const [stepData, setStepData] = useState<TStepDataTasker>(STEP_DATA_TASKER);
+  // // OBJETO GENERAL DE PASOS CON VALORES POR DEFECTO Y PARA ALMACENAR EN STROAGE
+  // const [stepData, setStepData] = useState<TStepDataTasker>(STEP_DATA_TASKER);
 
-  //--------------------------------------------------------------------HOOKS DE REACT--------------------------------------------------------------------//
-  const { setTerms } = useRegister(); //HOOK QUE USA CONTEXTO NIVEL REGISTRO
-
+  const { stepData, formState, setTerms, isStepValid, setIsStepValid } = useTasker(); //CUSTOM HOOK QUE USA CONTEXTO TASKER GENERAL
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
   // ESTADO PARA EL PASO ACTUAL DEL FORMULARIO
   const [step, setStep] = useState<number>(() => {
@@ -39,10 +37,6 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
   const [hasInteracted, setHasInteracted] = useState<boolean>(() => {
     return localStorage.getItem(ENamesOfKeyLocalStorage.INTERACTED) === 'true'; //LEER KEY DE interacted EN ALMACENAMIENTO  DE STORAGE Y COMPARAR
   });
-
-  //ESTADO QUE ME PERMITIRA SABER SI DEBE ESTAR PARSEADO O NO UN VALOR DE TEXTO
-  //UTIL PARA EVITAR PROBLEMAS EN PARSEOS EN CAMPOS EN TIEMPO
-  const [isParsed, setIsParsed] = useState(false);
 
   // -----------------------------------------------------------ESTADOS--------------------------------------------------------------------------//
   const [valueSelected, setValueSelected] = useState<string>(() => {
@@ -57,28 +51,22 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
 
   // ESTADO DE BANDER PARA SABER SI RENDERIZA O NO ULTIMO PASO
   const [isFieldsBasic, setIsFieldsBasic] = useState<boolean>(true);
-
   const [isBudgeMountDisabled, setIsBudgeMountDisabled] = useState<boolean>(true);
   const [isReinsertDisabled, setIsReinsertDisabled] = useState<boolean>(true);
 
   //ESTADO QUE PERMITE EN TIMPO DE RUNTIME FORMATEAR A MONEDA EN CAMPO UI
   const [amountFieldFormat, setAmountFieldFormat] = useState<string>('');
-  const [isFocus, setIsFocus] = useState<boolean>(false); //PERMITE INDICAR SI SE HIZO O NO FOCO
-
-  // ESTADO DE VALIDACIONES EN TODO EL FORMULARIO ==> INICIALIZA CON ==> initialFormState LEE DATOS PERSISTIDOS
-  const [formState, setFormState] = useState<iFormStateValidationTask>(() => initialFormState({ stepData }));
+  // const [isFocus, setIsFocus] = useState<boolean>(false); //PERMITE INDICAR SI SE HIZO O NO FOCO
 
   //GANCHO PAR VALIDAR PASOS
   const { validateCurrentStep } = useValidateTasker({ step, formState, hasBudge, hasWorkArea, hasInteracted });
-
-  // VALIDAR  CAMPOS POR PASOS
-  const [isStepValid, setIsStepValid] = useState<boolean>(validateCurrentStep);
 
   const [isLoaded, setIsLoaded] = useState(false);
 
   // -------------------------------------------------------------useEffects-------------------------------------------------------------------------//
   // EFECTO QUE INDICA QUE TODO FUE CARGADO
   useEffect(() => {
+    setIsStepValid(validateCurrentStep()); //REVALIDA
     setIsLoaded(true);
   }, []);
 
@@ -122,43 +110,33 @@ const TaskerProvider = ({ children }: { children: React.ReactNode }) => {
   const contextRegisterValue: TRegisterTasker = {
     setIsFieldsBasic,
     setIsLoaded,
-    setStepData,
     setValueSelected,
     validateCurrentStep,
-    setIsFocus,
-    setIsParsed,
     setAmountFieldFormat,
     setIsBudgeMountDisabled,
-    setFormState,
     setHasInteracted,
     handleClickNext,
     handleClickPrev,
     setHasWorkArea,
     setHasBudge,
-    setIsStepValid,
     setStep,
     setIsResetDetailsWork,
     setIsReinsertDisabled,
     isLoaded,
     isFieldsBasic,
-    stepData,
     isReinsertDisabled,
-    formState,
     hasInteracted,
     isBudgeMountDisabled,
     amountFieldFormat,
-    isParsed,
     isResetDetailsWork,
     valueSelected,
-    isFocus,
-    isStepValid,
     step,
     hasWorkArea,
     hasBudge,
   };
 
   //RETORNO PROVEEDOR
-  return <TaskerContext.Provider value={contextRegisterValue}>{isLoaded ? children : <Loader />}</TaskerContext.Provider>;
+  return <TaskerRegisterContext.Provider value={contextRegisterValue}>{isLoaded ? children : <Loader />}</TaskerRegisterContext.Provider>;
 };
 
-export default TaskerProvider;
+export default TaskerRegisterProvider;

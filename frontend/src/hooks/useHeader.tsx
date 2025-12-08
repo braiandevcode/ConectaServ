@@ -100,10 +100,10 @@ const useHeader = () => {
           </button>
 
           <div className='c-flex c-flex-items-center gap-2'>
-            {pathname !== '/profile/info' && <NavProfile />}
+            {pathname !== '/tasker/profile' && <NavProfile />}
             <NavLinkChats />
             <NavCategory menuChildOpen={menuOpen} />
-            {pathname !== '/profile/info' && pathname !== '/' && (
+            {pathname !== '/tasker/profile' && pathname !== '/' && (
               <>
                 <h3 className='c-flex c-flex-items-center gap-1/2'>
                   <FaUser /> {userData?.userName}
@@ -131,7 +131,7 @@ const useHeader = () => {
             </h3>
             <NavLinkChats />
             <NavCategory menuChildOpen={menuOpen} />
-            {pathname !== '/services/all' && <NavService />}
+            {pathname !== '/client/services' && <NavService />}
             <NavLogout />
           </div>
         </div>

@@ -1,15 +1,15 @@
 import FieldsClientProvider from '../../../../../context/register/registerClient/FieldsClientProvider';
 import useRegisterClient from '../../../../../hooks/useRegisterClient';
 import BtnSubmit from '../../../../BtnSubmit';
-import FooterConditionsTerm from '../FooterConditionsTerm';
 import FieldsClient from './FieldsClient';
 import useSendData from '../../../../../hooks/useSendDataRegister';
 import LoaderBtn from '../../../../LoaderBtn';
-import useRegister from '../../../../../hooks/useRegister';
+import useRegister from '../../../../../hooks/useTasker';
 
 // CSS
 import '../../FormBase.css';
 import { FaInfoCircle, FaUserCircle } from 'react-icons/fa';
+import FooterConditionsTerm from '../FooterConditionsTerm';
 
 // FORMULARIO DE CLIENTE
 const Form = () => {
@@ -41,7 +41,7 @@ const Form = () => {
             <FieldsClientProvider>
               <FieldsClient />
             </FieldsClientProvider>
-            <FooterConditionsTerm />
+            <FooterConditionsTerm/>
           </div>
           {isSending ? <LoaderBtn /> : <BtnSubmit variant='btn btn__submit' disabled={!isValid} text='Enviar'/>}
 

@@ -23,14 +23,14 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   if (userData) {
     // CLIENTE
     if (!userData.isTasker) {
-      const allowed: boolean = isIncludesValues(['/services', '/to/chats'], pathname);
-      if (!allowed) return <Navigate to='/services/all' replace />;
+      const allowed: boolean = isIncludesValues(['/client/services', '/client/to/chats'], pathname);
+      if (!allowed) return <Navigate to='/client/services' replace />;
     }
 
     // TASKER
     if (userData.isTasker) {
-      const allowed: boolean = isIncludesValues(['/profile', '/to/chats'], pathname);
-      if (!allowed) return <Navigate to='/profile/info' replace />;
+      const allowed: boolean = isIncludesValues(['/tasker/profile', '/tasker/to/chats'], pathname);
+      if (!allowed) return <Navigate to='/tasker/profile' replace />;
     }
   }
 

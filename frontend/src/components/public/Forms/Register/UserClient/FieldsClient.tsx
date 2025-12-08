@@ -1,7 +1,7 @@
 import { RiMailSendLine } from 'react-icons/ri';
 import useFieldsClient from '../../../../../hooks/useFieldsClient';
 import useFormVerifyEmailCode from '../../../../../hooks/useFormVerifyEmailCode';
-import useRegister from '../../../../../hooks/useRegister';
+import useRegister from '../../../../../hooks/useTasker';
 import useRegisterClient from '../../../../../hooks/useRegisterClient';
 import { EDataClient, ELocationKey } from '../../../../../types/enums';
 import { renderFieldError, styleBorderFieldError } from '../../../../../utils/formUtils';

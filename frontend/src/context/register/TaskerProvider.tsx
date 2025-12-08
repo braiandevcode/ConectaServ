@@ -1,15 +1,27 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ReactNode } from 'react';
-import { RegisterContext } from './RegisterContext';
-import type { TRegister } from '../../types/typeRegister';
+import type { TTasker } from '../../types/typeTasker';
 import { ENamesOfKeyLocalStorage } from '../../types/enums';
 import { useLocation, useNavigate } from 'react-router';
 import type { iEmailUser } from '../../interfaces/iEmailUser';
 import type { iTimeExpire } from '../../interfaces/iTimeExpire';
+import { TaskerContext } from './TaskerContext';
+import useStepDataTasker from '../../hooks/useStepDataTasker';
+import type { TStepDataTasker } from '../../types/typeStepData';
+import type { iFormStateValidationTask } from '../../interfaces/iFormStateValidationTask';
 
 // CONTEXTO DE ESTADOS GENERALES A FORMULARIOS
-const RegisterProvider = ({ children }: { children: ReactNode }) => {
+const TaskerProvider = ({ children }: { children: ReactNode }) => {
   const location = useLocation(); //HOOK DE REACT LOCATION
   const navigate = useNavigate(); // HOOK DE REACT NAVIGATION
+  const { STEP_DATA_TASKER, initialFormState } = useStepDataTasker(); //GANCHO PARA TRAER EL OBJETO DE DATOS DE LOS PASOS DE REGISTRO
+
+  // OBJETO GENERAL DE PASOS CON VALORES POR DEFECTO Y PARA ALMACENAR EN STROAGE
+  const [stepData, setStepData] = useState<TStepDataTasker>(STEP_DATA_TASKER);
+  // ESTADO DE VALIDACIONES EN TODO EL FORMULARIO ==> INICIALIZA CON ==> initialFormState LEE DATOS PERSISTIDOS
+  const [formState, setFormState] = useState<iFormStateValidationTask>(() => initialFormState({ stepData }));
+
+  // VALIDAR  CAMPOS POR PASOS
+  const [isStepValid, setIsStepValid] = useState<boolean>(false);
 
   //ESTADO DE TERMINOS Y CONDICIONES EN FALSE SIEMPRE
   const [terms, setTerms] = useState<boolean>(false);
@@ -24,7 +36,6 @@ const RegisterProvider = ({ children }: { children: ReactNode }) => {
 
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
 
-
   const [time, setTime] = useState<iTimeExpire>({ min: 0, sec: 0 }); // ==> ESTADO PARA EL TIEMPO ACTUAL DE EXPIRACION DEL CODIGO
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null); // ==> ID DE REFERENCIA PARA EL TIMMER
 
@@ -32,7 +43,7 @@ const RegisterProvider = ({ children }: { children: ReactNode }) => {
   const [isSuccefullyVerified, setIsSuccefullyVerified] = useState<boolean>(() => {
     return localStorage.getItem(ENamesOfKeyLocalStorage.IS_VERIFY_CODE) === 'true';
   });
-  
+
   //ONCHANGE TERMINOS Y CONDICIONES
   const onChangeTerms = (e: ChangeEvent<HTMLInputElement>) => {
     setTerms(e.target.checked);
@@ -57,9 +68,8 @@ const RegisterProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [location.pathname, navigate]); //==> DEPENDE DE CAMBIOS EN LOCATION Y NAVIGATE, HOOKS DE REACT
 
-  
   //VALORES DE ESTADOS QUE CONSUME EL CONTEXTO
-  const contextValuesRegister: TRegister = {
+  const contextValuesRegister: TTasker = {
     setIsSuccefullyVerified,
     setResendEmail,
     setInteractedConfirmPassword,
@@ -69,9 +79,15 @@ const RegisterProvider = ({ children }: { children: ReactNode }) => {
     setConfirmPassword,
     setPassword,
     setIsSending,
-    expiresAt,
     setExpiresAt,
     setTime,
+    setFormState,
+    setStepData,
+    setIsStepValid,
+    isStepValid,
+    stepData,
+    formState,
+    expiresAt,
     time,
     timerRef,
     resendEmail,
@@ -85,7 +101,7 @@ const RegisterProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // RETORNAMOS EL PROVIDER  DE REGISTROS
-  return <RegisterContext.Provider value={contextValuesRegister}>{children}</RegisterContext.Provider>;
+  return <TaskerContext.Provider value={contextValuesRegister}>{children}</TaskerContext.Provider>;
 };
 
-export default RegisterProvider;
+export default TaskerProvider;

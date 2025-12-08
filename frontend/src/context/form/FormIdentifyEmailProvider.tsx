@@ -7,12 +7,12 @@ import type { TFieldState } from '../../types/typeStateFields';
 import EmailValidator from '../../modules/validators/EmailValidator';
 import useMain from '../../hooks/useMain';
 import { useNavigate } from 'react-router';
-// import type { TUser } from '../../types/typeUser';
 import useUserApi from '../../hooks/useUserApi';
 import FormIdentifyEmailContext from './FormIdentifyEmailContext';
 import { clearPersistence } from '../../utils/storageUtils';
 import type { iMessageResponseStatus } from '../../interfaces/iMessageResponseStatusBack';
 import type { iStatusError } from '../../interfaces/iSatatus';
+import scrolledTop from '../../utils/scrollTop';
 
 const emailValidator: EmailValidator = new EmailValidator(); // ==> INSTANCIA DE VALIDACION DE ENTRADA DE CODIGO
 
@@ -81,8 +81,9 @@ const FormIdentifyEmailProvider = ({ children }: { children: ReactNode }) => {
       if(result){
         // SI ES 200 NO EXISTE PASAR AL REGISTRO
         if(result.success){
-          navigate(`register/${role}`); //SEGUN EL ROL GUARDADO NAVEGAR
+          navigate(`${role}/register`); //SEGUN EL ROL GUARDADO NAVEGAR
           setIsExistEmail(false);
+          scrolledTop();
           return;
         }
       }

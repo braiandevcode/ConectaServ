@@ -25,13 +25,6 @@
   font-size: 1.2rem;
 }
 
-.profile__section {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0.5rem;
-}
-
 .profile__price {
   background-color: #f3f4f6;
   padding: 1rem;
@@ -100,9 +93,9 @@
 .profileSection-details-budget__price-amount,
 .profileSection-details-budget-option,
 .profileSection-details-budget__reinsert-option,
-.profile__categoryText{
-    font-weight: 700;
-    letter-spacing: 1px;
+.profile__categoryText {
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 /* 768px > */
@@ -111,7 +104,7 @@
     width: 100%;
   }
 
-  .profile__details_budge{
+  .profile__details_budge {
     margin-right: auto;
   }
 
@@ -119,10 +112,19 @@
     font-size: 1.2rem;
     width: 90%;
   }
- 
+
   .profile__imageProfile {
     flex-direction: row;
     gap: 2rem;
     width: 80%;
+  }
+}
+
+/* 968px */
+@media screen and (min-width: 968px) {
+  .profile__section.profile__section-starstAndBudget{
+    display: flex;
+    flex-direction:row;
+    align-items: stretch;
   }
 }

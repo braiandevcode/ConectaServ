@@ -2,6 +2,7 @@ import { FaHandsHelping } from 'react-icons/fa';
 import { Link } from 'react-router';
 import NavLoginAndRegister from './NavLoginAndRegister';
 import useMain from '../../hooks/useMain';
+import scrolledTop from '../../utils/scrollTop';
 
 export default function Footer() {
   const { isAuth } = useMain();
@@ -28,10 +29,10 @@ export default function Footer() {
                 <h4 className='mb-1/2'>Enlaces</h4>
                 <ul className='c-flex c-flex-column gap-1/2 p-0 mb-0'>
                   <li className='footer__link'>
-                    <Link to='/'>Inicio</Link>
+                    <Link to='/' onClick={() => scrolledTop()}>Inicio</Link>
                   </li>
                   <li className='footer__link'>
-                    <Link to='/como-funciona'>¿Cómo funciona?</Link>
+                    <Link to='/como-funciona' onClick={() => scrolledTop()}>¿Cómo funciona?</Link>
                   </li>
                 </ul>
               </div>

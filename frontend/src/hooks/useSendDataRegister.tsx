@@ -1,9 +1,7 @@
 import type { FormEvent } from 'react';
 import { EDataClient, EKeyDataByStep, ENamesOfKeyLocalStorage } from '../types/enums';
 import useMain from './useMain';
-import useRegister from './useRegister';
 import useRegisterClient from './useRegisterClient';
-import useRegisterTasker from './useRegisterTasker';
 import useGlobalModal from './useGlobalModal';
 import useValidateStep from './useValidateStep';
 import type { TUser } from '../types/typeUser';
@@ -12,13 +10,13 @@ import useFormVerifyEmailCode from './useFormVerifyEmailCode';
 import type { TFormRole } from '../types/typeFormRole';
 import type { ITaskerData } from '../interfaces/iTaskerData';
 import type {TImageDataStored } from '../types/typeRegisterEndDto';
+import useTasker from './useTasker';
 
 // HOOK QUE SE ENCARGA DEL PROCESO DE ENVIO DE DATOS AL BACKEND
 const useSendDataRegister = () => {
   const { client } = useMain(); // HOOK QUE USA EL CONTEXTO A NIVEL MAIN
-  const { password } = useRegister(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO GENERALES
+  const { password, stepData, isStepValid } = useTasker(); // HOOK QUE USA EL CONTEXTO TASKER GENERAL
   const { dataClient, isLoaded: isValid } = useRegisterClient(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO CLIENTE
-  const { stepData, isStepValid } = useRegisterTasker(); // HOOK QUE USA EL CONTEXTO A NIVEL REGISTRO PROFESIONAL
   const { showError} = useGlobalModal(); //HOOK QUE USA CONTEXTO DE MODALES GLOBAL
   const { addUser } = useUserApi(); //HOOK PARA PETICIONES DATOS DE USUARIOS
   const { isCodeVerified } = useFormVerifyEmailCode();

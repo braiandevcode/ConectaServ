@@ -1,5 +1,4 @@
-import useRegister from '../../../../../../hooks/useRegister';
-import useRegisterTasker from '../../../../../../hooks/useRegisterTasker';
+import useRegister from '../../../../../../hooks/useTasker';
 import useStepFour from '../../../../../../hooks/useStepFour';
 import { EKeyDataByStep, ELocationKey } from '../../../../../../types/enums';
 import { renderFieldError, styleBorderFieldError } from '../../../../../../utils/formUtils';
@@ -23,10 +22,11 @@ import { EModalGlobalType } from '../../../../../../types/enumGlobalModalType';
 import type { iMessageStatusToken } from '../../../../../../interfaces/iMessageStatusToken';
 import type { iMessageResponseStatus } from '../../../../../../interfaces/iMessageResponseStatusBack';
 import type { iStatusError } from '../../../../../../interfaces/iSatatus';
+import useTasker from '../../../../../../hooks/useTasker';
 
 // COMPONENTE PASO 4
 const StepFour = () => {
-  const { formState, stepData } = useRegisterTasker(); //HOOK REGISTRO PROFESIONAL
+  const { formState, stepData } = useTasker(); //HOOK REGISTRO PROFESIONAL
   const { isSendingCode, isCodeSent, updateTokenEmail} = useVerifyEmailCode(); //HOOK QUE USA CONTEXTO VERIFICACION DE EMAIL
   const { password, isSending, isSuccefullyVerified, interactedPassword, interactedConfirmPassword, confirmPassword, setResendEmail } = useRegister(); //HOOK DE ESTADOS DE REGISTROS EN COMUN
   const { handleFullName, handleUserName, handleChangeLocation, handleConfirmPassword, handleEmail, handlePassword } = useStepFour(); // HOOK PASO 4
@@ -39,10 +39,7 @@ const StepFour = () => {
     try {
       const responseIdentify: iMessageResponseStatus | null = await getIdentifyEmail({ setIsSendingIdentificationEmail, emailIdentify: (formState.email.value as string) });
 
-      
-  
       if(responseIdentify){
-        console.log(responseIdentify.status);
         // SI EL EMAIL NO EXISTE ES 200
         if (responseIdentify.success) {
           await sendCodeToUserEmail({ emailCode: stepData[EKeyDataByStep.FOUR].email }); // ENVIAR

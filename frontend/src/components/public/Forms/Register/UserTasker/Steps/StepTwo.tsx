@@ -1,13 +1,12 @@
-import useRegisterTasker from '../../../../../../hooks/useRegisterTasker';
 import useStepTwo from '../../../../../../hooks/useStepTwo';
 import { EKeyDataByStep } from '../../../../../../types/enums';
-import { renderFieldError, styleBorderFieldError } from '../../../../../../utils/formUtils';
+// import { renderFieldError, styleBorderFieldError } from '../../../../../../utils/formUtils';
 import ExperienceImagesPreview from '../ExperienceImagePreview';
 import ProfileImagePreview from '../ProfileImagePreview';
 
 // ICONOS DE REACT ICONS
 import { GiIdCard } from 'react-icons/gi';
-import { FaFileLines } from 'react-icons/fa6';
+// import { FaFileLines } from 'react-icons/fa6';
 import { IoImage } from 'react-icons/io5';
 import { FaCloudUploadAlt } from 'react-icons/fa';
 import { IoMdImages } from 'react-icons/io';
@@ -15,12 +14,14 @@ import type { TImageDataStored } from '../../../../../../types/typeRegisterEndDt
 // CSS
 import './StepTwo.css';
 import SectionLoader from '../../../../../SectionLoader';
+import Description from '../../../Description';
+import useTasker from '../../../../../../hooks/useTasker';
 
 // COMPONENTE PASO 2
 const StepTwo = () => {
   //DEL FORMSTATE TOMO EL VALOR ACTUAL QUE CONSUME DEL  ==> STEPDATA POR LO CUAL ES MOTIVO DE LA PERSISTENCIA
-  const { formState, stepData } = useRegisterTasker();
-  const {loadImgExp, handleImageProfileChange, handleImageExperiencesChange, handleDescriptionInput, handleDescriptionBlur, loadImg } = useStepTwo();
+  const { formState, stepData } = useTasker();
+  const {loadImgExp, handleImageProfileChange, handleImageExperiencesChange, loadImg } = useStepTwo();
 
   const profile: TImageDataStored | null = stepData[EKeyDataByStep.TWO].imageProfileData;
   const experiences: TImageDataStored[] = stepData[EKeyDataByStep.TWO].imageExperienceData;
@@ -36,14 +37,16 @@ const StepTwo = () => {
 
         <div className='mb-2 c-flex c-flex-column c-flex-items-center gap-3 form-groupProfile__body'>
           {/* DESCRIPCIÓN PERFIL */}
-          <div className='w-full c-flex c-flex-items-center c-flex-column gap-1/2 w-full form-groupProfile__containerDescription'>
+          {/* <div className='w-full c-flex c-flex-items-center c-flex-column gap-1/2 w-full form-groupProfile__containerDescription'>
             <label htmlFor='description' className='to-left c-flex c-flex-items-center gap-1/2 form-groupProfile__label'>
               <FaFileLines size={20} />
               <span>Descripción de perfil (Opcional)</span>
             </label>
             <textarea id='description' name='description' value={formState.description.value as string} className={`w-full form-groupProfile__textarea ${styleBorderFieldError(formState, 'description')}`} placeholder='Cuentales a la gente sobre ti...' spellCheck='true' lang='es' onChange={handleDescriptionInput} onBlur={handleDescriptionBlur} autoFocus></textarea>
             {renderFieldError(formState, 'description')}
-          </div>
+          </div> */}
+
+          <Description />
 
           {/* FOTO PERFIL */}
 

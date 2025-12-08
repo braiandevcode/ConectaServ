@@ -44,13 +44,13 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   // ----------------------useEffects----------------------------------//
   // INTERVAL PARA REFRESCAR ACCESS TOKEN CADA 14 MINUTOS
   useEffect(() => {
+    if (isLogout) return;
     // SI ESTAMOS HACIENDO LOGOUT, LIMPIAR EL INTERVAL Y NO HACER REFRESH TOKEN
     // LIMPIAR INTERVAL SI EXISTE
-    if (isLogout) {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
 
     // FUNCION PARA INICIAR EL INTERVAL
@@ -155,7 +155,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
 
   const onBackToList = () => {
     setSelectedTaskerProfile(undefined);
-    navigate('/services/all', { replace: true });
+    navigate('/client/services', { replace: true });
   };
 
   // MANEJA TODA LA LOGICA DE FORM + ROLE + NAVEGACION
