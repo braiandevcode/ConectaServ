@@ -23,7 +23,7 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   if (userData) {
     // CLIENTE
     if (!userData.isTasker) {
-      const allowed: boolean = isIncludesValues(['/client/services', '/client/to/chats'], pathname);
+      const allowed: boolean = isIncludesValues(['/client/services', '/client/to/chats', '/client/category'], pathname);
       if (!allowed) return <Navigate to='/client/services' replace />;
     }
 

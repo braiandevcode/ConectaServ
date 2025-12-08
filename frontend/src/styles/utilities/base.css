@@ -55,6 +55,7 @@ body {
   background-color: var(--bg-primary);
   font-family: 'Inter', sans-serif;
   letter-spacing: 1px;
+  user-select: none;
 }
 
 body,
