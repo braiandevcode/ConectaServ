@@ -94,7 +94,7 @@ const useHeader = () => {
       condition: isAuth && Boolean(userData?.isTasker),
       component: () => (
         <div className='w-full c-flex c-flex-items-center c-flex-justify-between'>
-          <button className='menu-toggle' onClick={() => setMenuOpen(true)}>
+          <button className='menu-toggle' onClick={() => setMenuOpen(!menuOpen)}>
             <FaList color={'#1e5da3'} />
           </button>
 
@@ -120,7 +120,7 @@ const useHeader = () => {
       condition: isAuth && Boolean(!userData?.isTasker),
       component: () => (
         <div className='w-full c-flex c-flex-items-center c-flex-justify-between'>
-          <button className='menu-toggle' onClick={() => setMenuOpen(true)}>
+          <button className='menu-toggle' onClick={() => setMenuOpen(!menuOpen)}>
             <FaList color={'#1e5da3'}/>
           </button>
 
