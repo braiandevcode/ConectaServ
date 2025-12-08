@@ -13,6 +13,7 @@ export interface iEndPointUser {
   IMAGE_PROFILE: string;
   IMAGES_EXP: string;
   TASKER_INFO: string;
+  DELETE_IMAGE_EXP:string;
 }
 
 // INTERFACES PARA URL DE PETICIONES

@@ -17,4 +17,5 @@ export const endPointUser: iEndPointUser= {
   IMAGE_PROFILE: `${BASE_BACK_URL}${EEndpoint.IMAGE_PROFILE}`,
   IMAGES_EXP: `${BASE_BACK_URL}${EEndpoint.IMAGES_EXP}`,
   TASKER_INFO:`${BASE_BACK_URL}${EEndpoint.TASKER_INFO}`,
+  DELETE_IMAGE_EXP:`${BASE_BACK_URL}${EEndpoint.DELETE_IMAGE_EXP}`
 };

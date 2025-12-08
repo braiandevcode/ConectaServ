@@ -19,12 +19,13 @@ export type TTasker = Omit<TStepFourProps, 'handleChangeLocation' | 'handleConfi
 
   // NUEVO------------------------------
   setFormState: Dispatch<SetStateAction<iFormStateValidationTask>>;
-  // initialFormState: ({ stepData }: { stepData: TStepDataTasker }) => void;
   setStepData: Dispatch<SetStateAction<TStepDataTasker>>;
+  setIsStepValid: (isStepValid: boolean) => void;
+  setEdit: Dispatch<SetStateAction<boolean>>;
   stepData: TStepDataTasker;
   formState: iFormStateValidationTask;
-  setIsStepValid: (isStepValid: boolean) => void;
   isStepValid: boolean;
+  edit:boolean;
   // ------------------------//
   expiresAt: number | null;
   isSuccefullyVerified: boolean; // INDICA SI LA VALIDACION DEL CODIGO FUE EXITOSA O NO

@@ -1,4 +1,3 @@
-
 import { defaultDataTasker } from '../config/defaultDataTasker';
 import type { iFormStateValidationTask } from '../interfaces/iFormStateValidationTask';
 import BudgeValidator from '../modules/validators/BudgeValidator';
@@ -14,7 +13,8 @@ import UserNameValidator from '../modules/validators/UserNameValidator';
 import { EKeyDataByStep, ENamesOfKeyLocalStorage } from '../types/enums';
 import type { TStepDataTasker } from '../types/typeStepData';
 import { readExistingData } from '../utils/storageUtils';
-import useRegister from './useTasker';
+import useMain from './useMain';
+import useTasker from './useTasker';
 
 // INSTANCIO VALIDACIONES NECESARIAS
 const descriptionValidator: DescriptionValidator = new DescriptionValidator();
@@ -31,7 +31,8 @@ const confirmPasswordValidator: ConfirmPasswordValidator = new ConfirmPasswordVa
 // HOOK PARA RETORNAR DATOS DEL USUARIO ACTUALIZADOS EN STORAGE
 const useStepDataTasker = () => {
   //--------------------------------------------------------------------HOOKS DE REACT--------------------------------------------------------------------//
-  const { password, confirmPassword } = useRegister(); //HOOK QUE USA CONTEXTO NIVEL REGISTRO
+  const { password, confirmPassword, edit } = useTasker(); //HOOK QUE USA CONTEXTO NIVEL REGISTRO
+  const { userData } = useMain();
 
   const stored = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA); //LEEO Y PARSEO OBJETO GENERAL DE PASOS
   const STEP_DATA_TASKER: TStepDataTasker = {
@@ -54,17 +55,22 @@ const useStepDataTasker = () => {
   };
 
   const initialFormState = ({ stepData }: { stepData: TStepDataTasker }) => {
+    // SI ES MODO EDICION, USAR DATOS DEL USUARIO
+    //SINO LOS DE stepData[EKeyDataByStep.TWO].description 
+    const descriptionValue = edit ? userData?.description ?? '' : stepData[EKeyDataByStep.TWO]?.description ?? '';
+    
+    
     // OBJETO INICIAL DE VALIDACIONES QUE LEERA LOS DATOS EN ALMACEN LOCAL Y VALIDARA O DEJAR VALORES POR DEFECTO
     const initialFormState: iFormStateValidationTask = {
       // ESTADOS DE ENTRADA EN PASO 1
       category: selectedCategoryValidator.validate(stepData[EKeyDataByStep.ONE].categoryData.category ?? ''),
-      'service': { value: stepData[EKeyDataByStep.ONE].serviceData['service'] ?? [], error: '', isValid: false },
-      'workArea': { value: stepData[EKeyDataByStep.ONE].workAreaData?.workArea ?? [], error: '', isValid: false },
-      'day': { value: stepData[EKeyDataByStep.ONE].dayData['day'] ?? [], error: '', isValid: false },
-      'hour': { value: stepData[EKeyDataByStep.ONE].hourData['hour'] ?? [], error: '', isValid: false },
+      service: { value: stepData[EKeyDataByStep.ONE].serviceData['service'] ?? [], error: '', isValid: false },
+      workArea: { value: stepData[EKeyDataByStep.ONE].workAreaData?.workArea ?? [], error: '', isValid: false },
+      day: { value: stepData[EKeyDataByStep.ONE].dayData['day'] ?? [], error: '', isValid: false },
+      hour: { value: stepData[EKeyDataByStep.ONE].hourData['hour'] ?? [], error: '', isValid: false },
 
       // ESTADOS DE ENTRADA EN PASO 2
-      description: descriptionValidator.validate(stepData[EKeyDataByStep.TWO].description ?? ''),
+      description: descriptionValidator.validate(descriptionValue),
       imageProfileData: imageProfileValidator.validate(stepData[EKeyDataByStep.TWO].imageProfileData),
       imageExperienceData: imageExperiencesValidator.validate(stepData[EKeyDataByStep.TWO].imageExperienceData),
 
