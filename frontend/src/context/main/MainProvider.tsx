@@ -42,14 +42,15 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   // ----------------------useEffects----------------------------------//
   // INTERVAL PARA REFRESCAR ACCESS TOKEN CADA 14 MINUTOS
   useEffect(() => {
+    if (isLogout) return;
     // SI ESTAMOS HACIENDO LOGOUT, LIMPIAR EL INTERVAL Y NO HACER REFRESH TOKEN
     // LIMPIAR INTERVAL SI EXISTE
-    if (isLogout) {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
+
     // FUNCION PARA INICIAR EL INTERVAL
     const startInterval = () => {
       // 14 MINUTOS EN MS ANTES DE EXPIRO DEL ACCESS TOKEN
