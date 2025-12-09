@@ -51,11 +51,6 @@ const useTaskerApi = () => {
         credentials: 'include',
       });
 
-      console.log(tasker);
-
-      console.log('TOKEN EN GETDEAILS:', accessToken);
-      
-
       if (!tasker) return null;
 
       // TASKERS CON IMAGENES
