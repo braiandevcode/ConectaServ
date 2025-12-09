@@ -1,5 +1,6 @@
 .loaderContainer {
   background-color: #fff;
+  z-index: 1000;
 }
 
 .lds-spinner,

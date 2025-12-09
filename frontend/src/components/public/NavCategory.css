@@ -151,7 +151,7 @@ button.color:active {
         left: 50%;
         transform: translateX(-55%);
         max-width: 95vw;
-        z-index: 9999;
+        z-index: 100;
     }
 }
 
