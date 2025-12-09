@@ -43,7 +43,7 @@ const useUserApi = () => {
   };
 
   // CARGAR IMGENES POR URL QUE VIENE DEL BACKEND
-  const loadTaskerImagesProfile= async <T extends TDataPayloadUser | TDataPayloadTaskerSingle>(userData:T, accessToken: string): Promise<T> => {
+  const loadTaskerImagesProfile = async <T extends TDataPayloadUser | TDataPayloadTaskerSingle>(userData: T, accessToken: string): Promise<T> => {
     setLoading(true);
     let profileImage: string | null = null;
     let experienceImages: string[] = [];
@@ -51,7 +51,7 @@ const useUserApi = () => {
     let idImageExp: string[] = [];
     // PERFIL
     if (userData.profileImageUrl) {
-      const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${userData.profileImageUrl}`, { headers: { Authorization: `Bearer ${accessToken}` }, credentials:'include' });
+      const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${userData.profileImageUrl}`, { headers: { Authorization: `Bearer ${accessToken}` }, credentials: 'include' });
       idImageProfile = img?.id;
       if (img?.base64 && img.base64.data.length > 0) {
         const base64Str: string = bufferToBase64(img.base64.data);
@@ -66,7 +66,7 @@ const useUserApi = () => {
     if (urls.length > 0) {
       const imgs = await Promise.all(
         urls.map(async (url) => {
-          const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${url}`, { headers: { Authorization: `Bearer ${accessToken}` }, credentials:'include' });
+          const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${url}`, { headers: { Authorization: `Bearer ${accessToken}` }, credentials: 'include' });
           idImageExp.push(img?.id);
           if (img?.base64 && img.base64.data.length > 0) {
             const base64Str: string = bufferToBase64(img.base64.data);
@@ -301,7 +301,7 @@ const useUserApi = () => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-        credentials:'include',
+        credentials: 'include',
       });
 
       if (!userData.isTasker) {
@@ -334,7 +334,7 @@ const useUserApi = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials:'include',
+        credentials: 'include',
         body: JSON.stringify({ userName, password: passwordLogin }),
       });
 
@@ -381,9 +381,14 @@ const useUserApi = () => {
       setIsAuth(false); //AUTENTICADO EN FALSE
       setAccessToken(null);
       redirectToHome();
+
+      // REFREZCAR
+      setTimeout(() => {
+        window.location.reload();
+      }, 50);
     } catch (error: unknown) {
       const err = error as iStatusError;
-      if(err.status === 500){
+      if (err.status === 500) {
         let title: string = 'Ups';
         let userMessage: string = 'Ocurrio un error inesperado. Intente de nuevo más tarde.';
         openGlobalModal(EModalGlobalType.MODAL_ERROR);
