@@ -11,7 +11,7 @@ import type { TFormRole } from '../../types/typeFormRole';
 const LoginProvider = ({ children }: { children: ReactNode }) => {
   // ---------CUSTOM HOOKS--------------------//
   const { setErrorText, passwordLogin, setPasswordLogin } = useGlobalModal();
-  const { client, setAccessToken, setIsAuth } = useMain();
+  const { client, setAccessToken, setIsAuth, setIsSession } = useMain();
   const { isGlobalModalOpen } = useGlobalModal();
 
   // -------------------------ESTADOS--------------------------//
@@ -61,7 +61,7 @@ const LoginProvider = ({ children }: { children: ReactNode }) => {
   const submitLogin = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setInteractedSession(true);
-    await signIn({ passwordLogin, setPasswordLogin, userName, setErrorText, setIsAuth, setAccessToken });
+    await signIn({ passwordLogin, setPasswordLogin, userName, setErrorText, setIsAuth, setAccessToken, setIsSession });
   };
 
   // OBJETO DE ESTADOS ACTUALIZADOS PARA EL CONTEXTO
