@@ -79,6 +79,7 @@ export enum EEndpoint {
   ALL_TASKERS = '/api/v1/users/actives',
   IMAGE_PROFILE = '/api/v1/profile',
   IMAGES_EXP = '/api/v1/experiences',
+  DELETE_IMAGE_EXP='/api/v1/experiences',
   TASKER_INFO = '/api/v1/users/tasker',
 }
 

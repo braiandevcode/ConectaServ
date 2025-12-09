@@ -19,6 +19,8 @@ const defaultTaskerContext: TTasker = {
   setFormState: () => {},
   setStepData: () => {},
   setIsStepValid:() => {},
+  setEdit: () => {},
+  edit:false,
   isStepValid:false,
   stepData: defaultDataTasker,
   formState: formStateValidFieldTasker,

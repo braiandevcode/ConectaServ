@@ -8,7 +8,6 @@ import type { TFormRole } from '../../types/typeFormRole';
 import useGlobalModal from '../../hooks/useGlobalModal';
 import { EModalGlobalType } from '../../types/enumGlobalModalType';
 import { endPointUser } from '../../config/configEndpointUser';
-import useUserApi from '../../hooks/useUserApi';
 import type { TDataPayloadUser } from '../../types/typeDataPayloadUser';
 import type { TActiveTaskerUser } from '../../types/typeActiveTaskUser';
 import type { TDataPayloadTaskerSingle } from '../../types/typeDataPayloadTaskerSingle';
@@ -17,7 +16,6 @@ import type { TDataPayloadTaskerSingle } from '../../types/typeDataPayloadTasker
 const MainProvider = ({ children }: { children: ReactNode }) => {
   // CUSTOM HOOKS
   const { closeGlobalModal, showError, openGlobalModal, setErrorText, setPasswordLogin } = useGlobalModal(); //HOOK QUE USA EL CONTEXTO DE MODAL GLOBAL
-  const { getDataUser } = useUserApi();
 
   const { REFRESH } = endPointUser;
 
@@ -31,7 +29,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   const [isLogout, setIsLogout] = useState(false);
   const [selectedTaskerProfile, setSelectedTaskerProfile] = useState<TDataPayloadTaskerSingle | undefined>(undefined);
 
-  const fetchedRef = useRef(false); //REF PARA EVITAR LLAMADAD DUPLICADAS
+  // const fetchedRef = useRef(false); //REF PARA EVITAR LLAMADAD DUPLICADAS
   const intervalRef = useRef<number | null>(null); // REF PARA GUARDAR EL INTERVAL Y PODER LIMPIARLO
 
   // ------------------HOOKS DE REACT-------------------------//
@@ -83,19 +81,6 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
       }
     };
   }, [isLogout]);
-
-  // TRAER DATOS NI BIEN SE LOGEA USUARIO
-  useEffect(() => {
-    if (!accessToken || fetchedRef.current) return; // SI NO HAY TOKEN Y SI EL REF YA ES TRUE
-
-    fetchedRef.current = true; //PASAR A TRUE ==> YA HIZO EL FETCH UNA VEZ, QUE NO LO HAGA DE NUEVO
-    const fetchData = async () => {
-      const data: TDataPayloadUser = await getDataUser({ accessToken });
-      setUserData(data);
-    };
-
-    fetchData();
-  }, [accessToken]);
 
   useEffect(() => {
     handleRoleAndFormNavigation();

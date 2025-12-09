@@ -9,32 +9,32 @@ import type { FormEvent } from 'react';
 const useTaskerDescriptionHandlers = (props: iPropsHandleDescriptionInput) => {
   const descriptionValidator: DescriptionValidator = new DescriptionValidator();
 
-  // //ESTADO QUE ME PERMITIRA SABER SI DEBE ESTAR PARSEADO O NO UN VALOR DE TEXTO
-  // //UTIL PARA EVITAR PROBLEMAS EN PARSEOS EN CAMPOS EN TIEMPO
-  // const [isParsed, setIsParsed] = useState(false);
-
-  const {  setStepData, setFormState } = useTasker();
+  let result: TFieldState;
+  const { setStepData, setFormState, edit } = useTasker();
 
   // EVENTO INPUT A DESCRIPCION PASO 2
-  const handleDescriptionInput = (e:FormEvent<HTMLTextAreaElement>) => {
-    // setIsParsed(false); //EN CADA EVENTO DE INPUT EN DESCRIPCION SERA FALSE ==> NO SE PARSEA
+  const handleDescriptionInput = (e: FormEvent<HTMLTextAreaElement>) => {
     const value: string = (e.target as HTMLTextAreaElement).value;
-    const result: TFieldState = descriptionValidator.validate(value); //==>  VALIDAR ENTRADA
-    setFormState((prevState) => ({ ...prevState, description: result })); //==> PASAR OBJETO(RESULTADO) DE VALIDACION AL formState.
+    // VALIDAR CON EL VALOR ACTUAL TANTO REGISTRO COMO EDICION
+    result = descriptionValidator.validate(value);
 
-    // SI ES REGISTRO
-    if(props.setStepData){
-      // GUARDAR EN STE DATA
-      setStepData((prev) => ({
-        ...prev, //==> COPIAR TODO LO PREVIO DEL OBJETO GLOBAL
-        [EKeyDataByStep.TWO]: {
-          // ==>  EN ATRIBUTO 2
-          ...prev[EKeyDataByStep.TWO], // MANTENER EL RESTO DE LOS VALORES EXISTENTES EN SUBOBJETO
-          description: value, //ACTUALIZAR EL descriptionUser
-        },
-      }));
-
+    // ACTUALIZAR EL formState CON RESULTADO DE VALIDACION
+    setFormState((prevState) => ({ ...prevState, description: result }));
+    if (!edit) {
+      // SI ES REGISTRO
+      if (props.setStepData) {
+        // GUARDAR EN STE DATA
+        setStepData((prev) => ({
+          ...prev, //==> COPIAR TODO LO PREVIO DEL OBJETO GLOBAL
+          [EKeyDataByStep.TWO]: {
+            // ==>  EN ATRIBUTO 2
+            ...prev[EKeyDataByStep.TWO], // MANTENER EL RESTO DE LOS VALORES EXISTENTES EN SUBOBJETO
+            description: value, //ACTUALIZAR EL descriptionUser
+          },
+        }));
+      }
     }
+
     props.setIsStepValid(result.isValid); //SETEAR AL MOMENTO ASEGURANDO LA UNICA FUENTE DE LA VERDAD
   };
 
@@ -42,22 +42,21 @@ const useTaskerDescriptionHandlers = (props: iPropsHandleDescriptionInput) => {
   const handleDescriptionBlur = () => {
     // SI EL ESTADO REAL ACTUAL ES VALIDO
     if (props.formState.description.isValid) {
-      // setIsParsed(true); // ==> INDICAR PARSEO
-
-      // SETEAR ESTADO GLOBAL EN STORAGE
-      setStepData((prev) => ({
-        ...prev, //==> COPIAR TODO LO PREVIO DEL OBJETO GLOBAL
-        [EKeyDataByStep.TWO]: {
-          // ==>  EN SUBOBJETO DEL PASO 2
-          ...prev[EKeyDataByStep.TWO], // MANTENER EL RESTO DE LOS VALORES EXISTENTES EN SUBOBJETO PASO 2
-          description: formatTextArea(props.formState.description.value as string), // ACTUALIZAR CON FORMATO
-        },
-      }));
+      if (!edit && props.setStepData) {
+        // SETEAR ESTADO GLOBAL EN STORAGE
+        setStepData((prev) => ({
+          ...prev, //==> COPIAR TODO LO PREVIO DEL OBJETO GLOBAL
+          [EKeyDataByStep.TWO]: {
+            // ==>  EN SUBOBJETO DEL PASO 2
+            ...prev[EKeyDataByStep.TWO], // MANTENER EL RESTO DE LOS VALORES EXISTENTES EN SUBOBJETO PASO 2
+            description: formatTextArea(props.formState.description.value as string), // ACTUALIZAR CON FORMATO
+          },
+        }));
+      }
     }
   };
 
-
-  return { handleDescriptionBlur, handleDescriptionInput }
+  return { handleDescriptionBlur, handleDescriptionInput };
 };
 
 export default useTaskerDescriptionHandlers;

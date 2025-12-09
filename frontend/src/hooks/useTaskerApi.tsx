@@ -12,7 +12,7 @@ import useMain from './useMain';
 import useUserApi from './useUserApi';
 
 const useTaskerApi = () => {
-  const { ALL_TASKERS, TASKER_INFO } = endPointUser;
+  const { ALL_TASKERS, TASKER_INFO, DELETE_IMAGE_EXP } = endPointUser;
   const { showError, openGlobalModal } = useGlobalModal();
   const { setLoading, setTaskerData } = useMain();
   const { loadTaskerImagesProfile: loadImageTaskerSingle } = useUserApi();
@@ -27,7 +27,7 @@ const useTaskerApi = () => {
         if (t.profileImageUrl) {
           const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${t.profileImageUrl}`, {
             headers: { Authorization: `Bearer ${accessToken}` },
-            credentials:'include'
+            credentials: 'include',
           });
 
           // SI  VIENE IMAGEN Y SU LONGITUD ES MAYOR QUE CERO
@@ -42,13 +42,13 @@ const useTaskerApi = () => {
   };
 
   // LEER INFO DE UN TASKER
-  const getDetailsTasker = async ({ accessToken, idTasker }: { accessToken: string; idTasker:string }): Promise<TDataPayloadTaskerSingle | null> => {
+  const getDetailsTasker = async ({ accessToken, idTasker }: { accessToken: string; idTasker: string }): Promise<TDataPayloadTaskerSingle | null> => {
     try {
       setLoading(true);
       const tasker = await apiRequest<TDataPayloadTaskerSingle | null>(`${TASKER_INFO}/${idTasker}/details`, {
         method: 'GET',
         headers: { Authorization: `Bearer ${accessToken}` },
-        credentials:'include'
+        credentials: 'include',
       });
 
       if (!tasker) return null;
@@ -56,9 +56,8 @@ const useTaskerApi = () => {
       // TASKERS CON IMAGENES
       const taskerSingleWithImages: TDataPayloadTaskerSingle = await loadImageTaskerSingle<TDataPayloadTaskerSingle>(tasker, accessToken);
 
-      const taskerInfo: TDataPayloadTaskerSingle = {...tasker, ...taskerSingleWithImages  };  
+      const taskerInfo: TDataPayloadTaskerSingle = { ...tasker, ...taskerSingleWithImages };
       return taskerInfo;
-      
     } catch (error) {
       const err = error as iStatusError;
       openGlobalModal(EModalGlobalType.MODAL_ERROR);
@@ -71,12 +70,12 @@ const useTaskerApi = () => {
 
   // MOSTRAR VISTAS PREVIAS DE TODOS LOS TASKERS
   const getTaskers = async ({ accessToken }: { accessToken: string }): Promise<TActiveTaskerUser[]> => {
-    setLoading(true);
     try {
+      setLoading(true);
       const taskers: TActiveTaskerUser[] = await apiRequest<TActiveTaskerUser[]>(ALL_TASKERS, {
         method: 'GET',
         headers: { Authorization: `Bearer ${accessToken}` },
-        credentials:'include'
+        credentials: 'include',
       });
 
       // SI NO ES UN ARREGLO
@@ -100,7 +99,26 @@ const useTaskerApi = () => {
     }
   };
 
-  return { getTaskers, loadTaskerImagesProfile, getDetailsTasker };
+  // ELIMINAR IMAGEN DE EXPEIENCIA
+  const deleteImageExpById = async ({ accessToken, idImage }: { accessToken: string; idImage: string }): Promise<void> => {
+    try {
+      setLoading(true);
+      return await apiRequest(`${DELETE_IMAGE_EXP}/${idImage}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${accessToken}` },
+        credentials: 'include',
+      });
+    } catch (error) {
+      const err = error as iStatusError;
+      openGlobalModal(EModalGlobalType.MODAL_ERROR);
+      showError('Ups', 'Ocurrio un error inesperado. Intente de nuevo más tarde.');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { getTaskers, loadTaskerImagesProfile, getDetailsTasker, deleteImageExpById };
 };
 
 export default useTaskerApi;
