@@ -15,6 +15,8 @@ export type TMain = TRole & {
   setTaskerData:Dispatch<SetStateAction<TActiveTaskerUser[]>>
   setSelectedTaskerProfile: Dispatch<SetStateAction<TDataPayloadTaskerSingle | undefined>>;
   onBackToList: () => void;
+  setIsSession: Dispatch<SetStateAction<boolean>>;
+  isSession:boolean;
   selectedTaskerProfile:TDataPayloadTaskerSingle | undefined;
   taskerData:TActiveTaskerUser[], 
   userData:TDataPayloadUser | null,
