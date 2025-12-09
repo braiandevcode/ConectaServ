@@ -1,0 +1,5 @@
+@media screen and (min-width:968px) {
+    .descriptionField{
+        max-width: 80%;
+    }
+}

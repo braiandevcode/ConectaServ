@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FaAngleDown } from 'react-icons/fa';
 import { Link } from 'react-router';
 
@@ -8,7 +8,6 @@ const NavCategory = ({ menuChildOpen }: { menuChildOpen: boolean }) => {
 
   // Función para cerrar el desplegable
   const closeDropdown = () => setDropdownOpen(false);
-
 
   return (
     <>

@@ -20,9 +20,14 @@
 }
 
 .btn__edit {
-  padding: 0.3rem 0.6rem;
+  padding: 0.5rem 0.8rem;
   font-size: 0.9rem;
   height: auto;
+}
+
+.btn__deteleteImageCancel{
+   font-weight: 900;
+   color: #1f1d1d;
 }
 
 /* SECCIONES */
@@ -52,9 +57,9 @@
   position: relative;
   border-radius: 0.5rem;
   overflow: hidden;
-  flex: 1 1 48%; /* ancho flexible */
+  flex: 1 1 48%; 
   max-width: 48%;
-  height: 200px; /* altura fija para todas */
+  height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -67,6 +72,11 @@
   display: block;
   border-radius: 0.5rem;
 }
+
+.taskerExperiences--edit{
+  opacity: .6;
+}
+
 
 /* BOTON EDITAR IMAGEN */
 .taskerExperiences .btn__edit {
