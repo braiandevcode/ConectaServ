@@ -73,9 +73,6 @@ const AllSevices = () => {
     if (!accessToken) return; //NO SEGUIR
     setLoadingTaskerId(idTasker);
     const tasker: TDataPayloadTaskerSingle | null = await getDetailsTasker({ accessToken, idTasker });
-   
-    console.log('TASKER: ',  tasker);
-    
     setLoadingTaskerId(null);
     if (!tasker) return;
     setSelectedTaskerProfile(tasker);
