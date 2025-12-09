@@ -323,7 +323,7 @@ const useUserApi = () => {
 
   // INICIO DE SESSION
   const signIn = async (setter: TStateAuth & TDataLoginUser): Promise<void> => {
-    const { setIsAuth, setAccessToken, setErrorText, passwordLogin, userName, setIsSession } = setter;
+    const { setIsAuth, setAccessToken, setErrorText, passwordLogin, userName } = setter;
     try {
       setIsSending(true);
       setLoading(true);
@@ -346,8 +346,6 @@ const useUserApi = () => {
         //PEDIR DATOS NECESARIOS EN ESTE MOMENTO
         const userData: TDataPayloadUser = await getDataUser({ accessToken: result.accessToken });
         setUserData(userData);
-        setIsSession(true);
-        localStorage.setItem('hasSession', 'true');
         redirectToDashBoard(); //REDIRECCIONAR AL DASHBOARD
       }
     } catch (error: unknown) {
@@ -363,8 +361,6 @@ const useUserApi = () => {
         setErrorText('No pudimos conectarnos. Intentá de nuevo más tarde.');
       }
 
-      setIsSession(false);
-      localStorage.removeItem('hasSession');
       throw err;
     } finally {
       setLoading(false);
@@ -384,6 +380,12 @@ const useUserApi = () => {
 
       setIsAuth(false); //AUTENTICADO EN FALSE
       setAccessToken(null);
+      redirectToHome();
+
+      // REFREZCAR
+      setTimeout(() => {
+        window.location.reload();
+      }, 50);
     } catch (error: unknown) {
       const err = error as iStatusError;
       if (err.status === 500) {

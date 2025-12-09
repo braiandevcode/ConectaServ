@@ -38,50 +38,41 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(false); // ==> BANDERA DEL PROCESO DE LOADER
   const [userData, setUserData] = useState<TDataPayloadUser | null>(null); //DATOS DE USUARIO LOGEADO
   const [taskerData, setTaskerData] = useState<TActiveTaskerUser[]>([]); // DATOS DE TASKERS EXCLUIDO USUARIO LOGEADO
-  const [isSession, setIsSession] = useState<boolean>(() => {
-    const storedSession = localStorage.getItem('hasSession');
-    return storedSession === 'true';
-  });
 
   // ----------------------useEffects----------------------------------//
   // INTERVAL PARA REFRESCAR ACCESS TOKEN CADA 14 MINUTOS
   useEffect(() => {
-    console.log('LOGUT: ', isLogout);
-    console.log('IS SESSION', isSession);
-    
-    
-   if (!isSession) return;
+    if (isLogout) return;
     // SI ESTAMOS HACIENDO LOGOUT, LIMPIAR EL INTERVAL Y NO HACER REFRESH TOKEN
     // LIMPIAR INTERVAL SI EXISTE
-    
+
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-    
+
     // FUNCION PARA INICIAR EL INTERVAL
     const startInterval = () => {
       // 14 MINUTOS EN MS ANTES DE EXPIRO DEL ACCESS TOKEN
       const REFRESH_INTERVAL: number = 14 * 60 * 1000;
-      
+
       // SI YA EXISTE UN INTERVAL
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
-      
+
       // CREAR NUEVO INTERVAL Y ALMACENAR EN REF
       intervalRef.current = setInterval(() => {
         refreshToken(); // LLAMAR AL REFRESH TOKEN AUTOMATICO
       }, REFRESH_INTERVAL);
     };
-    
+
     // PRIMER REFRESH AL MONTAR ==> SOLO SI NO ESTAMOS EN LOGOUT
     refreshToken().finally(() => {
       // INICIAR INTERVAL DESPUES DEL PRIMER REFRESH
       startInterval();
     });
-    
-    localStorage.setItem('hasSession', String(isSession));
+
     // CLEANUP CUANDO SE DESMONTA EL PROVIDER
     return () => {
       if (intervalRef.current) {
@@ -89,7 +80,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
         intervalRef.current = null;
       }
     };
-  }, [isSession]);
+  }, [isLogout]);
 
   useEffect(() => {
     handleRoleAndFormNavigation();
@@ -134,9 +125,6 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
 
       // TOKEN REFRESCADO CORRECTAMENTE
       setAccessToken(data.accessToken);
-
-      console.log('NUEVO TOKEN', data.accessToken);
-
       setIsAuth(true);
       setIsSessionChecked(true);
     } catch (error) {
@@ -221,8 +209,6 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     setTaskerData,
     setSelectedTaskerProfile,
     onBackToList,
-    isSession,
-    setIsSession,
     selectedTaskerProfile,
     taskerData,
     userData,
