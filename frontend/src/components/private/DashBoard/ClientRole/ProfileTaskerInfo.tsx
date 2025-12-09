@@ -26,7 +26,7 @@ const ProfileTaskerInfo = () => {
   //ABREVIAR
   const C: string | null | undefined = selectedTaskerProfile?.category;
 
-  
+
   // USEREF
   const fetchedRef = useRef<boolean>(false);
 
@@ -50,12 +50,11 @@ const ProfileTaskerInfo = () => {
   }, [accessToken, idTasker]); // ==> DEPENDEN DEL ACCESSTOKEN
 
   // CLASES SECCION RESEÑAS Y DETALLES PRESUPUESTO
-  const CLASSES_STARS_BUDGET: string = `${
-    selectedTaskerProfile && selectedTaskerProfile.isRepair ? 'w-3/4 profile__section profile__section-starstAndBudget c-flex-justify-center centered c-flex gap-2 p-2' : selectedTaskerProfile && !selectedTaskerProfile.isRepair ? 'profile__section profile__section-starsAndBudget centered c-flex p-2' : 'profile__section profile__section-starsAndBudget centered c-flex p-2'
-  }`;
+  const CLASSES_STARS_BUDGET: string = `${selectedTaskerProfile && selectedTaskerProfile.isRepair ? 'w-3/4 profile__section profile__section-starstAndBudget c-flex-justify-center centered c-flex gap-2 p-2' : selectedTaskerProfile && !selectedTaskerProfile.isRepair ? 'profile__section profile__section-starsAndBudget centered c-flex p-2' : 'profile__section profile__section-starsAndBudget centered c-flex p-2'
+    }`;
 
   // SI EXISTE PERFIL Y ES REPARACION HAY DATOS DE PRESUPUESTO
-  const isBudget:boolean= Boolean(selectedTaskerProfile && selectedTaskerProfile.isRepair);
+  const isBudget: boolean = Boolean(selectedTaskerProfile && selectedTaskerProfile.isRepair);
 
   return (
     <>
@@ -93,14 +92,48 @@ const ProfileTaskerInfo = () => {
                   <p className='profile__categoryText text-center'>{C ? valueCategoryUI(C) : 'Sin Categoría'}</p>
                 </div>
 
+                {selectedTaskerProfile.services?.length > 0 && (
+                  <section className='profile__section'>
+                    <ul className='profile__services'>
+                      {selectedTaskerProfile.services.map((service, i) => (
+                        <li key={i}>{service}</li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
+
                 <div className='profile__cityAndStart c-flex c-flex-items-center gap-1'>
                   <div className='c-flec c-flex-column gap-1'>
                     <p className='profile__cityAndStart-cityText'>{selectedTaskerProfile.city}</p>
                     <h4 className='profile__cityAndStartRole text-center'>Tasker</h4>
                   </div>
                 </div>
-                <div className='cursor-pointer profile__rating'>★★★★☆</div>
+                <div className='cursor-pointer profile__rating'>Proximamente sistema de ★★★★☆</div>
               </div>
+
+              {selectedTaskerProfile.days && selectedTaskerProfile.hours && (
+                <section className='profile__section profile__section--availability'>
+                  <h4 className='profile__section-title'>Disponibilidad</h4>
+                  <div className='profile__availability'>
+                    <div className='profile__availability-item'>
+                      <span className='profile__availability-label'>Días:</span>
+                      <p className='profile__availability-value'>{selectedTaskerProfile.days.join(', ')}</p>
+                    </div>
+                    <div className='profile__availability-item'>
+                      <span className='profile__availability-label'>Horarios:</span>
+                      <p className='profile__availability-value'>{selectedTaskerProfile.hours.join(', ')}</p>
+                    </div>
+                  </div>
+                </section>
+              )}
+
+              {selectedTaskerProfile.worksArea?.length > 0 && (
+                <section className='profile__section profile__section--workarea'>
+                  <h4 className='profile__section-title'>Zonas de trabajo</h4>
+                  <p className='profile__workarea-list'>{selectedTaskerProfile.worksArea.join(', ')}</p>
+                </section>
+              )}
+
               {isBudget && (
                 <div className='profileSection-details-budget c-flex c-flex-column gap-2'>
                   <p className='profileSection-details-budget__reinsert c-flex c-flex-column c-flex-items-center gap-1/2'>
@@ -122,7 +155,7 @@ const ProfileTaskerInfo = () => {
           </div>
 
           <section className='p-2 profile__section'>
-            <h3 className='profile__description-header'>¿Por qué Elegirme?</h3>
+            <h3 className='profile__description-header'>Descripción</h3>
             <p className='profile__description-body'>{selectedTaskerProfile.description || 'El Tasker aún no tiene una descripción.'}</p>
           </section>
 
@@ -140,6 +173,12 @@ const ProfileTaskerInfo = () => {
               )}
             </div>
           </section>
+
+          <section className='profile__section'>
+            <h3>Valoraciones</h3>
+            <p>Próximamente: Sistema de valoraciones</p>
+          </section>
+
         </div>
       )}
     </>

@@ -98,6 +98,47 @@
   letter-spacing: 1px;
 }
 
+/* Estilos para Disponibilidad y Zonas de trabajo */
+.profile__section--availability,
+.profile__section--workarea {
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
+
+.profile__section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color-primary);
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.profile__availability {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.profile__availability-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.profile__availability-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--btn-text-gray);
+}
+
+.profile__availability-value,
+.profile__workarea-list {
+  font-size: 0.95rem;
+  color: var(--text-color-primary);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
 /* 768px > */
 @media (min-width: 768px) {
   .profile__info {
