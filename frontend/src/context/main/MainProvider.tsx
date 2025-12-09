@@ -77,6 +77,8 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
       startInterval();
     });
 
+    localStorage.setItem('hasSession', String(isSession))
+
     // CLEANUP CUANDO SE DESMONTA EL PROVIDER
     return () => {
       if (intervalRef.current) {
@@ -84,7 +86,7 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
         intervalRef.current = null;
       }
     };
-  }, [isLogout]);
+  }, [isSession]);
 
   useEffect(() => {
     handleRoleAndFormNavigation();
