@@ -50,7 +50,7 @@ const useTaskerApi = () => {
         headers: { Authorization: `Bearer ${accessToken}` },
         credentials: 'include',
       });
-
+      
       if (!tasker) return null;
 
       // TASKERS CON IMAGENES
