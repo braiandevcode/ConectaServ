@@ -14,6 +14,8 @@ const defaultMainContext: TMain = {
   setTaskerData: () => {},
   setSelectedTaskerProfile: async  () => {},
   onBackToList: () => {},
+  isSession:false,
+  setIsSession: () => {},
   selectedTaskerProfile:undefined,
   taskerData:[],
   userData:null,

@@ -38,7 +38,10 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(false); // ==> BANDERA DEL PROCESO DE LOADER
   const [userData, setUserData] = useState<TDataPayloadUser | null>(null); //DATOS DE USUARIO LOGEADO
   const [taskerData, setTaskerData] = useState<TActiveTaskerUser[]>([]); // DATOS DE TASKERS EXCLUIDO USUARIO LOGEADO
-
+  const [isSession, setIsSession] = useState<boolean>(()=> {
+    const storedSession = localStorage.getItem('hasSession');
+    return storedSession === 'true';
+  });
   // ----------------------useEffects----------------------------------//
   // INTERVAL PARA REFRESCAR ACCESS TOKEN CADA 14 MINUTOS
   useEffect(() => {
@@ -210,6 +213,8 @@ const MainProvider = ({ children }: { children: ReactNode }) => {
     setTaskerData,
     setSelectedTaskerProfile,
     onBackToList,
+    isSession,
+    setIsSession,
     selectedTaskerProfile,
     taskerData,
     userData,
