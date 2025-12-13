@@ -99,7 +99,6 @@ const useHeader = () => {
           </button>
 
           <div className='c-flex c-flex-items-center gap-2'>
-            <NavCategory menuChildOpen={menuOpen} />
             {pathname !== '/tasker/profile' && <NavProfile />}
             {pathname === '/tasker/profile' && (
               <>

@@ -50,7 +50,7 @@ const ProfileTaskerInfo = () => {
   }, [accessToken, idTasker]); // ==> DEPENDEN DEL ACCESSTOKEN
 
   // CLASES SECCION RESEÑAS Y DETALLES PRESUPUESTO
-  const CLASSES_STARS_BUDGET: string = `${selectedTaskerProfile && selectedTaskerProfile.isRepair ? 'w-3/4 profile__section profile__section-starstAndBudget c-flex-justify-center centered c-flex gap-2 p-2' : selectedTaskerProfile && !selectedTaskerProfile.isRepair ? 'profile__section profile__section-starsAndBudget centered c-flex p-2' : 'profile__section profile__section-starsAndBudget centered c-flex p-2'
+  const CLASSES_STARS_BUDGET: string = `${selectedTaskerProfile && selectedTaskerProfile.isRepair ? 'w-3/4 profile__section profile__section-starstAndBudget c-flexc-flex-justify-center centered gap-2 p-2' : selectedTaskerProfile && !selectedTaskerProfile.isRepair ? 'profile__section profile__section-starsAndBudget centered c-flex p-2' : 'profile__section profile__section-starsAndBudget centered c-flex p-2'
     }`;
 
   // SI EXISTE PERFIL Y ES REPARACION HAY DATOS DE PRESUPUESTO
