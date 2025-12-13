@@ -162,10 +162,10 @@
 }
 
 /* 968px */
-@media screen and (min-width: 968px) {
-  .profile__section.profile__section-starstAndBudget{
+/* @media screen and (min-width: 968px) {
+  .profile__section-starstAndBudget{
     display: flex;
     flex-direction:row;
     align-items: stretch;
   }
-}
+} */
