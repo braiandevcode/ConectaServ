@@ -13,6 +13,9 @@ import apiRequest from '../../../utils/apiRequestUtils';
 import type { TImageDataStored } from '../../../types/typeRegisterEndDto';
 import { BASE_BACK_URL } from '../../../config/configBaseBackUrl';
 import { endpointCloud } from '../../../config/configEnpointCloud';
+import useGlobalModal from '../../../hooks/useGlobalModal';
+import { EModalGlobalType } from '../../../types/enumGlobalModalType';
+import type { iStatusError } from '../../../interfaces/iSatatus';
 
 const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
   const { DELETE_AVATAR_PREV, DELETE_AVATAR_EXPERIENCE_PREV  } = endpointCloud;
@@ -21,10 +24,10 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
 
   // CUSTOM HOOK DE TASKER GENERAL
   const { setStepData, stepData, formState, setFormState, setIsStepValid } = useTasker();
-
   // CUSTOM HOOK REGISTER PROFESIONAL
   const { validateCurrentStep, step } = useRegisterTasker();
   const { savedExperiences, savedProfile } = useImages();
+  const { openGlobalModal, showError } = useGlobalModal();
 
   // -----------------------------------------------useRef------------------------------------------------------//
   const countImagesExp = useRef<number>(0);
@@ -38,10 +41,7 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
 
   // EFECTO PARA CARGAR IMAGEN DE EXPERIENCIAS
   useEffect(() => {
-    console.log('ME DEBERIA EJECUTAR AHORA EN EFECTO DE MONTAJE DE EXPERIENCIAS');
-
     const images = stepData[EKeyDataByStep.TWO].imageExperienceData;
-
     if (!images || images.length === 0) {
       setSrcVector([]);
       return;
@@ -53,8 +53,6 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
 
   // EFECTO PARA CARGAR IMAGEN DE PERFIL
   useEffect(() => {
-    console.log('ME DEBERIA EJECUTAR AHORA EN EFECTO DE MONTAJE DE PERFIL');
-
     const img = stepData[EKeyDataByStep.TWO].imageProfileData;
     if (!img?.secureUrl) {
       setSrc(null);
@@ -80,7 +78,10 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
       }));
       setSrc(null); // LIMPIAR PREVIEW
     } catch (error) {
-      console.warn(error);
+      const err = error as iStatusError;
+      openGlobalModal(EModalGlobalType.MODAL_ERROR);
+      showError('Ups!', 'Ah ocurrido un error inesperado, intente nuevamente')
+      throw err;
     }
   };
 
@@ -126,7 +127,10 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
         }),
       );
     } catch (error) {
-      console.warn(error);
+     const err = error as iStatusError;
+      openGlobalModal(EModalGlobalType.MODAL_ERROR);
+      showError('Ups!', 'Ah ocurrido un error inesperado, intente nuevamente')
+      throw err;
     }
   };
 

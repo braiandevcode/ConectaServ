@@ -41,7 +41,6 @@ const useUserApi = () => {
 
   // CARGAR IMGENES POR URL QUE VIENE DEL BACKEND
   const loadTaskerImages= async <T extends TDataPayloadUser | TDataPayloadTaskerSingle>(userData: T, accessToken: string): Promise<T> => {
-    console.log('DATOS DEL USUARIO: ', userData);
     let imageProfile: TTaskerImage | null = null;
     let imageExperineces: TTaskerImage[] = [];
 
@@ -70,10 +69,6 @@ const useUserApi = () => {
         }),
       );
     }
-
-    console.log('URL PERFIL: ', imageProfile);
-    console.log('URL EXPERIENCIAS: ', imageExperineces);
-    
     return {
       ...userData,
       experienceImagesUrl: imageExperineces.map(i => i.url),
@@ -218,9 +213,6 @@ const useUserApi = () => {
   const addUser = async ({ newData }: { newData: TUser }): Promise<void> => {
     // JSON FINAL, SI VIENEN DATOS DE TASKER O NO
     const jsonToSend: TUser = !newData.taskerData ? newData : { ...newData, taskerData: newData.taskerData };
-
-    console.log(jsonToSend);
-
     // // LLAMAR PARA ENVIAR DATOS AHORA
     await sendDataUser(jsonToSend);
   };

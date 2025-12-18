@@ -30,9 +30,6 @@ const useTaskerApi = () => {
           },
           credentials: 'include',
         });
-
-        console.log('URL PERFIL TASKER CARD: ', imageProfile);
-
         return { ...t, profileImageUrl: imageProfile?.url } as TActiveTaskerUser;
       }),
     );

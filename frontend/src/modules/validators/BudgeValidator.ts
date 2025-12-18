@@ -29,15 +29,6 @@ export default class BudgeValidator implements IValidator {
       };
     }
 
-    // VALIDAR QUE SOLO HAYA NUMEROS (Y SEPARADORES VÁLIDOS)
-    // if (!validateWithRegex({ pattern: /^[0-9]+([.,][0-9]{0,2})?$/, text: trimed })) {
-    //   return {
-    //     error: 'El valor debe contener solo números válidos',
-    //     value: trimed,
-    //     isValid: false,
-    //   };
-    // }
-
     //VALIDAR SOLO FORMATO DECIMAL
     if (!validateWithRegex({ pattern: /^\d+([.,]\d{0,3})?$/, text: trimed })) {
       return {

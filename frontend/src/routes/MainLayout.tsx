@@ -5,7 +5,6 @@ import useMain from '../hooks/useMain';
 import Loader from '../components/Loader';
 import Header from '../components/public/Header';
 import ModalGlobalRenderer from '../components/public/Modals/ModalGlobalRenderer';
-// import GlobalModalProvider from '../context/modal/GlobalModalProvider';
 import LoginProvider from '../context/login/LoginProvider';
 import FormIdentifyEmailProvider from '../context/form/FormIdentifyEmailProvider';
 import GlobalModalProvider from '../context/modal/GlobalModalProvider';
