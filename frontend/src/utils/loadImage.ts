@@ -1,7 +1,5 @@
-import { ENamesOfKeyLocalStorage } from "../types/enums";
 import type { TProfileImagePreviewProps } from "../types/typeImageProfilePreview";
 import type {  TImageDataStored } from "../types/typeRegisterEndDto";
-import { getImageDataUrlFromIndexedDB } from "./storageUtils";
 import { verifyMetaDataImage } from "./validateFieldUtils";
 
 // TIPADO INTERNO
@@ -18,11 +16,9 @@ const loadImage = async ({  storedImage, setSrc }: TLoadImage) => {
   const isImage: boolean = verifyMetaDataImage(storedImage); // ==> UTILIZAR HELPER PARA VERIFICAR
   if (!isImage) return; //SI NO HAY DATOS RETORNAR
 
-  //LEO IMAGEN POR SU ID EN INDEXEDDB Y GUARDO EN "result"
-  const result: Record<string, string> | null = await getImageDataUrlFromIndexedDB(storedImage.idImage, ENamesOfKeyLocalStorage.IMAGE_INDEXED_DB);
   //SI NO ES NULO Y SI EL OBJETO CONTIENE DATOS
-  if (result && Object.keys(result).length > 0) {
-    setSrc(result.data); //SETEAR ESTADO DE SOURCE "src"
+  if (storedImage && Object.keys(storedImage).length > 0) {
+    setSrc(storedImage.secureUrl); //SETEAR ESTADO DE SOURCE "src"
   }
 };
 
