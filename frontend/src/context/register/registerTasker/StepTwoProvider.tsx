@@ -1,26 +1,21 @@
 import React, { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { StepTwoContext } from './StepTwoContext';
 import useRegisterTasker from '../../../hooks/useRegisterTasker';
-// import { formatTextArea } from '../../../utils/parsedAndFormatValuesUtils';
 import { EKeyDataByStep, ENamesOfKeyLocalStorage } from '../../../types/enums';
-import { deleteImageFromIndexedDB } from '../../../utils/storageUtils';
-// import DescriptionValidator from '../../../modules/validators/DescriptionValidator';
-import loadImage from '../../../utils/loadImage';
-import loadImages from '../../../utils/loadImages';
-import { verifyMetaDataImage } from '../../../utils/validateFieldUtils';
-import type { TIdString } from '../../../types/typeUUID';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TTypeContextStepTwo } from '../../../types/typeContextStepTwo';
 import ImageProfileValidator from '../../../modules/validators/ImageProfileValidator';
 import ImageExperiencesValidator from '../../../modules/validators/ImageExperiencesValidator';
-import type { TImageData, TImageDataStored } from '../../../types/typeRegisterEndDto';
 import useImages from '../../../hooks/useImages';
-import useGlobalModal from '../../../hooks/useGlobalModal';
-import { EModalGlobalType } from '../../../types/enumGlobalModalType';
 import useTasker from '../../../hooks/useTasker';
+import { readExistingData } from '../../../utils/storageUtils';
+import apiRequest from '../../../utils/apiRequestUtils';
+import type { TImageDataStored } from '../../../types/typeRegisterEndDto';
+import { BASE_BACK_URL } from '../../../config/configBaseBackUrl';
+import { endpointCloud } from '../../../config/configEnpointCloud';
 
 const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
-  // const descriptionValidator: DescriptionValidator = new DescriptionValidator();
+  const { DELETE_AVATAR_PREV, DELETE_AVATAR_EXPERIENCE_PREV  } = endpointCloud;
   const imageProfileDataValidator: ImageProfileValidator = new ImageProfileValidator();
   const imageExperienceDataValidator: ImageExperiencesValidator = new ImageExperiencesValidator();
 
@@ -30,189 +25,176 @@ const StepTwoProvider = ({ children }: { children: React.ReactNode }) => {
   // CUSTOM HOOK REGISTER PROFESIONAL
   const { validateCurrentStep, step } = useRegisterTasker();
   const { savedExperiences, savedProfile } = useImages();
-  const { openGlobalModal, showError } = useGlobalModal();
 
   // -----------------------------------------------useRef------------------------------------------------------//
-  const countImagesExp = useRef<number>(0); // ==> REF PARA ALMACENAR CANTIDAD DE IMAGENES ALMACENADA
-  const listFiles = useRef<FileList | File | null>(null); // ==> REF PARA ALMACENAR ARCHIVO O ARCHIVOS DE IMAGENES ACTUALMENTE
+  const countImagesExp = useRef<number>(0);
+  const listFiles = useRef<FileList | File | null>(null);
 
-  //ESTADOS INTERNOS SOLO DE PASO 2
-  const [src, setSrc] = useState<string | null>(null); //ESTADO PARA SOURCE DE IMAGEN
-  const [srcVector, setSrcVector] = useState<string[]>([]); //ESTADO PARA SOURCE DE IMAGENES
-
+  // ESTADOS INTERNOS SOLO DE PASO 2
+  const [src, setSrc] = useState<string | null>(null);
+  const [srcVector, setSrcVector] = useState<string[]>([]);
   const [loadImg, setLoadImg] = useState<boolean>(false);
   const [loadImgExp, setLoadImgExp] = useState<boolean>(false);
+
+  // EFECTO PARA CARGAR IMAGEN DE EXPERIENCIAS
+  useEffect(() => {
+    console.log('ME DEBERIA EJECUTAR AHORA EN EFECTO DE MONTAJE DE EXPERIENCIAS');
+
+    const images = stepData[EKeyDataByStep.TWO].imageExperienceData;
+
+    if (!images || images.length === 0) {
+      setSrcVector([]);
+      return;
+    }
+
+    setSrcVector(images.map((img) => img.secureUrl));
+    setIsStepValid(validateCurrentStep());
+  }, [step, stepData[EKeyDataByStep.TWO].imageExperienceData]);
+
   // EFECTO PARA CARGAR IMAGEN DE PERFIL
   useEffect(() => {
-    upLoadImgExp();
-    setIsStepValid(validateCurrentStep()); // ==> REVALIDAR
-    // CLEANUP AL DESMONTAR RESETEO
-    return () => {
-      countImagesExp.current = 0; // RESETEAR CONTADOR REF
-      setSrcVector([]); // LIMPIAR ESTADO DE IMAGENES RENDERIZADAS
-      setSrc(''); //RESETEAR AL DESMONTAR
-    };
-  }, [step, stepData[EKeyDataByStep.TWO].imageExperienceData]); // SOLO DEPENDE DE ESA PARTE
+    console.log('ME DEBERIA EJECUTAR AHORA EN EFECTO DE MONTAJE DE PERFIL');
 
-  useEffect(() => {
-    uploadImgProfile();
-    setIsStepValid(validateCurrentStep()); // ==> REVALIDAR
+    const img = stepData[EKeyDataByStep.TWO].imageProfileData;
+    if (!img?.secureUrl) {
+      setSrc(null);
+      return;
+    }
+    setSrc(img.secureUrl);
+    setIsStepValid(validateCurrentStep());
   }, [step, stepData[EKeyDataByStep.TWO].imageProfileData]);
 
   // ------------------------------------- EVENTOS------------------------------------------------//
-  // HANDLER PARA ELIMINAR IMAGEN DE PERFIL PASO 2
-  const onDeleteProfile = async () => {
-    const storedImage: TImageDataStored | null = stepData[EKeyDataByStep.TWO].imageProfileData;
-    if (storedImage) {
-      // ==> ELIMINAR IMAGEN DE INDEXEDDB POR ID
-      await deleteImageFromIndexedDB(storedImage.idImage, ENamesOfKeyLocalStorage.IMAGE_INDEXED_DB);
-
-      // SETEAR ESTADO GLOBAL DE PASOS
+  // ELIMINAR DEL STORAGE Y CLOUDINARY LA IMAGEN PREVIA DE PERFIL
+  const onDeleteProfile = async (): Promise<void> => {
+    try {
+      await apiRequest(`${BASE_BACK_URL}/${DELETE_AVATAR_PREV}/${stepData[EKeyDataByStep.TWO].imageProfileData?.publicId}`, {
+        method:'DELETE',
+      });
       setStepData((prev) => ({
         ...prev,
         [EKeyDataByStep.TWO]: {
-          ...prev[EKeyDataByStep.TWO], //COPIAR TODO LO PREVIO
-          imageProfileData: null, //PISAR NCON UEVO VALOR A NULL
+          ...prev[EKeyDataByStep.TWO],
+          imageProfileData: null,
         },
       }));
-    }
-  };
-
-  // HANDLER PARA ELIMINAR UNA EXPERIENCIA POR ID
-  const onDeleteExperience = async (idImage: TIdString) => {
-    // ==> ELIMINAR IMAGEN DE INDEXEDDB POR ID
-    await deleteImageFromIndexedDB(idImage, ENamesOfKeyLocalStorage.IMAGE_INDEXED_DB);
-
-    // SETEAR ESTADO GLOBAL DE PASOS
-    setStepData((prev) => ({
-      ...prev,
-      [EKeyDataByStep.TWO]: {
-        ...prev[EKeyDataByStep.TWO], //COPIAR TODO LO PREVIO
-        imageExperienceData: prev[EKeyDataByStep.TWO].imageExperienceData.filter((img) => img.idImage !== idImage), //PISAR NCON UEVO VALOR A NULL
-      },
-    }));
-  };
-
-  // SUBIDA DE IMAGEN DE EXPERIENCIAS
-  const upLoadImgExp = async () => {
-    try {
-      setLoadImgExp(true);
-      //SI TODOS LOS OBJETOS DEL ARREGLO TIENEN DATOS
-      const isEveryDataImageExp: boolean = stepData[EKeyDataByStep.TWO].imageExperienceData.every((imageObj) => verifyMetaDataImage(imageObj));
-      // SI HAY DATOS EN TODOS LOS ELEMENTOS
-      if (isEveryDataImageExp) {
-        // CARGAR EL SOURCE DE CADA IMAGEN MEDIANTE FUNCION INVOCADA
-        await loadImages({ setSrcVector, storedImages: stepData[EKeyDataByStep.TWO].imageExperienceData as TImageData[], countImagesExp }); // INVOCAR FUNCION ASINCRONA
-      }
+      setSrc(null); // LIMPIAR PREVIEW
     } catch (error) {
-      openGlobalModal(EModalGlobalType.MODAL_ERROR);
-      showError('ERROR', 'Ocurrió un error inesperado, intente de nuevo más tarde.');
-    } finally {
-      setLoadImgExp(false);
+      console.warn(error);
     }
   };
 
-  // SUBIDA DE IMAGEN DEL PEFIL
-  const uploadImgProfile = async () => {
+  // ELIMINAR DEL STORAGE Y CLOUDINARY LA IMAGEN PREVIA DE EXPERIENCIA
+  const onDeleteExperience = async (publicId: string): Promise<void> => {
     try {
-      setLoadImg(true);
-      if (stepData[EKeyDataByStep.TWO].imageProfileData) {
-        // CARGAR EL SOURCE DE IMAGEN MEDIANTE FUNCION INVOCADA
-        await loadImage({ setSrc, storedImage: stepData[EKeyDataByStep.TWO].imageProfileData });
-      }
+      const imageToDelete: TImageDataStored | undefined= stepData[EKeyDataByStep.TWO].imageExperienceData.find((img) => img.publicId === publicId);
+
+      if (!imageToDelete) return;
+
+      // BORRAR EN CLOUDINARY (BACKEND)
+      await apiRequest(`${BASE_BACK_URL}/${DELETE_AVATAR_EXPERIENCE_PREV}/${imageToDelete.publicId}`, {
+        method:'DELETE',
+      });
+
+      // FILTRAR EL ESTADO
+      const newExperiences = stepData[EKeyDataByStep.TWO].imageExperienceData.filter((img) => img.publicId !== publicId);
+
+      // ACTUALIZAR TODO
+      setStepData((prev) => ({
+        ...prev,
+        [EKeyDataByStep.TWO]: {
+          ...prev[EKeyDataByStep.TWO],
+          imageExperienceData: newExperiences,
+        },
+      }));
+
+      //VISTA PREVIA
+      setSrcVector((prev) => prev.filter((_, i) => stepData[EKeyDataByStep.TWO].imageExperienceData[i].publicId !== publicId));
+
+      // LOCALSTORAGE
+      const existing = readExistingData(ENamesOfKeyLocalStorage.STEP_DATA);
+      const existingStepTwo = existing[EKeyDataByStep.TWO] || {};
+
+      localStorage.setItem(
+        ENamesOfKeyLocalStorage.STEP_DATA,
+        JSON.stringify({
+          ...existing,
+          [EKeyDataByStep.TWO]: {
+            ...existingStepTwo,
+            imageExperienceData: newExperiences,
+          },
+        }),
+      );
     } catch (error) {
-      openGlobalModal(EModalGlobalType.MODAL_ERROR);
-      showError('ERROR', 'Ocurrió un error inesperado, intente de nuevo más tarde.');
-    } finally {
-      setLoadImg(false);
+      console.warn(error);
     }
   };
-
 
   // EVENTO ONCHANGE A PERFIL
-  const handleImageProfileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0 && e.target.files[0]) {
-      listFiles.current = e.target.files[0]; //ALMACENAR EL REF
-    }
+  const handleImageProfileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    listFiles.current = file;
 
-    if (!listFiles.current || !(listFiles.current instanceof File)) return; //==> SI NO EXISTE O NO ES UN FILE EN RUNTIME  NO SEGUIR
-
-    const result: TFieldState = imageProfileDataValidator.validate(listFiles.current);
+    const result: TFieldState = imageProfileDataValidator.validate(file);
     setFormState((prevState) => ({ ...prevState, imageProfileData: result }));
 
-    // SI NO ES VALIDO  EJECUTAR EL TIMEOUT Y ACTUALIZAR EL ERROR A "__hidden__" QUE INDICA QUE SE OCULTE
+    // SI NO ES VALIDO
     if (!result.isValid) {
-      // DESPUES DE 2 SEGUNDO Y MEDIO
+      // TIEMPO DE DELAY
       setTimeout(() => {
         setFormState((prev) => ({
           ...prev,
           imageProfileData: { ...result, error: '__hidden__' },
         }));
       }, 2500);
+      return;
     }
 
-    // SETEAR ESTADO GLOBAL DE PASOS
+    // SINO GUARDAR
     savedProfile({
       formState: {
-        ...formState, // LO VIEJO
-        imageProfileData: result, //LO NUEVO
+        ...formState,
+        imageProfileData: result,
       },
       listFiles,
       setStepData,
     });
 
-    // VALIDAR PASO
-    setIsStepValid(result.isValid); // GUARDO EL RESULTADO FINAL DE LA VALIDACION DEL PASO
+    setIsStepValid(result.isValid);
+    setSrc(URL.createObjectURL(file)); // PREVIEW DIRECTO
   };
 
   // EVENTO ONCHANGE A EXPERIENCIAS
-  const handleImageExperiencesChange = (e: ChangeEvent<HTMLInputElement>) => {
-    listFiles.current = e.target.files as FileList; // ==> GUARDO VALOR EN REFERENCIA
-    const storedImages: TImageDataStored[] = stepData[EKeyDataByStep.TWO].imageExperienceData;
+  const handleImageExperiencesChange = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
+    const files: FileList | null = e.target.files; //GUARDO EN CONSTANTE LOS ARCHIVOS
+    if (!files) return; //RETORNAR Y NO SEGUIR
+    listFiles.current = files;
 
-    // SUMO EL PESO TOTAL DE TODAS LAS IMAGENES EXISTENTES ==> TIPO ESPECIAL TStoredImage[]
-    const existingTotalSize: number = storedImages?.reduce((acc, img) => acc + img.size, 0) ?? 0; // POR DEFAULT 0
+    const result: TFieldState = imageExperienceDataValidator.validate(files, countImagesExp.current, 0);
 
-    // VALIDO LAS NUEVAS IMAGENES PERO PASANDO TAMBIEN LO QUE YA EXISTIA
-    const result: TFieldState = imageExperienceDataValidator.validate(listFiles.current, countImagesExp.current, existingTotalSize);
-
-    // ACTUALIZO EL FORMSTATE SOLO PARA EL CAMPO "imageExperienceData"
-    setFormState((prevState) => ({ ...prevState, ['imageExperienceData']: result }));
-
-    // SI NO ES VALIDO  EJECUTAR EL TIMEOUT Y ACTUALIZAR EL ERROR A "__hidden__" QUE INDICA QUE SE OCULTE
     if (!result.isValid) {
-      // DESPUES DE 2 SEGUNDO Y MEDIO
-      setTimeout(() => {
-        setFormState((prev) => ({
-          ...prev,
-          imageExperienceData: { ...result, error: '__hidden__' },
-        }));
-      }, 2500);
+      setFormState((prev) => ({ ...prev, imageExperienceData: result }));
+      return;
     }
 
-    // ACTUALIZAR ESTADO EN REACT, NO ES INMEDIATO
-    setFormState((prev) => ({
-      ...prev,
-      imageExperienceData: result,
-    }));
-
-    // ESTADO ACTUAL
-    savedExperiences({
-      formState: {
-        ...formState, // LO ACTUAL
-        imageExperienceData: result, //LO NUEVO
-      },
+    await savedExperiences({
+      formState: { ...formState, imageExperienceData: result },
       listFiles,
       setStepData,
     });
+
     setIsStepValid(result.isValid);
+
+    const urls: string[] = Array.from(files).map((f) => URL.createObjectURL(f));
+
+    setSrcVector(urls);
+    countImagesExp.current = files.length;
   };
 
   const contextValueStepTwo: TTypeContextStepTwo = {
-    // handleDescriptionInput,
     handleImageProfileChange,
     handleImageExperiencesChange,
-    // handleDescriptionBlur,
     onDeleteExperience,
     onDeleteProfile,
     setSrc,

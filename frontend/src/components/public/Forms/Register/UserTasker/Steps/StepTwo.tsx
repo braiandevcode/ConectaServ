@@ -1,21 +1,19 @@
 import useStepTwo from '../../../../../../hooks/useStepTwo';
 import { EKeyDataByStep } from '../../../../../../types/enums';
-// import { renderFieldError, styleBorderFieldError } from '../../../../../../utils/formUtils';
 import ExperienceImagesPreview from '../ExperienceImagePreview';
 import ProfileImagePreview from '../ProfileImagePreview';
 
 // ICONOS DE REACT ICONS
 import { GiIdCard } from 'react-icons/gi';
-// import { FaFileLines } from 'react-icons/fa6';
 import { IoImage } from 'react-icons/io5';
 import { FaCloudUploadAlt } from 'react-icons/fa';
 import { IoMdImages } from 'react-icons/io';
-import type { TImageDataStored } from '../../../../../../types/typeRegisterEndDto';
-// CSS
-import './StepTwo.css';
 import SectionLoader from '../../../../../SectionLoader';
 import Description from '../../../Description';
 import useTasker from '../../../../../../hooks/useTasker';
+import type { TImageDataStored } from '../../../../../../types/typeRegisterEndDto';
+// CSS
+import './StepTwo.css';
 
 // COMPONENTE PASO 2
 const StepTwo = () => {
@@ -36,20 +34,8 @@ const StepTwo = () => {
         </div>
 
         <div className='mb-2 c-flex c-flex-column c-flex-items-center gap-3 form-groupProfile__body'>
-          {/* DESCRIPCIÓN PERFIL */}
-          {/* <div className='w-full c-flex c-flex-items-center c-flex-column gap-1/2 w-full form-groupProfile__containerDescription'>
-            <label htmlFor='description' className='to-left c-flex c-flex-items-center gap-1/2 form-groupProfile__label'>
-              <FaFileLines size={20} />
-              <span>Descripción de perfil (Opcional)</span>
-            </label>
-            <textarea id='description' name='description' value={formState.description.value as string} className={`w-full form-groupProfile__textarea ${styleBorderFieldError(formState, 'description')}`} placeholder='Cuentales a la gente sobre ti...' spellCheck='true' lang='es' onChange={handleDescriptionInput} onBlur={handleDescriptionBlur} autoFocus></textarea>
-            {renderFieldError(formState, 'description')}
-          </div> */}
-
           <Description />
-
           {/* FOTO PERFIL */}
-
           <div className={`c-flex c-flex-items-center c-flex-column gap-1/2 w-full form-groupProfile__containerImageProfile`}>
             {loadImg ? (
               <SectionLoader />
@@ -81,7 +67,6 @@ const StepTwo = () => {
           </div>
 
           {/* IMÁGENES EXPERIENCIAS */}
-
           <div className='c-flex c-flex-items-center c-flex-column gap-1/2 w-full form-professional__groupImagesExperiences'>
             {loadImgExp ? (
               <SectionLoader />

@@ -1,9 +1,9 @@
-import type { TBudgetData, TCategoryData, TDayData, THourData, TImageData, TServiceData, TWorkAreaData } from "../types/typeRegisterEndDto";
+import type { TBudgetData, TCategoryData, TDayData, THourData, TImageDataStored, TServiceData, TWorkAreaData } from "../types/typeRegisterEndDto";
 
 export interface ITaskerData {
   description: string;
-  imageProfileData?: TImageData | null; 
-  imageExperienceData?: TImageData[]; 
+  imageProfileData?: TImageDataStored| null; 
+  imageExperienceData?: TImageDataStored[]; 
   categoryData: TCategoryData;
   serviceData: TServiceData;
   workAreaData: TWorkAreaData;

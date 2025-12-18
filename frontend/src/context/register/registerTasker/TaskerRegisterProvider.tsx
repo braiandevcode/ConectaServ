@@ -20,11 +20,6 @@ import useTasker from '../../../hooks/useTasker';
 
 // PROVIDER ES QUIEN NOS PROVEE LOS ESTADOS Y FUNCIONES DE COMPONENTES
 const TaskerRegisterProvider = ({ children }: { children: React.ReactNode }) => {
-  // const { STEP_DATA_TASKER, initialFormState } = useStepDataTasker(); //GANCHO PARA TRAER EL OBJETO DE DATOS DE LOS PASOS DE REGISTRO
-
-  // // OBJETO GENERAL DE PASOS CON VALORES POR DEFECTO Y PARA ALMACENAR EN STROAGE
-  // const [stepData, setStepData] = useState<TStepDataTasker>(STEP_DATA_TASKER);
-
   const { stepData, formState, setTerms, isStepValid, setIsStepValid } = useTasker(); //CUSTOM HOOK QUE USA CONTEXTO TASKER GENERAL
   // ------------------------------------------------------------------------useState------------------------------------------------------------------------//
   // ESTADO PARA EL PASO ACTUAL DEL FORMULARIO

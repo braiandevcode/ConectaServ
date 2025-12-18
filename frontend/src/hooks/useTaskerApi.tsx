@@ -6,7 +6,6 @@ import type { TActiveTaskerUser } from '../types/typeActiveTaskUser';
 import type { TDataPayloadTaskerSingle } from '../types/typeDataPayloadTaskerSingle';
 import type { TTaskerImage } from '../types/typeTaskerImage';
 import apiRequest from '../utils/apiRequestUtils';
-import { bufferToBase64 } from '../utils/dataUrlToBlob';
 import useGlobalModal from './useGlobalModal';
 import useMain from './useMain';
 import useUserApi from './useUserApi';
@@ -15,28 +14,26 @@ const useTaskerApi = () => {
   const { ALL_TASKERS, TASKER_INFO, DELETE_IMAGE_EXP } = endPointUser;
   const { showError, openGlobalModal } = useGlobalModal();
   const { setLoading, setTaskerData } = useMain();
-  const { loadTaskerImagesProfile: loadImageTaskerSingle } = useUserApi();
+  const { loadTaskerImages: loadImageTaskerSingle } = useUserApi();
 
-  // CARGAR IMAGENES POR URL QUE VIENE DEL BACKEND
+  // CARGAR IMAGENES DE PERFIL DE TASKER POR URL QUE VIENE DEL BACKEND
   const loadTaskerImagesProfile = async (taskers: TActiveTaskerUser[], accessToken: string): Promise<TActiveTaskerUser[]> => {
-    return Promise.all(
+    let imageProfile: TTaskerImage | null = null;
+
+    return await Promise.all(
       taskers.map(async (t) => {
-        let profileImage: string | null = null;
+        // SI VIENEN DATOS DEL TASKER Y SI TIENE IMAGEN DE PERFIL
+        imageProfile = await apiRequest(`${BASE_BACK_URL}/${t.profileImageUrl}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          credentials: 'include',
+        });
 
-        // PERFIL
-        if (t.profileImageUrl) {
-          const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${t.profileImageUrl}`, {
-            headers: { Authorization: `Bearer ${accessToken}` },
-            credentials: 'include',
-          });
+        console.log('URL PERFIL TASKER CARD: ', imageProfile);
 
-          // SI  VIENE IMAGEN Y SU LONGITUD ES MAYOR QUE CERO
-          if (img?.base64 && img.base64.data.length > 0) {
-            const base64Str: string = bufferToBase64(img.base64.data);
-            profileImage = `data:${img.mimeType};base64,${base64Str}`;
-          }
-        }
-        return { ...t, imageProfileBase64: profileImage } as TActiveTaskerUser;
+        return { ...t, profileImageUrl: imageProfile?.url } as TActiveTaskerUser;
       }),
     );
   };
@@ -50,7 +47,7 @@ const useTaskerApi = () => {
         headers: { Authorization: `Bearer ${accessToken}` },
         credentials: 'include',
       });
-      
+
       if (!tasker) return null;
 
       // TASKERS CON IMAGENES

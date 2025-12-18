@@ -24,10 +24,9 @@ export type TDataPayloadUser = {
   profileImageUrl: string | null;
   experienceImagesUrl: string[];
 
-  imageProfileBase64:string | null;
-  imageExpBase64:string[];
+  publicIdProfile: string;
+  publicIdExperiences: string[];
 
-  idImageExp:string[];
-  idImageProfile:string;
+  idProfile: string;
+  idExperiences: string[];
 };
-

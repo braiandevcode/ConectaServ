@@ -118,8 +118,6 @@ const StepOneProvider = ({ children }: { children: React.ReactNode }) => {
     // VALIDAR QUE TODOS LOS GRUPOS TENGAN AL MENOS UN CHECK
     const isValidGroups = groups.every((arr) => arr.length > 0);
     setIsStepValid(isValidGroups); // ACTUALIZA VALIDACION DEL PASO INSTANTANEAMENTE
-
-    console.log((isValidGroups));
   };
 
   const contextStepOneValue: TTypeContextStepOne = {

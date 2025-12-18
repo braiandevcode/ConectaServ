@@ -54,7 +54,6 @@ const useSendDataRegister = () => {
       dataProfileOutId = {...restDataProfile};
     }
 
-    // PREGUNTO SI VIENE CON ELEMENTOS Y SI DENTRO DE CADA OBJETO NO ESTA VACIO
    const dataExperienceOutId: Omit<TImageDataStored, "idImage"> [] = imageExperienceData.reduce((vectorAcc, { idImage, ...rest }): Omit<TImageDataStored, 'idImage'>[] => {
       vectorAcc.push(rest);
       return vectorAcc
@@ -66,7 +65,7 @@ const useSendDataRegister = () => {
 
     // CREA NUEVO OBJETO APLANADO
     const dataSendTasker = {
-      ...res, // SE PROPAGAN TODAS LAS PROPIEDADES DE CADA 
+      ...res, // SE PROPAGAN TODAS LAS PROPIEDADES
       ...(stepData[EKeyDataByStep.TWO]),
       imageProfileData:dataProfileOutId,
       imageExperienceData:dataExperienceOutId,
@@ -95,11 +94,14 @@ const useSendDataRegister = () => {
 
 
     const newData:TUser = dataUser; //NUEVO USUARIOA
+
+
+    console.log('DATA ENVIADA AL BACKEND: ', newData);
+    
  
     await addUser({ newData }); //AGREGAR USUARIO
   };
 
-  // return { submitDataRegister,  isReady };
   return { submitDataRegister };
 
 };

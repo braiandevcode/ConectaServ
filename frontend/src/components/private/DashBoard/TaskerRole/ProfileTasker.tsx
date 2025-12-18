@@ -70,6 +70,7 @@ const ProfileTasker = () => {
     setLoading(true);
     fechedData().finally(() => setLoading(false))
   }, [accessToken,fechedData]);
+  
 
   return (
     <>
@@ -83,7 +84,7 @@ const ProfileTasker = () => {
               <div className='profile__avatar position-relative'>
                 <img
                   src={
-                    userData.imageProfileBase64 ??
+                    userData.profileImageUrl ??
                     `${HOST}${QUERY_NAME}=${userData.fullName}&${QUERY_BG_RANDOM}`
                   }
                   alt='avatar'
@@ -152,7 +153,7 @@ const ProfileTasker = () => {
                     </label>
                   </Button>
 
-                  {userData.imageExpBase64.length > 0 && (
+                  {userData.experienceImagesUrl.length > 0 && (
                     <Button
                       type='button'
                       variant='btn btn__close'
@@ -165,7 +166,7 @@ const ProfileTasker = () => {
                 </div>
               </div>
             ) : (
-              userData.imageExpBase64.length > 0 && (
+              userData.experienceImagesUrl.length > 0 && (
                 <Button
                   type='button'
                   variant='btn btn__ghost'
@@ -178,10 +179,10 @@ const ProfileTasker = () => {
             )}
 
             <div className={editImage ? 'w-full c-flex taskerExperiences taskerExperiences--edit' : 'w-full c-flex taskerExperiences'}>
-              {userData.imageExpBase64 && userData.imageExpBase64.length > 0 ? (
-                userData.imageExpBase64.map((img, i) => (
+              {userData.experienceImagesUrl && userData.experienceImagesUrl.length > 0 ? (
+                userData.experienceImagesUrl.map((img, i) => (
                   <div
-                    key={userData.idImageExp[i]}
+                    key={userData.idExperiences[i]}
                     className='w-1/2 c-flex c-flex-justify-center c-flex-items-center position-relative'
                   >
                     {editImage && (
@@ -189,14 +190,14 @@ const ProfileTasker = () => {
                         type='button'
                         variant='btn btn__ghost'
                         className='w-full btn__deleteImage cursor-pointer position-absolute'
-                        id={userData.idImageExp[i]}
+                        id={userData.publicIdExperiences[i]}
                         onClick={deleteImage}
                       >
                         <FaTrash size={120} className='btn__deleteImage-icon w-full' />
                       </Button>
                     )}
 
-                    {loading && userData.idImageExp[i] === idImgExp ? (
+                    {loading && userData.publicIdExperiences[i] === idImgExp ? (
                       <SectionLoader />
                     ) : (
                       <img

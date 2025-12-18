@@ -25,6 +25,4 @@ export type TActiveTaskerUser = {
   category: string;
 
   profileImageUrl: string | null;
-
-  imageProfileBase64:string | null;
 };

@@ -69,7 +69,7 @@ const ProfileTaskerInfo = () => {
               <div className='w-full profile__imageProfile c-flex c-flex c-flex-column c-flex-items-center gap-1'>
                 <div className='w-full c-flex c-flex-column c-flex-items-center gap-1 '>
                   <div className='profile__avatar'>
-                    <img src={selectedTaskerProfile.imageProfileBase64 ?? `${HOST}${QUERY_NAME}=${selectedTaskerProfile.fullName}&${QUERY_BG_RANDOM}`} alt='avatar' id={selectedTaskerProfile.idImageProfile} />
+                    <img src={selectedTaskerProfile.profileImageUrl ?? `${HOST}${QUERY_NAME}=${selectedTaskerProfile.fullName}&${QUERY_BG_RANDOM}`} alt='avatar' id={selectedTaskerProfile.idProfile} />
                   </div>
 
                   <div className='profile__userNameAndMsg w-3/4 c-flex  c-flex-items-center c-flex-column gap-1/2'>
@@ -162,10 +162,10 @@ const ProfileTaskerInfo = () => {
           <section className='p-2 profile__section'>
             <h3 className='profile__imagesExperience__header'>Mis experiencias</h3>
             <div className='gallery profile__imagesExperience-gallery'>
-              {selectedTaskerProfile.imageExpBase64 && selectedTaskerProfile.imageExpBase64.length > 0 ? (
-                selectedTaskerProfile.imageExpBase64.map((img, i) => (
-                  <div key={selectedTaskerProfile.idImageExp[i]} className='gallery__item  w-full'>
-                    <img src={img} alt={`Experiencia ${i}`} className='w-full' id={selectedTaskerProfile.idImageExp[i]} />
+              {selectedTaskerProfile.experienceImagesUrl && selectedTaskerProfile.experienceImagesUrl.length > 0 ? (
+                selectedTaskerProfile.experienceImagesUrl.map((img, i) => (
+                  <div key={selectedTaskerProfile.publicIdExperiences[i]} className='gallery__item  w-full'>
+                    <img src={img} alt={`Experiencia ${i}`} className='w-full' id={selectedTaskerProfile.publicIdExperiences[i]} />
                   </div>
                 ))
               ) : (
