@@ -91,14 +91,7 @@ const useSendDataRegister = () => {
       isVerified:isCodeVerified, //SI ESTA VERIFICADO
       taskerData: isTasker ? dataSendTasker : null
     } as TUser
-
-
     const newData:TUser = dataUser; //NUEVO USUARIOA
-
-
-    console.log('DATA ENVIADA AL BACKEND: ', newData);
-    
- 
     await addUser({ newData }); //AGREGAR USUARIO
   };
 

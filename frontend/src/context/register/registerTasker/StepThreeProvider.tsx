@@ -22,7 +22,6 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
   
   const storedAmount: number = stepData[EKeyDataByStep.THREE]?.amountBudge ?? 0;
   const storedBudgeSelected: TYesOrNo = stepData[EKeyDataByStep.THREE]?.budgeSelected ?? 'no';
-  
   const amountRef = useRef<HTMLInputElement | null>(null); // REF
   // ---------------------------------------------------EFECTOS----------------------------------------------------------------//
 
@@ -60,7 +59,6 @@ const StepThreeProvider = ({ children }: { children: React.ReactNode }) => {
   // EVENTO ONCHANGE DEL RADIO "¿COBRA PRESUPUESTO?" EN EL PASO 3
   const onChangeIsBudge = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value as TYesOrNo; // VALOR SELECCIONADO ("yes" O "no")
-
     // ACTUALIZAR EL OBJETO GLOBAL DE PASOS CON EL NUEVO VALOR DE "budgeSelected"
     setStepData(
       (prev) =>

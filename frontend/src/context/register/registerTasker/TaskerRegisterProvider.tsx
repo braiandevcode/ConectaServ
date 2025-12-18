@@ -51,7 +51,6 @@ const TaskerRegisterProvider = ({ children }: { children: React.ReactNode }) => 
 
   //ESTADO QUE PERMITE EN TIMPO DE RUNTIME FORMATEAR A MONEDA EN CAMPO UI
   const [amountFieldFormat, setAmountFieldFormat] = useState<string>('');
-  // const [isFocus, setIsFocus] = useState<boolean>(false); //PERMITE INDICAR SI SE HIZO O NO FOCO
 
   //GANCHO PAR VALIDAR PASOS
   const { validateCurrentStep } = useValidateTasker({ step, formState, hasBudge, hasWorkArea, hasInteracted });

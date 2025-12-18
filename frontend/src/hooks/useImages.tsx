@@ -13,8 +13,6 @@ const useImages = () => {
   const savedExperiences = async ({ formState, listFiles, setStepData }: TSavedExperiences): Promise<void> => {
     if (!formState?.imageExperienceData?.isValid || !listFiles.current || !(listFiles.current instanceof FileList)) return;
 
-    console.log(listFiles.current);
-
     // CREAMOS UNA PROMESA EN PARALELO, HASTA QUE NO SE TERMINE NO SEGUIR
     const storedImages: TImageDataStored[] = (
       await Promise.all(
@@ -40,8 +38,6 @@ const useImages = () => {
         }),
       )
     ).filter((img): img is TImageDataStored => img !== null);
-
-    console.log(storedImages);
 
     setStepData((prev) => {
       const prevImages = prev[EKeyDataByStep.TWO]?.imageExperienceData || [];
@@ -77,9 +73,7 @@ const useImages = () => {
       displayName: upload.display_name,
       bytes: upload.bytes,
     };
-
-    console.log(imageProfileData);
-
+    
     setStepData((prev) => ({
       ...prev,
       [EKeyDataByStep.TWO]: {

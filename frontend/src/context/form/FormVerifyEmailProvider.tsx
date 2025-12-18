@@ -146,7 +146,6 @@ const FormVerifyEmailProvider = ({ children }: { children: ReactNode }) => {
   const handlePaste = (e:ClipboardEvent<HTMLInputElement>): void => {
     e.preventDefault(); // EVITAR EL PASTE POR DEFECTO
     const pastedData:string = e.clipboardData.getData('Text').trim(); // TEXTO PEGADO SIN ESPACIOS
-
     // GUARDO EN MEMORIA Y SEPARO POR '' CONVIRTIENDO EL STRNG A UN ARREGLO PARA DESPUES TOMAR SOLO LOS PRIMEROS 6 DIGITOS
     const digits:string[] = pastedData.split('').slice(0, NUM_DIGITS); 
 

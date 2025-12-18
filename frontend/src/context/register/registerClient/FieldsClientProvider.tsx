@@ -14,7 +14,7 @@ import type { TLocationKey } from '../../../types/typeLocation';
 import type { TFieldState } from '../../../types/typeStateFields';
 import type { TTypeContextBasic } from '../../../types/typeContextBasic';
 import type { TUser } from '../../../types/typeUser';
-
+// CAMPOS DE FORMULARIO DE REGISTRO CLIENTE
 const FieldsClientProvider = ({ children }: { children: ReactNode }) => {
   const fullNameValidator: FullNameValidator = new FullNameValidator();
   const userNameValidator: UserNameValidator = new UserNameValidator();

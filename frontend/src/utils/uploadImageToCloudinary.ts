@@ -21,14 +21,10 @@ export const uploadImageToCloudinary = async (file: File, uploadPreset: TUploadP
       throw new Error('Fallo la subida a Cloudinary');
     }
 
-    const data = await res.json(); //CONVERTIR A JSON
-
-    console.log('DATA DE CLOUDINARY: ', data);
-  
+    const data = await res.json(); //CONVERTIR A JSON  
     return data; //RETORNA LA DATA 
 
   } catch (error) {
-    console.warn('DATA DE CLOUDINARY: ', error);
     throw error;
   }
 };
