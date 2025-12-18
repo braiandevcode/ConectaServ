@@ -2,7 +2,6 @@ import useStepTwo from '../../../../../hooks/useStepTwo';
 import useTasker from '../../../../../hooks/useTasker';
 import { EKeyDataByStep } from '../../../../../types/enums';
 import type { TImageDataStored } from '../../../../../types/typeRegisterEndDto';
-import type { TIdString } from '../../../../../types/typeUUID';
 import BtnDeleteImage from './Buttons/BtnDeleteImage';
 
 // CSS
@@ -12,10 +11,13 @@ import './ProfileImagePreview.css';
 const ProfileImagePreview = () => {
   const { stepData } = useTasker(); //HOOK PERSONALIZADO QUE USA CONTEXTO NIVEL PASO DOS
   const { src, onDeleteProfile } = useStepTwo();
+
+  console.log('SRC PERFIL: ', src);
+  
   if (!src) return; //SI NO HAY SRC NO SEGUIR
   const profile: TImageDataStored | null = stepData[EKeyDataByStep.TWO].imageProfileData;
   if (!profile) return; // ==> SI ES NULO NO SEGUIR
-  const idImage: TIdString = profile.idImage;
+  const idImage:string= profile.publicId;
   return (
     <>
       <img src={src} alt='Vista previa del perfil' data-image={idImage} className='profile-image-preview' />

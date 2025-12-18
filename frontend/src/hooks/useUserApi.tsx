@@ -12,18 +12,15 @@ import useRegister from './useTasker';
 import useRegisterModal from './useRegisterModal';
 import type { TDataLoginUser } from '../types/typeDataLoginUser';
 import type { TStateAuth } from '../types/typeStateAuth';
-import type { ITaskerData } from '../interfaces/iTaskerData';
-import type { TImageData } from '../types/typeRegisterEndDto';
-import { bufferToBase64, dataURLtoBlob } from '../utils/dataUrlToBlob';
 import type { iMessageResponseStatus } from '../interfaces/iMessageResponseStatusBack';
 import type { iMessageStatusToken } from '../interfaces/iMessageStatusToken';
 import { EModalRegistersType } from '../types/enumModalRegistersTypes';
 import type { iDataVerifyCode } from '../interfaces/iDataVerifyCode';
 import type { iStatusError } from '../interfaces/iSatatus';
 import type { TDataPayloadUser } from '../types/typeDataPayloadUser';
-import type { TTaskerImage } from '../types/typeTaskerImage';
-import { BASE_BACK_URL } from '../config/configBaseBackUrl';
 import type { TDataPayloadTaskerSingle } from '../types/typeDataPayloadTaskerSingle';
+import { BASE_BACK_URL } from '../config/configBaseBackUrl';
+import type { TTaskerImage } from '../types/typeTaskerImage';
 
 const { USER, USER_IDENTIFY, USER_CODE_REQUEST, USER_VERIFY, AUTH_LOGIN, LOGOUT, AUTH_ME } = endPointUser; //DESESTRUCTURAR ENDPOINT
 
@@ -43,43 +40,49 @@ const useUserApi = () => {
   };
 
   // CARGAR IMGENES POR URL QUE VIENE DEL BACKEND
-  const loadTaskerImagesProfile = async <T extends TDataPayloadUser | TDataPayloadTaskerSingle>(userData: T, accessToken: string): Promise<T> => {
-    setLoading(true);
-    let profileImage: string | null = null;
-    let experienceImages: string[] = [];
-    let idImageProfile: string = '';
-    let idImageExp: string[] = [];
-    // PERFIL
-    if (userData.profileImageUrl) {
-      const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${userData.profileImageUrl}`, { headers: { Authorization: `Bearer ${accessToken}` }, credentials: 'include' });
-      idImageProfile = img?.id;
-      if (img?.base64 && img.base64.data.length > 0) {
-        const base64Str: string = bufferToBase64(img.base64.data);
-        profileImage = `data:${img.mimeType};base64,${base64Str}`;
-      }
+  const loadTaskerImages= async <T extends TDataPayloadUser | TDataPayloadTaskerSingle>(userData: T, accessToken: string): Promise<T> => {
+    console.log('DATOS DEL USUARIO: ', userData);
+    let imageProfile: TTaskerImage | null = null;
+    let imageExperineces: TTaskerImage[] = [];
+
+    // SI VIENEN DATOS DEL USUARIO Y SI TIENE IMAGEN DE PERFIL
+    if (userData && userData.profileImageUrl) {
+      imageProfile = await apiRequest(`${BASE_BACK_URL}/${userData.profileImageUrl}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: 'include',
+      });
     }
 
-    // EXPERIENCIAS
-    const urls: string[] = Array.isArray(userData.experienceImagesUrl) ? userData.experienceImagesUrl : userData.experienceImagesUrl ? [userData.experienceImagesUrl] : [];
-
-    // SI VIENEN URLS
-    if (urls.length > 0) {
-      const imgs = await Promise.all(
-        urls.map(async (url) => {
-          const img: TTaskerImage = await apiRequest<TTaskerImage>(`${BASE_BACK_URL}/${url}`, { headers: { Authorization: `Bearer ${accessToken}` }, credentials: 'include' });
-          idImageExp.push(img?.id);
-          if (img?.base64 && img.base64.data.length > 0) {
-            const base64Str: string = bufferToBase64(img.base64.data);
-            return `data:${img.mimeType};base64,${base64Str}`;
-          }
-          return ''; // SI NO HAY IMAGEN
+    // SI VIENEN DATOS DEL USUARIO Y SI TIENE IMAGENES DE EXPERIENCIAS
+    if (userData && userData.experienceImagesUrl.length > 0) {
+      imageExperineces = await Promise.all(
+        userData.experienceImagesUrl.map(async (url) => {
+          return await apiRequest(`${BASE_BACK_URL}/${url}`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+            credentials: 'include',
+          });
         }),
       );
-
-      experienceImages = imgs.filter(Boolean); //EVITAR VACIOS
     }
 
-    return { ...userData, imageExpBase64: experienceImages, imageProfileBase64: profileImage, idImageProfile, idImageExp } as T;
+    console.log('URL PERFIL: ', imageProfile);
+    console.log('URL EXPERIENCIAS: ', imageExperineces);
+    
+    return {
+      ...userData,
+      experienceImagesUrl: imageExperineces.map(i => i.url),
+      profileImageUrl: imageProfile?.url ?? null,
+      publicIdProfile: imageProfile?.publicId,
+      publicIdExperiences: imageExperineces.map(img => img.publicId),
+      idImageProfile: userData.idProfile,
+      idImageExp: userData.idProfile,
+    } as T;
   };
 
   // FUNCION PARA CUANDO EL REGISTRO ES EXITOSO
@@ -169,7 +172,7 @@ const useUserApi = () => {
   };
 
   // ENVIAR TODO LO QUE TENGA EL FORMDATA
-  const sendDataUser = async (fd: FormData) => {
+  const sendDataUser = async (dataUser: TUser) => {
     // TRY/CATCH
     try {
       setIsSending(true); //ENVIANDO DATOS
@@ -177,7 +180,10 @@ const useUserApi = () => {
       // PETICION FETCH CON HELPER
       const result = await apiRequest(`${USER}`, {
         method: 'POST',
-        body: fd,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataUser),
       });
 
       if (result) {
@@ -210,49 +216,13 @@ const useUserApi = () => {
 
   // ENVIAR DATOS DEL REGISTRO METODO POST
   const addUser = async ({ newData }: { newData: TUser }): Promise<void> => {
-    const fd: FormData = new FormData(); //INSTANCIA DE FORMDATA
-    let taskerDataWithOutImage: Omit<ITaskerData, 'imageProfileData' | 'imageExperienceData'> | undefined = undefined;
-    let imageProfileData: TImageData | null | undefined = null; // PARA IMAGEN DE PERFIL
-    let imageExperienceData: TImageData[] = []; // PARA ARRAY DE EXPERIENCIAS
+    // JSON FINAL, SI VIENEN DATOS DE TASKER O NO
+    const jsonToSend: TUser = !newData.taskerData ? newData : { ...newData, taskerData: newData.taskerData };
 
-    // SEPARO DATOS Y ARCHIVOS OBTENIENDO BASE64 ORIGINAL
-    if (newData.taskerData) {
-      // OBTENGO LOS DATOS BASE64 ANTES DE OMITIR DEL JSON A ENVIAR
-      imageProfileData = newData.taskerData.imageProfileData;
-      imageExperienceData = newData.taskerData.imageExperienceData || [];
+    console.log(jsonToSend);
 
-      //SEPARO EL RESTO DEL JSON
-      const { imageProfileData: imgProfile, imageExperienceData: imgExp, ...dataTasker } = newData.taskerData;
-      taskerDataWithOutImage = dataTasker;
-    }
-
-    // JSON FINAL SIN IMAGENES BASE64
-    const jsonToSend: TUser = !newData.taskerData ? newData : { ...newData, taskerData: taskerDataWithOutImage };
-
-    // ADJUNTO EL JSON DE TEXTO
-    // 'data' DEBE COINCIDIR CON EL @Body('data') EN NestJS
-    fd.append('data', JSON.stringify(jsonToSend));
-
-    // ADJUNTO IMAGEN DE PERFIL (SIMPLE)
-    if (imageProfileData && imageProfileData.dataUrl) {
-      const profileBlob: Blob | null = dataURLtoBlob(imageProfileData.dataUrl);
-      if (profileBlob) {
-        fd.append('imageProfile', profileBlob, imageProfileData.name || 'profile.jpg');
-      }
-    }
-
-    // ADJUNTO IMAGENES DE EXPERIENCIAS (ARRAY)
-    imageExperienceData.forEach((imageData, index) => {
-      if (imageData.dataUrl) {
-        const experienceBlob: Blob | null = dataURLtoBlob(imageData.dataUrl);
-        if (experienceBlob) {
-          fd.append('imageExperiences', experienceBlob, imageData.name || `experience_${index}.jpg`);
-        }
-      }
-    });
-
-    // LLAMAR PARA ENVIAR DATOS AHORA
-    await sendDataUser(fd);
+    // // LLAMAR PARA ENVIAR DATOS AHORA
+    await sendDataUser(jsonToSend);
   };
 
   // ENVIO DE DATOS DE CODIGO AL BACKEND
@@ -307,7 +277,7 @@ const useUserApi = () => {
       if (!userData.isTasker) {
         return userData;
       }
-      const newTasker = await loadTaskerImagesProfile<TDataPayloadUser>(userData, accessToken);
+      const newTasker = await loadTaskerImages<TDataPayloadUser>(userData, accessToken);
 
       return newTasker;
     } catch (error) {
@@ -397,7 +367,7 @@ const useUserApi = () => {
     }
   };
 
-  return { getIdentifyEmail, addUser, signIn, loadTaskerImagesProfile, sendCodeToUserEmail, userVerify, logout, getDataUser }; // ==> ACA RETORNO TODOS LOS METODOS QUE HACEN REFERNECIA A DATOS DE USUARIOS
+  return { getIdentifyEmail, addUser, signIn, loadTaskerImages, sendCodeToUserEmail, userVerify, logout, getDataUser }; // ==> ACA RETORNO TODOS LOS METODOS QUE HACEN REFERNECIA A DATOS DE USUARIOS
 };
 
 export default useUserApi;

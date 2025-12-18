@@ -18,9 +18,9 @@ const ExperienceImagesPreview = () => {
       {storedImages.length > 0 &&
         storedImages.map((img, index) => {
           return (
-            <div key={img.idImage} data-image={img.idImage} className='form-groupProfile__multipleImages c-flex c-flex-wrap gap-2 position-relative'>
+            <div key={img.idImage} data-image={img.publicId} className='form-groupProfile__multipleImages c-flex c-flex-wrap gap-2 position-relative'>
               <img src={srcVector[index]} alt='Vista previa del perfil' className='profile-image-preview' />
-              <BtnDeleteImage variant='btn btn__close' id={img.idImage} onDelete={onDeleteExperience}/>
+              <BtnDeleteImage variant='btn btn__close' id={img.publicId} onDelete={onDeleteExperience}/>
             </div>
           );
         })}

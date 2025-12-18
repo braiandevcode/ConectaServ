@@ -53,6 +53,11 @@ export enum EDefaultSelected {
   SELECT_CATEGORY = 'Seleccione una categoría',
 }
 
+export enum EResouce{
+  IMAGE='image',
+  VIDEO='video',
+}
+
 // NOMBRE DE CLAVES PARA LOCALSTORAGE
 export enum ENamesOfKeyLocalStorage {
   STEP_DATA = 'stepData',
@@ -81,6 +86,15 @@ export enum EEndpoint {
   IMAGES_EXP = '/api/v1/experiences',
   DELETE_IMAGE_EXP='/api/v1/experiences',
   TASKER_INFO = '/api/v1/users/tasker',
+}
+
+export enum EEndpointCloud{
+  HOST='https://api.cloudinary.com',
+  VERSION='v1_1',
+  NAME_CLOUD= import.meta.env.VITE_CLOUDINARY_CLOUD_NAME,
+  PATH_FOLDER='image/upload',
+  DELETE_AVATAR_PREV='api/v1/avatar',
+  DELETE_AVATAR_EXPERIENCE_PREV='api/v1/experiencesAvatar',
 }
 
 // ENUM PARA CONFIGURAR LAS RUTAS DE LA PAGINA

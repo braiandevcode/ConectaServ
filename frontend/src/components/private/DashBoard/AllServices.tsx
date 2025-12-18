@@ -148,7 +148,7 @@ const AllSevices = () => {
                 <div key={service.idUser} className='card w-full'>
                   <div className='card__content'>
                     <div className='card__info-container'>
-                      <img src={service.imageProfileBase64 ?? `${HOST}${QUERY_NAME}=${service.fullName}&${QUERY_BG_RANDOM}`} className='card__img' alt={`Imagen de perfil de ${service.fullName}`} />
+                      <img src={service.profileImageUrl ?? `${HOST}${QUERY_NAME}=${service.fullName}&${QUERY_BG_RANDOM}`} className='card__img' alt={`Imagen de perfil de ${service.fullName}`} />
                       <div className='card__info'>
                         <h3>{service.fullName}</h3>
                         {service.category === ECategoryKey.REPAIR ? (

@@ -1,25 +1,24 @@
-import type { ERoles } from "./enumRoles";
-import type { ECategoryKey, ELocationKey } from "./enums";
-import type { TYesOrNo } from "./typeRadioYesOrNo";
-import type { TIdString } from "./typeUUID";
-
-export type TImageData = {
-  size: number;
-  name: string;
-  type: string;
-  idImage: TIdString,
-  dataUrl: string;
-};
+import type { ERoles } from './enumRoles';
+import type { ECategoryKey, ELocationKey } from './enums';
+import type { TYesOrNo } from './typeRadioYesOrNo';
+import type { TResource } from './typeResource';
+import type { TIdString } from './typeUUID';
 
 export type TImageDataStored = {
-  size: number;
-  name: string;
+  idImage: TIdString;
+  publicId: string; // Identificador de Cloudinary
+  url: string; // URL directa de la imagen en Cloudinary
+  bytes: number;
+  displayName: string;
+  format: string;
   type: string;
-  idImage: TIdString,
+  resourceType: TResource;
+  secureUrl: string;
+  signature: string;
 };
 
 export type TRoleData = {
-  role: ERoles | null; 
+  role: ERoles | null;
 };
 
 export type TLocationData = {
@@ -50,5 +49,5 @@ export type THourData = {
 export type TBudgetData = {
   amountBudge: number;
   budgeSelected: TYesOrNo;
-  reinsert: TYesOrNo ;
+  reinsert: TYesOrNo;
 };
