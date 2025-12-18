@@ -1,13 +1,11 @@
 import type { RefObject } from 'react';
 import { verifyMetaDataImage } from './validateFieldUtils';
-import { getImageDataUrlFromIndexedDB } from './storageUtils';
-import { ENamesOfKeyLocalStorage } from '../types/enums';
 import type { TExperienceImagesPreviewProps } from '../types/typeImageExperiences';
-import type { TImageData } from '../types/typeRegisterEndDto';
+import type { TImageDataStored } from '../types/typeRegisterEndDto';
 
 // TIPADO INTERNO
 type TLoadImages = Pick<TExperienceImagesPreviewProps, 'setSrcVector'> & {
-  storedImages: TImageData[];
+  storedImages: TImageDataStored[];
   countImagesExp: RefObject<number>;
 };
 
@@ -30,14 +28,7 @@ const loadImages = async ({ setSrcVector, storedImages, countImagesExp }: TLoadI
   const dataUrl = []; // ==> ARRAY AUXILIAR
   for (const imageObj of storedImages) {
     if (!verifyMetaDataImage(imageObj)) continue; // VALIDAR OBJETO ANTES DE USARLO
-    // ACA SE PRODUCE EL COMPORTAMIENTO ASINCRONICO REAL:
-    // CADA "await" DETIENE LA FUNCIÓN HASTA QUE SE RESUELVA LA PROMESA.
-    // MIENTRAS, REACT PUEDE VOLVER A RENDERIZAR O DESMONTAR EL COMPONENTE.
-    const result = await getImageDataUrlFromIndexedDB(imageObj.idImage, ENamesOfKeyLocalStorage.IMAGE_INDEXED_DB);
-
-    if (result) {
-      dataUrl.push(result.data); // AGREGO LA DATAURL AL ARRAY TEMPORAL
-    }
+    dataUrl.push(imageObj.secureUrl); // AGREGO LA DATAURL AL ARRAY TEMPORAL
   }
   setSrcVector([...dataUrl]); //SOBREESCRIBIR VIEJOS Y EVITAR ACUMULAR
 };
