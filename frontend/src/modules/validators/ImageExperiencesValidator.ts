@@ -5,7 +5,7 @@ import { convertBytes } from '../../utils/parsedAndFormatValuesUtils.js';
 
 // VALIDACION ENTRADA IMAGEN DE EXPERIENCIAS
 export default class ImageExperiencesValidator implements IValidator {
-  public validate(files:TImageDataStored[] | null, existingCount: number = 0, existingTotalSize: number = 0): TFieldState {
+  public validate(files: FileList | TImageDataStored[] | null, existingCount: number = 0, existingTotalSize: number = 0): TFieldState {
     const allowedTypes: string[] = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     const maxSizeMB: number = 5;
     const maxImages: number = 10;
@@ -37,15 +37,31 @@ export default class ImageExperiencesValidator implements IValidator {
 
       const maxSizesBytes: number = convertBytes(maxSizeMB);
 
-      if (file.bytes > maxSizesBytes) {
-        return {
-          error: `Cada imagen debe pesar menos de ${maxSizeMB}MB.`,
-          value: null,
-          isValid: false,
-        };
+      // SI ES INSTANCIA DE FILE
+      if (file instanceof File) {
+        if (file.size > maxSizesBytes) {
+          return {
+            error: `Cada imagen debe pesar menos de ${maxSizeMB}MB.`,
+            value: null,
+            isValid: false,
+          };
+        }
+      } else {
+        if (file.bytes > maxSizesBytes) {
+          return {
+            error: `Cada imagen debe pesar menos de ${maxSizeMB}MB.`,
+            value: null,
+            isValid: false,
+          };
+        }
       }
 
-      totalSize += file.bytes;
+      // PREGUNTAMOS DE VUETA SI ES INSTANCIA DE FILE
+      if (file instanceof File) {
+        totalSize += file.size; //ACUMULAR
+      } else {
+        totalSize += file.bytes; // ACUMULAR
+      }
     }
 
     const maxSizesTotalBytes: number = convertBytes(maxTotalSizeMB);
